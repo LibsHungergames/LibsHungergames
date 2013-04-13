@@ -9,11 +9,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class GeneralListener extends Extender implements Listener {
-    
+
     @EventHandler
     public void onTarget(EntityTargetEvent event) {
         if (hg.currentTime < 0)
@@ -36,6 +37,11 @@ public class GeneralListener extends Extender implements Listener {
                 }
             });
         }
+    }
+
+    @EventHandler
+    public void pigZap(PigZapEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler
