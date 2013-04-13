@@ -85,9 +85,12 @@ public class PlayerJoinThread extends Thread {
                     ResultSet r = stmt.executeQuery("SELECT * FROM `HGKits` WHERE `Name` = '" + gamer.getName() + "' ;");
                     r.beforeFirst();
                     List<Kit> hisKits = new ArrayList<Kit>();
+                    if (Extender.kits.hisKits.containsKey(gamer.getName()))
+                        hisKits = Extender.kits.hisKits.get(gamer.getName());
                     while (r.next()) {
                         Kit kit = Extender.kits.getKitByName(r.getString("Kit"));
-                        hisKits.add(kit);
+                        if (!hisKits.contains(kit))
+                            hisKits.add(kit);
                     }
                     Extender.kits.hisKits.put(gamer.getName(), hisKits);
                     r.close();
