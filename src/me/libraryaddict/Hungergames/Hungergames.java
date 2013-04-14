@@ -149,6 +149,9 @@ public class Hungergames extends JavaPlugin {
                 world.setTime(0);
                 world.getChunkAt(0, 0).load();
                 world.setSpawnLocation(0, world.getHighestBlockYAt(0, 0), 0);
+                for (int x = -1; x <= 1; x++)
+                    for (int z = -1; z <= 1; z++)
+                        world.getSpawnLocation().clone().add(x * 16, 0, z * 16).getChunk().load();
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
                     world.setStorm(false);
