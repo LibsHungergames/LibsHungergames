@@ -23,19 +23,11 @@ public class Kit extends Extender implements CommandExecutor {
                     p.sendMessage(ChatColor.RED + "Type /kit for all the kits you can use!");
                     return true;
                 }
-                if (!kits.ownsKit(sender.getName(), kit)) {
+                if (!kits.ownsKit((Player) sender, kit)) {
                     p.sendMessage(ChatColor.RED + "You do not own this kit!");
                     return true;
                 }
-                if (!kits.choose) {
-                    sender.sendMessage(ChatColor.RED + "You may not choose a kit this game, Everyone is using "
-                            + (kits.random ? "a random kit" : kits.defaultKit));
-                    return true;
-                }
-                me.libraryaddict.Hungergames.Types.Kit kito = kits.getKitByPlayer(p.getName());
-                if (kito != null)
-                    kito.removePlayer(p.getName());
-                kit.addPlayer(p.getName());
+                kits.setKit(p, kit.getName());
                 p.sendMessage(ChatColor.RED + "Now using kit " + kit.getName() + ChatColor.RED + "!");
             } else {
                 p.sendMessage(ChatColor.RED + "The game has already started!");

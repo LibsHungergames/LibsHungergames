@@ -40,8 +40,6 @@ public class KitManager extends Extender {
      */
     public List<Kit> kits = new ArrayList<Kit>();
     public String defaultKit;
-    public boolean choose = true;
-    public boolean random = false;
     private static KitManager kitty;
 
     public KitManager() {
@@ -64,18 +62,6 @@ public class KitManager extends Extender {
             getKitByName(kitNames.get(i)).setId(i);
     }
 
-    public void loadSaveKit(Player p, Kit kit) {
-        if (ownsKit(p.getName(), kit)) {
-            if (choose && hg.currentTime < 0 && setKit(p, kit.getName()))
-                p.sendMessage(ChatColor.RED + "Loaded saved kit: " + kit.getName());
-            else
-                p.sendMessage(ChatColor.RED + "Failed to load saved kit: " + kit.getName());
-        } else {
-            p.sendMessage(ChatColor.RED + "No permission to use kit: " + kit.getName());
-            p.sendMessage(ChatColor.RED + "Failed to load saved kit: " + kit.getName());
-        }
-    }
-
     public boolean setKit(Player p, String name) {
         Kit kit = getKitByName(name);
         if (kit == null)
@@ -89,7 +75,6 @@ public class KitManager extends Extender {
 
     private Kit parseKit(ConfigurationSection path) {
         String desc = ChatColor.translateAlternateColorCodes('&', path.getString("Description"));
-        String perm = path.getString("Permission");
         String name = path.getString("Name");
         if (name == null)
             name = path.getName();
@@ -119,7 +104,7 @@ public class KitManager extends Extender {
                 ability[n] = abilityList.get(n);
         } else
             ability = new String[0];
-        Kit kit = new Kit(name, armor, items, perm, desc, ability);
+        Kit kit = new Kit(name, armor, items, desc, ability);
         if (path.getBoolean("Free", false) == true)
             kit.setFree(true);
         if (path.getInt("Price", -1) != -1)
@@ -270,9 +255,8 @@ public class KitManager extends Extender {
     List<Kit> otherKits(Player p) {
         List<Kit> otherKit = new ArrayList<Kit>();
         for (Kit kit : kits)
-            otherKit.add(kit);
-        for (Kit kit : defaultKits)
-            otherKit.remove(kit);
+            if (!ownsKit(p, kit))
+                otherKit.add(kit);
         return otherKit;
     }
 
@@ -282,10 +266,11 @@ public class KitManager extends Extender {
         String currentKit = "None";
         if (getKitByPlayer(p.getName()) != null)
             currentKit = getKitByPlayer(p.getName()).getName();
-        for (Kit kit : defaultKits)
-            hisKits.add(kit.getName());
-        for (Kit kit : otherKits(p))
-            otherKits.add(kit.getName());
+        for (Kit kit : kits)
+            if (ownsKit(p, kit))
+                hisKits.add(kit.getName());
+            else
+                otherKits.add(kit.getName());
         Collections.sort(hisKits, String.CASE_INSENSITIVE_ORDER);
         Collections.sort(otherKits, String.CASE_INSENSITIVE_ORDER);
         if (getKitByPlayer(p.getName()) != null)
@@ -305,8 +290,10 @@ public class KitManager extends Extender {
         p.sendMessage(ChatColor.GREEN + "To view the information on a kit, Use /kitinfo <Kit>");
     }
 
-    public boolean ownsKit(String player, Kit kit) {
+    public boolean ownsKit(Player player, Kit kit) {
         if (defaultKits.contains(kit))
+            return true;
+        if (player.hasPermission(kit.getPermission()))
             return true;
         return hisKits.containsKey(player) && hisKits.get(player).contains(kit);
     }

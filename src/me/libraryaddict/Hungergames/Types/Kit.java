@@ -24,13 +24,13 @@ public class Kit extends Extender {
     private int id;
     static private int cId = 0;
 
-    public Kit(String name, ItemStack[] armour, ItemStack[] item, String perm, String desc, String[] abilitys) {
+    public Kit(String name, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
         id = cId;
         cId++;
         kitName = name;
         armor = armour;
         items = item;
-        permission = perm;
+        permission = "hungergames." + name.replaceAll(" ", "_");
         if (desc != null)
             description = desc;
         abilities = abilitys;

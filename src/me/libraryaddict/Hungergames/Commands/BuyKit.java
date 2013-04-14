@@ -25,7 +25,7 @@ public class BuyKit extends Extender implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + "You can't buy this kit!");
                         return true;
                     }
-                    if (kits.ownsKit(gamer.getName(), kit)) {
+                    if (kits.ownsKit(gamer.getPlayer(), kit)) {
                         sender.sendMessage(ChatColor.AQUA + "You already own this kit!");
                         return true;
                     }
