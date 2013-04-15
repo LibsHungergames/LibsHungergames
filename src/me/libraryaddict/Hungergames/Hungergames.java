@@ -167,7 +167,7 @@ public class Hungergames extends JavaPlugin {
                     Bukkit.getPluginManager().callEvent(new TimeSecondEvent());
                 }
             }
-        }, 0L, 1L);
+        }, 2L, 1L);
         getCommand("players").setExecutor(new Players());
         getCommand("time").setExecutor(new Time());
         getCommand("fstart").setExecutor(new Fstart());
@@ -354,6 +354,7 @@ public class Hungergames extends JavaPlugin {
         plugin.registerEvents(new Forger(), this);
         plugin.registerEvents(new Kaya(), this);
         plugin.registerEvents(new Hades(), this);
+        plugin.registerEvents(new Endermage(), this);
         for (Location l : Extender.playerListener.entitys.keySet())
             l.getWorld().spawnEntity(l, Extender.playerListener.entitys.get(l));
         Extender.playerListener.entitys.clear();
