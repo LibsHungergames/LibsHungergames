@@ -69,6 +69,7 @@ public class Endermage extends Extender implements Listener {
                                 meta.setDisplayName(ChatColor.WHITE + "Endermage Portal");
                                 item.setItemMeta(meta);
                                 item.addEnchantment(Enchants.UNLOOTABLE, 1);
+                                Enchants.updateEnchants(item);
                                 kits.addItem(mager.getPlayer(), item);
                             }
                         }
