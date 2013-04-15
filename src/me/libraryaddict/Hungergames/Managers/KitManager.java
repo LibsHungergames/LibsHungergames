@@ -38,7 +38,7 @@ public class KitManager extends Extender {
     /**
      * List of every kit
      */
-    public List<Kit> kits = new ArrayList<Kit>();
+    public ArrayList<Kit> kits = new ArrayList<Kit>();
     public String defaultKit;
     private static KitManager kitty;
 
@@ -57,7 +57,7 @@ public class KitManager extends Extender {
         List<String> kitNames = new ArrayList<String>();
         for (Kit kit : kits)
             kitNames.add(kit.getName());
-        Collections.sort(kitNames, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(kitNames);
         for (int i = 0; i < kitNames.size(); i++)
             getKitByName(kitNames.get(i)).setId(i);
     }
@@ -104,7 +104,13 @@ public class KitManager extends Extender {
                 ability[n] = abilityList.get(n);
         } else
             ability = new String[0];
-        Kit kit = new Kit(name, armor, items, desc, ability);
+        ItemStack icon = new ItemStack(Material.STONE);
+        if (path.contains("Icon")) {
+            icon = this.parseItem(path.getString("Icon"))[0];
+            if (icon == null)
+                icon = new ItemStack(Material.STONE);
+        }
+        Kit kit = new Kit(name, icon, armor, items, desc, ability);
         if (path.getBoolean("Free", false) == true)
             kit.setFree(true);
         if (path.getInt("Price", -1) != -1)

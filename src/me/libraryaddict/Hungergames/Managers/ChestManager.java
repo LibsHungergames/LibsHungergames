@@ -39,7 +39,7 @@ public class ChestManager {
         randomItems.add(new RandomItem(20, Material.ARROW, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.TNT, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.EXP_BOTTLE, 0, 1, 10));
-        randomItems.add(new RandomItem(16, Material.POTION, 16420, 1, 2)); // Poisons
+        randomItems.add(new RandomItem(16, Material.POTION, 16420, 1, 2)); // Poisons 
         randomItems.add(new RandomItem(16, Material.POTION, 16425, 1, 2)); // Strength
         randomItems.add(new RandomItem(16, Material.POTION, 16418, 1, 2)); // Speed
                                                                            // II

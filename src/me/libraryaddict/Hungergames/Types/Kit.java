@@ -13,6 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 public class Kit extends Extender {
 
     private String kitName;
+    private ItemStack icon;
     private ItemStack[] armor;
     private ItemStack[] items;
     private List<String> players = new ArrayList<String>();
@@ -24,8 +25,9 @@ public class Kit extends Extender {
     private int id;
     static private int cId = 0;
 
-    public Kit(String name, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
+    public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
         id = cId;
+        this.icon = icon;
         cId++;
         kitName = name;
         armor = armour;
@@ -34,6 +36,10 @@ public class Kit extends Extender {
         if (desc != null)
             description = desc;
         abilities = abilitys;
+    }
+    
+    public ItemStack getIcon() {
+        return icon;
     }
 
     public int getId() {

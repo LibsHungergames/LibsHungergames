@@ -27,6 +27,10 @@ public class Kit extends Extender implements CommandExecutor {
                     p.sendMessage(ChatColor.RED + "You do not own this kit!");
                     return true;
                 }
+                if (kit == kits.getKitByPlayer(sender.getName())) {
+                    sender.sendMessage(ChatColor.RED + "Already using kit " + kit.getName() + "!");
+                    return true;
+                }
                 kits.setKit(p, kit.getName());
                 p.sendMessage(ChatColor.RED + "Now using kit " + kit.getName() + ChatColor.RED + "!");
             } else {

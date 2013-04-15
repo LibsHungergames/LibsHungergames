@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Types;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.ChestManager;
+import me.libraryaddict.Hungergames.Managers.IconManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
@@ -16,4 +17,5 @@ public class Extender {
     public static PlayerListener playerListener;
     public static FeastManager fm;
     public static KitManager kits;
+    public static IconManager icon;
 }

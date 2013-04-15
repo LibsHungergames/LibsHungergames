@@ -14,7 +14,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -208,6 +210,8 @@ public class PlayerManager extends Extender {
                 else
                     entity.remove();
             }
+            if (entity instanceof Creature && ((Creature) entity).getTarget() == event.getKilled().getPlayer())
+                ((Creature) entity).setTarget(null);
         }
         if (!hg.spectators && !p.hasPermission("Hungegames.spectate"))
             p.kickPlayer(event.getDeathMessage());

@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Listeners;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,12 +10,14 @@ import java.util.Random;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Types.Kit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.ContainerBlock;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -121,6 +124,21 @@ public class PlayerListener extends Extender implements Listener {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
                     gamer.hide(gamer.getPlayer());
+                }
+            }, 0L);
+        } else {
+            gamer.clearInventory();
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+                public void run() {
+                    gamer.getPlayer()
+                            .getInventory()
+                            .addItem(
+                                    icon.generateItem(
+                                            Material.FLOWER_POT,
+                                            0,
+                                            "Kit Selector",
+                                            Arrays.asList(new String[] { "Right click with this",
+                                                    "to open a kit selection screen!" })));
                 }
             }, 0L);
         }
@@ -255,30 +273,37 @@ public class PlayerListener extends Extender implements Listener {
              * event.getClickedBlock().getState()).getInventory()); }
              */
         }
-        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (gamer.isAlive() && gamer.canRide())
                 if (p.isInsideVehicle() == true)
                     p.leaveVehicle();
-            if (hg.mushroomStew) {
-                ItemStack item = event.getItem();
-                if ((p.getHealth() < 20 || p.getFoodLevel() < 19) && item != null && item.getType() == Material.MUSHROOM_SOUP) {
+            ItemStack item = event.getItem();
+            if (item != null) {
+                if (item.getType() == Material.FLOWER_POT && item.getItemMeta().hasDisplayName()
+                        && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Kit Selector")) {
+                    p.openInventory(icon.getKitSelector());
                     event.setCancelled(true);
-                    if (p.getHealth() < 20)
-                        if (p.getHealth() + hg.mushroomStewRestores <= 20)
-                            p.setHealth(p.getHealth() + hg.mushroomStewRestores);
-                        else
-                            p.setHealth(20);
-                    else if (p.getFoodLevel() < 20)
-                        if (p.getFoodLevel() + hg.mushroomStewRestores <= 20)
-                            p.setFoodLevel(p.getFoodLevel() + hg.mushroomStewRestores);
-                        else
-                            p.setFoodLevel(20);
-                    if (item.getAmount() > 1) {
-                        item.setAmount(item.getAmount() - 1);
-                        kits.addItem(p, new ItemStack(Material.BOWL));
-                    } else
-                        item = new ItemStack(Material.BOWL);
-                    p.setItemInHand(item);
+                }
+                if (item.getType() == Material.MUSHROOM_SOUP && hg.mushroomStew) {
+                    if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
+                        event.setCancelled(true);
+                        if (p.getHealth() < 20)
+                            if (p.getHealth() + hg.mushroomStewRestores <= 20)
+                                p.setHealth(p.getHealth() + hg.mushroomStewRestores);
+                            else
+                                p.setHealth(20);
+                        else if (p.getFoodLevel() < 20)
+                            if (p.getFoodLevel() + hg.mushroomStewRestores <= 20)
+                                p.setFoodLevel(p.getFoodLevel() + hg.mushroomStewRestores);
+                            else
+                                p.setFoodLevel(20);
+                        if (item.getAmount() > 1) {
+                            item.setAmount(item.getAmount() - 1);
+                            kits.addItem(p, new ItemStack(Material.BOWL));
+                        } else
+                            item = new ItemStack(Material.BOWL);
+                        p.setItemInHand(item);
+                    }
                 }
             }
         }
@@ -347,6 +372,15 @@ public class PlayerListener extends Extender implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
             event.setCancelled(true);
+        }
+        if (event.getView().getTitle() != null && event.getView().getTitle().equals("Select kit")) {
+            event.setCancelled(true);
+            ItemStack item = event.getCurrentItem();
+            if (item != null && item.getItemMeta().hasDisplayName()) {
+                Kit kit = kits.getKitByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                if (kit != null)
+                    Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());
+            }
         }
     }
 }
