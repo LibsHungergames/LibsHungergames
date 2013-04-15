@@ -123,7 +123,7 @@ public class Hungergames extends JavaPlugin {
                 item.setAmount(0);
             kits.add(item);
         }
-        Extender.icon.createInventory(ChatColor.RED + "Select kit", kits);
+        Extender.icon.createInventory(ChatColor.DARK_RED + "Select kit", kits);
         Extender.playerListener = new PlayerListener();
         if (getConfig().getBoolean("DeleteWorld", true))
             FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/world"));
@@ -164,8 +164,8 @@ public class Hungergames extends JavaPlugin {
                 world.setTime(0);
                 world.getChunkAt(0, 0).load();
                 world.setSpawnLocation(0, world.getHighestBlockYAt(0, 0), 0);
-                for (int x = -1; x <= 1; x++)
-                    for (int z = -1; z <= 1; z++)
+                for (int x = -5; x <= 5; x++)
+                    for (int z = -5; z <= 5; z++)
                         world.getSpawnLocation().clone().add(x * 16, 0, z * 16).getChunk().load();
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
@@ -449,13 +449,13 @@ public class Hungergames extends JavaPlugin {
                 for (int repeations = 0; repeations <= 10; repeations++)
                     Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                         public void run() {
-                            Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!\n\nGame is restarting!");
+                            Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
                         }
                     }, repeations * 60);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(ChatColor.GOLD + winner.getName() + " won!");
+                            p.kickPlayer(ChatColor.GOLD + winner.getName() + " won!\n\nGame is restarting!");
                         shutdown();
                     }
                 }, 11 * 60);

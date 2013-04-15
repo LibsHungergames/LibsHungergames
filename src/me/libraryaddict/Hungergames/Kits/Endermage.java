@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -12,27 +13,42 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Endermage extends Extender implements Listener {
 
     HashMap<Player, List<Player>> angryMaged = new HashMap<Player, List<Player>>();
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
-        ItemStack item = event.getItemInHand();
-        if (item.getType() == Material.ENDER_PORTAL && item.getItemMeta().hasDisplayName()
+    public void onPlace(PlayerInteractEvent event) {
+        ItemStack item = event.getItem();
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && item.getType() == Material.ENDER_PORTAL
+                && item.getItemMeta().hasDisplayName()
                 && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Endermage Portal")) {
+            event.setCancelled(true);
+            final Block b = event.getClickedBlock();
+            if (b.getType() == Material.ENDER_PORTAL)
+                return;
+            item.setAmount(item.getAmount() - 1);
+            if (item.getAmount() == 0)
+                event.getPlayer().setItemInHand(new ItemStack(0));
             final List<Gamer> maged = new ArrayList<Gamer>();
             List<Player> victims = new ArrayList<Player>();
-            final Location portal = event.getBlock().getLocation().clone().add(0.5, 0.5, 0.5);
+            final Location portal = b.getLocation().clone().add(0.5, 0.5, 0.5);
+            final Material material = b.getType();
+            final byte dataValue = b.getData();
+            portal.getBlock().setType(Material.ENDER_PORTAL);
             for (Gamer gamer : pm.getAliveGamers()) {
-                Player p = event.getPlayer();
+                Player p = gamer.getPlayer();
                 if (p != event.getPlayer() && isEnderable(portal, p.getLocation())) {
                     maged.add(gamer);
                     victims.add(p);
@@ -55,8 +71,18 @@ public class Endermage extends Extender implements Listener {
                                 }
                             }
                         }
-                        if (no == 5)
+                        if (no == 5) {
+                            portal.getBlock().setTypeIdAndData(material.getId(), dataValue, true);
                             angryMaged.remove(mager.getPlayer());
+                            if (mager.isAlive()) {
+                                ItemStack item = new ItemStack(Material.ENDER_PORTAL);
+                                ItemMeta meta = item.getItemMeta();
+                                meta.setDisplayName(ChatColor.WHITE + "Endermage Portal");
+                                item.setItemMeta(meta);
+                                item.addEnchantment(Enchants.UNLOOTABLE, 1);
+                                kits.addItem(mager.getPlayer(), item);
+                            }
+                        }
                     }
                 }, i * 20);
             }

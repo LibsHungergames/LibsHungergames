@@ -35,9 +35,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
@@ -367,13 +369,18 @@ public class PlayerListener extends Extender implements Listener {
             }
         }
     }
+    
+    @EventHandler
+    public void onEnter(EntityPortalEvent event) {
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
             event.setCancelled(true);
         }
-        if (event.getView().getTitle() != null && event.getView().getTitle().equals("Select kit")) {
+        if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getKitSelector().getTitle())) {
             event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
             if (item != null && item.getItemMeta().hasDisplayName()) {
