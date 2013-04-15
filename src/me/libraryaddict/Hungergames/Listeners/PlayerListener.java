@@ -39,6 +39,7 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -99,7 +100,7 @@ public class PlayerListener extends Extender implements Listener {
     }
 
     @EventHandler
-    public void onChat(PlayerChatEvent event) {
+    public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
         if (!hg.spectatorChat && !gamer.isAlive() && hg.doSeconds) {
             Iterator<Player> players = event.getRecipients().iterator();
@@ -136,7 +137,7 @@ public class PlayerListener extends Extender implements Listener {
                             .getInventory()
                             .addItem(
                                     icon.generateItem(
-                                            Material.FLOWER_POT,
+                                            Material.FEATHER,
                                             0,
                                             "Kit Selector",
                                             Arrays.asList(new String[] { "Right click with this",
@@ -281,7 +282,7 @@ public class PlayerListener extends Extender implements Listener {
                     p.leaveVehicle();
             ItemStack item = event.getItem();
             if (item != null) {
-                if (item.getType() == Material.FLOWER_POT && item.getItemMeta().hasDisplayName()
+                if (item.getType() == Material.FEATHER && item.getItemMeta().hasDisplayName()
                         && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Kit Selector")) {
                     p.openInventory(icon.getKitSelector());
                     event.setCancelled(true);
