@@ -65,6 +65,7 @@ BadKits:
   - Barbarian
   - Burrower
   - Digger
+  #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
   - Explorer
   - Flash
@@ -487,7 +488,7 @@ Kits:
     Description: 'The Scout kit can be used at the start, or towards the end of the game. With 2 speed potions, you can use the potions as you please depending on your strategy! When speed is in effect, you take no fall damage! Every 10 minutes you get 2 new potions as well!'
     Free: true
     Price: 0
-    Icon: POTION 16418 1
+    Icon: FEATHER 0 1
     Items:
       - POTION 16418 2
     Ability:
@@ -569,7 +570,7 @@ Kits:
     Description: 'The Urgal kit starts with three Strength I potions. You can use the pots early, or late game depending on your strategy. It really is an excellent, attacking kit that can be supportive or solo intended.'
     Free: true
     Price: 0
-    Icon: POTION 16425 3
+    Icon: POTION 8201 3
     Items:
       - POTION 8201 3 Unlootable 1
     Ability:
