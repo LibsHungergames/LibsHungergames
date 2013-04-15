@@ -58,8 +58,13 @@ public class KitManager extends Extender {
         for (Kit kit : kits)
             kitNames.add(kit.getName());
         Collections.sort(kitNames);
-        for (int i = 0; i < kitNames.size(); i++)
-            getKitByName(kitNames.get(i)).setId(i);
+        ArrayList<Kit> newKit = new ArrayList<Kit>();
+        for (int i = 0; i < kitNames.size(); i++) {
+            Kit kit = getKitByName(kitNames.get(i));
+            kit.setId(i);
+            newKit.add(kit);
+        }
+        kits = newKit;
     }
 
     public boolean setKit(Player p, String name) {
