@@ -369,7 +369,7 @@ public class PlayerListener extends Extender implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onEnter(EntityPortalEvent event) {
         event.setCancelled(true);
@@ -383,7 +383,7 @@ public class PlayerListener extends Extender implements Listener {
         if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getKitSelector().getTitle())) {
             event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
-            if (item != null && item.getItemMeta().hasDisplayName()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Kit kit = kits.getKitByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                 if (kit != null)
                     Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());

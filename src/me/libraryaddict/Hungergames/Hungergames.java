@@ -1,9 +1,11 @@
 package me.libraryaddict.Hungergames;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -29,6 +31,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -82,6 +86,20 @@ public class Hungergames extends JavaPlugin {
 
     public void onEnable() {
         saveDefaultConfig();
+        if (getServer().getAllowEnd() && getConfig().getBoolean("DisableEnd", true)) {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
+            config.set("settings.allow-end", false);
+            try {
+                config.save(new File("bukkit.yml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Disabled the end");
+        }
+        if (getServer().getAllowNether() && getConfig().getBoolean("DisableNether", true)) {
+            ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
+            System.out.println("Disabled the nether");
+        }
         feastSize = getConfig().getInt("FeastSize", 20);
         invincibility = getConfig().getInt("Invincibility", 120);
         border = getConfig().getInt("BorderSize", 500);

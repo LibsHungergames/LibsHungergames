@@ -52,6 +52,10 @@ Winner3: 3
 GameStartingMotd: '&2Game starting in %time%.'
 GameStartedMotd: '&4Game in progress.'
 
+#Removes the end and nether
+RemoveEnd: true
+RemoveNether: true
+
 
 
 # Kits - Any kits you add can be done normally here.
