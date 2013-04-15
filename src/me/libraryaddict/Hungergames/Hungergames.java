@@ -141,10 +141,12 @@ public class Hungergames extends JavaPlugin {
                 item.setAmount(0);
             kits.add(item);
         }
+        String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
         Extender.icon.createInventory(ChatColor.DARK_RED + "Select kit", kits);
         Extender.playerListener = new PlayerListener();
         if (getConfig().getBoolean("DeleteWorld", true))
-            FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/world"));
+            FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
+                    + worldName));
         if (getConfig().getBoolean("LoadMap", false)) {
             File path = this.getDataFolder().getAbsoluteFile();
             if (getConfig().contains("MapPath")) {
@@ -165,8 +167,8 @@ public class Hungergames extends JavaPlugin {
                     try {
                         File[] files = toLoad.listFiles();
                         for (File f : files) {
-                            FileUtils.copy(f, new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile()
-                                    + "/world"));
+                            FileUtils.copy(f, new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile() + "/"
+                                    + worldName));
                         }
                     } catch (IOException e) {
 
