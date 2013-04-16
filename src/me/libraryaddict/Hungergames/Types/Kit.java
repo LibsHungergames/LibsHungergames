@@ -32,7 +32,7 @@ public class Kit extends Extender {
         kitName = name;
         armor = armour;
         items = item;
-        permission = "hungergames." + name.replaceAll(" ", "_");
+        permission = "hungergames." + name.replaceAll(" ", "_").toLowerCase();
         if (desc != null)
             description = desc;
         abilities = abilitys;
