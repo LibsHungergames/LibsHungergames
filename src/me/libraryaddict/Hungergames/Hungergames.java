@@ -83,6 +83,7 @@ public class Hungergames extends JavaPlugin {
     public int mushroomStewRestores;
     public String gameStartingMotd;
     public String gameStartedMotd;
+    public String kickMessage;
 
     public void onEnable() {
         saveDefaultConfig();
@@ -100,6 +101,8 @@ public class Hungergames extends JavaPlugin {
             ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
             System.out.println("Disabled the nether");
         }
+        kickMessage = ChatColor.translateAlternateColorCodes('&',
+                getConfig().getString("KickMessage", "&6%winner% won!\n\nPlugin provided by libraryaddict"));
         feastSize = getConfig().getInt("FeastSize", 20);
         invincibility = getConfig().getInt("Invincibility", 120);
         border = getConfig().getInt("BorderSize", 500);
@@ -475,7 +478,7 @@ public class Hungergames extends JavaPlugin {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(ChatColor.GOLD + winner.getName() + " won!\n\nGame is restarting!");
+                            p.kickPlayer(kickMessage.replaceAll("%winner%", winner.getName()));
                         shutdown();
                     }
                 }, 11 * 60);

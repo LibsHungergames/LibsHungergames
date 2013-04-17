@@ -56,7 +56,8 @@ GameStartedMotd: '&4Game in progress.'
 RemoveEnd: true
 RemoveNether: true
 
-
+# Changes the kick message
+KickMessage: '&6%winner% won!\nGame is restarting!\nPlugin provided by libraryaddict'
 
 # Kits - Any kits you add can be done normally here.
 DefaultKit: Boxer
