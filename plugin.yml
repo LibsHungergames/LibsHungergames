@@ -12,6 +12,7 @@ commands:
   build:
   goto:
   kit:
+    aliases: [kits]
   kitinfo:
   kititems:
   track:
