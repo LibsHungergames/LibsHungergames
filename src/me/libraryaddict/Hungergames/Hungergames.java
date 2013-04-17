@@ -474,18 +474,31 @@ public class Hungergames extends JavaPlugin {
                 if (reward > 0)
                     winner.addBalance(reward);
                 winner.getPlayer().setAllowFlight(true);
+<<<<<<< HEAD
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
                         Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
                     }
                 }, 0, wonBroadcastsDelay * 20);
+=======
+                for (int repeations = 0; repeations <= 5; repeations++)
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                        public void run() {
+                            Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
+                        }
+                    }, repeations * 120);
+>>>>>>> 7c2e4f6068f2d277a8d7d65f6f4819a99abb148f
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         for (Player p : Bukkit.getOnlinePlayers())
                             p.kickPlayer(kickMessage.replaceAll("%winner%", winner.getName()));
                         shutdown();
                     }
+<<<<<<< HEAD
                 }, gameShutdownDelay * 20);
+=======
+                }, 6 * 120);
+>>>>>>> 7c2e4f6068f2d277a8d7d65f6f4819a99abb148f
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
                 for (Player p : Bukkit.getOnlinePlayers())
