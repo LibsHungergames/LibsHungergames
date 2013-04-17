@@ -1,7 +1,7 @@
 name: LibsHungergames
 main: me.libraryaddict.Hungergames.Hungergames
 author: libraryaddict
-version: 0.7
+version: 0.8
 website: http://dev.bukkit.org/server-mods/hunger-games/
 load: startup
 softdepend: [LibsCommands, DisguiseCraft, Vault]
