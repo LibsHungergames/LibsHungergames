@@ -3,7 +3,6 @@ package me.libraryaddict.Hungergames.Kits;
 import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

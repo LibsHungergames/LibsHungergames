@@ -12,11 +12,6 @@ import net.minecraft.server.v1_5_R2.EntityTameableAnimal;
 import net.minecraft.server.v1_5_R2.MathHelper;
 import net.minecraft.server.v1_5_R2.PathEntity;
 import net.minecraft.server.v1_5_R2.PathPoint;
-import net.minecraft.server.v1_5_R2.PathfinderGoalDefendVillage;
-import net.minecraft.server.v1_5_R2.PathfinderGoalHurtByTarget;
-import net.minecraft.server.v1_5_R2.PathfinderGoalNearestAttackableTarget;
-import net.minecraft.server.v1_5_R2.PathfinderGoalOwnerHurtByTarget;
-import net.minecraft.server.v1_5_R2.PathfinderGoalOwnerHurtTarget;
 import net.minecraft.server.v1_5_R2.PathfinderGoalTarget;
 
 public class OwnerAttacked extends PathfinderGoalTarget {
@@ -28,7 +23,6 @@ public class OwnerAttacked extends PathfinderGoalTarget {
     private boolean a;
     private int b;
     private int c;
-    private int g;
 
     public OwnerAttacked(EntityLiving paramEntityTameableAnimal, EntityLiving owner) {
         super(paramEntityTameableAnimal, 32.0F, false);

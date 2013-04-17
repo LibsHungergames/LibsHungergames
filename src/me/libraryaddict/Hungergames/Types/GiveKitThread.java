@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import me.libraryaddict.Hungergames.Managers.MySqlManager;
-import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class GiveKitThread extends Thread {
     private Connection con = null;

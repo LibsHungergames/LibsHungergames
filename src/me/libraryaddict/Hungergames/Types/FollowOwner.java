@@ -1,7 +1,6 @@
 package me.libraryaddict.Hungergames.Types;
 
 import net.minecraft.server.v1_5_R2.EntityLiving;
-import net.minecraft.server.v1_5_R2.EntityTameableAnimal;
 import net.minecraft.server.v1_5_R2.MathHelper;
 import net.minecraft.server.v1_5_R2.Navigation;
 import net.minecraft.server.v1_5_R2.PathfinderGoal;
@@ -16,7 +15,6 @@ public class FollowOwner extends PathfinderGoal {
     private int h;
     float b;
     float c;
-    private boolean i;
 
     public FollowOwner(EntityLiving paramEntityTameableAnimal, float paramFloat1, float paramFloat2, float paramFloat3,
             EntityLiving owner) {
@@ -42,15 +40,14 @@ public class FollowOwner extends PathfinderGoal {
 
     public void c() {
         this.h = 0;
-        this.i = this.d.getNavigation().a();
         this.d.getNavigation().a(false);
     }
 
     public void d() {
         return;
-     /*   this.e = null;
-        this.g.g();
-        this.d.getNavigation().a(this.i);*/
+        /*
+         * this.e = null; this.g.g(); this.d.getNavigation().a(this.i);
+         */
     }
 
     public void e() {

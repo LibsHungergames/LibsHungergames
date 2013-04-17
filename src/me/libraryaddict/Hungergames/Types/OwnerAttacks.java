@@ -23,7 +23,6 @@ public class OwnerAttacks extends PathfinderGoalTarget {
     private boolean a;
     private int b;
     private int c;
-    private int g;
 
     public OwnerAttacks(EntityLiving paramEntityTameableAnimal, EntityLiving owner) {
         super(paramEntityTameableAnimal, 32.0F, false);

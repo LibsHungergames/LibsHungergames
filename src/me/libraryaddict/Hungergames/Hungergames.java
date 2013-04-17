@@ -1,11 +1,9 @@
 package me.libraryaddict.Hungergames;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -23,7 +21,6 @@ import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
@@ -84,6 +81,10 @@ public class Hungergames extends JavaPlugin {
     public String gameStartingMotd;
     public String gameStartedMotd;
     public String kickMessage;
+    public int minPlayers;
+    public boolean fireSpread;
+    public int wonBroadcastsDelay;
+    public int gameShutdownDelay;
 
     public void onEnable() {
         saveDefaultConfig();
@@ -101,6 +102,10 @@ public class Hungergames extends JavaPlugin {
             ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
             System.out.println("Disabled the nether");
         }
+        minPlayers = getConfig().getInt("MinPlayers", 2);
+        fireSpread = getConfig().getBoolean("DisableFireSpread", false);
+        wonBroadcastsDelay = getConfig().getInt("WinnerBroadcastingDelay");
+        gameShutdownDelay = getConfig().getInt("GameShutdownDelay");
         kickMessage = ChatColor.translateAlternateColorCodes('&',
                 getConfig().getString("KickMessage", "&6%winner% won!\n\nPlugin provided by libraryaddict"));
         feastSize = getConfig().getInt("FeastSize", 20);
@@ -311,7 +316,7 @@ public class Hungergames extends JavaPlugin {
             if (currentTime % 60 == 0 || currentTime == -10 || currentTime == -30 || (currentTime >= -5 && currentTime < 0))
                 Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
         } else if (currentTime == 0) {
-            if (pm.getGamers().size() <= 1) {
+            if (pm.getGamers().size() < minPlayers) {
                 currentTime = -90;
                 Bukkit.broadcastMessage(ChatColor.RED + "You need more people!");
                 return;
@@ -469,19 +474,18 @@ public class Hungergames extends JavaPlugin {
                 if (reward > 0)
                     winner.addBalance(reward);
                 winner.getPlayer().setAllowFlight(true);
-                for (int repeations = 0; repeations <= 10; repeations++)
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-                        public void run() {
-                            Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
-                        }
-                    }, repeations * 60);
+                Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+                    public void run() {
+                        Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
+                    }
+                }, 0, wonBroadcastsDelay * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         for (Player p : Bukkit.getOnlinePlayers())
                             p.kickPlayer(kickMessage.replaceAll("%winner%", winner.getName()));
                         shutdown();
                     }
-                }, 11 * 60);
+                }, gameShutdownDelay * 20);
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
                 for (Player p : Bukkit.getOnlinePlayers())

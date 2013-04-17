@@ -1,16 +1,7 @@
 package me.libraryaddict.Hungergames.Managers;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Bukkit;
-
 import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.PlayerJoinThread;
-import me.libraryaddict.Hungergames.Types.GiveKitThread;
 
 public class MySqlManager extends Extender {
     public String SQL_USER = "";

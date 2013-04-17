@@ -59,6 +59,18 @@ RemoveNether: true
 # Changes the kick message
 KickMessage: '&6%winner% won!\nGame is restarting!\nPlugin provided by libraryaddict'
 
+# Disables fire spread before the game starts
+DisableFireSpread: false
+
+# Min players to start a game
+MinPlayers: 2
+
+# Delay in seconds between broadcasts of 'libraryaddict won!'
+WinnerBroadcastingDelay: 6
+
+# Delay in seconds before the game shuts down after a winner
+GameShutdownDelay: 33
+
 # Kits - Any kits you add can be done normally here.
 DefaultKit: Boxer
 # Bad kits is kits which will not be usable.

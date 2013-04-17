@@ -1,9 +1,6 @@
 package me.libraryaddict.Hungergames.Listeners;
 
 import me.libraryaddict.Hungergames.Types.Extender;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +8,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class GeneralListener extends Extender implements Listener {
 
@@ -25,18 +21,20 @@ public class GeneralListener extends Extender implements Listener {
 
     @EventHandler
     public void ignite(final BlockIgniteEvent event) {
-        if (event.getPlayer() != null) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                public void run() {
-                    ItemStack item = event.getPlayer().getItemInHand();
-                    if (item != null && item.getType() == Material.FLINT_AND_STEEL) {
-                        item.setDurability((short) (item.getDurability() + 10));
-                        if (item.getDurability() > 63)
-                            event.getPlayer().setItemInHand(new ItemStack(Material.AIR));
-                    }
-                }
-            });
+        if (hg.currentTime < 0 && hg.fireSpread) {
+            event.setCancelled(true);
+            return;
         }
+        /*
+         * if (event.getPlayer() != null) {
+         * Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+         * public void run() { ItemStack item =
+         * event.getPlayer().getItemInHand(); if (item != null && item.getType()
+         * == Material.FLINT_AND_STEEL) { item.setDurability((short)
+         * (item.getDurability() + 10)); if (item.getDurability() > 63)
+         * event.getPlayer().setItemInHand(new ItemStack(Material.AIR)); } } });
+         * }
+         */
     }
 
     @EventHandler

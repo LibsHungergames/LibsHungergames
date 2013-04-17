@@ -1,7 +1,5 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import net.minecraft.server.v1_5_R2.RecipesCrafting;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
