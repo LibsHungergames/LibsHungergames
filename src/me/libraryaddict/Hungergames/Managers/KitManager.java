@@ -47,7 +47,7 @@ public class KitManager extends Extender {
         ConfigurationSection config = hg.getConfig();
         defaultKit = config.getString("DefaultKit");
         for (String string : config.getConfigurationSection("Kits").getKeys(false)) {
-            if (config.getStringList("BadKits").contains(string))
+            if (config.contains("BadKits") && config.getStringList("BadKits").contains(string))
                 continue;
             Kit kit = parseKit(config.getConfigurationSection("Kits." + string));
             kits.add(kit);
