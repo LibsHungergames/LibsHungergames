@@ -13,6 +13,7 @@ public class MySqlManager extends Extender {
 
     public MySqlManager() {
         joinThread = new PlayerJoinThread(this, pm);
+        joinThread.start();
         // joinThread.start();
         // quitThread.start();
         // pointsThread.start();*/
