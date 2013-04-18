@@ -10,7 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class IconManager {
+public class KitSelectorManager {
     Inventory icon;
 
     public void createInventory(String invName, ArrayList<ItemStack> items) {
@@ -37,7 +37,7 @@ public class IconManager {
         return item;
     }
 
-    public Inventory getKitSelector() {
+    public Inventory getInventory() {
         return icon;
     }
 }

@@ -279,7 +279,7 @@ public class PlayerListener extends Extender implements Listener {
             if (item != null) {
                 if (item.getType() == Material.FEATHER && item.getItemMeta().hasDisplayName()
                         && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Kit Selector")) {
-                    p.openInventory(icon.getKitSelector());
+                    p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && hg.mushroomStew) {
@@ -376,7 +376,7 @@ public class PlayerListener extends Extender implements Listener {
         if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
             event.setCancelled(true);
         }
-        if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getKitSelector().getTitle())) {
+        if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getInventory().getTitle())) {
             event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {

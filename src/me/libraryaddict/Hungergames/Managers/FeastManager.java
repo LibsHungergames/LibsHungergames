@@ -69,7 +69,7 @@ public class FeastManager extends Extender {
             }
         }
         if (found.size() == 0)
-            return 64;
+            return -1;
         return found.get((int) Math.round(found.size() / 3));
     }
 
@@ -138,6 +138,8 @@ public class FeastManager extends Extender {
             heightLevels.add(b.getY());
         Collections.sort(heightLevels);
         int y = getHeight(heightLevels, 5);
+        if (y == -1)
+            y = b.getY();
         loc = new Location(loc.getWorld(), loc.getBlockX(), y + 1, loc.getBlockZ());
         return y;
     }

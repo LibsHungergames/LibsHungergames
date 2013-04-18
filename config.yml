@@ -52,6 +52,9 @@ Winner3: 3
 GameStartingMotd: '&2Game starting in %time%.'
 GameStartedMotd: '&4Game in progress.'
 
+# Should the minutes and seconds in motd be shortened to mins and secs?
+ShortenTime: false
+
 #Removes the end and nether
 RemoveEnd: true
 RemoveNether: true
@@ -70,6 +73,7 @@ WinnerBroadcastingDelay: 6
 
 # Delay in seconds before the game shuts down after a winner
 GameShutdownDelay: 33
+
 
 # Kits - Any kits you add can be done normally here.
 DefaultKit: Boxer

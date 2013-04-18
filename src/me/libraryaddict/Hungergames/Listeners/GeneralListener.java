@@ -48,12 +48,12 @@ public class GeneralListener extends Extender implements Listener {
             event.setMotd(hg.gameStartedMotd);
         else {
             String curTime = "";
-            if (hg.currentTime <= -60) {
-                curTime = (int) Math.floor(Math.abs(hg.currentTime) / 60) + " minute";
-                if (hg.currentTime < -120)
+            if (hg.currentTime < -60) {
+                curTime = (int) Math.floor(Math.abs(hg.currentTime) / 60) + " " + (hg.shortenTime ? "min" : "minute");
+                if (hg.currentTime <= -120)
                     curTime += "s";
             } else {
-                curTime = Math.abs(hg.currentTime) + " second";
+                curTime = Math.abs(hg.currentTime) + " " + (hg.shortenTime ? "sec" : "second");
                 if (hg.currentTime < -1)
                     curTime += "s";
             }

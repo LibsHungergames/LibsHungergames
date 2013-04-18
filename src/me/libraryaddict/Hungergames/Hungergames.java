@@ -85,6 +85,7 @@ public class Hungergames extends JavaPlugin {
     public boolean fireSpread;
     public int wonBroadcastsDelay;
     public int gameShutdownDelay;
+    public boolean shortenTime;
 
     public void onEnable() {
         saveDefaultConfig();
@@ -102,6 +103,7 @@ public class Hungergames extends JavaPlugin {
             ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
             System.out.println("Disabled the nether");
         }
+        shortenTime = getConfig().getBoolean("ShortenTime", false);
         minPlayers = getConfig().getInt("MinPlayers", 2);
         fireSpread = getConfig().getBoolean("DisableFireSpread", false);
         wonBroadcastsDelay = getConfig().getInt("WinnerBroadcastingDelay");
@@ -124,7 +126,7 @@ public class Hungergames extends JavaPlugin {
         Extender.cm = new ChestManager();
         Extender.pm = new PlayerManager();
         Extender.fm = new FeastManager();
-        Extender.icon = new IconManager();
+        Extender.icon = new KitSelectorManager();
         pm = Extender.pm;
         Extender.mysql = new MySqlManager();
         MySqlManager mysql = Extender.mysql;
