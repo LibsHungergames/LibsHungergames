@@ -75,10 +75,7 @@ public class Hungergames extends JavaPlugin {
 
         new Enchants();
         new HungergamesApi(this);
-        HungergamesApi.getChestManager();
         pm = HungergamesApi.getPlayerManager();
-        HungergamesApi.getFeastManager();
-        KitSelectorManager icon = HungergamesApi.getKitSelector();
         config = HungergamesApi.getConfigManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
@@ -98,7 +95,7 @@ public class Hungergames extends JavaPlugin {
             kitList.add(item);
         }
         String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
-        icon.createInventory(ChatColor.DARK_RED + "Select kit", kitList);
+        HungergamesApi.getKitSelector().createInventory(ChatColor.DARK_RED + "Select kit", kitList);
         if (getConfig().getBoolean("DeleteWorld", true))
             FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
                     + worldName));
