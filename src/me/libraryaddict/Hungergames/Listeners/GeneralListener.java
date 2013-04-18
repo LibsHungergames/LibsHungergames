@@ -53,13 +53,10 @@ public class GeneralListener extends Extender implements Listener {
             	if(hg.MotdShortTime){
                 	curTime = (int) Math.floor(Math.abs(hg.currentTime) / 60) + " min";
                 }else{
-                    curTime = Math.abs(hg.currentTime) + " second";
-                	if (hg.currentTime < -1)
-                    	curTime += "s";	
+                    curTime = Math.abs(hg.currentTime) + " minute";
+                    if (hg.currentTime < -120)
+                        curTime += "s";
                 }
-            	
-                if (hg.currentTime < -120)
-                    curTime += "s";
             } else {
                 if(hg.MotdShortTime){
                     curTime = Math.abs(hg.currentTime) + " sec";
