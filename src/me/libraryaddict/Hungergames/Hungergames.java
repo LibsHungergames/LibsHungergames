@@ -319,7 +319,7 @@ public class Hungergames extends JavaPlugin {
                 ScoreboardManager.makeScore(ChatColor.GOLD + "Invincible", config.getInvincibilityTime());
         }
         Bukkit.broadcastMessage(ChatColor.RED + "The game has started!");
-        if (config.getInvincibilityTime() > 0)
+        if (config.getInvincibilityTime() > 0 && config.displayMessages())
             Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(config.getInvincibilityTime())
                     + "!");
         for (Gamer gamer : pm.getGamers()) {
