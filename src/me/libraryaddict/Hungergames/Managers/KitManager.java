@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.Enchants;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-public class KitManager extends Extender {
+public class KitManager {
     /**
      * Kits every player gets by default
      */
@@ -41,9 +42,11 @@ public class KitManager extends Extender {
     public ArrayList<Kit> kits = new ArrayList<Kit>();
     public String defaultKit;
     private static KitManager kitty;
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public KitManager() {
         kitty = this;
+        hg.saveDefaultConfig();
         ConfigurationSection config = hg.getConfig();
         defaultKit = config.getString("DefaultKit");
         for (String string : config.getConfigurationSection("Kits").getKeys(false)) {

@@ -1,9 +1,8 @@
 package me.libraryaddict.Hungergames.Managers;
 
-import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.PlayerJoinThread;
 
-public class MySqlManager extends Extender {
+public class MySqlManager  {
     public String SQL_USER = "";
     public String SQL_PASS = "";
     public String SQL_DATA = "";
@@ -12,7 +11,7 @@ public class MySqlManager extends Extender {
     private PlayerJoinThread joinThread;
 
     public MySqlManager() {
-        joinThread = new PlayerJoinThread(this, pm);
+        joinThread = new PlayerJoinThread(this);
         joinThread.start();
         // joinThread.start();
         // quitThread.start();

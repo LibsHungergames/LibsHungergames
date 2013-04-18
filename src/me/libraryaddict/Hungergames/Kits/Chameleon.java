@@ -1,7 +1,9 @@
 package me.libraryaddict.Hungergames.Kits;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Creature;
@@ -15,8 +17,11 @@ import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
 import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
 
-public class Chameleon extends Extender implements Listener {
+public class Chameleon implements Listener {
     DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
+
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {

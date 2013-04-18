@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Location;
@@ -17,7 +19,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.util.Vector;
 
-public class Stomper extends Extender implements Listener {
+public class Stomper implements Listener {
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
+
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.isCancelled())
@@ -64,8 +69,8 @@ public class Stomper extends Extender implements Listener {
                         if (hisDmg >= ((LivingEntity) entity).getHealth() && entity instanceof Player) {
                             Gamer gamer = pm.getGamer(entity);
                             if (gamer.isAlive())
-                                pm.killPlayer(gamer, p, entity.getLocation(), gamer.getInventory(),
-                                        gamer.getName() + " was stomped by " + p.getName());
+                                pm.killPlayer(gamer, p, entity.getLocation(), gamer.getInventory(), gamer.getName()
+                                        + " was stomped by " + p.getName());
                         } else
                             ((LivingEntity) entity).damage(hisDmg);
                     }

@@ -3,11 +3,13 @@ package me.libraryaddict.Hungergames.Kits;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class Creeper extends Extender implements Listener {
+public class Creeper implements Listener {
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onExplode(PlayerKilledEvent event) {

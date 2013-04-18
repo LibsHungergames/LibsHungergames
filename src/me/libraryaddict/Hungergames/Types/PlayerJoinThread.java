@@ -9,16 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
     private Connection con = null;
-    PlayerManager pm;
     MySqlManager mysql;
 
-    public PlayerJoinThread(MySqlManager mysql, PlayerManager pm) {
-        this.pm = pm;
+    public PlayerJoinThread(MySqlManager mysql) {
         this.mysql = mysql;
     }
 
@@ -74,9 +73,11 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void run() {
-        if (!Extender.mysql.enabled)
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
             return;
         SQLconnect();
+        KitManager kits = HungergamesApi.getKitManager();
+        PlayerManager pm = HungergamesApi.getPlayerManager();
         while (true) {
             if (pm.loadGamer.peek() != null) {
                 Gamer gamer = pm.loadGamer.poll();
@@ -85,14 +86,14 @@ public class PlayerJoinThread extends Thread {
                     ResultSet r = stmt.executeQuery("SELECT * FROM `HGKits` WHERE `Name` = '" + gamer.getName() + "' ;");
                     r.beforeFirst();
                     List<Kit> hisKits = new ArrayList<Kit>();
-                    if (Extender.kits.hisKits.containsKey(gamer.getName()))
-                        hisKits = Extender.kits.hisKits.get(gamer.getName());
+                    if (kits.hisKits.containsKey(gamer.getName()))
+                        hisKits = kits.hisKits.get(gamer.getName());
                     while (r.next()) {
-                        Kit kit = Extender.kits.getKitByName(r.getString("Kit"));
+                        Kit kit = kits.getKitByName(r.getString("Kit"));
                         if (!hisKits.contains(kit))
                             hisKits.add(kit);
                     }
-                    Extender.kits.hisKits.put(gamer.getName(), hisKits);
+                    kits.hisKits.put(gamer.getName(), hisKits);
                     r.close();
                     stmt.close();
                 } catch (SQLException ex) {

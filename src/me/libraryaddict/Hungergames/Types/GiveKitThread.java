@@ -26,8 +26,10 @@ public class GiveKitThread extends Thread {
     public void SQLconnect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String conn = "jdbc:mysql://" + Extender.mysql.SQL_HOST + "/" + Extender.mysql.SQL_DATA;
-            con = DriverManager.getConnection(conn, Extender.mysql.SQL_USER, Extender.mysql.SQL_PASS);
+            String conn = "jdbc:mysql://" + HungergamesApi.getMySqlManager().SQL_HOST + "/"
+                    + HungergamesApi.getMySqlManager().SQL_DATA;
+            con = DriverManager.getConnection(conn, HungergamesApi.getMySqlManager().SQL_USER,
+                    HungergamesApi.getMySqlManager().SQL_PASS);
         } catch (ClassNotFoundException ex) {
         } catch (SQLException ex) {
         } catch (Exception ex) {
@@ -35,7 +37,7 @@ public class GiveKitThread extends Thread {
     }
 
     public void run() {
-        if (!Extender.mysql.enabled)
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
             return;
         SQLconnect();
         try {

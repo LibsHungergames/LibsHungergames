@@ -2,7 +2,8 @@ package me.libraryaddict.Hungergames.Events;
 
 import java.util.List;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Location;
@@ -27,6 +28,7 @@ public class PlayerKilledEvent extends Event implements Cancellable {
 
     public PlayerKilledEvent(Gamer killed, Entity killer, Gamer backupKiller, String deathMessage, Location itemsDrop,
             List<ItemStack> itemsToDrop) {
+        PlayerManager pm = HungergamesApi.getPlayerManager();
         this.killed = killed;
         killed.setSpectating(true);
         this.killer = killer;
@@ -34,15 +36,15 @@ public class PlayerKilledEvent extends Event implements Cancellable {
         this.dropItems = itemsDrop;
         this.items = itemsToDrop;
         if (killer instanceof Projectile) {
-            killerGamer = Extender.pm.getGamer(((Projectile) killer).getShooter());
+            killerGamer = pm.getGamer(((Projectile) killer).getShooter());
             if (killerGamer == killed)
                 killerGamer = null;
         } else if (killer instanceof Tameable) {
-            killerGamer = Extender.pm.getGamer(((Tameable) killer).getOwner().getName());
+            killerGamer = pm.getGamer(((Tameable) killer).getOwner().getName());
             if (killerGamer == killed)
                 killerGamer = null;
         } else if (killer instanceof Player) {
-            killerGamer = Extender.pm.getGamer(killer);
+            killerGamer = pm.getGamer(killer);
             if (killerGamer == killed)
                 killerGamer = null;
         }

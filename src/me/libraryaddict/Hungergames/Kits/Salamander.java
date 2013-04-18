@@ -2,9 +2,11 @@ package me.libraryaddict.Hungergames.Kits;
 
 import java.util.ArrayList;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,9 +16,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Salamander extends Extender implements Listener {
+public class Salamander implements Listener {
 
     ArrayList<Player> salamanders = new ArrayList<Player>();
+
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {

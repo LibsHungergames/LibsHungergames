@@ -2,7 +2,9 @@ package me.libraryaddict.Hungergames.Kits;
 
 import java.util.HashMap;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,8 +18,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class Thor extends Extender implements Listener {
+public class Thor implements Listener {
     HashMap<String, Long> lastThored = new HashMap<String, Long>();
+
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

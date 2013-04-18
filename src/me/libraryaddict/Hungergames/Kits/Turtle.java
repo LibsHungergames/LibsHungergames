@@ -6,9 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Turtle extends Extender implements Listener {
+public class Turtle implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {

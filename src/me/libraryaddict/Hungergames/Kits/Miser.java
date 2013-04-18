@@ -1,13 +1,16 @@
 package me.libraryaddict.Hungergames.Kits;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class Miser extends Extender implements Listener {
+public class Miser implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKilled(PlayerKilledEvent event) {

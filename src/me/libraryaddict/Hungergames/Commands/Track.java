@@ -1,7 +1,9 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Kits.Tracker;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
@@ -10,7 +12,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Track extends Extender implements CommandExecutor {
+public class Track implements CommandExecutor {
+    private KitManager kits = HungergamesApi.getKitManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (kits.hasAbility(gamer.getPlayer(), "Tracker")) {

@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,7 +10,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Forger extends Extender implements Listener {
+public class Forger implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onIntentoryClick(InventoryClickEvent event) {

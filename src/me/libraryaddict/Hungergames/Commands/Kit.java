@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -10,7 +12,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Kit extends Extender implements CommandExecutor {
+public class Kit implements CommandExecutor {
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Player p = Bukkit.getPlayerExact(sender.getName());

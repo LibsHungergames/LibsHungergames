@@ -10,9 +10,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Berserker extends Extender implements Listener {
+public class Berserker  implements Listener {
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

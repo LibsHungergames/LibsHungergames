@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -17,7 +18,7 @@ import me.libraryaddict.Hungergames.Listeners.LibsCommandsListener;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.Enchants;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -28,8 +29,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -66,87 +67,27 @@ public class Hungergames extends JavaPlugin {
     protected long time = 0;
     public World world;
     public Location feastLoc;
-
-    private int feastSize;
-    public int invincibility;
-    private boolean borderCloseIn;
-    public boolean spectatorChat;
-    public boolean spectators;
-    private int timeTillFeast;
-    private double border = 500;
-    private double borderClosesIn = 0.2D;
-    private int chestLayers;
-    public boolean mushroomStew;
-    public int mushroomStewRestores;
-    public String gameStartingMotd;
-    public String gameStartedMotd;
-    public String kickMessage;
-    public int minPlayers;
-    public boolean fireSpread;
-    public int wonBroadcastsDelay;
-    public int gameShutdownDelay;
-    public boolean shortenTime;
-    public boolean displayMessages;
-    public boolean displayScoreboards;
+    private ConfigManager config;
+    public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
+    private PlayerListener playerListener;
 
     public void onEnable() {
-        saveDefaultConfig();
-        if (getServer().getAllowEnd() && getConfig().getBoolean("DisableEnd", true)) {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
-            config.set("settings.allow-end", false);
-            try {
-                config.save(new File("bukkit.yml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Disabled the end");
-        }
-        if (getServer().getAllowNether() && getConfig().getBoolean("DisableNether", true)) {
-            ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
-            System.out.println("Disabled the nether");
-        }
-        shortenTime = getConfig().getBoolean("ShortenTime", false);
-        displayScoreboards = getConfig().getBoolean("Scoreboards", false);
-        displayMessages = getConfig().getBoolean("Messages", true);
-        shortenTime = getConfig().getBoolean("ShortenTime", false);
-        minPlayers = getConfig().getInt("MinPlayers", 2);
-        fireSpread = getConfig().getBoolean("DisableFireSpread", false);
-        wonBroadcastsDelay = getConfig().getInt("WinnerBroadcastingDelay");
-        gameShutdownDelay = getConfig().getInt("GameShutdownDelay");
-        kickMessage = ChatColor.translateAlternateColorCodes('&',
-                getConfig().getString("KickMessage", "&6%winner% won!\n\nPlugin provided by libraryaddict"));
-        feastSize = getConfig().getInt("FeastSize", 20);
-        invincibility = getConfig().getInt("Invincibility", 120);
-        border = getConfig().getInt("BorderSize", 500);
-        chestLayers = getConfig().getInt("ChestLayers", 500);
-        timeTillFeast = getConfig().getInt("TimeTillFeast", 500);
-        borderCloseIn = getConfig().getBoolean("BorderCloseIn", true);
-        borderClosesIn = getConfig().getDouble("BorderClosesIn", 0.2);
-        spectatorChat = getConfig().getBoolean("SpectatorChat", true);
-        spectators = getConfig().getBoolean("Spectators", true);
-        mushroomStew = getConfig().getBoolean("MushroomStew", false);
-        mushroomStewRestores = getConfig().getInt("MushroomStewRestores", 5);
+
         new Enchants();
-        Extender.hg = this;
-        Extender.cm = new ChestManager();
-        Extender.pm = new PlayerManager();
-        Extender.fm = new FeastManager();
-        Extender.icon = new KitSelectorManager();
-        pm = Extender.pm;
-        Extender.mysql = new MySqlManager();
-        MySqlManager mysql = Extender.mysql;
-        mysql.enabled = getConfig().getBoolean("UseMySql", false);
+        new HungergamesApi(this);
+        HungergamesApi.getChestManager();
+        pm = HungergamesApi.getPlayerManager();
+        HungergamesApi.getFeastManager();
+        KitSelectorManager icon = HungergamesApi.getKitSelector();
+        config = HungergamesApi.getConfigManager();
+        MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
         mysql.SQL_USER = getConfig().getString("MySqlUser");
-        gameStartingMotd = ChatColor.translateAlternateColorCodes('&',
-                getConfig().getString("GameStartingMotd", "&2Game starting in %time%."));
-        gameStartedMotd = ChatColor.translateAlternateColorCodes('&',
-                getConfig().getString("GameStartedMotd", "&4Game in progress."));
-        Extender.kits = new KitManager();
-        ArrayList<ItemStack> kits = new ArrayList<ItemStack>();
-        for (me.libraryaddict.Hungergames.Types.Kit kit : Extender.kits.kits) {
+        KitManager kits = HungergamesApi.getKitManager();
+        ArrayList<ItemStack> kitList = new ArrayList<ItemStack>();
+        for (me.libraryaddict.Hungergames.Types.Kit kit : kits.kits) {
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + kit.getName());
@@ -154,11 +95,10 @@ public class Hungergames extends JavaPlugin {
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
                 item.setAmount(0);
-            kits.add(item);
+            kitList.add(item);
         }
         String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
-        Extender.icon.createInventory(ChatColor.DARK_RED + "Select kit", kits);
-        Extender.playerListener = new PlayerListener();
+        icon.createInventory(ChatColor.DARK_RED + "Select kit", kitList);
         if (getConfig().getBoolean("DeleteWorld", true))
             FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
                     + worldName));
@@ -235,7 +175,8 @@ public class Hungergames extends JavaPlugin {
         getCommand("ride").setExecutor(new Ride());
         getCommand("creator").setExecutor(new Creator());
         getCommand("buykit").setExecutor(new BuyKit());
-        Bukkit.getPluginManager().registerEvents(Extender.playerListener, this);
+        playerListener = new PlayerListener();
+        Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
         if (Bukkit.getPluginManager().getPlugin("LibsCommands") != null)
             Bukkit.getPluginManager().registerEvents(new LibsCommandsListener(), this);
@@ -277,6 +218,7 @@ public class Hungergames extends JavaPlugin {
         Location sLoc = world.getSpawnLocation();
         Location tpTo = loc.clone();
         int fromSpawn = loc.getBlockX() - sLoc.getBlockX();
+        final double border = config.getBorderSize();
         if (fromSpawn > border - 20) {
             tpTo.setX(((border - 2) + sLoc.getBlockX()));
         }
@@ -320,54 +262,50 @@ public class Hungergames extends JavaPlugin {
         }
         if (currentTime < 0) {
             world.setTime(0);
-            if (displayScoreboards)
-                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Starting in"))
-                        .setScore(-currentTime);
-            if (displayMessages)
-                if (currentTime % 60 == 0 || currentTime == -10 || currentTime == -30 || (currentTime >= -5 && currentTime < 0))
+            if (config.displayScoreboards())
+                ScoreboardManager.makeScore(ChatColor.GOLD + "Starting in", -currentTime);
+            if (config.displayMessages())
+                if (config.advertiseGameStarting(currentTime))
                     Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
         } else if (currentTime == 0) {
-            if (pm.getGamers().size() < minPlayers) {
+            if (pm.getGamers().size() < config.getMinPlayers()) {
                 currentTime = -90;
                 Bukkit.broadcastMessage(ChatColor.RED + "You need more people!");
                 return;
             }
             startGame();
             return;
-        } else if (currentTime == timeTillFeast) {
-            if (displayScoreboards)
-                ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Feast in"));
-            Extender.fm.generateChests(feastLoc, chestLayers);
+        } else if (currentTime == config.getTimeFeastStarts()) {
+            if (config.displayScoreboards())
+                ScoreboardManager.hideScore(ChatColor.GOLD + "Feast in");
+            HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
             Bukkit.broadcastMessage(ChatColor.RED + "The feast has begun!");
-        } else if (currentTime < timeTillFeast && currentTime >= timeTillFeast - (5 * 60)) {
-            if (displayScoreboards)
-                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Feast in"))
-                        .setScore(timeTillFeast - currentTime);
-            if ((currentTime == timeTillFeast - 60 || currentTime == timeTillFeast - 180
-                    || currentTime == timeTillFeast - (5 * 60) || currentTime == timeTillFeast - 30
-                    || currentTime == timeTillFeast - 10 || currentTime >= timeTillFeast - 5)) {
+        } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
+            if (config.displayScoreboards())
+                ScoreboardManager.makeScore(ChatColor.GOLD + "Feast in", config.feastStartsIn());
+            if (config.advertiseFeast(currentTime)) {
                 if (feastLoc.getBlockY() == 0) {
                     feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-                    Extender.fm.generateSpawn(feastLoc, Extender.fm.getSpawnHeight(feastLoc, feastSize), feastSize);
+                    HungergamesApi.getFeastManager().generateSpawn(feastLoc,
+                            HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize()),
+                            config.getFeastSize());
                 }
                 Bukkit.broadcastMessage(ChatColor.RED + "The feast will begin at (" + feastLoc.getBlockX() + ", "
-                        + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(currentTime - timeTillFeast)
-                        + "!" + (timeTillFeast - currentTime > 10 ? "\nUse /feast to fix your compass on it!" : ""));
+                        + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(config.feastStartsIn()) + "!"
+                        + (config.feastStartsIn() > 10 ? "\nUse /feast to fix your compass on it!" : ""));
             }
-        } else if (borderCloseIn && currentTime > timeTillFeast)
-            border -= borderClosesIn;
-        if (invincibility > 0 && currentTime <= invincibility && currentTime >= 0) {
-            if (displayScoreboards)
-                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible"))
-                        .setScore(-(currentTime - invincibility));
-            if (currentTime == invincibility) {
+        } else if (config.doesBorderCloseIn() && currentTime > config.getTimeFeastStarts())
+            config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
+        if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
+            if (config.displayScoreboards())
+                ScoreboardManager.makeScore(ChatColor.GOLD + "Invincible", config.invincibilityWearsOffIn());
+            if (currentTime == config.getInvincibilityTime()) {
                 Bukkit.broadcastMessage(ChatColor.RED + "Invincibility has worn off!");
-                if (displayScoreboards)
-                    ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible"));
-            } else if (displayMessages && (invincibility - currentTime % 60 == 0 || invincibility - currentTime == 30
-                    || (invincibility - currentTime > 0 && invincibility - currentTime < 6) || invincibility - currentTime == 10
-                    || invincibility - currentTime == 15)) {
-                Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(currentTime - 120));
+                if (config.displayScoreboards())
+                    ScoreboardManager.hideScore(ChatColor.GOLD + "Invincible");
+            } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
+                Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in "
+                        + returnTime(config.invincibilityWearsOffIn()) + "!");
             }
 
         }
@@ -375,13 +313,15 @@ public class Hungergames extends JavaPlugin {
 
     public void startGame() {
         currentTime = 0;
-        if (displayScoreboards) {
-            ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Starting in"));
-            ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible")).setScore(0);
+        if (config.displayScoreboards()) {
+            ScoreboardManager.hideScore(ChatColor.GOLD + "Starting in");
+            if (config.getInvincibilityTime() > 0)
+                ScoreboardManager.makeScore(ChatColor.GOLD + "Invincible", config.getInvincibilityTime());
         }
         Bukkit.broadcastMessage(ChatColor.RED + "The game has started!");
-        if (invincibility > 0)
-            Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(invincibility));
+        if (config.getInvincibilityTime() > 0)
+            Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(config.getInvincibilityTime())
+                    + "!");
         for (Gamer gamer : pm.getGamers()) {
             gamer.setRiding(false);
             gamer.clearInventory();
@@ -400,7 +340,7 @@ public class Hungergames extends JavaPlugin {
             public void run() {
                 for (Gamer gamer : pm.getAliveGamers())
                     gamer.getPlayer().getInventory().addItem(new ItemStack(Material.COMPASS));
-                for (me.libraryaddict.Hungergames.Types.Kit kit : Extender.kits.kits)
+                for (me.libraryaddict.Hungergames.Types.Kit kit : HungergamesApi.getKitManager().kits)
                     kit.giveKit();
                 PluginManager plugin = Bukkit.getPluginManager();
                 plugin.registerEvents(new Array(), games);
@@ -452,9 +392,9 @@ public class Hungergames extends JavaPlugin {
             }
         });
 
-        for (Location l : Extender.playerListener.entitys.keySet())
-            l.getWorld().spawnEntity(l, Extender.playerListener.entitys.get(l));
-        Extender.playerListener.entitys.clear();
+        for (Location l : entitys.keySet())
+            l.getWorld().spawnEntity(l, entitys.get(l));
+        entitys.clear();
     }
 
     public void cannon() {
@@ -505,14 +445,14 @@ public class Hungergames extends JavaPlugin {
                     public void run() {
                         Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
                     }
-                }, 0, wonBroadcastsDelay * 20);
+                }, 0, config.getWinnerBroadcastDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(kickMessage.replaceAll("%winner%", winner.getName()));
+                            p.kickPlayer(config.getKickMessage().replaceAll("%winner%", winner.getName()));
                         shutdown();
                     }
-                }, gameShutdownDelay * 20);
+                }, config.getGameShutdownDelay() * 20);
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
                 for (Player p : Bukkit.getOnlinePlayers())
@@ -526,9 +466,9 @@ public class Hungergames extends JavaPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer("The game was shut down by a admin.");
             PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
-            Extender.playerListener.onQuit(event);
+            playerListener.onQuit(event);
         }
-        if (!Extender.mysql.enabled)
+        if (!config.isMySqlEnabled())
             return;
         while (pm.loadGamer.size() > 0) {
             System.out.print("Waiting for load gamer to complete, " + pm.loadGamer.size() + " left!");
@@ -538,16 +478,8 @@ public class Hungergames extends JavaPlugin {
 
             }
         }
-        Extender.mysql.getPlayerJoinThread().SQLdisconnect();
-        Extender.mysql.getPlayerJoinThread().stop();
-        while (pm.saveGamer.size() > 0) {
-            System.out.print("Waiting for save gamer to complete, " + pm.saveGamer.size() + " left!");
-            try {
-                Thread.sleep(1000);
-            } catch (Exception ex) {
-
-            }
-        }
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().SQLdisconnect();
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
 
     public void shutdown() {

@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Fireman extends Extender implements Listener {
+public class Fireman implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {

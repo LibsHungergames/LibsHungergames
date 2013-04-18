@@ -10,9 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import me.libraryaddict.Hungergames.Types.Extender;
-
-public class Doctor extends Extender implements Listener {
+public class Doctor  implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {

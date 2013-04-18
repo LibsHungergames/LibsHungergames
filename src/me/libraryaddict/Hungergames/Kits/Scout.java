@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,7 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class Scout extends Extender implements Listener {
+public class Scout implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public Scout() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(hg, new Runnable() {

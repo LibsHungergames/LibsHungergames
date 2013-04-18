@@ -3,6 +3,8 @@ package me.libraryaddict.Hungergames.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Hungergames;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Kit extends Extender {
+public class Kit {
 
     private String kitName;
     private ItemStack icon;
@@ -37,7 +39,7 @@ public class Kit extends Extender {
             description = desc;
         abilities = abilitys;
     }
-    
+
     public ItemStack getIcon() {
         return icon;
     }
@@ -116,6 +118,7 @@ public class Kit extends Extender {
 
     public void giveKit() {
         double time = 0;
+        Hungergames hg = HungergamesApi.getHungergames();
         for (final String player : players) {
             Player p = Bukkit.getPlayerExact(player);
             if (p == null)

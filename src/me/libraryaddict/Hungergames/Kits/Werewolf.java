@@ -9,10 +9,17 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
-public class Werewolf extends Extender implements Listener {
+public class Werewolf implements Listener {
+
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public Werewolf() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(hg, new Runnable() {

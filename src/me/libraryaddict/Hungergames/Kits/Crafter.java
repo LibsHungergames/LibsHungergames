@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FakeFurnace;
 
 import org.bukkit.Bukkit;
@@ -19,9 +19,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Crafter extends Extender implements Listener {
+public class Crafter implements Listener {
+
     public Crafter() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(hg, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
                 for (FakeFurnace furnace : furnaces.values())
                     furnace.tick();

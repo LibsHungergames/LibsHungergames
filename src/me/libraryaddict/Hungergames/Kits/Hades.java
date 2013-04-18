@@ -24,13 +24,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FollowOwner;
 import me.libraryaddict.Hungergames.Types.OwnerAttacked;
 import me.libraryaddict.Hungergames.Types.OwnerAttacks;
 
-public class Hades extends Extender implements Listener {
+public class Hades implements Listener {
     HashMap<Zombie, Player> tamed = new HashMap<Zombie, Player>();
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

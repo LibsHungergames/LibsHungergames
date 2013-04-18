@@ -11,9 +11,14 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Salavager extends Extender implements Listener {
+public class Salavager implements Listener {
+
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

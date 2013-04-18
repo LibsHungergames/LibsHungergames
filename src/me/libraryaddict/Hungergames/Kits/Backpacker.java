@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,10 +20,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Backpacker extends Extender implements Listener {
+public class Backpacker  implements Listener {
 
     HashMap<Player, Inventory> backpack = new HashMap<Player, Inventory>();
     HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     public Backpacker() {
         ItemStack item = new ItemStack(Material.ENDER_CHEST);

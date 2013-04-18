@@ -12,11 +12,14 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.Enchants;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Gravedigger extends Extender implements Listener {
+public class Gravedigger implements Listener {
     BlockFace[] faces = new BlockFace[] { BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {

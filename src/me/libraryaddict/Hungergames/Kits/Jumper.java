@@ -13,10 +13,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Jumper extends Extender implements Listener {
+public class Jumper implements Listener {
     HashMap<Block, Integer> platforms = new HashMap<Block, Integer>();
+
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {

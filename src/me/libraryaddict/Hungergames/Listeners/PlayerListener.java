@@ -2,24 +2,25 @@ package me.libraryaddict.Hungergames.Listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.ConfigManager;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.KitSelectorManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
@@ -30,8 +31,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -55,10 +54,14 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerListener extends Extender implements Listener {
+public class PlayerListener implements Listener {
 
-    public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
     private List<String> deathMessages = new ArrayList<String>();
+    PlayerManager pm = HungergamesApi.getPlayerManager();
+    ConfigManager config = HungergamesApi.getConfigManager();
+    KitManager kits = HungergamesApi.getKitManager();
+    KitSelectorManager icon = HungergamesApi.getKitSelector();
+    Hungergames hg = HungergamesApi.getHungergames();
 
     public PlayerListener() {
         deathMessages.add("%Killer% dual wielded a %Weapon% and laid waste upon %Killed%");
@@ -76,20 +79,6 @@ public class PlayerListener extends Extender implements Listener {
     }
 
     @EventHandler
-    public void onSpawn(CreatureSpawnEvent event) {
-        if (event.getEntityType() == EntityType.SLIME)
-            event.setCancelled(true);
-        if (hg.currentTime < 0) {
-            event.setCancelled(true);
-            if (event.getEntity() instanceof Animals && event.getSpawnReason() == SpawnReason.CHUNK_GEN
-                    && new Random().nextInt(4) == 1)
-                entitys.put(event.getLocation().clone(), event.getEntityType());
-        } else if (event.getEntity() instanceof Animals && event.getSpawnReason() == SpawnReason.CHUNK_GEN
-                && new Random().nextInt(4) != 1)
-            event.setCancelled(true);
-    }
-
-    @EventHandler
     public void onExpChange(PlayerExpChangeEvent event) {
         if (!pm.getGamer(event.getPlayer()).isAlive())
             event.setAmount(0);
@@ -98,7 +87,7 @@ public class PlayerListener extends Extender implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
-        if (!hg.spectatorChat && !gamer.isAlive() && hg.doSeconds) {
+        if (!config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds) {
             Iterator<Player> players = event.getRecipients().iterator();
             while (players.hasNext()) {
                 Gamer g = pm.getGamer(players.next());
@@ -128,23 +117,25 @@ public class PlayerListener extends Extender implements Listener {
             }, 0L);
         } else {
             gamer.clearInventory();
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                public void run() {
-                    gamer.getPlayer()
-                            .getInventory()
-                            .addItem(
-                                    icon.generateItem(
-                                            Material.FEATHER,
-                                            0,
-                                            "Kit Selector",
-                                            Arrays.asList(new String[] { "Right click with this",
-                                                    "to open a kit selection screen!" })));
-                }
-            }, 0L);
+            if (config.useKitSelector())
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+                    public void run() {
+                        gamer.getPlayer()
+                                .getInventory()
+                                .addItem(
+                                        icon.generateItem(
+                                                Material.FEATHER,
+                                                0,
+                                                "Kit Selector",
+                                                Arrays.asList(new String[] { "Right click with this",
+                                                        "to open a kit selection screen!" })));
+                    }
+                }, 0L);
         }
         pm.sendToSpawn(gamer.getPlayer());
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
+        pm.loadGamer.add(gamer);
     }
 
     @EventHandler
@@ -175,7 +166,7 @@ public class PlayerListener extends Extender implements Listener {
     public void onLogin(PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL && !pm.vips.containsKey(event.getPlayer().getName()))
             event.disallow(Result.KICK_OTHER, "The game is full!");
-        else if (hg.currentTime >= 0 && !hg.spectators && !event.getPlayer().hasPermission("Hungergames.Spectate"))
+        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("Hungergames.Spectate"))
             event.disallow(Result.KICK_OTHER, "Spectators have been disabled!");
         // else if (!(event.getPlayer().isOp() ||
         // pm.vips.containsKey(event.getPlayer().getName())))
@@ -230,7 +221,7 @@ public class PlayerListener extends Extender implements Listener {
         if (event.getEntity() instanceof Player
                 || (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed())) {
             if ((event.getEntity() instanceof Player && (!hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive()))
-                    || hg.currentTime <= hg.invincibility)
+                    || hg.currentTime <= config.getInvincibilityTime())
                 event.setCancelled(true);
         }
     }
@@ -284,17 +275,17 @@ public class PlayerListener extends Extender implements Listener {
                     p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
-                if (item.getType() == Material.MUSHROOM_SOUP && hg.mushroomStew) {
+                if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
                     if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
                         event.setCancelled(true);
                         if (p.getHealth() < 20)
-                            if (p.getHealth() + hg.mushroomStewRestores <= 20)
-                                p.setHealth(p.getHealth() + hg.mushroomStewRestores);
+                            if (p.getHealth() + config.mushroomStewRestores() <= 20)
+                                p.setHealth(p.getHealth() + config.mushroomStewRestores());
                             else
                                 p.setHealth(20);
                         else if (p.getFoodLevel() < 20)
-                            if (p.getFoodLevel() + hg.mushroomStewRestores <= 20)
-                                p.setFoodLevel(p.getFoodLevel() + hg.mushroomStewRestores);
+                            if (p.getFoodLevel() + config.mushroomStewRestores() <= 20)
+                                p.setFoodLevel(p.getFoodLevel() + config.mushroomStewRestores());
                             else
                                 p.setFoodLevel(20);
                         if (item.getAmount() > 1) {

@@ -14,13 +14,20 @@ import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
 import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Pussy extends Extender implements Listener {
+public class Pussy implements Listener {
     DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
 
     HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
+
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     @EventHandler
     public void onSprint(PlayerToggleSprintEvent event) {

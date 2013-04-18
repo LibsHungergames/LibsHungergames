@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import net.minecraft.server.v1_5_R2.ChunkCoordIntPair;
 import net.minecraft.server.v1_5_R2.EntityPlayer;
@@ -12,7 +13,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class Chunk extends Extender implements CommandExecutor {
+public class Chunk implements CommandExecutor {
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (gamer.getChunkCooldown() < System.currentTimeMillis() / 1000L) {

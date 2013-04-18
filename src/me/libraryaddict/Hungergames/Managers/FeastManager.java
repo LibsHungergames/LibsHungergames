@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,8 +15,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-public class FeastManager extends Extender {
+public class FeastManager {
     // This manages the chests, The buildings
     List<BlockFace> faces = new ArrayList<BlockFace>();
     List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
@@ -73,10 +74,10 @@ public class FeastManager extends Extender {
         return found.get((int) Math.round(found.size() / 3));
     }
 
-    private boolean setBlockFast(Block b, int typeId, byte data) {
+    private boolean setBlockFast(Block b, int typeId, short s) {
         try {
-            if (b.getTypeId() != typeId || b.getData() != data)
-                return b.setTypeIdAndData(typeId, data, false);
+            if (b.getTypeId() != typeId || b.getData() != s)
+                return b.setTypeIdAndData(typeId, (byte) s, false);
             // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
             // b.getY(), b.getZ() & 15, typeId, data);
         } catch (Exception ex) {
@@ -108,6 +109,7 @@ public class FeastManager extends Extender {
      * Gets the best Y level to spawn the feast at
      * 
      * This also modifies the Location fed to it for use by feast generation
+     * 
      * @param loc
      * @param radius
      * @return Best Y Level
@@ -146,11 +148,14 @@ public class FeastManager extends Extender {
 
     /**
      * Generates a feast
+     * 
      * @param loc
      * @param lowestLevel
      * @param radius
      */
     public void generateSpawn(final Location loc, int lowestLevel, int radius) {
+        ConfigManager config = HungergamesApi.getConfigManager();
+        ItemStack feastGround = config.getFeastGround();
         loc.setY(lowestLevel + 1);
         double radiusSquared = radius * radius;
         // Sets to air and generates to stand on
@@ -164,7 +169,7 @@ public class FeastManager extends Extender {
                             setBlockFast(b, 0, (byte) 0);
                         } else {
                             // Generates to stand on
-                            setBlockFast(b, Material.QUARTZ_BLOCK.getId(), (byte) 0);
+                            setBlockFast(b, feastGround.getTypeId(), feastGround.getDurability());
                         }
                     }
                 }
@@ -173,21 +178,24 @@ public class FeastManager extends Extender {
         // Generates pillars
         int[] cords = new int[] { (int) (-radius / 2.5), (int) (radius / 2.5) };
         int pillarRadius = Math.round(radius / 8);
-        for (int px = 0; px <= 1; px++)
-            for (int pz = 0; pz <= 1; pz++)
-                for (int x = -pillarRadius; x <= pillarRadius; x++) {
-                    for (int z = -pillarRadius; z <= pillarRadius; z++) {
-                        Block b = loc.getWorld().getBlockAt(x + loc.getBlockX() + cords[px], loc.getBlockY() - 2,
-                                z + loc.getBlockZ() + cords[pz]);
-                        while (!isSolid(b)) {
-                            if (Math.abs(x) == pillarRadius && Math.abs(z) == pillarRadius)
-                                setBlockFast(b, Material.QUARTZ_BLOCK.getId(), (byte) 0);
-                            else
-                                setBlockFast(b, Material.GLASS.getId(), (byte) 0);
-                            b = b.getRelative(BlockFace.DOWN);
+        ItemStack pillarCorner = config.getPillarCorner();
+        ItemStack pillarInsides = config.getPillarInsides();
+        if (config.generatePillars())
+            for (int px = 0; px <= 1; px++)
+                for (int pz = 0; pz <= 1; pz++)
+                    for (int x = -pillarRadius; x <= pillarRadius; x++) {
+                        for (int z = -pillarRadius; z <= pillarRadius; z++) {
+                            Block b = loc.getWorld().getBlockAt(x + loc.getBlockX() + cords[px], loc.getBlockY() - 2,
+                                    z + loc.getBlockZ() + cords[pz]);
+                            while (!isSolid(b)) {
+                                if (Math.abs(x) == pillarRadius && Math.abs(z) == pillarRadius)
+                                    setBlockFast(b, pillarCorner.getTypeId(), pillarCorner.getDurability());
+                                else
+                                    setBlockFast(b, pillarInsides.getTypeId(), pillarInsides.getDurability());
+                                b = b.getRelative(BlockFace.DOWN);
+                            }
                         }
                     }
-                }
         // naturalizeSpawn(loc, radius);
     }
 
@@ -219,11 +227,16 @@ public class FeastManager extends Extender {
     /**
      * Generates the chests.
      * 
-     * Height is the amount of chests. There will be a enchanting table on top of this putting the total at 4 blocks high.
+     * Height is the amount of chests. There will be a enchanting table on top
+     * of this putting the total at 4 blocks high.
+     * 
      * @param loc
-     * @param height of chests
+     * @param height
+     *            of chests
      */
     public void generateChests(Location loc, int height) {
+        ChestManager cm = HungergamesApi.getChestManager();
+        ConfigManager config = HungergamesApi.getConfigManager();
         for (Player p : Bukkit.getOnlinePlayers()) {
             Location l = p.getLocation().clone();
             l.setY(loc.getY());
@@ -232,6 +245,8 @@ public class FeastManager extends Extender {
                 p.teleport(l);
             }
         }
+        ItemStack feast = config.getFeast();
+        ItemStack feastInsides = config.getFeastInsides();
         for (int x = -height; x < height + 1; x++) {
             for (int z = -height; z < height + 1; z++) {
                 int y = Math.abs(x);
@@ -244,21 +259,22 @@ public class FeastManager extends Extender {
                 while (repeated > 0) {
                     b = b.getRelative(BlockFace.DOWN);
                     if (y - 1 >= repeated)
-                        setBlockFast(b, Material.TNT.getId(), (byte) 0);
+                        setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
                     else
-                        setBlockFast(b, Material.QUARTZ_BLOCK.getId(), (byte) 1);
+                        setBlockFast(b, feast.getTypeId(), feast.getDurability());
                     repeated--;
                 }
                 if (x == 0 && z == 0) {
                     setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
-                    setBlockFast(block.getRelative(BlockFace.DOWN), Material.TNT.getId(), (byte) 1);
+                    if (block.getRelative(BlockFace.DOWN).getType() == Material.TNT && config.isFeastTntIgnite())
+                        setBlockFast(block.getRelative(BlockFace.DOWN), Material.TNT.getId(), (byte) 1);
                 } else if (Math.abs(x + z) % 2 == 0) {
                     setBlockFast(block, Material.CHEST.getId(), (byte) 0);
                     Chest chest = (Chest) block.getState();
-                    Extender.cm.fillChest(chest.getInventory());
+                    cm.fillChest(chest.getInventory());
                     chest.update();
                 } else
-                    setBlockFast(block, Material.QUARTZ_BLOCK.getId(), (byte) 1);
+                    setBlockFast(block, feast.getTypeId(), feast.getDurability());
             }
         }
     }

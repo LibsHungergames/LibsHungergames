@@ -3,6 +3,8 @@ package me.libraryaddict.Hungergames.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import net.milkbowl.vault.economy.Economy;
 import net.minecraft.server.v1_5_R2.EntityPlayer;
 import net.minecraft.server.v1_5_R2.Packet201PlayerInfo;
@@ -14,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class Gamer extends Extender {
+public class Gamer {
 
     private boolean spectating = false;
     private boolean build = false;
@@ -29,6 +31,8 @@ public class Gamer extends Extender {
     private boolean vip = false;
     private long cooldown = 0;
     private static Economy economy = null;
+    private static PlayerManager pm = HungergamesApi.getPlayerManager();
+    private static Hungergames hg = HungergamesApi.getHungergames();
 
     public Gamer(Player player, boolean isVip) {
         vip = isVip;

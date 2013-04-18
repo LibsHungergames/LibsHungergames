@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Kits;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Animals;
@@ -12,7 +13,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Vampire extends Extender implements Listener {
+public class Vampire implements Listener {
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {

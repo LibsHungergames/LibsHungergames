@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -8,7 +9,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Fstart extends Extender implements CommandExecutor {
+public class Fstart implements CommandExecutor {
+    private Hungergames hg = HungergamesApi.getHungergames();
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.isOp() || sender.hasPermission("Hungergames.fstart")) {
             if (hg.currentTime >= 0) {

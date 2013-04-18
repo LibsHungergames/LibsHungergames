@@ -25,19 +25,22 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.Enchants;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
-public class PlayerManager extends Extender {
+public class PlayerManager {
 
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
     public ConcurrentHashMap<String, Long> vips = new ConcurrentHashMap<String, Long>();
     public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
-    public ConcurrentLinkedQueue<Gamer> saveGamer = new ConcurrentLinkedQueue<Gamer>();
     public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
+    Hungergames hg = HungergamesApi.getHungergames();
+    ConfigManager config = HungergamesApi.getConfigManager();
+    KitManager kits = HungergamesApi.getKitManager();
 
     public synchronized Gamer getGamer(Entity entity) {
         for (Gamer g : gamers)
@@ -175,7 +178,7 @@ public class PlayerManager extends Extender {
                             + (kits.getKitByPlayer(event.getKillerPlayer().getName()) == null ? "None" : kits.getKitByPlayer(
                                     event.getKillerPlayer().getName()).getName()) + ChatColor.DARK_RED + ")"));
         Gamer killed = event.getKilled();
-        int reward = hg.getPrize(pm.getAliveGamers().size());
+        int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
         hg.cannon();
@@ -212,7 +215,7 @@ public class PlayerManager extends Extender {
             if (entity instanceof Creature && ((Creature) entity).getTarget() == event.getKilled().getPlayer())
                 ((Creature) entity).setTarget(null);
         }
-        if (!hg.spectators && !p.hasPermission("Hungegames.spectate"))
+        if (!config.isSpectatorsEnabled() && !p.hasPermission("Hungegames.spectate"))
             p.kickPlayer(event.getDeathMessage());
     }
 

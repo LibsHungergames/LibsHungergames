@@ -2,7 +2,8 @@ package me.libraryaddict.Hungergames.Kits;
 
 import java.util.Iterator;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
@@ -12,7 +13,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Fletcher extends Extender implements Listener {
+public class Fletcher implements Listener {
+    private KitManager kits = HungergamesApi.getKitManager();
+
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Chicken && event.getEntity().getKiller() != null

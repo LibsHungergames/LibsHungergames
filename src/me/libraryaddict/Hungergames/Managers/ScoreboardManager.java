@@ -18,13 +18,21 @@ public class ScoreboardManager {
 
     // Make sure to update each player's scoreboard with this scoreboard if you
     // reset.
-    public static void resetScoreboard() {
+    private static void resetScoreboard() {
         mainScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         final Objective objective = mainScoreboard.registerNewObjective(dummyObjectiveName, "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
-    public static Objective getSidebar() {
+    private static Objective getSidebar() {
         return getMainScoreboard().getObjective(dummyObjectiveName);
+    }
+
+    public static void makeScore(String name, int score) {
+        getSidebar().getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
+    }
+
+    public static void hideScore(String name) {
+        mainScoreboard.resetScores(Bukkit.getOfflinePlayer(name));
     }
 }

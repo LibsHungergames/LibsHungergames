@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.GiveKitThread;
 
@@ -10,7 +12,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class BuyKit extends Extender implements CommandExecutor {
+public class BuyKit implements CommandExecutor {
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private KitManager kits = HungergamesApi.getKitManager();
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (cmd.getName().equalsIgnoreCase("buykit")) {
@@ -29,8 +34,9 @@ public class BuyKit extends Extender implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + "You already own this kit!");
                         return true;
                     }
-                    if (!mysql.enabled) {
-                        sender.sendMessage(ChatColor.AQUA + "Magical forces render you powerless and- No. The server owner did not setup mysql.");
+                    if (!HungergamesApi.getConfigManager().isMySqlEnabled()) {
+                        sender.sendMessage(ChatColor.AQUA
+                                + "Magical forces render you powerless and- No. The server owner did not setup mysql.");
                         return true;
                     }
                     gamer.addBalance(-kit.getPrice());

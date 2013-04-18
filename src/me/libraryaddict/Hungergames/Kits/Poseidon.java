@@ -11,15 +11,18 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Poseidon extends Extender implements Listener {
+public class Poseidon implements Listener {
     ArrayList<Player> waterBreathers = new ArrayList<Player>();
+
+    private KitManager kits = HungergamesApi.getKitManager();
 
     public Poseidon() {
         for (Player p : Bukkit.getOnlinePlayers())
             if (kits.hasAbility(p, "Poseidon")) {
-               waterBreathers.add(p);
+                waterBreathers.add(p);
             }
     }
 
@@ -37,7 +40,7 @@ public class Poseidon extends Extender implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
         waterBreathers.remove(event.getKilled().getPlayer());

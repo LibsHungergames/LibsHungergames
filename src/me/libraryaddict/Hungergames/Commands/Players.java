@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +15,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Players extends Extender implements CommandExecutor {
+public class Players implements CommandExecutor {
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         List<Gamer> gamers = pm.getAliveGamers();
@@ -23,7 +27,8 @@ public class Players extends Extender implements CommandExecutor {
         for (Gamer game : gamers)
             gamerNames.add(game.getPlayer().getDisplayName());
         Collections.sort(gamerNames);
-        sender.sendMessage(ChatColor.DARK_GRAY + "Gamers: " + ChatColor.GRAY + StringUtils.join(gamerNames, ChatColor.GRAY + ", " + ChatColor.GRAY));
+        sender.sendMessage(ChatColor.DARK_GRAY + "Gamers: " + ChatColor.GRAY
+                + StringUtils.join(gamerNames, ChatColor.GRAY + ", " + ChatColor.GRAY));
         if (hg.currentTime >= 0)
             sender.sendMessage(ChatColor.DARK_GRAY + "The game has been going for " + hg.returnTime(hg.currentTime) + ".");
         else

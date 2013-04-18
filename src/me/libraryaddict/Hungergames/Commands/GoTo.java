@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
@@ -9,7 +11,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class GoTo extends Extender implements CommandExecutor {
+public class GoTo implements CommandExecutor {
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (args.length > 0 && args[0] != null && !gamer.isAlive()) {

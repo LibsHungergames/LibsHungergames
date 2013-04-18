@@ -80,6 +80,24 @@ WinnerBroadcastingDelay: 6
 # Delay in seconds before the game shuts down after a winner
 GameShutdownDelay: 33
 
+# Enables the kit selector
+EnableKitSelector: true
+
+# ID of the feast, Its MATERIAL/ID DATAVALUE
+FeastGround: QUARTZ_BLOCK 0
+Feast: QUARTZ_BLOCK 1
+FeastInsides: TNT 0
+# If the feast insides is tnt, Then the top block is changed into TNT which ignites when punched
+FeastTnt: true
+
+# Does it generate pillars under it if it can?
+Pillars: true
+
+# ID of pillars corners
+PillarCorner: QUARTZ_BLOCK 2
+# ID of material inside
+PillarInsides: GLASS 0
+
 
 # Kits - Any kits you add can be done normally here.
 DefaultKit: Boxer

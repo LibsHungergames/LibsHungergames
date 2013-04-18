@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import me.libraryaddict.Hungergames.Types.Extender;
+import me.libraryaddict.Hungergames.Managers.KitManager;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -13,7 +14,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BeastMaster extends Extender implements Listener {
+public class BeastMaster implements Listener {
+    private KitManager kits = HungergamesApi.getKitManager();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
