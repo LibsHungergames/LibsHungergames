@@ -119,6 +119,7 @@ BadKits:
   - Reaper
   - Rider
   - Santa
+  - Seeker
   - Spiderman 
   - Tarzan
   - Timelord
@@ -534,6 +535,13 @@ Kits:
       - POTION 16418 2
     Ability:
       - Scout
+  Seeker:
+    Description: 'The Seeker kit allows you to see the unseeable by using your eyes of ender. When you use them, up to 65 blocks ahead of where you look, all ground blocks are turned to glass, except for ores, lava, water, etc. This allows you to easily find ores and see undergound.'
+    Free: true
+    Price: 0
+    Icon: EYE_OF_ENDER 0 1
+    Items:
+      - EYE_OF_ENDER 0 10 Name=Ghost_Eyes Unlootable 1
   Snail:
     Description: 'The Snail kit gives you the ability that as you do damage to players, you have a 33% chance to slow them with slowness II.'
     Free: true
