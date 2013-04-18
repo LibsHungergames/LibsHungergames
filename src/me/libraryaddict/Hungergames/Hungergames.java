@@ -78,6 +78,7 @@ public class Hungergames extends JavaPlugin {
     private int chestLayers;
     public boolean mushroomStew;
     public int mushroomStewRestores;
+    public boolean MotdShortTime;
     public String gameStartingMotd;
     public String gameStartedMotd;
     public String kickMessage;
@@ -133,6 +134,7 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
         mysql.SQL_USER = getConfig().getString("MySqlUser");
+        MotdShortTime = getConfig().getBoolean("MotdShortTime", "false")
         gameStartingMotd = ChatColor.translateAlternateColorCodes('&',
                 getConfig().getString("GameStartingMotd", "&2Game starting in %time%."));
         gameStartedMotd = ChatColor.translateAlternateColorCodes('&',
