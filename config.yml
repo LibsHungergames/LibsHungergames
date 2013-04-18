@@ -48,7 +48,8 @@ Winner1: 10
 Winner2: 5
 Winner3: 3
 
-# Game starting motd
+# MOTD
+MotdShortTime: false
 GameStartingMotd: '&2Game starting in %time%.'
 GameStartedMotd: '&4Game in progress.'
 
