@@ -55,6 +55,12 @@ GameStartedMotd: '&4Game in progress.'
 # Should the minutes and seconds in motd be shortened to mins and secs?
 ShortenTime: false
 
+# Use scoreboards
+Scoreboards: true
+
+# Display the messages scoreboards replace
+Messages: true
+
 #Removes the end and nether
 RemoveEnd: true
 RemoveNether: true

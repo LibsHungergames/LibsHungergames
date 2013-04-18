@@ -86,6 +86,8 @@ public class Hungergames extends JavaPlugin {
     public int wonBroadcastsDelay;
     public int gameShutdownDelay;
     public boolean shortenTime;
+    public boolean displayMessages;
+    public boolean displayScoreboards;
 
     public void onEnable() {
         saveDefaultConfig();
@@ -103,6 +105,9 @@ public class Hungergames extends JavaPlugin {
             ((CraftServer) getServer()).getServer().getPropertyManager().a("allow-nether", false);
             System.out.println("Disabled the nether");
         }
+        shortenTime = getConfig().getBoolean("ShortenTime", false);
+        displayScoreboards = getConfig().getBoolean("Scoreboards", false);
+        displayMessages = getConfig().getBoolean("Messages", true);
         shortenTime = getConfig().getBoolean("ShortenTime", false);
         minPlayers = getConfig().getInt("MinPlayers", 2);
         fireSpread = getConfig().getBoolean("DisableFireSpread", false);
@@ -315,8 +320,12 @@ public class Hungergames extends JavaPlugin {
         }
         if (currentTime < 0) {
             world.setTime(0);
-            if (currentTime % 60 == 0 || currentTime == -10 || currentTime == -30 || (currentTime >= -5 && currentTime < 0))
-                Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
+            if (displayScoreboards)
+                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Starting in"))
+                        .setScore(-currentTime);
+            if (displayMessages)
+                if (currentTime % 60 == 0 || currentTime == -10 || currentTime == -30 || (currentTime >= -5 && currentTime < 0))
+                    Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
         } else if (currentTime == 0) {
             if (pm.getGamers().size() < minPlayers) {
                 currentTime = -90;
@@ -326,34 +335,50 @@ public class Hungergames extends JavaPlugin {
             startGame();
             return;
         } else if (currentTime == timeTillFeast) {
+            if (displayScoreboards)
+                ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Feast in"));
             Extender.fm.generateChests(feastLoc, chestLayers);
             Bukkit.broadcastMessage(ChatColor.RED + "The feast has begun!");
-        } else if ((currentTime < timeTillFeast)
-                && (currentTime == timeTillFeast - 60 || currentTime == timeTillFeast - 180
-                        || currentTime == timeTillFeast - (5 * 60) || currentTime == timeTillFeast - 30
-                        || currentTime == timeTillFeast - 10 || (currentTime >= timeTillFeast - 5 && currentTime < timeTillFeast))) {
-            if (feastLoc.getBlockY() == 0) {
-                feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-                Extender.fm.generateSpawn(feastLoc, Extender.fm.getSpawnHeight(feastLoc, feastSize), feastSize);
+        } else if (currentTime < timeTillFeast && currentTime >= timeTillFeast - (5 * 60)) {
+            if (displayScoreboards)
+                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Feast in"))
+                        .setScore(timeTillFeast - currentTime);
+            if ((currentTime == timeTillFeast - 60 || currentTime == timeTillFeast - 180
+                    || currentTime == timeTillFeast - (5 * 60) || currentTime == timeTillFeast - 30
+                    || currentTime == timeTillFeast - 10 || currentTime >= timeTillFeast - 5)) {
+                if (feastLoc.getBlockY() == 0) {
+                    feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
+                    Extender.fm.generateSpawn(feastLoc, Extender.fm.getSpawnHeight(feastLoc, feastSize), feastSize);
+                }
+                Bukkit.broadcastMessage(ChatColor.RED + "The feast will begin at (" + feastLoc.getBlockX() + ", "
+                        + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(currentTime - timeTillFeast)
+                        + "!" + (timeTillFeast - currentTime > 10 ? "\nUse /feast to fix your compass on it!" : ""));
             }
-            Bukkit.broadcastMessage(ChatColor.RED + "The feast will begin at (" + feastLoc.getBlockX() + ", "
-                    + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(currentTime - timeTillFeast)
-                    + "!" + (timeTillFeast - currentTime > 10 ? "\nUse /feast to fix your compass on it!" : ""));
         } else if (borderCloseIn && currentTime > timeTillFeast)
             border -= borderClosesIn;
         if (invincibility > 0 && currentTime <= invincibility && currentTime >= 0) {
-            if (currentTime == invincibility)
+            if (displayScoreboards)
+                ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible"))
+                        .setScore(-(currentTime - invincibility));
+            if (currentTime == invincibility) {
                 Bukkit.broadcastMessage(ChatColor.RED + "Invincibility has worn off!");
-            else if (invincibility - currentTime % 60 == 0 || invincibility - currentTime == 30
+                if (displayScoreboards)
+                    ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible"));
+            } else if (displayMessages && (invincibility - currentTime % 60 == 0 || invincibility - currentTime == 30
                     || (invincibility - currentTime > 0 && invincibility - currentTime < 6) || invincibility - currentTime == 10
-                    || invincibility - currentTime == 15)
+                    || invincibility - currentTime == 15)) {
                 Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(currentTime - 120));
+            }
 
         }
     }
 
     public void startGame() {
         currentTime = 0;
+        if (displayScoreboards) {
+            ScoreboardManager.getMainScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Starting in"));
+            ScoreboardManager.getSidebar().getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Invincible")).setScore(0);
+        }
         Bukkit.broadcastMessage(ChatColor.RED + "The game has started!");
         if (invincibility > 0)
             Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(invincibility));

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.Extender;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -114,6 +115,7 @@ public class PlayerListener extends Extender implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
+        p.setScoreboard(ScoreboardManager.getMainScoreboard());
         p.setAllowFlight(true);
         if (gamer.isVip() && gamer.getPlayer().equals(gamer.getName()))
             gamer.getPlayer().setDisplayName(ChatColor.GREEN + gamer.getName());
