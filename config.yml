@@ -122,7 +122,6 @@ BadKits:
   - Rider
   - Santa
   - Tarzan
-  - Timelord
 Kits:
   Archer:
     Description: 'The archer kit allows you to shoot others. Hmm. Thats pretty much it. You also get a bow and 10 arrows'
@@ -592,15 +591,6 @@ Kits:
       - WOOD_AXE 0 1
     Ability:
       - Thor
-  Timelord:
-    Description: 'The Timelord kit will give you a watch. Use the watch to cast a spell that freezes time in the surrounding area. All nearby players other than you will be frozen as well, but will be able to attack. However, while time is frozen you cannot break or place blocks. Hitting any of the frozen players will unfreeze them. Do not run away from your spell. It will backfire and slow the time around you down, and speed it up for the players you froze. It has a 30 second cooldown.'
-    Free: true
-    Price: 0
-    Icon: WATCH 0 1
-    Items:
-      - WATCH 0 1 Name=Pocket_Watch Unlootable 1
-    Ability:
-      - Timelord
   Tracker:
     Description: 'You know the ways of your fellow allies and foes. And so you have a very special set of skills, Skills you have acquired over a very long career, Skills that make you a nightmare for people like them. You are able to tell precisely how far away someone is! What their location is and automatically update your compass if they move! By using /track <Player> you can even track a certain person!'
     Free: true
