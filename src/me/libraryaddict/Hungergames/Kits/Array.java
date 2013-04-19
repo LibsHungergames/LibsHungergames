@@ -7,6 +7,7 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -72,6 +73,8 @@ public class Array implements Listener {
                 ItemStack item = new ItemStack(Material.BEACON);
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(ChatColor.WHITE + "Array");
+                item.setItemMeta(meta);
+                item.addEnchantment(Enchants.UNLOOTABLE, 1);
                 kits.addItem(player, item);
                 for (Block b : heal.blocks)
                     b.setType(Material.AIR);
