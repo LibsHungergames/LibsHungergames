@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import me.libraryaddict.Hungergames.Commands.*;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
@@ -22,6 +23,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
@@ -447,8 +449,9 @@ public class Hungergames extends JavaPlugin {
                 }, 0, config.getWinnerBroadcastDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
+                        String kick = config.getKickMessage().replace("%winner%", winner.getName()).replace("\\n", "\n");
                         for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(config.getKickMessage().replaceAll("%winner%", winner.getName()));
+                            p.kickPlayer(kick);
                         shutdown();
                     }
                 }, config.getGameShutdownDelay() * 20);
