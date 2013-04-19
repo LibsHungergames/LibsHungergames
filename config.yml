@@ -396,7 +396,7 @@ Kits:
     Ability:
       - Jumper
   Kaya:
-    Description: 'The Kaya kit is awesome for planting traps and annoying unsuspecting victims! Kaya can use their grass blocks to make people fall down really far, or into lava. You can craft grass blocks with dirt and seeds in a crafting square, too.'
+    Description: 'The Kaya kit is awesome for planting traps and annoying unsuspecting victims! Kaya can use their grass blocks to make a platform, but when they try to walk on it. It disappears!'
     Free: true
     Price: 0
     Icon: GRASS 0 1
