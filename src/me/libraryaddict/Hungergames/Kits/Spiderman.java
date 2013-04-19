@@ -14,7 +14,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -65,6 +69,21 @@ public class Spiderman implements Listener {
                     b.setType(Material.WEB);
             }
             event.getEntity().remove();
+        }
+    }
+
+    private boolean isWeb(Location loc) {
+        if (loc.getBlock().getType() == Material.WEB)
+            return true;
+        return loc.clone().add(0, 1, 0).getBlock().getType() == Material.WEB;
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        if (kits.hasAbility(event.getPlayer(), "Spiderman")) {
+            if (isWeb(event.getFrom()) || isWeb(event.getTo())) {
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 40));
+            }
         }
     }
 }
