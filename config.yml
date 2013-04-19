@@ -111,7 +111,6 @@ BadKits:
   #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
   - Explorer
-  - Flash
   - Frosty
   - Gambler
   - Hermit
@@ -301,7 +300,7 @@ Kits:
     Price: 0
     Icon: REDSTONE_TORCH_ON 0 1
     Items:
-      - REDSTONE_TORCH_ON 0 1
+      - REDSTONE_TORCH_ON 0 1 Name=Flash UniqueItem Unlootable 1
     Ability:
       - Flash
   Fletcher:

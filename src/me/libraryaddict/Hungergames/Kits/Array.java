@@ -37,7 +37,8 @@ public class Array implements Listener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.BEACON && kits.hasAbility(event.getPlayer(), "Array")) {
+        if (event.getBlock().getType() == Material.BEACON && event.getItemInHand().getItemMeta().hasDisplayName()
+                && ChatColor.stripColor(event.getItemInHand().getItemMeta().getDisplayName()).equals("Array")) {
             // Create beacon
             Block b = event.getBlock();
             HealArray heal = new HealArray();
