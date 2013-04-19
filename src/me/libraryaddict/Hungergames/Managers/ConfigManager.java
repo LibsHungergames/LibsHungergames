@@ -95,6 +95,7 @@ public class ConfigManager {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
             System.out.println("Changed spawn radius to 0");
         }
+        hg.currentTime = -Math.abs(hg.getConfig().getInt("Countdown", 270));
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
         shortenTime = hg.getConfig().getBoolean("ShortenTime", false);
         displayScoreboards = hg.getConfig().getBoolean("Scoreboards", false);

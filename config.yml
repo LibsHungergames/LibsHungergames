@@ -95,6 +95,9 @@ FeastTnt: true
 # Does it generate pillars under it if it can?
 Pillars: true
 
+# What time does the game start at?
+Countdown: 270
+
 # ID of pillars corners
 PillarCorner: QUARTZ_BLOCK 2
 # ID of material inside
