@@ -91,6 +91,10 @@ public class ConfigManager {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("allow-nether", false);
             System.out.println("Disabled the nether");
         }
+        if (hg.getServer().getSpawnRadius() > 0 && hg.getConfig().getBoolean("ChangeSpawnLimit", true)) {
+            ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
+            System.out.println("Changed spawn radius to 0");
+        }
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
         shortenTime = hg.getConfig().getBoolean("ShortenTime", false);
         displayScoreboards = hg.getConfig().getBoolean("Scoreboards", false);

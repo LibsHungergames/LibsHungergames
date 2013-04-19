@@ -64,6 +64,8 @@ Messages: true
 #Removes the end and nether
 RemoveEnd: true
 RemoveNether: true
+# Changes the spawn radius in server.properties so people can build there
+ChangeSpawnLimit: true
 
 # Changes the kick message
 KickMessage: '&6%winner% won!\nGame is restarting!\n\nPlugin provided by libraryaddict'
