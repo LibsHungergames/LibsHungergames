@@ -512,7 +512,7 @@ Kits:
     Description: 'The Salvager kit will give you an anvil, when you place that anvil down, you can right click all tools and armor on the anvil, and you will receive the building materials back, ie. a iron helmet will give you back 5 iron ingots.'
     Free: true
     Price: 0
-    Icon: ANVIL 0 1
+    Icon: WORKBENCH 0 1
     Items:
       - ANVIL 0 1
     Ability:
@@ -541,7 +541,7 @@ Kits:
     Price: 0
     Icon: EYE_OF_ENDER 0 1
     Items:
-      - EYE_OF_ENDER 0 10 Name=Ghost_Eyes Unlootable 1
+      - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1
   Snail:
     Description: 'The Snail kit gives you the ability that as you do damage to players, you have a 33% chance to slow them with slowness II.'
     Free: true
