@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -42,18 +43,19 @@ public class Seeker implements Listener {
                                 ChatColor.BLUE
                                         + "You body slam the ghost eye into your socket. Not gonna recover from that for a few minutes..");
                 // Turn into glass
-                for (int x = -15; x <= 15; x++) {
-                    for (int y = -15; y <= 15; y++) {
-                        for (int z = -15; z <= 15; z++) {
-                            Block b = event.getClickedBlock().getLocation().clone().add(x, y, z).getBlock();
-                            if (transparent.contains(b.getType()))
-                                event.getPlayer().sendBlockChange(b.getLocation(), Material.GLASS, (byte) 0);
+                Location beginning = event.getClickedBlock().getLocation().clone().add(0.5, 0.5, 0.5);
+                for (int x = -20; x <= 20; x++) {
+                    for (int y = -20; y <= 20; y++) {
+                        for (int z = -20; z <= 20; z++) {
+                            Location loc = event.getClickedBlock().getLocation().clone().add(x, y, z).add(0.5, 0.5, 0.5);
+                            if (beginning.distance(loc) <= 10 && transparent.contains(loc.getBlock().getType()))
+                                event.getPlayer().sendBlockChange(loc, Material.GLASS, (byte) 0);
                         }
                     }
                 }
             } else {
                 event.getPlayer().sendMessage(
-                        ChatColor.BLUE + "The ghost eye will be usable in " + (-(System.currentTimeMillis() - last) / 1500)
+                        ChatColor.BLUE + "The ghost eye will be usable in " + (-(System.currentTimeMillis() - last) / 120000)
                                 + " seconds");
             }
         }
