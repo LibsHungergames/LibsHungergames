@@ -47,6 +47,7 @@ public class Spiderman implements Listener {
                 if (cooldowns.size() == 3) {
                     if (cooldowns.get(0) >= System.currentTimeMillis()) {
                         event.setCancelled(true);
+                        p.updateInventory();
                         p.sendMessage(ChatColor.BLUE + "Your web shooters havn't refilled yet! Wait "
                                 + (((cooldowns.get(0) - System.currentTimeMillis()) / 1000) + 1) + " seconds!");
                         kits.addItem(p, new ItemStack(Material.SNOW_BALL));
