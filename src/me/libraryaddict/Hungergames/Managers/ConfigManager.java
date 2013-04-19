@@ -3,7 +3,6 @@ package me.libraryaddict.Hungergames.Managers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 

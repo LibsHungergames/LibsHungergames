@@ -1,6 +1,5 @@
 package me.libraryaddict.Hungergames.Kits;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -8,15 +7,11 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import me.libraryaddict.Hungergames.Managers.KitManager;
-import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Seeker implements Listener {
     private HashMap<ItemStack, Long> lastClicked = new HashMap<ItemStack, Long>();
