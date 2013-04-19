@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Kits;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -55,37 +56,39 @@ public class Flash implements Listener {
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
         if (cooldown.containsValue(hg.currentTime)) {
-            ItemStack item = null;
-            for (ItemStack i : cooldown.keySet())
-                if (cooldown.get(i) == hg.currentTime) {
-                    item = i;
-                    break;
-                }
-            if (item == null)
-                return;
-            for (Gamer gamer : pm.getAliveGamers()) {
-                if (gamer.getPlayer().getInventory().contains(item)) {
-                    cooldown.remove(item);
-                    for (ItemStack i : gamer.getPlayer().getInventory().getContents()) {
-                        if (i.equals(item)) {
-                            i.setType(Material.REDSTONE_TORCH_ON);
-                            return;
+            Iterator<ItemStack> itel = cooldown.keySet().iterator();
+            while (itel.hasNext()) {
+                boolean carryOn = false;
+                ItemStack item = itel.next();
+                if (cooldown.get(item) == hg.currentTime) {
+                    for (Gamer gamer : pm.getAliveGamers()) {
+                        if (gamer.getPlayer().getInventory().contains(item)) {
+                            itel.remove();
+                            for (ItemStack i : gamer.getPlayer().getInventory().getContents()) {
+                                if (i.equals(item)) {
+                                    i.setType(Material.REDSTONE_TORCH_ON);
+                                    carryOn = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (gamer.getPlayer().getItemOnCursor() != null && gamer.getPlayer().getItemOnCursor().equals(item)) {
+                            gamer.getPlayer().getItemOnCursor().setType(Material.REDSTONE_TORCH_ON);
+                            carryOn = true;
+                            break;
+                        }
+                    }
+                    if (carryOn)
+                        continue;
+                    for (Item itemEntity : hg.world.getEntitiesByClass(Item.class)) {
+                        if (itemEntity.getItemStack().equals(item)) {
+                            itel.remove();
+                            itemEntity.getItemStack().setType(Material.REDSTONE_TORCH_ON);
+                            break;
                         }
                     }
                 }
-                if (gamer.getPlayer().getItemOnCursor() != null && gamer.getPlayer().getItemOnCursor().equals(item)) {
-                    gamer.getPlayer().getItemOnCursor().setType(Material.REDSTONE_TORCH_ON);
-                    return;
-                }
             }
-            for (Item itemEntity : hg.world.getEntitiesByClass(Item.class)) {
-                if (itemEntity.getItemStack().equals(item)) {
-                    cooldown.remove(item);
-                    itemEntity.getItemStack().setType(Material.REDSTONE_TORCH_ON);
-                    return;
-                }
-            }
-            cooldown.remove(item);
         }
     }
 
