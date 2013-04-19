@@ -71,7 +71,14 @@ public class Hungergames extends JavaPlugin {
     private PlayerListener playerListener;
 
     public void onEnable() {
-
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+            if (metrics.isOptOut())
+                this.getLogger().log(Level.INFO,
+                        "Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..");
+        } catch (IOException e) {
+        }
         new Enchants();
         new HungergamesApi(this);
         pm = HungergamesApi.getPlayerManager();
