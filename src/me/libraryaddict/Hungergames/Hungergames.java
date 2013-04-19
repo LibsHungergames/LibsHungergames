@@ -157,7 +157,7 @@ public class Hungergames extends JavaPlugin {
         }, 2L, 1L);
         getCommand("players").setExecutor(new Players());
         getCommand("time").setExecutor(new Time());
-        getCommand("fstart").setExecutor(new Fstart());
+        getCommand("forcestart").setExecutor(new ForceStart());
         getCommand("build").setExecutor(new Build());
         getCommand("goto").setExecutor(new GoTo());
         getCommand("kit").setExecutor(new Kit());
@@ -172,6 +172,8 @@ public class Hungergames extends JavaPlugin {
         getCommand("ride").setExecutor(new Ride());
         getCommand("creator").setExecutor(new Creator());
         getCommand("buykit").setExecutor(new BuyKit());
+        getCommand("forcetime").setExecutor(new ForceTime());
+        getCommand("forcefeast").setExecutor(new ForceFeast());
         playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
@@ -283,9 +285,8 @@ public class Hungergames extends JavaPlugin {
             if (config.advertiseFeast(currentTime)) {
                 if (feastLoc.getBlockY() == 0) {
                     feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-                    HungergamesApi.getFeastManager().generateSpawn(feastLoc,
-                            HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize()),
-                            config.getFeastSize());
+                    int feastHeight = HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize());
+                    HungergamesApi.getFeastManager().generateSpawn(feastLoc, feastHeight, config.getFeastSize());
                 }
                 Bukkit.broadcastMessage(ChatColor.RED + "The feast will begin at (" + feastLoc.getBlockX() + ", "
                         + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(config.feastStartsIn()) + "!"

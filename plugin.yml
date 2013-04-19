@@ -8,7 +8,10 @@ softdepend: [LibsCommands, DisguiseCraft, Vault]
 commands:
   time:
   players:
-  fstart:
+  forcestart:
+    aliases: [fstart]
+  forcetime:
+    aliases: [ftime]
   build:
   goto:
   kit:
@@ -26,3 +29,5 @@ commands:
   creator:
     aliases: [download]
   buykit:
+  forcefeast:
+    aliases: [ffeast]

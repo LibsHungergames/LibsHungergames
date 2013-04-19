@@ -9,11 +9,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Fstart implements CommandExecutor {
+public class ForceStart implements CommandExecutor {
     private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (sender.isOp() || sender.hasPermission("Hungergames.fstart")) {
+        if (sender.hasPermission("Hungergames.forcestart")) {
             if (hg.currentTime >= 0) {
                 sender.sendMessage(ChatColor.RED + "The game has already started!");
                 return true;
