@@ -202,10 +202,12 @@ public class KitManager {
                         if (ChatColor.getLastColors(name).equals(""))
                             name = ChatColor.WHITE + name;
                         ItemMeta meta = item.getItemMeta();
-                        meta.setDisplayName(name);
+                        String previous = meta.getDisplayName();
+                        if (previous == null)
+                            previous = "";
+                        meta.setDisplayName(name + previous);
                         item.setItemMeta(meta);
-                    }
-                    if (argString.contains("Color=") && item.getType().name().contains("LEATHER")) {
+                    } else if (argString.contains("Color=") && item.getType().name().contains("LEATHER")) {
                         String[] name = argString.substring(6).split(":");
                         int[] ids = new int[3];
                         for (int o = 0; o < 3; o++)
@@ -213,10 +215,12 @@ public class KitManager {
                         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
                         meta.setColor(Color.fromRGB(ids[0], ids[1], ids[2]));
                         item.setItemMeta(meta);
-                    } else if (argString.contains("Armor=")) {
+                    } else if (argString.equalsIgnoreCase("UniqueItem")) {
                         ItemMeta meta = item.getItemMeta();
-                        if (!meta.hasDisplayName())
-                            meta.setDisplayName(ChatColor.WHITE + toReadable(argString.replace("Armor=", "")));
+                        String previous = meta.getDisplayName();
+                        if (previous == null)
+                            previous = "";
+                        meta.setDisplayName(previous + "UniqueIdentifier");
                         item.setItemMeta(meta);
                     }
                 }

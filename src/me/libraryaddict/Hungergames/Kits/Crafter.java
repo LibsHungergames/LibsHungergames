@@ -40,7 +40,7 @@ public class Crafter implements Listener {
             Player p = event.getPlayer();
             if (item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Crafting Star")) {
                 p.openWorkbench(null, true);
-            } else if (item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Furnace Powder")) {
+            } else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Furnace Powder")) {
                 if (!furnaces.containsKey(item)) {
                     furnaces.put(item, new FakeFurnace());
                 }

@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
 
@@ -25,6 +26,7 @@ public class Kit {
     private boolean isFree = false;
     private int price = -1;
     private int id;
+    private static int identifier = 0;
     static private int cId = 0;
 
     public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
@@ -146,8 +148,17 @@ public class Kit {
         }
         inv.setArmorContents(arm);
         for (ItemStack item : items) {
-            inv.addItem(item.clone());
+            if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().contains("UniqueIdentifier")) {
+                ItemStack itemStack = item.clone();
+                ItemMeta meta = itemStack.getItemMeta();
+                String string = meta.getDisplayName().replace("UniqueIdentifier", "");
+                for (char c : ("" + identifier++).toCharArray())
+                    string = string + ChatColor.COLOR_CHAR + c;
+                meta.setDisplayName(string);
+                itemStack.setItemMeta(meta);
+                inv.addItem(itemStack);
+            } else
+                inv.addItem(item.clone());
         }
-
     }
 }
