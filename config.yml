@@ -66,7 +66,7 @@ RemoveEnd: true
 RemoveNether: true
 
 # Changes the kick message
-KickMessage: '&6%winner% won!\nGame is restarting!\nPlugin provided by libraryaddict'
+KickMessage: '&6%winner% won!\nGame is restarting!\n\nPlugin provided by libraryaddict'
 
 # Disables fire spread before the game starts
 DisableFireSpread: false
@@ -119,7 +119,6 @@ BadKits:
   - Reaper
   - Rider
   - Santa
-  - Seeker
   - Spiderman 
   - Tarzan
   - Timelord
@@ -223,7 +222,7 @@ Kits:
     Icon: BLAZE_POWDER 0 1
     Items:
       - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1
-      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1
+      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem
   Creeper:
     Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
     Free: true
@@ -541,7 +540,7 @@ Kits:
     Price: 0
     Icon: EYE_OF_ENDER 0 1
     Items:
-      - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1
+      - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1 UniqueItem
   Snail:
     Description: 'The Snail kit gives you the ability that as you do damage to players, you have a 33% chance to slow them with slowness II.'
     Free: true
