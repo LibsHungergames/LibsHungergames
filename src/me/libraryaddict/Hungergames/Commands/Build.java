@@ -15,7 +15,7 @@ public class Build implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
-        if (sender.hasPermission("Hungergames.build")) {
+        if (sender.hasPermission("hungergames.build")) {
             if (args.length > 0) {
                 Player player = sender.getServer().getPlayer(args[0]);
                 if (player == null) {

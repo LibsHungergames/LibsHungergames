@@ -18,7 +18,7 @@ public class ForceFeast implements CommandExecutor {
     private FeastManager fm = HungergamesApi.getFeastManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (sender.hasPermission("Hungergames.forcefeast")) {
+        if (sender.hasPermission("hungergames.forcefeast")) {
             int radius = config.getFeastSize();
             int chestLayers = config.getChestLayers();
             if (args.length > 0) {

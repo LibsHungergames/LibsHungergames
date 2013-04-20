@@ -13,7 +13,7 @@ public class ForceStart implements CommandExecutor {
     private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (sender.hasPermission("Hungergames.forcestart")) {
+        if (sender.hasPermission("hungergames.forcestart")) {
             if (hg.currentTime >= 0) {
                 sender.sendMessage(ChatColor.RED + "The game has already started!");
                 return true;

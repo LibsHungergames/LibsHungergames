@@ -215,7 +215,7 @@ public class PlayerManager {
             if (entity instanceof Creature && ((Creature) entity).getTarget() == event.getKilled().getPlayer())
                 ((Creature) entity).setTarget(null);
         }
-        if (!config.isSpectatorsEnabled() && !p.hasPermission("Hungegames.spectate"))
+        if (!config.isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
     }
 

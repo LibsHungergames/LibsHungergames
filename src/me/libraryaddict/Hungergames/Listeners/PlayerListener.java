@@ -167,7 +167,7 @@ public class PlayerListener implements Listener {
     public void onLogin(PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL && !pm.vips.containsKey(event.getPlayer().getName()))
             event.disallow(Result.KICK_OTHER, "The game is full!");
-        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("Hungergames.Spectate"))
+        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
             event.disallow(Result.KICK_OTHER, "Spectators have been disabled!");
         // else if (!(event.getPlayer().isOp() ||
         // pm.vips.containsKey(event.getPlayer().getName())))
