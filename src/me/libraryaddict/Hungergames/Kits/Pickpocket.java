@@ -19,9 +19,12 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class Pickpocket implements Listener {
+    // TODO Rewrite this
+    
     private KitManager kits = HungergamesApi.getKitManager();
     private Hungergames hg = HungergamesApi.getHungergames();
 
@@ -44,8 +47,9 @@ public class Pickpocket implements Listener {
     // He can pick when taken is there.
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof Player && event.getPlayer().getItemInHand() != null
-                && event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD
+        ItemStack item = event.getPlayer().getItemInHand();
+        if (event.getRightClicked() instanceof Player && item != null && item.getItemMeta().hasDisplayName()
+                && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Thieving Stick")
                 && pickpockets.containsKey(event.getPlayer())) {
             if (pickpockets.get(event.getPlayer()).lastPicked > (System.currentTimeMillis() / 1000)) {
                 event.getPlayer().sendMessage(ChatColor.BLUE + "You may not pickpocket again at this time");

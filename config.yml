@@ -439,6 +439,13 @@ Kits:
     Items:
     Ability:
       - Miser
+  Monk:
+    Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
+    Free: true
+    Price: 0
+    Icon: CHEST 0 1
+    Items:
+      - BLAZE_ROD 0 1 Name=Monk_Staff Unlootable 1 UniqueItem
   Monster:
     Description: 'The Monster kit is the perfect kit for mining safely, or attacking during the night without being disturbed! Alternately if you are just sick of creepers!'
     Free: true

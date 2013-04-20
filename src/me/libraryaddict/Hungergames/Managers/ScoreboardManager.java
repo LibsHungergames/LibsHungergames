@@ -27,6 +27,10 @@ public class ScoreboardManager {
     private static Objective getSidebar() {
         return getMainScoreboard().getObjective(dummyObjectiveName);
     }
+    
+    public static void setDisplayName(String string) {
+        getSidebar().setDisplayName(string);
+    }
 
     public static void makeScore(String name, int score) {
         getSidebar().getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
