@@ -492,11 +492,11 @@ public class Hungergames extends JavaPlugin {
     }
 
     public void shutdown() {
-        getLogger().log(Level.INFO, "SurvivalGames is now shutting the server down!");
+        getLogger().log(Level.INFO, "Hungergames is now shutting the server down!");
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled())
-            Bukkit.shutdown();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop");
         else
             getLogger().log(Level.SEVERE, "Shutdown event was cancelled by some plugin");
     }
