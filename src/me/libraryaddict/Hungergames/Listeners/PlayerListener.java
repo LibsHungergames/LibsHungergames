@@ -87,11 +87,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
-        if (!config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds) {
+        if (!config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
+                && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
             Iterator<Player> players = event.getRecipients().iterator();
             while (players.hasNext()) {
                 Gamer g = pm.getGamer(players.next());
-                if (!g.getPlayer().isOp() && g.isAlive())
+                if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
                     players.remove();
             }
         }
