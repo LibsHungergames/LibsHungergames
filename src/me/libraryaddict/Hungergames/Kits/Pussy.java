@@ -4,15 +4,14 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
-import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
-import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
-import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
-import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
+import de.robingrether.idisguise.api.DisguiseAPI;
+import de.robingrether.idisguise.api.MobDisguise;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
@@ -21,7 +20,7 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Pussy implements Listener {
-    DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
+    // DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
 
     HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
 
@@ -37,15 +36,19 @@ public class Pussy implements Listener {
                 int id = Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                     public void run() {
                         p.sendMessage(ChatColor.BLUE + "Meow!");
-                        dcAPI.disguisePlayer(p, new Disguise(dcAPI.newEntityID(), DisguiseType.Ocelot));
+                        DisguiseAPI.disguiseToAll(p, new MobDisguise(EntityType.OCELOT, true));
+                        // dcAPI.disguisePlayer(p, new
+                        // Disguise(dcAPI.newEntityID(), DisguiseType.Ocelot));
                     }
                 }, 10 * 20);
                 pussys.put(p, id);
             } else if (pussys.containsKey(p)) {
-                p.sendMessage(ChatColor.BLUE + "HISS!");
                 Bukkit.getScheduler().cancelTask(pussys.remove(p));
-                if (dcAPI.isDisguised(p))
-                    dcAPI.undisguisePlayer(p);
+                if (DisguiseAPI.isDisguised(p)) {
+                    p.sendMessage(ChatColor.BLUE + "HISS!");
+                    DisguiseAPI.undisguiseToAll(p);
+                    // dcAPI.undisguisePlayer(p);
+                }
             }
         }
     }

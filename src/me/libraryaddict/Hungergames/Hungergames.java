@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,6 +37,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import de.robingrether.idisguise.iDisguise;
 
 public class Hungergames extends JavaPlugin {
     /**
@@ -381,12 +384,11 @@ public class Hungergames extends JavaPlugin {
                 plugin.registerEvents(new Creeper(), games);
                 plugin.registerEvents(new Miser(), games);
                 plugin.registerEvents(new Salamander(), games);
-                if (Bukkit.getPluginManager().getPlugin("DisguiseCraft") != null) {
+                if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
                     plugin.registerEvents(new Chameleon(), games);
                     plugin.registerEvents(new Pussy(), games);
                 } else
-                    System.out.print("Failed to find DisguiseCraft. Not loading kits Chameleon and Pussy");
-
+                    System.out.print("Failed to find iDisguise. Not loading kits Chameleon and Pussy");
                 plugin.registerEvents(new Salavager(), games);
                 plugin.registerEvents(new Forger(), games);
                 plugin.registerEvents(new Kaya(), games);

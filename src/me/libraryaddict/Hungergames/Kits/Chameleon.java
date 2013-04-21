@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
-import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
-import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
-import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
+
+import de.robingrether.idisguise.api.Disguise;
+import de.robingrether.idisguise.api.DisguiseAPI;
+import de.robingrether.idisguise.api.MobDisguise;
 
 public class Chameleon implements Listener {
-    DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
+    // DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
 
     private PlayerManager pm = HungergamesApi.getPlayerManager();
     private KitManager kits = HungergamesApi.getKitManager();
@@ -29,15 +29,15 @@ public class Chameleon implements Listener {
             return;
         if (isChameleon(event.getEntity())) {
             Player p = (Player) event.getEntity();
-            if (dcAPI.isDisguised(p)) {
-                dcAPI.undisguisePlayer(p);
+            if (DisguiseAPI.isDisguised(p)) {
+                DisguiseAPI.undisguiseToAll(p);
                 p.sendMessage(ChatColor.GREEN + "Your disguise was broken!");
             }
         }
         if (isChameleon(event.getDamager())) {
             Player p = (Player) event.getDamager();
-            if (event.getEntity() instanceof Player && dcAPI.isDisguised(p)) {
-                dcAPI.undisguisePlayer(p);
+            if (event.getEntity() instanceof Player && DisguiseAPI.isDisguised(p)) {
+                DisguiseAPI.undisguiseToAll(p);
                 p.sendMessage(ChatColor.GREEN + "You broke out of your disguise!");
             } else
                 disguise(event.getEntity(), p);
@@ -46,22 +46,20 @@ public class Chameleon implements Listener {
 
     @EventHandler
     public void onDeath(PlayerKilledEvent event) {
-        if (dcAPI.isDisguised(event.getKilled().getPlayer()))
-            dcAPI.undisguisePlayer(event.getKilled().getPlayer());
+        if (DisguiseAPI.isDisguised(event.getKilled().getPlayer()))
+            DisguiseAPI.undisguiseToAll(event.getKilled().getPlayer());
     }
 
     private void disguise(Entity entity, Player p) {
         if (entity instanceof Creature) {
             if (pm.getGamer(p).isAlive() && kits.hasAbility(p, "Chameleon")) {
-                if (!dcAPI.isDisguised(p))
-                    dcAPI.disguisePlayer(p,
-                            new Disguise(dcAPI.newEntityID(), DisguiseType.fromString(entity.getType().getName())));
+                if (!DisguiseAPI.isDisguised(p))
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 else {
-                    Disguise disguise = dcAPI.getDisguise(p);
-                    if (disguise.type == DisguiseType.fromString(entity.getType().getName()))
+                    Disguise disguise = DisguiseAPI.getDisguise(p);
+                    if (disguise.getType() == entity.getType())
                         return;
-                    dcAPI.changePlayerDisguise(p,
-                            new Disguise(dcAPI.getDisguise(p).entityID, DisguiseType.fromString(entity.getType().getName())));
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 }
                 p.sendMessage(ChatColor.GREEN + "Now disguised as a " + kits.toReadable(entity.getType().getName()) + "!");
             }

@@ -9,9 +9,12 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
 import org.bukkit.inventory.ItemStack;
+
+import de.robingrether.idisguise.iDisguise;
 
 public class ConfigManager {
 
@@ -94,6 +97,19 @@ public class ConfigManager {
         if (hg.getServer().getSpawnRadius() > 0 && hg.getConfig().getBoolean("ChangeSpawnLimit", true)) {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
             System.out.println("Changed spawn radius to 0");
+        }
+        if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
+            if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
+                iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
+                FileConfiguration config = disguise.getConfig();
+                config.set("save-disguises", false);
+                config.set("undisguise-on-hit", true);
+                try {
+                    config.save(new File("plugins/iDisguise/Config.yml"));
+                } catch (IOException e) {
+                   System.out.print("Failed to change iDisguise config");
+                }
+            }
         }
         hg.currentTime = -Math.abs(hg.getConfig().getInt("Countdown", 270));
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
