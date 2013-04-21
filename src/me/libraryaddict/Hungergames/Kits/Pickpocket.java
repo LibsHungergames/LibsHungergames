@@ -1,15 +1,14 @@
 package me.libraryaddict.Hungergames.Kits;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,102 +23,136 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class Pickpocket implements Listener {
     // TODO Rewrite this
-    
-    private KitManager kits = HungergamesApi.getKitManager();
+
     private Hungergames hg = HungergamesApi.getHungergames();
 
+    HashMap<ItemStack, Pick> pickpockets = new HashMap<ItemStack, Pick>();
+
+    // Pickpocket. Multiple people can pickpocket at the time.
+    // Store itemstack. Its used to measure the cooldown and items you can
+    // click.
+    // Lets see. On click, cooldown is now 30secs. And the taken items is now 4.
+
     class Pick {
-        Player victim;
-        Inventory picking;
-        int taken;
-        long lastPicked;
+        Player pickpocket = null;
+        int itemsStolen = 0;
+        long lastUsed = 0;
     }
-
-    public Pickpocket() {
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (kits.hasAbility(p, "Pickpocket")) {
-                pickpockets.put(p, new Pick());
-            }
-    }
-
-    HashMap<Player, Pick> pickpockets = new HashMap<Player, Pick>();
 
     // He can pick when taken is there.
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
         ItemStack item = event.getPlayer().getItemInHand();
         if (event.getRightClicked() instanceof Player && item != null && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Thieving Stick")
-                && pickpockets.containsKey(event.getPlayer())) {
-            if (pickpockets.get(event.getPlayer()).lastPicked > (System.currentTimeMillis() / 1000)) {
-                event.getPlayer().sendMessage(ChatColor.BLUE + "You may not pickpocket again at this time");
-            } else if (event.getRightClicked().hasMetadata("Picking")) {
-                event.getPlayer().sendMessage(ChatColor.BLUE + "This player is already being pickpocketed!");
+                && item.getItemMeta().getDisplayName().startsWith(ChatColor.WHITE + "")
+                && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Thieving Stick")) {
+            Pick pick = new Pick();
+            if (pickpockets.containsKey(item))
+                pick = pickpockets.get(item);
+            if (pick.lastUsed > System.currentTimeMillis()) {
+                event.getPlayer().sendMessage(
+                        ChatColor.BLUE + "You may not pickpocket again for "
+                                + (-((System.currentTimeMillis() - pick.lastUsed) / 1000)) + " seconds!");
             } else {
-                event.getRightClicked().setMetadata("Picking", new FixedMetadataValue(hg, event.getPlayer()));
-                pickpockets.get(event.getPlayer()).taken = 0;
-                pickpockets.get(event.getPlayer()).victim = (Player) event.getRightClicked();
-                pickpockets.get(event.getPlayer()).picking = ((Player) event.getRightClicked()).getInventory();
-                event.getPlayer().openInventory(pickpockets.get(event.getPlayer()).picking);
+                pickpockets.put(item, pick);
+                pick.lastUsed = System.currentTimeMillis() + 30000;
+                pick.pickpocket = event.getPlayer();
+                List<Player> pickers = new ArrayList<Player>();
+                if (event.getRightClicked().hasMetadata("Picking"))
+                    pickers = (List<Player>) event.getRightClicked().getMetadata("Picking").get(0).value();
+                pickers.add(event.getPlayer());
+                event.getRightClicked().setMetadata("Picking", new FixedMetadataValue(hg, pickers));
+                event.getPlayer().openInventory(((Player) event.getRightClicked()).getInventory());
             }
         }
     }
 
+    // If he is being pickpocketed. Then the thief is added to metadata on him.
+    // The
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         if (event.getPlayer().hasMetadata("Picking")) {
-            Player picker = (Player) event.getPlayer().getMetadata("Picking").get(0).value();
-            if (event.getTo().distance(picker.getLocation()) > 6) {
-                picker.closeInventory();
-            }
+            List<Player> pickers = (List<Player>) event.getPlayer().getMetadata("Picking").get(0).value();
+            List<Player> cloned = new ArrayList<Player>();
+            for (Player p : pickers)
+                cloned.add(p);
+            for (Player picker : cloned)
+                if (event.getTo().distance(picker.getLocation()) > 6) {
+                    picker.closeInventory();
+                }
         }
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (pickpockets.containsKey(event.getPlayer())) {
-            Pick pick = pickpockets.get(event.getPlayer());
-            if (pick.victim != null) {
-                pick.victim.removeMetadata("Picking", hg);
-                pick.lastPicked = (System.currentTimeMillis() / 1000) + 10;
-                pick.victim = null;
-                pick.picking = null;
-            }
-        }
+        closedInv(event.getInventory(), (Player) event.getPlayer());
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryClickEvent event) {
-        if (pickpockets.containsKey(event.getWhoClicked())) {
-            Pick pick = pickpockets.get(event.getWhoClicked());
-            if (pick.victim != null) {
-                if (event.getRawSlot() < 36) {
-                    if (pick.taken < 4) {
-                        if (event.getRawSlot() > 8) {
-                            pick.taken++;
-                        } else if (event.getRawSlot() < 9) {
-                            event.setCancelled(true);
-                            ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "Thats their hotbar!");
-                        }
+    public void onInvClick(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null && pickpockets.containsKey(event.getCurrentItem())
+                && pickpockets.get(event.getCurrentItem()).pickpocket != null) {
+            event.setCancelled(true);
+            ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "You cannot touch that!");
+            ((Player) event.getWhoClicked()).updateInventory();
+        }
+        List<Player> peverts = this.getPerverts(event.getInventory());
+        if (peverts.contains(event.getWhoClicked())) {
+            if (event.getRawSlot() < 36) {
+                Pick pick = getPick((Player) event.getWhoClicked());
+                if (pick.itemsStolen < 4) {
+                    if (event.getRawSlot() > 8) {
+                        pick.itemsStolen++;
                     } else {
                         event.setCancelled(true);
-                        ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE
-                                + "You have pickpocketed your max for this player!");
+                        ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "Thats their hotbar!");
+                        ((Player) event.getWhoClicked()).updateInventory();
                     }
+                } else {
+                    event.setCancelled(true);
+                    ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "You have pickpocketed your max!");
+                    ((Player) event.getWhoClicked()).updateInventory();
                 }
             }
         }
     }
 
+    private void closedInv(Inventory inv, Player player) {
+        List<Player> peverts = this.getPerverts(inv);
+        if (peverts.contains(player)) {
+            peverts.remove(player);
+            // This guy is a pickpocket and he is done for some reason.. Who
+            // cares.
+            // Lets wipe his pick.
+            if (peverts.size() == 0)
+                ((Player) inv.getHolder()).removeMetadata("Picking", hg);
+            for (Pick pick : pickpockets.values()) {
+                if (pick.pickpocket == player) {
+                    pick.pickpocket = null;
+                    pick.itemsStolen = 0;
+                }
+            }
+        }
+    }
+
+    private Pick getPick(Player thief) {
+        for (Pick pick : pickpockets.values())
+            if (pick.pickpocket == thief)
+                return pick;
+        return null;
+    }
+
+    private List<Player> getPerverts(Inventory inv) {
+        if (inv.getHolder() instanceof Player && ((Player) inv.getHolder()).hasMetadata("Picking"))
+            return (List<Player>) ((Player) inv.getHolder()).getMetadata("Picking").get(0).value();
+        return new ArrayList<Player>();
+    }
+
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
-        if (pickpockets.containsKey(event.getKilled().getPlayer())
-                && pickpockets.get(event.getKilled().getPlayer()).victim != null) {
-            InventoryCloseEvent invEvent = new InventoryCloseEvent(event.getKilled().getPlayer().getOpenInventory());
-            onInventoryClose(invEvent);
-            pickpockets.remove(event.getKilled().getPlayer());
-        }
-        for (HumanEntity human : event.getKilled().getPlayer().getInventory().getViewers())
-            human.closeInventory();
+        for (HumanEntity entity : event.getKilled().getPlayer().getInventory().getViewers())
+            closedInv(event.getKilled().getPlayer().getInventory(), (Player) entity);
+        closedInv(event.getKilled().getPlayer().getInventory(), event.getKilled().getPlayer());
     }
 }

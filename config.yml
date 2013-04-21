@@ -466,7 +466,7 @@ Kits:
     Price: 0
     Icon: BLAZE_ROD 0 1
     Items:
-      - BLAZE_ROD 0 1 Unlootable 1 Name=Thieving_Stick
+      - BLAZE_ROD 0 1 Unlootable 1 Name=Thieving_Stick UniqueItem
     Ability:
       - Pickpocket
   Poseidon:
