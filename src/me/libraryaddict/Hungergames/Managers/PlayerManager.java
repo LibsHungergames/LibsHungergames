@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -145,17 +146,20 @@ public class PlayerManager {
     }
 
     public void manageDeath(PlayerKilledEvent event) {
-        final Player p = event.getKilled().getPlayer();
+        Gamer killed = event.getKilled();
+        final Player p = killed.getPlayer();
         p.setHealth(20);
         if (event.isCancelled())
             return;
+        for (HumanEntity human : p.getInventory().getViewers())
+            human.closeInventory();
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
         Iterator<Gamer> itel = lastDamager.keySet().iterator();
         while (itel.hasNext()) {
             Gamer g = itel.next();
-            if (lastDamager.get(g).getDamager() == event.getKilled())
+            if (lastDamager.get(g).getDamager() == killed)
                 itel.remove();
         }
         if (event.getDeathMessage().equalsIgnoreCase(ChatColor.stripColor(event.getDeathMessage())))
@@ -177,7 +181,6 @@ public class PlayerManager {
                             + ChatColor.RED
                             + (kits.getKitByPlayer(event.getKillerPlayer().getName()) == null ? "None" : kits.getKitByPlayer(
                                     event.getKillerPlayer().getName()).getName()) + ChatColor.DARK_RED + ")"));
-        Gamer killed = event.getKilled();
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
@@ -214,7 +217,7 @@ public class PlayerManager {
                 else
                     entity.remove();
             }
-            if (entity instanceof Creature && ((Creature) entity).getTarget() == event.getKilled().getPlayer())
+            if (entity instanceof Creature && ((Creature) entity).getTarget() == p)
                 ((Creature) entity).setTarget(null);
         }
         if (!config.isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
