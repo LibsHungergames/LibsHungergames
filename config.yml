@@ -298,7 +298,7 @@ Kits:
     Items:
       - FISHING_ROD 0 1
   Flash:
-    Description: 'The Flash kit will allow you to instantly teleport to the location you''re aiming at with a swing of your redstone torch. Once you get teleported, you will receive half of the distance you teleported in Weakness II. Once you teleport, lightning will strike at the position you flashed to, and a teleportation effect (Like that of Enderman) will lead towards the position you flashed to. Your redstone torch will turn off on use, and when the cooldown is over, it will turn on again.'
+    Description: 'The Flash kit will allow you to instantly teleport to the location you''re aiming at with a swing of your redstone torch. Once you get teleported, you will receive half of the distance you teleported in Weakness I. e.g. Flashing 60 blocks away, will result in 30 seconds of Weakness I. Once you teleport, lightning will strike at the position you flashed to, and a teleportation effect (Like that of Enderman) will lead towards the position you flashed to. Your redstone torch will turn off on use, and when the cooldown is over, it will turn on again.'
     Free: true
     Price: 0
     Icon: REDSTONE_TORCH_ON 0 1
@@ -310,7 +310,7 @@ Kits:
     Description: 'The Fletcher kit is the perfect match for someone with the Archer kit. The fletcher can make more arrows, while the Archer can fend off foes with their bow!'
     Free: true
     Price: 0
-    Icon: ARROW 0 1
+    Icon: FEATHER 0 1
     Ability:
       - Fletcher
   Forger:
@@ -326,7 +326,7 @@ Kits:
     Description: 'The frosty kit will give the player a huge advantage over others when in a snow biome. The player can also bring the advantage outside of the snow biome with snowballs. This kit gives an all game advantage that also counters poseidons.'
     Free: true
     Price: 0
-    Icon: SNOW 0 1
+    Icon: SNOW_BALL 0 1
     Items:
       - SNOW_BALL 0 5
     Ability:
@@ -344,7 +344,7 @@ Kits:
     Description: 'The Grandpa kit is really useful when on hilly situations, or when you want someone to leave you alone! The stick has Knockback II, sending your enemies miles (6 or so blocks) away when they come within range!'
     Free: true
     Price: 0
-    Icon: STICK 0 1 KNOCKBACK 2
+    Icon: STICK 0 1
     Items:
       - Stick 0 1 Name=Grandpa's_Cane KNOCKBACK 2 Unlootable 1
   Gravedigger:
@@ -554,7 +554,7 @@ Kits:
     Description: 'The Spiderman kit will give you 6 snowballs (which you will be able to replenish of course), which will create a 2x2 spider web at the location they spawn at, and right in front of any mob if they are hit head on. You can only throw 3 snowballs after each other, before getting a 30 second cooldown. You also get Speed II while in the cobwebs.'
     Free: true
     Price: 0
-    Icon: SNOW_BALL 0 1
+    Icon: WEB 0 1
     Items:
       - SNOW_BALL 0 6
     Ability:
