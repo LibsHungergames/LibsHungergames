@@ -440,10 +440,10 @@ Kits:
     Ability:
       - Miser
   Monk:
-    Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
+    Description: 'Right click someone with your blaze rod and their currently held item will switch with a random item in their inventory!'
     Free: true
     Price: 0
-    Icon: CHEST 0 1
+    Icon: BLAZE_ROD 0 1
     Items:
       - BLAZE_ROD 0 1 Name=Monk_Staff Unlootable 1 UniqueItem
   Monster:
