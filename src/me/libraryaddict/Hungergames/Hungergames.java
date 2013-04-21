@@ -394,6 +394,7 @@ public class Hungergames extends JavaPlugin {
                 plugin.registerEvents(new Endermage(), games);
                 plugin.registerEvents(new Seeker(), games);
                 plugin.registerEvents(new Spiderman(), games);
+                plugin.registerEvents(new Flash(), games);
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());
             }
         });
