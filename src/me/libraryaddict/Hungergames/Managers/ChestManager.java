@@ -39,20 +39,20 @@ public class ChestManager {
         randomItems.add(new RandomItem(20, Material.ARROW, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.TNT, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.EXP_BOTTLE, 0, 1, 10));
-        randomItems.add(new RandomItem(16, Material.POTION, 16420, 1, 2)); // Poisons 
-        randomItems.add(new RandomItem(16, Material.POTION, 16425, 1, 2)); // Strength
-        randomItems.add(new RandomItem(16, Material.POTION, 16418, 1, 2)); // Speed
+        randomItems.add(new RandomItem(10, Material.POTION, 16420, 1, 2)); // Poisons
+        randomItems.add(new RandomItem(10, Material.POTION, 16425, 1, 2)); // Strength
+        randomItems.add(new RandomItem(10, Material.POTION, 16418, 1, 2)); // Speed
                                                                            // II
-        randomItems.add(new RandomItem(16, Material.POTION, 16426, 1, 2)); // Slowness
-        randomItems.add(new RandomItem(16, Material.POTION, 16428, 1, 2)); // Damage
-        randomItems.add(new RandomItem(16, Material.POTION, 16421, 1, 4)); // Healing
-        randomItems.add(new RandomItem(16, Material.POTION, 16417, 1, 2)); // Regen
+        randomItems.add(new RandomItem(10, Material.POTION, 16426, 1, 2)); // Slowness
+        randomItems.add(new RandomItem(10, Material.POTION, 16428, 1, 2)); // Damage
+        randomItems.add(new RandomItem(10, Material.POTION, 16421, 1, 4)); // Healing
+        randomItems.add(new RandomItem(10, Material.POTION, 16417, 1, 2)); // Regen
                                                                            // II
-        randomItems.add(new RandomItem(13, Material.POTION, 16385, 1, 2)); // Regenm
+        randomItems.add(new RandomItem(10, Material.POTION, 16385, 1, 2)); // Regenm
                                                                            // I
-        randomItems.add(new RandomItem(13, Material.POTION, 16451, 1, 2)); // Fire
+        randomItems.add(new RandomItem(10, Material.POTION, 16451, 1, 2)); // Fire
         // resist
-        randomItems.add(new RandomItem(4, Material.POTION, 16462, 1, 2)); // Invis
+        randomItems.add(new RandomItem(1, Material.POTION, 16462, 1, 2)); // Invis
     }
 
     private int countItems(Inventory inv) {
@@ -65,7 +65,7 @@ public class ChestManager {
 
     private void fillChest(Inventory inv, boolean doubleChest) {
         inv.clear();
-        while (countItems(inv) < (doubleChest ? 12 : 6)) {
+        while (countItems(inv) < (doubleChest ? 10 : 4)) {
             Collections.shuffle(randomItems, new Random());
             for (RandomItem item : randomItems) {
                 if (item.hasChance()) {
