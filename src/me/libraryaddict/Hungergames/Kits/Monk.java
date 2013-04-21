@@ -18,8 +18,8 @@ public class Monk implements Listener {
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {
         ItemStack item = event.getPlayer().getItemInHand();
-        if (event.getRightClicked() instanceof Player && item != null && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
+        if (event.getRightClicked() instanceof Player && item != null && item.hasItemMeta()
+                && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
                 && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Monk Staff")) {
             long lastUsed = 0;
             if (monkStaff.containsKey(item))
