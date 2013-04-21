@@ -21,9 +21,9 @@ public class Vampire implements Listener {
     public void onKilled(PlayerKilledEvent event) {
         if (event.getKillerPlayer() != null && kits.hasAbility(event.getKillerPlayer().getPlayer(), "Vampire")) {
             int hp = event.getKillerPlayer().getPlayer().getHealth();
-            hp += 8;
+            hp += 6;
             if (hp > 20) {
-                if (hp >= 27)
+                if (hp >= 19 + hp)
                     event.getDrops().add(new ItemStack(Material.POTION, 1, (short) 16421));
                 hp = 20;
             }
@@ -37,7 +37,7 @@ public class Vampire implements Listener {
             Player p = event.getEntity().getKiller();
             if (event.getEntity() instanceof Creature) {
                 int hp = p.getHealth();
-                hp += (event.getEntity() instanceof Animals ? 4 : 6);
+                hp += (event.getEntity() instanceof Animals ? 3 : 5);
                 if (hp > 20) {
                     hp = 20;
                 }
