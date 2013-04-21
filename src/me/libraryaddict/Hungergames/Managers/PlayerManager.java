@@ -202,6 +202,8 @@ public class PlayerManager {
             p.removePotionEffect(effect.getType());
         p.teleport(p.getWorld().getHighestBlockAt(p.getLocation()).getLocation().clone().add(0, 10, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 9), true);
+        p.sendBlockChange(p.getLocation(), Material.PORTAL.getId(), (byte) 0);
+        p.sendBlockChange(p.getLocation(), Material.AIR.getId(), (byte) 0);
         for (Entity entity : p.getWorld().getEntities()) {
             if (entity instanceof Tameable && ((Tameable) entity).isTamed()
                     && ((Tameable) entity).getOwner().getName().equals(p.getName())) {
