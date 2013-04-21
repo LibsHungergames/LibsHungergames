@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 public class Scout implements Listener {
 
@@ -31,7 +32,8 @@ public class Scout implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getCause() == DamageCause.FALL && event.getEntity() instanceof Player
-                && kits.hasAbility((Player) event.getEntity(), "Scout"))
+                && kits.hasAbility((Player) event.getEntity(), "Scout")
+                && ((Player) event.getEntity()).hasPotionEffect(PotionEffectType.SPEED))
             event.setCancelled(true);
     }
 }
