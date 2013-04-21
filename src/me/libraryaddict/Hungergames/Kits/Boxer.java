@@ -15,10 +15,8 @@ public class Boxer implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player
-                && kits.hasAbility((Player) event.getDamager(), "Boxer")
-                && (((Player) event.getDamager()).getItemInHand() == null || ((Player) event.getDamager()).getItemInHand()
-                        .getType() == Material.AIR))
+        if (event.getDamager() instanceof Player && kits.hasAbility((Player) event.getDamager(), "Boxer")
+                && event.getDamage() == 1)
             event.setDamage(4);
         if (event.getEntity() instanceof Player && kits.hasAbility((Player) event.getEntity(), "Boxer"))
             if (event.getDamage() > 0)
