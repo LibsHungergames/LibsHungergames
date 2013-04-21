@@ -491,6 +491,8 @@ Kits:
     Items:
       - FLINT_AND_STEEL 0 1
       - FIREBALL 0 5
+    Ability:
+      - Pyro
   Reaper:
     Description: 'The Reaper kit will allow you to curse players by hitting them with your wooden hoe, the players will get the wither effect and get damage over time.'
     Free: true
