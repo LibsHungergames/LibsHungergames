@@ -39,20 +39,20 @@ public class ChestManager {
         randomItems.add(new RandomItem(20, Material.ARROW, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.TNT, 0, 1, 20));
         randomItems.add(new RandomItem(20, Material.EXP_BOTTLE, 0, 1, 10));
-        randomItems.add(new RandomItem(10, Material.POTION, 16420, 1, 2)); // Poisons
-        randomItems.add(new RandomItem(10, Material.POTION, 16425, 1, 2)); // Strength
-        randomItems.add(new RandomItem(10, Material.POTION, 16418, 1, 2)); // Speed
+        randomItems.add(new RandomItem(10, Material.POTION, 16420, 1, 1)); // Poisons
+        randomItems.add(new RandomItem(10, Material.POTION, 16425, 1, 1)); // Strength
+        randomItems.add(new RandomItem(10, Material.POTION, 16418, 1, 1)); // Speed
                                                                            // II
-        randomItems.add(new RandomItem(10, Material.POTION, 16426, 1, 2)); // Slowness
-        randomItems.add(new RandomItem(10, Material.POTION, 16428, 1, 2)); // Damage
-        randomItems.add(new RandomItem(10, Material.POTION, 16421, 1, 4)); // Healing
-        randomItems.add(new RandomItem(10, Material.POTION, 16417, 1, 2)); // Regen
+        randomItems.add(new RandomItem(10, Material.POTION, 16426, 1, 1)); // Slowness
+        randomItems.add(new RandomItem(10, Material.POTION, 16428, 1, 1)); // Damage
+        randomItems.add(new RandomItem(10, Material.POTION, 16421, 1, 1)); // Healing
+        randomItems.add(new RandomItem(10, Material.POTION, 16417, 1, 1)); // Regen
                                                                            // II
-        randomItems.add(new RandomItem(10, Material.POTION, 16385, 1, 2)); // Regenm
+        randomItems.add(new RandomItem(10, Material.POTION, 16385, 1, 1)); // Regenm
                                                                            // I
-        randomItems.add(new RandomItem(10, Material.POTION, 16451, 1, 2)); // Fire
+        randomItems.add(new RandomItem(10, Material.POTION, 16451, 1, 1)); // Fire
         // resist
-        randomItems.add(new RandomItem(1, Material.POTION, 16462, 1, 2)); // Invis
+        randomItems.add(new RandomItem(1, Material.POTION, 16462, 1, 1)); // Invis
     }
 
     private int countItems(Inventory inv) {
