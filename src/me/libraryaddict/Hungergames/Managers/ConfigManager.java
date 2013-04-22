@@ -98,19 +98,24 @@ public class ConfigManager {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
             System.out.println("Changed spawn radius to 0");
         }
-        if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
-            if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
-                iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
-                FileConfiguration config = disguise.getConfig();
-                config.set("save-disguises", false);
-                config.set("undisguise-on-hit", true);
-                try {
-                    config.save(new File("plugins/iDisguise/Config.yml"));
-                } catch (IOException e) {
-                   System.out.print("Failed to change iDisguise config");
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
+                    if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
+                        iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
+                        FileConfiguration config = disguise.getConfig();
+                        config.set("save-disguises", false);
+                        config.set("undisguise-on-hit", false);
+                        try {
+                            config.save(new File("plugins/iDisguise/Config.yml"));
+                        } catch (IOException e) {
+                            System.out.print("Failed to change iDisguise config");
+                        }
+                        disguise.config.loadConfig();
+                    }
                 }
             }
-        }
+        });
         hg.currentTime = -Math.abs(hg.getConfig().getInt("Countdown", 270));
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
         shortenTime = hg.getConfig().getBoolean("ShortenTime", false);
