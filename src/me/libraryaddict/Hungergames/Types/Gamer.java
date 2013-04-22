@@ -33,6 +33,7 @@ public class Gamer {
     private static Economy economy = null;
     private static PlayerManager pm = HungergamesApi.getPlayerManager();
     private static Hungergames hg = HungergamesApi.getHungergames();
+    private int kills = 0;
 
     public Gamer(Player player, boolean isVip) {
         vip = isVip;
@@ -270,6 +271,14 @@ public class Gamer {
 
     public boolean isAlive() {
         return !isSpectator() && hg.currentTime >= 0;
+    }
+    
+    public int getKills() {
+        return kills;
+    }
+    
+    public void addKill() {
+        kills++;
     }
 
     public long getChunkCooldown() {
