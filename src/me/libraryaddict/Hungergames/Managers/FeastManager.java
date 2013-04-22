@@ -266,8 +266,8 @@ public class FeastManager {
                 }
                 if (x == 0 && z == 0) {
                     setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
-                    if (block.getRelative(BlockFace.DOWN).getType() == Material.TNT && config.isFeastTntIgnite())
-                        setBlockFast(block.getRelative(BlockFace.DOWN), Material.TNT.getId(), (byte) 1);
+                    setBlockFast(block.getRelative(BlockFace.DOWN), feastInsides.getType().getId(), (config.isFeastTntIgnite()
+                            && feastInsides.getType() == Material.TNT ? (byte) 1 : feastInsides.getDurability()));
                 } else if (Math.abs(x + z) % 2 == 0) {
                     setBlockFast(block, Material.CHEST.getId(), (byte) 0);
                     Chest chest = (Chest) block.getState();
