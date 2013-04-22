@@ -99,7 +99,7 @@ public class PlayerManager {
         p.eject();
         while (true) {
             Location hisSpawn = new Location(spawn.getWorld(), spawn.getX() + (returnChance(10 * 2) - 10), spawn.getY()
-                    + (returnChance(10 * 2) - 10), spawn.getZ() + (returnChance(10 * 2) - 10));
+                    + new Random().nextInt(10), spawn.getZ() + (returnChance(10 * 2) - 10));
             chances = chances + 1;
             if (hisSpawn.getBlock().getType() == Material.AIR
                     && hisSpawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR) {
