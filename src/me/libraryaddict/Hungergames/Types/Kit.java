@@ -36,7 +36,7 @@ public class Kit {
         kitName = name;
         armor = armour;
         items = item;
-        permission = "hungergames." + name.replaceAll(" ", "_").toLowerCase();
+        permission = "hungergames.kit." + name.replaceAll(" ", "_").toLowerCase();
         if (desc != null)
             description = desc;
         abilities = abilitys;
