@@ -117,6 +117,7 @@ public class PlayerListener implements Listener {
                 }
             }, 0L);
         } else {
+            ScoreboardManager.makeScore(ChatColor.GREEN + "Players: ", Bukkit.getOnlinePlayers().length);
             gamer.clearInventory();
             if (config.useKitSelector())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {

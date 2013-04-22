@@ -40,7 +40,6 @@ public class PlayerManager {
     public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
     public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
     Hungergames hg = HungergamesApi.getHungergames();
-    ConfigManager config = HungergamesApi.getConfigManager();
     KitManager kits = HungergamesApi.getKitManager();
 
     public synchronized Gamer getGamer(Entity entity) {
@@ -171,7 +170,9 @@ public class PlayerManager {
                 ChatColor.RED + p.getName() + ChatColor.DARK_RED + "(" + ChatColor.RED
                         + (kits.getKitByPlayer(p.getName()) == null ? "None" : kits.getKitByPlayer(p.getName()).getName())
                         + ChatColor.DARK_RED + ")"));
-        if (event.getKillerPlayer() != null)
+        if (event.getKillerPlayer() != null) {
+            event.getKillerPlayer().addKill();
+            ScoreboardManager.updateKills();
             event.setDeathMessage(event.getDeathMessage().replace(
                     event.getKillerPlayer().getName(),
                     ChatColor.RED
@@ -181,12 +182,12 @@ public class PlayerManager {
                             + ChatColor.RED
                             + (kits.getKitByPlayer(event.getKillerPlayer().getName()) == null ? "None" : kits.getKitByPlayer(
                                     event.getKillerPlayer().getName()).getName()) + ChatColor.DARK_RED + ")"));
+        }
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
         hg.cannon();
         killed.clearInventory();
-        killed.setSpectating(true);
         World world = p.getWorld();
         for (ItemStack item : event.getDrops()) {
             if (item == null || item.getType() == Material.AIR || item.containsEnchantment(Enchants.UNLOOTABLE))
@@ -198,8 +199,9 @@ public class PlayerManager {
         }
         if (event.getDeathMessage() != null)
             Bukkit.broadcastMessage(event.getDeathMessage());
-        hg.checkWinner();
         setSpectator(killed);
+        ScoreboardManager.makeScore(ChatColor.GREEN + "Players: ", getAliveGamers().size());
+        hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())
             p.removePotionEffect(effect.getType());
@@ -220,7 +222,7 @@ public class PlayerManager {
             if (entity instanceof Creature && ((Creature) entity).getTarget() == p)
                 ((Creature) entity).setTarget(null);
         }
-        if (!config.isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
+        if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
     }
 
