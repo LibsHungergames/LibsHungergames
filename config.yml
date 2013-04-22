@@ -522,7 +522,7 @@ Kits:
     Ability:
       - Salamander
   Salvager:
-    Description: 'The Salvager kit will give you an anvil, when you place that anvil down, you can right click all tools and armor on the anvil, and you will receive the building materials back, ie. a iron helmet will give you back 5 iron ingots.'
+    Description: 'The Salvager kit will give you an anvil, when you place that anvil down, you can right click a item on the anvil, and you will receive the building materials back, ie. a iron helmet will give you back 5 iron ingots.'
     Free: true
     Price: 0
     Icon: WORKBENCH 0 1
