@@ -95,7 +95,7 @@ public class Flash implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item != null && event.getAction().name().contains("RIGHT")) {
+        if (item != null && item.hasItemMeta() && event.getAction().name().contains("RIGHT")) {
             if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
                     && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Flash")) {
                 event.setCancelled(true);

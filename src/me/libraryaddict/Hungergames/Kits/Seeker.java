@@ -28,7 +28,7 @@ public class Seeker implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item != null && item.getItemMeta().hasDisplayName()
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()
                 && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
                 && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Ghost Eye")) {
             event.setCancelled(true);
