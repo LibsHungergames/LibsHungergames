@@ -74,7 +74,7 @@ public class ScoreboardManager {
         else if (hg.currentTime < config.getTimeFeastStarts() - (5 * 60))
             setDisplayName(ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Fighting");
         else if (hg.currentTime >= config.getTimeFeastStarts() - (5 * 60) && hg.currentTime < config.getTimeFeastStarts())
-            setDisplayName(ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Rushing feast");
+            setDisplayName(ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Pre-Feast");
         else
             setDisplayName(ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Finishing up");
     }

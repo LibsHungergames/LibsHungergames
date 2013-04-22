@@ -106,19 +106,19 @@ public class PlayerManager {
                 spawn = hisSpawn.clone();
                 break;
             }
+            while (spawn.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                if (spawn.getY() > 0)
+                    spawn.add(0, -1, 0);
+                else {
+                    spawn.getBlock().setType(Material.GLASS);
+                    spawn.setY(1);
+                    p.sendMessage(ChatColor.RED + "You are floating over the void :o");
+                    break;
+                }
+            }
             if (chances == 300) {
                 hisSpawn.setY(p.getWorld().getHighestBlockYAt(hisSpawn));
                 spawn = hisSpawn.clone();
-                break;
-            }
-        }
-        while (spawn.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-            if (spawn.getY() > 0)
-                spawn.add(0, -1, 0);
-            else {
-                spawn.getBlock().setType(Material.GLASS);
-                spawn.setY(1);
-                p.sendMessage(ChatColor.RED + "You are floating over the void :o");
                 break;
             }
         }
@@ -172,7 +172,6 @@ public class PlayerManager {
                         + ChatColor.DARK_RED + ")"));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
-            ScoreboardManager.updateKills();
             event.setDeathMessage(event.getDeathMessage().replace(
                     event.getKillerPlayer().getName(),
                     ChatColor.RED
@@ -224,6 +223,7 @@ public class PlayerManager {
         }
         if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
+        ScoreboardManager.updateKills();
     }
 
     public void setSpectator(Gamer gamer) {
