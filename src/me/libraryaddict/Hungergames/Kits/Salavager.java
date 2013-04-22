@@ -23,7 +23,7 @@ public class Salavager implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ANVIL
-                && pm.getGamer(event.getPlayer()).isAlive() && kits.hasAbility(event.getPlayer(), "Salavager")) {
+                && pm.getGamer(event.getPlayer()).isAlive() && kits.hasAbility(event.getPlayer(), "Salvager")) {
             ItemStack item = event.getItem();
             if (item != null && item.getType() != Material.AIR) {
                 for (Recipe recipe : Bukkit.getRecipesFor(item)) {
