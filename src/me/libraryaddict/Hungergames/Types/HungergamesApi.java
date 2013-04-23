@@ -1,13 +1,7 @@
 package me.libraryaddict.Hungergames.Types;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.ChestManager;
-import me.libraryaddict.Hungergames.Managers.ConfigManager;
-import me.libraryaddict.Hungergames.Managers.KitSelectorManager;
-import me.libraryaddict.Hungergames.Managers.KitManager;
-import me.libraryaddict.Hungergames.Managers.MySqlManager;
-import me.libraryaddict.Hungergames.Managers.PlayerManager;
-import me.libraryaddict.Hungergames.Managers.FeastManager;
+import me.libraryaddict.Hungergames.Managers.*;
 
 public class HungergamesApi {
     private static Hungergames hg;
@@ -18,19 +12,20 @@ public class HungergamesApi {
     private static KitManager kits;
     private static KitSelectorManager icon;
     private static ConfigManager config;
+    private static AbilityManager abilityManager;
 
-    public HungergamesApi(Hungergames hunger) {
+    public static void init(Hungergames hunger) {
         hg = hunger;
+    }
+
+    public static Hungergames getHungergames() {
+        return hg;
     }
 
     public static ConfigManager getConfigManager() {
         if (config == null)
             config = new ConfigManager();
         return config;
-    }
-
-    public static Hungergames getHungergames() {
-        return hg;
     }
 
     public static PlayerManager getPlayerManager() {
@@ -67,5 +62,11 @@ public class HungergamesApi {
         if (icon == null)
             icon = new KitSelectorManager();
         return icon;
+    }
+
+    public static AbilityManager getAbilityManager() {
+        if(abilityManager == null)
+            abilityManager = new AbilityManager(new AbilityConfigManager(getHungergames()));
+        return abilityManager;
     }
 }

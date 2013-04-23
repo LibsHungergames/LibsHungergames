@@ -134,6 +134,9 @@ public class Kit {
                     giveKit(p);
                 }
             }, Math.round(Math.floor(time)));
+            for (String abilityName : abilities) {
+                HungergamesApi.getAbilityManager().registerPlayerAbility(player, abilityName);
+            }
         }
     }
 

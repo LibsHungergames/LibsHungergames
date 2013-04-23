@@ -11,7 +11,6 @@ import me.libraryaddict.Hungergames.Commands.*;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
-import me.libraryaddict.Hungergames.Kits.*;
 import me.libraryaddict.Hungergames.Listeners.GeneralListener;
 import me.libraryaddict.Hungergames.Listeners.LibsCommandsListener;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
@@ -20,6 +19,7 @@ import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Utilities.SchedulingUtility;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,7 +83,9 @@ public class Hungergames extends JavaPlugin {
         } catch (IOException e) {
         }
         new Enchants();
-        new HungergamesApi(this);
+        HungergamesApi.init(this);
+        SchedulingUtility.init(this);
+        HungergamesApi.getAbilityManager();
         pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
@@ -173,7 +175,7 @@ public class Hungergames extends JavaPlugin {
         getCommand("kit").setExecutor(new Kit());
         getCommand("kitinfo").setExecutor(new KitInfo());
         getCommand("kititems").setExecutor(new KitItems());
-        getCommand("track").setExecutor(new Track());
+        // getCommand("track").setExecutor(new Track());
         getCommand("feast").setExecutor(new Feast());
         getCommand("chunk").setExecutor(new Chunk());
         getCommand("kill").setExecutor(new Kill());
@@ -342,67 +344,16 @@ public class Hungergames extends JavaPlugin {
             p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         }
         checkWinner();
-        final Hungergames games = this;
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 for (Gamer gamer : pm.getAliveGamers())
                     gamer.getPlayer().getInventory().addItem(new ItemStack(Material.COMPASS));
                 for (me.libraryaddict.Hungergames.Types.Kit kit : HungergamesApi.getKitManager().kits)
                     kit.giveKit();
-                PluginManager plugin = Bukkit.getPluginManager();
-                plugin.registerEvents(new Array(), games);
-                plugin.registerEvents(new Tracker(), games);
-                plugin.registerEvents(new Backpacker(), games);
-                plugin.registerEvents(new BeastMaster(), games);
-                plugin.registerEvents(new Berserker(), games);
-                plugin.registerEvents(new Boxer(), games);
-                plugin.registerEvents(new Cannibal(), games);
-                plugin.registerEvents(new Cultivator(), games);
-                plugin.registerEvents(new Lumberjack(), games);
-                plugin.registerEvents(new Necro(), games);
-                plugin.registerEvents(new Thor(), games);
-                plugin.registerEvents(new Turtle(), games);
-                plugin.registerEvents(new Viper(), games);
-                plugin.registerEvents(new Werewolf(), games);
-                plugin.registerEvents(new Snail(), games);
-                plugin.registerEvents(new Fletcher(), games);
-                plugin.registerEvents(new Jumper(), games);
-                plugin.registerEvents(new Monster(), games);
-                plugin.registerEvents(new Pickpocket(), games);
-                plugin.registerEvents(new Poseidon(), games);
-                plugin.registerEvents(new Scout(), games);
-                plugin.registerEvents(new Demoman(), games);
-                plugin.registerEvents(new Fireman(), games);
-                plugin.registerEvents(new Stomper(), games);
-                // plugin.registerEvents(new Kangaroo(), games);
-                plugin.registerEvents(new Gravedigger(), games);
-                plugin.registerEvents(new Hunter(), games);
-                plugin.registerEvents(new Vampire(), games);
-                plugin.registerEvents(new Crafter(), games);
-                plugin.registerEvents(new Summoner(), games);
-                plugin.registerEvents(new Doctor(), games);
-                plugin.registerEvents(new Creeper(), games);
-                plugin.registerEvents(new Miser(), games);
-                plugin.registerEvents(new Salamander(), games);
-                if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
-                    plugin.registerEvents(new Chameleon(), games);
-                    plugin.registerEvents(new Pussy(), games);
-                } else
-                    System.out.print("Failed to find iDisguise. Not loading kits Chameleon and Pussy");
-                plugin.registerEvents(new Salvager(), games);
-                plugin.registerEvents(new Forger(), games);
-                plugin.registerEvents(new Kaya(), games);
-                plugin.registerEvents(new Hades(), games);
-                plugin.registerEvents(new Endermage(), games);
-                plugin.registerEvents(new Seeker(), games);
-                plugin.registerEvents(new Spiderman(), games);
-                plugin.registerEvents(new Flash(), games);
-                plugin.registerEvents(new Monk(), games);
-                plugin.registerEvents(new Pyro(), games);
+                HungergamesApi.getAbilityManager().registerAbilityListeners();
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());
             }
         });
-
         for (Location l : entitys.keySet())
             l.getWorld().spawnEntity(l, entitys.get(l));
         entitys.clear();

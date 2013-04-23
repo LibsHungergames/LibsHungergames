@@ -126,16 +126,12 @@ public class KitManager {
         return kit;
     }
 
-    public boolean hasAbility(Player p, String ability) {
-        if (hg.currentTime < 0)
-            return false;
-        if (p == null)
-            return false;
-        Kit kit = kitty.getKitByPlayer(p.getName());
-        if (kit == null || !kit.hasAbility(ability))
-            return false;
-        return true;
-    }
+    /*
+     * public boolean hasAbility(Player p, String ability) { if (hg.currentTime
+     * < 0) return false; if (p == null) return false; Kit kit =
+     * kitty.getKitByPlayer(p.getName()); if (kit == null ||
+     * !kit.hasAbility(ability)) return false; return true; }
+     */
 
     public boolean canFit(Inventory pInv, ItemStack[] items) {
         Inventory inv = Bukkit.createInventory(null, pInv.getContents().length);
@@ -170,12 +166,11 @@ public class KitManager {
         }
     }
 
-    public boolean hasAbility(String player, String ability) {
-        Kit kit = kitty.getKitByPlayer(player);
-        if (kit == null || !kit.hasAbility(ability))
-            return false;
-        return true;
-    }
+    /*
+     * public boolean hasAbility(String player, String ability) { Kit kit =
+     * kitty.getKitByPlayer(player); if (kit == null ||
+     * !kit.hasAbility(ability)) return false; return true; }
+     */
 
     private ItemStack[] parseItem(String string) {
         if (string == null)
