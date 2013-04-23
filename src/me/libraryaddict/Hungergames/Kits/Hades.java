@@ -66,7 +66,7 @@ public class Hades implements Listener {
             if (item != null && item.getType() == Material.ROTTEN_FLESH && !tamed.containsKey(event.getRightClicked())) {
                 item.setAmount(item.getAmount() - 1);
                 if (item.getAmount() == 0)
-                    item.setType(Material.AIR);
+                    event.getPlayer().setItemInHand(new ItemStack(0));
                 Zombie old = (Zombie) event.getRightClicked();
                 Zombie monster = (Zombie) old.getWorld().spawnEntity(old.getLocation(), old.getType());
                 monster.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
