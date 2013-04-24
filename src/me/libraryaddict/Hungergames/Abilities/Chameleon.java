@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -18,7 +19,7 @@ import de.robingrether.idisguise.api.DisguiseAPI;
 import de.robingrether.idisguise.api.MobDisguise;
 
 public class Chameleon extends AbilityListener {
-    
+
     public Chameleon() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
             throw new Exception("iDisguise not found");
@@ -30,6 +31,9 @@ public class Chameleon extends AbilityListener {
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled())
             return;
+        Entity damager = event.getDamager();
+        if (event.getDamager() instanceof Projectile && ((Projectile) damager).getShooter() != null)
+            damager = ((Projectile) damager).getShooter();
         if (isChameleon(event.getEntity())) {
             Player p = (Player) event.getEntity();
             if (DisguiseAPI.isDisguised(p)) {
@@ -37,8 +41,8 @@ public class Chameleon extends AbilityListener {
                 p.sendMessage(ChatColor.GREEN + "Your disguise was broken!");
             }
         }
-        if (isChameleon(event.getDamager())) {
-            Player p = (Player) event.getDamager();
+        if (isChameleon(damager)) {
+            Player p = (Player) damager;
             if (event.getEntity() instanceof Player && DisguiseAPI.isDisguised(p)) {
                 DisguiseAPI.undisguiseToAll(p);
                 p.sendMessage(ChatColor.GREEN + "You broke out of your disguise!");
