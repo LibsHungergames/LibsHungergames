@@ -19,10 +19,15 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class Pussy extends AbilityListener {
     private transient HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
 
+    public Pussy() throws Exception {
+        if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
+            throw new Exception("iDisguise not found");
+    }
+
     @EventHandler
     public void onSprint(PlayerToggleSprintEvent event) {
         final Player p = event.getPlayer();
-        if (hasThisAbility(p.getName()) && (HungergamesApi.getPlayerManager().getGamer(p).isAlive())) {
+        if (hasAbility(p.getName()) && (HungergamesApi.getPlayerManager().getGamer(p).isAlive())) {
             if (event.isSprinting()) {
                 int id = Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {

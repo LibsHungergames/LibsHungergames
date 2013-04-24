@@ -18,6 +18,11 @@ public class Salamander extends AbilityListener {
 
     private transient ArrayList<Player> salamanders = new ArrayList<Player>();
 
+    public void registerPlayer(String name) {
+        Player p = Bukkit.getPlayerExact(name);
+        if (p != null)
+            salamanders.add(p);
+    }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
@@ -38,13 +43,6 @@ public class Salamander extends AbilityListener {
                  */
             }
         }
-    }
-
-    public Salamander() {
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (hasThisAbility(p)) {
-                salamanders.add(p);
-            }
     }
 
     @EventHandler

@@ -12,7 +12,7 @@ public class Fireman extends AbilityListener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player
-                && hasThisAbility((Player) event.getEntity())
+                && hasAbility((Player) event.getEntity())
                 && (event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK
                         || event.getCause() == DamageCause.LIGHTNING || event.getCause() == DamageCause.LAVA)) {
             event.setCancelled(true);

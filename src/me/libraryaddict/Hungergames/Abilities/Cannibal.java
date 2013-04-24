@@ -21,7 +21,7 @@ public class Cannibal extends AbilityListener {
             LivingEntity entity = (LivingEntity) event.getEntity();
             Player p = (Player) event.getDamager();
             if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SWORD")
-                    && hasThisAbility(p) && new Random().nextInt(3) == 1) {
+                    && hasAbility(p) && new Random().nextInt(3) == 1) {
                 /*
                  * int ticks =
                  * p.getItemInHand().getEnchantmentLevel(Enchants.POISON) * 60;

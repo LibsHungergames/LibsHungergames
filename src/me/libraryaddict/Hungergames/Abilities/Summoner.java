@@ -13,13 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class Summoner extends AbilityListener {
 
-
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity damager = event.getDamager();
         if (damager instanceof Egg && ((Egg) damager).getShooter() instanceof Player && entity instanceof Creature
-                && hasThisAbility((Player) ((Egg) damager).getShooter())) {
+                && hasAbility((Player) ((Egg) damager).getShooter())) {
             entity.getWorld().dropItemNaturally(entity.getLocation().clone().add(0, 0.5, 0),
                     new ItemStack(Material.MONSTER_EGG, 1, entity.getType().getTypeId()));
             entity.remove();

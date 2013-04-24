@@ -22,7 +22,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class Tracker extends AbilityListener implements CommandExecutor{
+public class Tracker extends AbilityListener implements CommandExecutor {
     private transient HashMap<Player, Player> tracking = new HashMap<Player, Player>();
     private transient List<String> locked = new ArrayList<String>();
 
@@ -47,7 +47,7 @@ public class Tracker extends AbilityListener implements CommandExecutor{
         }
         if (victim != null) {
             p.setCompassTarget(victim.getLocation());
-            if (hasThisAbility(p)) {
+            if (hasAbility(p)) {
                 p.sendMessage(ChatColor.YELLOW + "Compass pointing at " + victim.getName() + " who is " + ((int) distance)
                         + " blocks away at location (" + victim.getLocation().getBlockX() + ", "
                         + victim.getLocation().getBlockY() + ", " + victim.getLocation().getBlockZ() + ")");
@@ -91,15 +91,14 @@ public class Tracker extends AbilityListener implements CommandExecutor{
     }
 
     @Override
-    public String getCommand()
-    {
+    public String getCommand() {
         return "track";
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = HungergamesApi.getPlayerManager().getGamer(sender.getName());
-        if (hasThisAbility(gamer.getPlayer())) {
+        if (hasAbility(gamer.getPlayer())) {
             if (args.length > 0) {
                 Gamer victim = HungergamesApi.getPlayerManager().getGamer(Bukkit.getPlayer(args[0]));
                 if (victim.isAlive()) {

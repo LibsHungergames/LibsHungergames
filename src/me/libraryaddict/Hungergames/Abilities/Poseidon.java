@@ -16,13 +16,10 @@ import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 public class Poseidon extends AbilityListener {
     ArrayList<Player> waterBreathers = new ArrayList<Player>();
 
-
-
-    public Poseidon() {
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (hasThisAbility(p)) {
-                waterBreathers.add(p);
-            }
+    public void registerPlayer(String name) {
+        Player p = Bukkit.getPlayerExact(name);
+        if (p != null)
+            waterBreathers.add(p);
     }
 
     @EventHandler

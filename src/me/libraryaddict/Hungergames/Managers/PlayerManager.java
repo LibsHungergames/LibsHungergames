@@ -101,20 +101,16 @@ public class PlayerManager {
             Location hisSpawn = new Location(spawn.getWorld(), spawn.getX() + (returnChance(10 * 2) - 10), spawn.getY()
                     + new Random().nextInt(10), spawn.getZ() + (returnChance(10 * 2) - 10));
             chances = chances + 1;
+            while (hisSpawn.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                if (hisSpawn.getY() > 0)
+                    hisSpawn.add(0, -1, 0);
+                else
+                    continue;
+            }
             if (hisSpawn.getBlock().getType() == Material.AIR
                     && hisSpawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR) {
                 spawn = hisSpawn.clone();
                 break;
-            }
-            while (spawn.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                if (spawn.getY() > 0)
-                    spawn.add(0, -1, 0);
-                else {
-                    spawn.getBlock().setType(Material.GLASS);
-                    spawn.setY(1);
-                    p.sendMessage(ChatColor.RED + "You are floating over the void :o");
-                    break;
-                }
             }
             if (chances == 300) {
                 hisSpawn.setY(p.getWorld().getHighestBlockYAt(hisSpawn));

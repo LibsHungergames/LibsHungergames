@@ -9,6 +9,7 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class Pickpocket extends AbilityListener {
-    // TODO Rewrite this
 
     private transient HashMap<ItemStack, Pick> pickpockets = new HashMap<ItemStack, Pick>();
 
@@ -100,7 +100,8 @@ public class Pickpocket extends AbilityListener {
                 Pick pick = getPick((Player) event.getWhoClicked());
                 if (pick.itemsStolen < 4) {
                     if (event.getRawSlot() > 8) {
-                        pick.itemsStolen++;
+                        if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
+                            pick.itemsStolen++;
                     } else {
                         event.setCancelled(true);
                         ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "Thats their hotbar!");

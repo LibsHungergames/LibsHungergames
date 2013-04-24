@@ -32,7 +32,7 @@ public class Spiderman extends AbilityListener {
         if (event.getEntityType() == EntityType.SNOWBALL) {
             if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player) {
                 Player p = (Player) event.getEntity().getShooter();
-                if (!hasThisAbility(p))
+                if (!hasAbility(p))
                     return;
                 ArrayList<Long> cooldowns;
                 if (cooldown.containsKey(p.getName()))
@@ -84,7 +84,7 @@ public class Spiderman extends AbilityListener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (hasThisAbility(event.getPlayer())) {
+        if (hasAbility(event.getPlayer())) {
             if (isWeb(event.getFrom()) || isWeb(event.getTo())) {
                 event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 1), true);
             }

@@ -13,8 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Snail extends AbilityListener {
 
-
-
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled())
@@ -22,7 +20,7 @@ public class Snail extends AbilityListener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) event.getEntity();
             Player p = (Player) event.getDamager();
-            if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SWORD") && hasThisAbility(p)
+            if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SWORD") && hasAbility(p)
                     && new Random().nextInt(3) == 1) {
                 /*
                  * int ticks =

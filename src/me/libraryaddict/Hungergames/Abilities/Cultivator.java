@@ -10,11 +10,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class Cultivator extends AbilityListener {
 
-
-
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (hasThisAbility(event.getPlayer())) {
+        if (hasAbility(event.getPlayer())) {
             Block b = event.getBlock();
             if (b.getType() == Material.SAPLING) {
                 int data = (int) b.getData();

@@ -14,10 +14,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class Demoman extends AbilityListener {
 
-
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.STONE_PLATE && hasThisAbility(event.getPlayer())) {
+        if (event.getBlock().getType() == Material.STONE_PLATE && hasAbility(event.getPlayer())) {
             event.getBlock().removeMetadata("Placer", HungergamesApi.getHungergames());
             event.getBlock().setMetadata("Placer", new FixedMetadataValue(HungergamesApi.getHungergames(), event.getPlayer().getName()));
         }

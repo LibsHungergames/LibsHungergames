@@ -19,14 +19,13 @@ import org.bukkit.util.Vector;
 
 public class Stomper extends AbilityListener {
 
-
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.isCancelled())
             return;
         if (event.getCause() == DamageCause.FALL && event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
-            if (hasThisAbility(p)) {
+            if (hasAbility(p)) {
                 int dmg = event.getDamage();
                 int area = dmg / 3;
                 if (area > 3)

@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -14,13 +15,15 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Werewolf extends AbilityListener {
 
-    public Werewolf() {
+    @EventHandler
+    public void gameStartEvent(GameStartEvent event) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
                 for (Gamer gamer : HungergamesApi.getPlayerManager().getAliveGamers()) {
                     Player p = gamer.getPlayer();
-                    if (hasThisAbility(p)) {
-                        if (HungergamesApi.getHungergames().world.getTime() > 0 && HungergamesApi.getHungergames().world.getTime() <= 12000) {
+                    if (hasAbility(p)) {
+                        if (HungergamesApi.getHungergames().world.getTime() > 0
+                                && HungergamesApi.getHungergames().world.getTime() <= 12000) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0), true);
                         } else {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 12000, 0), true);
@@ -34,7 +37,7 @@ public class Werewolf extends AbilityListener {
 
     @EventHandler
     public void onTarget(EntityTargetEvent event) {
-        if (event.getTarget() instanceof Player && hasThisAbility((Player) event.getTarget())
+        if (event.getTarget() instanceof Player && hasAbility((Player) event.getTarget())
                 && event.getEntityType() == EntityType.WOLF)
             event.setCancelled(true);
     }

@@ -22,20 +22,23 @@ public class Jumper extends AbilityListener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof EnderPearl
                 && event.getEntity() == ((Projectile) event.getDamager()).getShooter()
-                && hasThisAbility((Player) event.getEntity())) {
+                && hasAbility((Player) event.getEntity())) {
             event.setCancelled(true);
             for (int x = -2; x < 3; x++) {
                 for (int z = -2; z < 3; z++) {
                     final Block b = event.getEntity().getLocation().clone().add(x, -1, z).getBlock();
                     if (platformTaskIds.containsKey(b))
                         Bukkit.getScheduler().cancelTask(platformTaskIds.remove(b));
-                    if (b.getType() == Material.AIR)
-                        platformTaskIds.put(b, Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-                            public void run() {
-                                b.setType(Material.AIR);
-                                platformTaskIds.remove(platformTaskIds.get(b));
-                            }
-                        }, 5 * 20));
+                    if (b.getType() == Material.AIR) {
+                        b.setType(Material.GLASS);
+                        platformTaskIds.put(b,
+                                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                                    public void run() {
+                                        b.setType(Material.AIR);
+                                        platformTaskIds.remove(platformTaskIds.get(b));
+                                    }
+                                }, 5 * 20));
+                    }
                 }
             }
         }

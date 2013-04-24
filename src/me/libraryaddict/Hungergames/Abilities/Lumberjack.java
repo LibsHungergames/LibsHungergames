@@ -9,9 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class Lumberjack extends AbilityListener {
+    
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
-        if (event.getBlock().getType() == Material.LOG && hasThisAbility(event.getPlayer())) {
+        if (event.getBlock().getType() == Material.LOG && hasAbility(event.getPlayer())) {
             Block b = event.getBlock().getRelative(BlockFace.UP);
             while (b.getType() == Material.LOG) {
                 b.breakNaturally();

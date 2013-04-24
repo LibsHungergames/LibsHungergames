@@ -26,7 +26,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Array extends AbilityListener {
 
-    private transient HashMap<Player, HealArray> beacons = new HashMap<Player, HealArray>();
+    private transient HashMap<HealArray, Player> beacons = new HashMap<HealArray, Player>();
     private transient PlayerManager pm = HungergamesApi.getPlayerManager();
 
     class HealArray {
@@ -42,37 +42,43 @@ public class Array extends AbilityListener {
             Block b = event.getBlock();
             HealArray heal = new HealArray();
             heal.expires = System.currentTimeMillis() + 30000;
-            heal.blocks = new Block[] { b, b.getRelative(BlockFace.UP), b.getRelative(BlockFace.UP).getRelative(BlockFace.UP) };
-            beacons.put(event.getPlayer(), heal);
-            b.setType(Material.FENCE);
-            b.getRelative(BlockFace.UP).setType(Material.FENCE);
-            b.getRelative(BlockFace.UP).getRelative(BlockFace.UP).setType(Material.GLOWSTONE);
+            heal.blocks = new Block[3];
+            for (int i = 0; i < 3; i++) {
+                heal.blocks[i] = b;
+                if (i != 2)
+                    b.setType(Material.FENCE);
+                else
+                    b.setType(Material.GLOWSTONE);
+                b = b.getRelative(BlockFace.UP);
+            }
+            beacons.put(heal, event.getPlayer());
         }
     }
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
-        for (HealArray heal : beacons.values()) {
+        for (HealArray heal : beacons.keySet()) {
             for (Block b : heal.blocks)
-                if (b == event.getBlock()) {
+                if (b.equals(event.getBlock())) {
                     event.setCancelled(true);
-                    break;
+                    return;
                 }
         }
     }
 
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
-        Iterator<Player> itel = beacons.keySet().iterator();
+        Iterator<HealArray> itel = beacons.keySet().iterator();
         while (itel.hasNext()) {
-            Player player = itel.next();
-            HealArray heal = beacons.get(player);
+            HealArray heal = itel.next();
+            Player player = beacons.get(heal);
             if (heal.expires < System.currentTimeMillis()) {
                 ItemStack item = new ItemStack(Material.BEACON);
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(ChatColor.WHITE + "Array");
                 item.setItemMeta(meta);
                 item.addEnchantment(Enchants.UNLOOTABLE, 1);
+                Enchants.updateEnchants(item);
                 HungergamesApi.getKitManager().addItem(player, item);
                 for (Block b : heal.blocks)
                     b.setType(Material.AIR);
@@ -89,9 +95,14 @@ public class Array extends AbilityListener {
 
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
-        if (beacons.containsKey(event.getKilled().getPlayer()))
-            for (Block b : beacons.remove(event.getKilled().getPlayer()).blocks)
-                b.setType(Material.AIR);
+        if (beacons.containsValue(event.getKilled().getPlayer())) {
+            for (HealArray array : beacons.keySet()) {
+                if (beacons.get(array).equals(event.getKilled().getPlayer())) {
+                    for (Block b : array.blocks)
+                        b.setType(Material.AIR);
+                }
+            }
+        }
     }
 
 }

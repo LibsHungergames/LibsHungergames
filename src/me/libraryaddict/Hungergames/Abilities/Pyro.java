@@ -11,12 +11,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class Pyro extends AbilityListener {
 
-
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (event.getAction() == Action.RIGHT_CLICK_AIR && item != null && item.getType() == Material.FIREBALL
-                && hasThisAbility(event.getPlayer())) {
+                && hasAbility(event.getPlayer())) {
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
                 item.setType(Material.AIR);

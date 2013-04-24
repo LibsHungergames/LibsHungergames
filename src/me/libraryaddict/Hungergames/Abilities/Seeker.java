@@ -31,7 +31,7 @@ public class Seeker extends AbilityListener {
             long last = 0;
             if (lastClicked.containsKey(item))
                 last = lastClicked.get(item);
-            if (120000 > System.currentTimeMillis() - last) {
+            if (120000 - System.currentTimeMillis() > last) {
                 lastClicked.put(item, System.currentTimeMillis());
                 event.getPlayer()
                         .sendMessage(
@@ -50,8 +50,8 @@ public class Seeker extends AbilityListener {
                 }
             } else {
                 event.getPlayer().sendMessage(
-                        ChatColor.BLUE + "The ghost eye will be usable in " + ((120000 - System.currentTimeMillis() - last)/1000)
-                                + " seconds");
+                        ChatColor.BLUE + "The ghost eye will be usable in "
+                                + ((120000 - System.currentTimeMillis() - last) / 1000) + " seconds");
             }
         }
     }

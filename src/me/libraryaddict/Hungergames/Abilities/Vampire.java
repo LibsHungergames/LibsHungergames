@@ -13,11 +13,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class Vampire extends AbilityListener {
 
-
-
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
-        if (event.getKillerPlayer() != null && hasThisAbility(event.getKillerPlayer().getPlayer())) {
+        if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
             int hp = event.getKillerPlayer().getPlayer().getHealth();
             hp += 6;
             if (hp > 20) {
@@ -31,7 +29,7 @@ public class Vampire extends AbilityListener {
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() != null && hasThisAbility(event.getEntity().getKiller())) {
+        if (event.getEntity().getKiller() != null && hasAbility(event.getEntity().getKiller())) {
             Player p = event.getEntity().getKiller();
             if (event.getEntity() instanceof Creature) {
                 int hp = p.getHealth();

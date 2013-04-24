@@ -10,10 +10,10 @@ public class Boxer extends AbilityListener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && hasThisAbility(((Player) event.getDamager()).getName())
+        if (event.getDamager() instanceof Player && hasAbility(((Player) event.getDamager()).getName())
                 && event.getDamage() == 1)
             event.setDamage(4);
-        if (event.getEntity() instanceof Player && hasThisAbility(((Player) event.getEntity()).getName()))
+        if (event.getEntity() instanceof Player && hasAbility(((Player) event.getEntity()).getName()))
             if (event.getDamage() > 0)
                 event.setDamage(event.getDamage() - 1);
     }

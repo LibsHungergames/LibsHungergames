@@ -18,7 +18,7 @@ public class Hunter extends AbilityListener {
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
         if ((event.getEntity() instanceof Chicken || event.getEntity() instanceof Cow || event.getEntity() instanceof Pig)
-                && event.getEntity().getKiller() != null && hasThisAbility(event.getEntity().getKiller())) {
+                && event.getEntity().getKiller() != null && hasAbility(event.getEntity().getKiller())) {
             Iterator<ItemStack> itel = event.getDrops().iterator();
             List<ItemStack> toAdd = new ArrayList<ItemStack>();
             while (itel.hasNext()) {

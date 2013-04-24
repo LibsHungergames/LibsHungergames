@@ -17,12 +17,11 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Salvager extends AbilityListener {
 
-
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ANVIL
-                && HungergamesApi.getPlayerManager().getGamer(p).isAlive() && hasThisAbility(p)) {
+                && HungergamesApi.getPlayerManager().getGamer(p).isAlive() && hasAbility(p)) {
             ItemStack item = event.getItem();
             if (item != null && item.getType() != Material.AIR && item.getType() != Material.ANVIL
                     && item.getType() != Material.COMPASS && !item.containsEnchantment(Enchants.UNLOOTABLE)) {

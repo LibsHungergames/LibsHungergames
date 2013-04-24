@@ -5,6 +5,7 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -17,10 +18,13 @@ import de.robingrether.idisguise.api.DisguiseAPI;
 import de.robingrether.idisguise.api.MobDisguise;
 
 public class Chameleon extends AbilityListener {
-    // DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
+    
+    public Chameleon() throws Exception {
+        if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
+            throw new Exception("iDisguise not found");
+    }
 
     private PlayerManager pm = HungergamesApi.getPlayerManager();
-
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
@@ -51,7 +55,7 @@ public class Chameleon extends AbilityListener {
 
     private void disguise(Entity entity, Player p) {
         if (entity instanceof Creature) {
-            if (pm.getGamer(p).isAlive() && hasThisAbility(p)) {
+            if (pm.getGamer(p).isAlive() && hasAbility(p)) {
                 if (!DisguiseAPI.isDisguised(p))
                     DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 else {
@@ -60,13 +64,14 @@ public class Chameleon extends AbilityListener {
                         return;
                     DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 }
-                p.sendMessage(ChatColor.GREEN + "Now disguised as a " + HungergamesApi.getKitManager().toReadable(entity.getType().getName()) + "!");
+                p.sendMessage(ChatColor.GREEN + "Now disguised as a "
+                        + HungergamesApi.getKitManager().toReadable(entity.getType().getName()) + "!");
             }
         }
     }
 
     private boolean isChameleon(Entity entity) {
-        return (entity instanceof Player && hasThisAbility((Player) entity));
+        return (entity instanceof Player && hasAbility((Player) entity));
     }
 
 }

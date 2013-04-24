@@ -19,12 +19,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class Thor extends AbilityListener {
     private transient HashMap<String, Long> lastThored = new HashMap<String, Long>();
 
-
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player p = event.getPlayer();
-            if (hasThisAbility(p) && event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE) {
+            if (hasAbility(p) && event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE) {
                 if (!lastThored.containsKey(p.getName()) || lastThored.get(p.getName()) < System.currentTimeMillis()) {
                     lastThored.put(p.getName(), System.currentTimeMillis() + 5000);
                     if (event.getClickedBlock().getType() != Material.BEDROCK)

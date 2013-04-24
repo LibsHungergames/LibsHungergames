@@ -7,6 +7,7 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +24,9 @@ public class Backpacker extends AbilityListener {
     private transient HashMap<Player, Inventory> backpack = new HashMap<Player, Inventory>();
     private transient HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
 
-    public Backpacker() {
+    @Override
+    public void registerPlayer(Player p) {
+        super.registerPlayer(p);
         ItemStack item = new ItemStack(Material.ENDER_CHEST);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Backpack");
@@ -31,11 +34,8 @@ public class Backpacker extends AbilityListener {
         lore.add(ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC + "Double click this chest to open your backpack!");
         meta.setLore(lore);
         item.setItemMeta(meta);
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (hasThisAbility(p.getName())) {
-                backpack.put(p, Bukkit.createInventory(p, 54, "Backpack"));
-                p.getInventory().setItem(9, item);
-            }
+        backpack.put(p, Bukkit.createInventory(null, 54, "Backpack"));
+        p.getInventory().setItem(9, item);
     }
 
     private boolean isBackpack(ItemStack item) {
@@ -47,11 +47,18 @@ public class Backpacker extends AbilityListener {
     public void onClick(InventoryClickEvent event) {
         if (isBackpack(event.getCurrentItem())) {
             event.setCancelled(true);
-            Player p = (Player) event.getWhoClicked();
+            final Player p = (Player) event.getWhoClicked();
             if (chestClick.containsKey(p) && chestClick.get(p) > System.currentTimeMillis() - 1000) {
                 // Open backpack
                 chestClick.remove(p);
-                p.openInventory(backpack.get(p));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.closeInventory();
+                        p.updateInventory();
+                        p.openInventory(backpack.get(p));
+                    }
+                }, 5);
             } else
                 chestClick.put(p, System.currentTimeMillis());
         }

@@ -15,7 +15,7 @@ public class Berserker  extends AbilityListener {
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() != null && hasThisAbility(event.getEntity().getKiller())) {
+        if (event.getEntity().getKiller() != null && hasAbility(event.getEntity().getKiller())) {
             Player p = event.getEntity().getKiller();
             if (event.getEntity() instanceof Creature) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30 * 20, 0), true);
@@ -26,7 +26,7 @@ public class Berserker  extends AbilityListener {
 
     @EventHandler
     public void onDeath(PlayerKilledEvent event) {
-        if (event.getKillerPlayer() != null && hasThisAbility(event.getKillerPlayer().getPlayer())) {
+        if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
             Player p = event.getKillerPlayer().getPlayer();
             p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30 * 20, 1), true);
             p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30 * 20, 1), true);

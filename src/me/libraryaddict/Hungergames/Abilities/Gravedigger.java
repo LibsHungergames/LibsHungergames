@@ -18,11 +18,9 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class Gravedigger extends AbilityListener {
     private transient BlockFace[] faces = new BlockFace[] { BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };
 
-
-
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
-        if (event.getKillerPlayer() != null && hasThisAbility(event.getKillerPlayer().getPlayer())) {
+        if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
             Block center = event.getDropsLocation().getBlock();
             for (BlockFace face : faces)
                 if (center.getRelative(face).getType() == Material.AIR) {

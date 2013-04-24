@@ -39,7 +39,7 @@ public class Kaya extends AbilityListener {
     public void onCraft(PrepareItemCraftEvent event) {
         if (event.getRecipe().getResult() != null && event.getRecipe().getResult().getType() == Material.GRASS) {
             for (HumanEntity entity : event.getViewers())
-                if (hasThisAbility((Player) entity))
+                if (hasAbility((Player) entity))
                     return;
             event.getInventory().setItem(0, new ItemStack(0, 0));
         }
@@ -65,7 +65,7 @@ public class Kaya extends AbilityListener {
 
     @EventHandler
     public void onDeath(PlayerKilledEvent event) {
-        if (!hasThisAbility(event.getKilled().getPlayer()))
+        if (!hasAbility(event.getKilled().getPlayer()))
             return;
         Iterator<Block> itel = kayaBlocks.keySet().iterator();
         while (itel.hasNext()) {
@@ -78,7 +78,7 @@ public class Kaya extends AbilityListener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         if (!event.isCancelled())
-            if (event.getBlock().getType() == Material.GRASS && hasThisAbility(event.getPlayer())) {
+            if (event.getBlock().getType() == Material.GRASS && hasAbility(event.getPlayer())) {
                 kayaBlocks.put(event.getBlock(), event.getPlayer());
             }
     }

@@ -9,12 +9,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Necro extends AbilityListener {
 
-
-
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if ((event.getEntity() instanceof Skeleton || event.getEntity() instanceof Zombie)
-                && event.getDamager() instanceof Player && hasThisAbility((Player) event.getDamager()))
+                && event.getDamager() instanceof Player && hasAbility((Player) event.getDamager()))
             event.setDamage(999);
     }
 }

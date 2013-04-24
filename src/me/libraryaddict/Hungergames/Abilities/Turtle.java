@@ -8,11 +8,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Turtle extends AbilityListener {
 
-
-
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && hasThisAbility((Player) event.getEntity())) {
+        if (event.getEntity() instanceof Player && hasAbility((Player) event.getEntity())) {
             Player p = (Player) event.getEntity();
             if (p.isSneaking() && p.isBlocking() && p.getHealth() > 1) {
                 event.setCancelled(true);
@@ -24,7 +22,7 @@ public class Turtle extends AbilityListener {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && hasThisAbility((Player) event.getDamager())) {
+        if (event.getDamager() instanceof Player && hasAbility((Player) event.getDamager())) {
             Player p = (Player) event.getDamager();
             if (p.isSneaking()) {
                 event.setCancelled(true);

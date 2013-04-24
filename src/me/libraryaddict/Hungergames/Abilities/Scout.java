@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -14,11 +15,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Scout extends AbilityListener {
 
-    public Scout() {
+    @EventHandler
+    public void gameStartEvent(GameStartEvent event) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
                 for (Player p : Bukkit.getOnlinePlayers())
-                    if (hasThisAbility(p.getName()))
+                    if (hasAbility(p.getName()))
                         HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.POTION, 2, (short) 16418));
             }
         }, 10 * 60 * 20, 10 * 60 * 20);
@@ -27,7 +29,7 @@ public class Scout extends AbilityListener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getCause() == DamageCause.FALL && event.getEntity() instanceof Player
-                && hasThisAbility(((Player) event.getEntity()).getName())
+                && hasAbility(((Player) event.getEntity()).getName())
                 && ((Player) event.getEntity()).hasPotionEffect(PotionEffectType.SPEED))
             event.setCancelled(true);
     }

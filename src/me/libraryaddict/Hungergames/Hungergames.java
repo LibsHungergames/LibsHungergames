@@ -19,7 +19,6 @@ import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
-import me.libraryaddict.Hungergames.Utilities.SchedulingUtility;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,17 +27,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import de.robingrether.idisguise.iDisguise;
 
 public class Hungergames extends JavaPlugin {
     /**
@@ -84,8 +79,6 @@ public class Hungergames extends JavaPlugin {
         }
         new Enchants();
         HungergamesApi.init(this);
-        SchedulingUtility.init(this);
-        HungergamesApi.getAbilityManager();
         pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
@@ -191,6 +184,7 @@ public class Hungergames extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
         if (Bukkit.getPluginManager().getPlugin("LibsCommands") != null)
             Bukkit.getPluginManager().registerEvents(new LibsCommandsListener(), this);
+        HungergamesApi.getAbilityManager();
     }
 
     private List<String> wrap(String string) {

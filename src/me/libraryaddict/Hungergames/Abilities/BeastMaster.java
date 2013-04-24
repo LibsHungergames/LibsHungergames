@@ -12,13 +12,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BeastMaster extends AbilityListener {
+public class Beastmaster extends AbilityListener {
+    
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         ItemStack item = p.getItemInHand();
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && item != null && item.getType() == Material.MONSTER_EGG) {
-            if (hasThisAbility(event.getPlayer()) && item.getDurability() == (byte) 95) {
+            if (hasAbility(event.getPlayer()) && item.getDurability() == (byte) 95) {
                 event.setCancelled(true);
                 ((Wolf) p.getWorld().spawnEntity(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(),
                         EntityType.WOLF)).setOwner(p);
@@ -36,7 +37,7 @@ public class BeastMaster extends AbilityListener {
         Player p = event.getPlayer();
         ItemStack item = p.getItemInHand();
         if (event.getRightClicked() instanceof Wolf && item != null && item.getType() == Material.BONE) {
-            if (hasThisAbility(event.getPlayer()) && !((Wolf) event.getRightClicked()).isTamed()) {
+            if (hasAbility(event.getPlayer()) && !((Wolf) event.getRightClicked()).isTamed()) {
                 event.setCancelled(true);
                 ((Wolf) event.getRightClicked()).setOwner(p);
                 if (item.getAmount() > 1)

@@ -7,9 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 public class Miser extends AbilityListener {
+    
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKilled(PlayerKilledEvent event) {
-        if (hasThisAbility(event.getKilled().getPlayer().getName()))
+        if (hasAbility(event.getKilled().getPlayer().getName()))
             event.getDrops().clear();
     }
 
