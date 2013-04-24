@@ -145,7 +145,7 @@ public class PlayerListener implements Listener {
         event.getDrops().clear();
         Player p = event.getEntity();
         EntityDamageEvent cause = event.getEntity().getLastDamageCause();
-        String deathMessage = event.getDeathMessage();
+        String deathMessage = ChatColor.stripColor(event.getDeathMessage());
         if (cause instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
             if (entityEvent.getDamager() instanceof Player) {
