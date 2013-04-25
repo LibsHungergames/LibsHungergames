@@ -31,16 +31,6 @@ public class Salamander extends AbilityListener {
                     || event.getCause() == DamageCause.LAVA) {
                 event.setCancelled(true);
                 event.getEntity().setFireTicks(0);
-                /*
-                 * Player p = (Player) event.getEntity(); p.damage(0); int hp =
-                 * p.getHealth(); if (hp < 20) { Location l =
-                 * event.getEntity().getLocation(); Block b = l.getBlock(); if
-                 * (b.getType() == Material.STATIONARY_LAVA) hp += 4; else if
-                 * (b.getType() == Material.LAVA) hp += 1; else return;
-                 * b.getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND,
-                 * Material.STATIONARY_LAVA.getId()); b.setType(Material.AIR);
-                 * if (hp > 20) hp = 20; p.setHealth(hp); }
-                 */
             }
         }
     }

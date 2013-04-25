@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Pyro extends AbilityListener {
+    public float fireballExplosiveMultiplier = 2;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -21,7 +22,7 @@ public class Pyro extends AbilityListener {
                 item.setType(Material.AIR);
             Fireball ball = event.getPlayer().launchProjectile(Fireball.class);
             ball.setIsIncendiary(true);
-            ball.setYield(ball.getYield() * 2);
+            ball.setYield(ball.getYield() * fireballExplosiveMultiplier);
         }
     }
 

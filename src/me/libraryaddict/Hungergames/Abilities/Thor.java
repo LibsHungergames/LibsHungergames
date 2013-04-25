@@ -18,6 +18,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class Thor extends AbilityListener {
     private transient HashMap<String, Long> lastThored = new HashMap<String, Long>();
+    public int cooldown = 5;
+    public boolean doNetherackAndFire = true;
+    public boolean protectThorer = true;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -25,14 +28,17 @@ public class Thor extends AbilityListener {
             Player p = event.getPlayer();
             if (hasAbility(p) && event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE) {
                 if (!lastThored.containsKey(p.getName()) || lastThored.get(p.getName()) < System.currentTimeMillis()) {
-                    lastThored.put(p.getName(), System.currentTimeMillis() + 5000);
-                    if (event.getClickedBlock().getType() != Material.BEDROCK)
-                        event.getClickedBlock().setType(Material.NETHERRACK);
-                    event.getClickedBlock().getRelative(BlockFace.UP).setType(Material.FIRE);
+                    lastThored.put(p.getName(), System.currentTimeMillis() + (cooldown * 1000));
+                    if (doNetherackAndFire) {
+                        if (event.getClickedBlock().getType() != Material.BEDROCK)
+                            event.getClickedBlock().setType(Material.NETHERRACK);
+                        event.getClickedBlock().getRelative(BlockFace.UP).setType(Material.FIRE);
+                    }
                     LightningStrike strike = p.getWorld().strikeLightning(
                             p.getWorld().getHighestBlockAt(event.getClickedBlock().getLocation()).getLocation().clone()
                                     .add(0, 1, 0));
-                    strike.setMetadata("DontHurt", new FixedMetadataValue(HungergamesApi.getHungergames(), p.getName()));
+                    if (protectThorer)
+                        strike.setMetadata("DontHurt", new FixedMetadataValue(HungergamesApi.getHungergames(), p.getName()));
                 } else
                     p.sendMessage(ChatColor.RED + "You may not do that at this time");
             }

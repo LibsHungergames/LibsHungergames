@@ -10,7 +10,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-public class Doctor  extends AbilityListener {
+public class Doctor extends AbilityListener {
+    public boolean heal = false;
+    public int toHeal = 5;
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {
@@ -18,9 +20,17 @@ public class Doctor  extends AbilityListener {
         if (event.getRightClicked() instanceof LivingEntity && item != null && item.hasItemMeta()
                 && item.getItemMeta().hasDisplayName()
                 && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Pair Of Forceps")) {
-            Collection<PotionEffect> effects = ((LivingEntity) event.getRightClicked()).getActivePotionEffects();
+            LivingEntity lEntity = (LivingEntity) event.getRightClicked();
+            Collection<PotionEffect> effects = lEntity.getActivePotionEffects();
             for (PotionEffect effect : effects)
-                ((LivingEntity) event.getRightClicked()).removePotionEffect(effect.getType());
+                lEntity.removePotionEffect(effect.getType());
+            if (heal) {
+                int health = lEntity.getHealth();
+                health += toHeal;
+                if (health > lEntity.getMaxHealth())
+                    health = lEntity.getMaxHealth();
+                lEntity.setHealth(health);
+            }
         }
     }
 

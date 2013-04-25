@@ -18,6 +18,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Pussy extends AbilityListener {
     private transient HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
+    public int timeToTransform = 10;
 
     public Pussy() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
@@ -34,7 +35,7 @@ public class Pussy extends AbilityListener {
                         p.sendMessage(ChatColor.BLUE + "Meow!");
                         DisguiseAPI.disguiseToAll(p, new MobDisguise(EntityType.OCELOT, true));
                     }
-                }, 10 * 20);
+                }, timeToTransform * 20);
                 pussys.put(p, id);
             } else if (pussys.containsKey(p)) {
                 Bukkit.getScheduler().cancelTask(pussys.remove(p));

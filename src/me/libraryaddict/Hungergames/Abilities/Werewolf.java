@@ -14,6 +14,9 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Werewolf extends AbilityListener {
+    public boolean giveWeakness = true;
+    public int strengthMultiplier = 0;
+    public int speedMultiplier = 0;
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {
@@ -24,10 +27,11 @@ public class Werewolf extends AbilityListener {
                     if (hasAbility(p)) {
                         if (HungergamesApi.getHungergames().world.getTime() > 0
                                 && HungergamesApi.getHungergames().world.getTime() <= 12000) {
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0), true);
+                            if (giveWeakness)
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0), true);
                         } else {
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 12000, 0), true);
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 12000, 0), true);
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 12000, strengthMultiplier), true);
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 12000, speedMultiplier), true);
                         }
                     }
                 }

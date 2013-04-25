@@ -24,6 +24,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class Pickpocket extends AbilityListener {
 
     private transient HashMap<ItemStack, Pick> pickpockets = new HashMap<ItemStack, Pick>();
+    public int cooldown = 30;
+    public int maxItems = 4;
+    public boolean stealHotbar = false;
 
     // Pickpocket. Multiple people can pickpocket at the time.
     // Store itemstack. Its used to measure the cooldown and items you can
@@ -52,7 +55,7 @@ public class Pickpocket extends AbilityListener {
                                 + (-((System.currentTimeMillis() - pick.lastUsed) / 1000)) + " seconds!");
             } else {
                 pickpockets.put(item, pick);
-                pick.lastUsed = System.currentTimeMillis() + 30000;
+                pick.lastUsed = System.currentTimeMillis() + (cooldown * 1000);
                 pick.pickpocket = event.getPlayer();
                 List<Player> pickers = new ArrayList<Player>();
                 if (event.getRightClicked().hasMetadata("Picking"))
@@ -98,8 +101,8 @@ public class Pickpocket extends AbilityListener {
         if (peverts.contains(event.getWhoClicked())) {
             if (event.getRawSlot() < 36) {
                 Pick pick = getPick((Player) event.getWhoClicked());
-                if (pick.itemsStolen < 4) {
-                    if (event.getRawSlot() > 8) {
+                if (pick.itemsStolen < maxItems) {
+                    if (stealHotbar || event.getRawSlot() > 8) {
                         if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
                             pick.itemsStolen++;
                     } else {

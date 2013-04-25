@@ -8,10 +8,14 @@ import org.bukkit.event.EventHandler;
 
 public class Creeper extends AbilityListener {
 
+    public float baseExplosionStrength = 0.4F;
+    public boolean randomizeExplosion = true;
+    public int randomizedStrength = 3;
+
     @EventHandler
     public void onExplode(PlayerKilledEvent event) {
         if (hasAbility(event.getKilled().getPlayer())) {
-            float strength = new Random().nextInt(4) + 0.4F;
+            float strength = (randomizeExplosion ? new Random().nextInt(randomizedStrength + 1) : 0) + baseExplosionStrength;
             event.getDropsLocation().getWorld().createExplosion(event.getDropsLocation(), strength);
         }
     }

@@ -26,8 +26,11 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class Flash extends AbilityListener {
 
     private transient HashMap<ItemStack, Integer> cooldown = new HashMap<ItemStack, Integer>();
-    HashSet<Byte> ignoreBlockTypes = new HashSet<Byte>();
-    private int minCooldown;
+    private HashSet<Byte> ignoreBlockTypes = new HashSet<Byte>();
+    public boolean giveWeakness = true;
+    public int maxTeleportDistance = 200;
+    public boolean addMoreCooldownForLargeDistances = true;
+    public int normalCooldown = 30;
 
     public Flash() {
         ignoreBlockTypes.add((byte) 0);
@@ -98,19 +101,19 @@ public class Flash extends AbilityListener {
                 event.getPlayer().updateInventory();
                 if (item.getType() == Material.REDSTONE_TORCH_OFF) {
                     event.getPlayer().sendMessage(
-                            ChatColor.BLUE + "You can use this again in " + (-(HungergamesApi.getHungergames().currentTime - cooldown.get(item)))
-                                    + " seconds!");
+                            ChatColor.BLUE + "You can use this again in "
+                                    + (-(HungergamesApi.getHungergames().currentTime - cooldown.get(item))) + " seconds!");
                 } else if (item.getType() == Material.REDSTONE_TORCH_ON) {
-                    List<Block> b = event.getPlayer().getLastTwoTargetBlocks(ignoreBlockTypes, 200);
+                    List<Block> b = event.getPlayer().getLastTwoTargetBlocks(ignoreBlockTypes, maxTeleportDistance);
                     if (b.size() > 1 && b.get(1).getType() != Material.AIR) {
                         double dist = event.getPlayer().getLocation().distance(b.get(0).getLocation());
                         if (dist > 2) {
                             Location loc = b.get(0).getLocation().clone().add(0.5, 0.5, 0.5);
                             item.setType(Material.REDSTONE_TORCH_OFF);
-                            minCooldown = 30;
-                            if ((dist / 2) > 30)
-                                minCooldown = (int) (dist / 2);
-                            cooldown.put(item, minCooldown + HungergamesApi.getHungergames().currentTime);
+                            int hisCooldown = normalCooldown;
+                            if (addMoreCooldownForLargeDistances && (dist / 2) > 30)
+                                hisCooldown = (int) (dist / 2);
+                            cooldown.put(item, hisCooldown + HungergamesApi.getHungergames().currentTime);
                             Location pLoc = event.getPlayer().getLocation();
                             loc.setPitch(pLoc.getPitch());
                             loc.setYaw(pLoc.getYaw());
@@ -121,8 +124,9 @@ public class Flash extends AbilityListener {
                                     pLoc.getZ(), loc.getX(), loc.getY(), loc.getZ());
                             ((CraftWorld) pLoc.getWorld()).getHandle().addParticle("portal", loc.getX(), loc.getY(), loc.getZ(),
                                     pLoc.getX(), pLoc.getY(), pLoc.getZ());
-                            event.getPlayer().addPotionEffect(
-                                    new PotionEffect(PotionEffectType.WEAKNESS, (int) ((dist / 2) * 20), 1), true);
+                            if (giveWeakness)
+                                event.getPlayer().addPotionEffect(
+                                        new PotionEffect(PotionEffectType.WEAKNESS, (int) ((dist / 2) * 20), 1), true);
                             pLoc.getWorld().strikeLightningEffect(loc);
                         }
                     }

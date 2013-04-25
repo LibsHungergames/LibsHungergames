@@ -15,6 +15,7 @@ import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 
 public class Poseidon extends AbilityListener {
     ArrayList<Player> waterBreathers = new ArrayList<Player>();
+    public int potionMultiplier = 1;
 
     public void registerPlayer(String name) {
         Player p = Bukkit.getPlayerExact(name);
@@ -32,7 +33,7 @@ public class Poseidon extends AbilityListener {
     public void onSecond(TimeSecondEvent event) {
         for (Player p : waterBreathers) {
             if (p.getLocation().getBlock().isLiquid()) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, potionMultiplier));
             }
         }
     }

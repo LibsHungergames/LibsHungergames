@@ -12,6 +12,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Cannibal extends AbilityListener {
+    public int chance = 3;
+    public int addHunger = 2;
+    public int potionLength = 5;
+    public int multiplier = 0;
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
@@ -20,19 +24,10 @@ public class Cannibal extends AbilityListener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             LivingEntity entity = (LivingEntity) event.getEntity();
             Player p = (Player) event.getDamager();
-            if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SWORD")
-                    && hasAbility(p) && new Random().nextInt(3) == 1) {
-                /*
-                 * int ticks =
-                 * p.getItemInHand().getEnchantmentLevel(Enchants.POISON) * 60;
-                 * for (PotionEffect effect : entity.getActivePotionEffects()) {
-                 * if (effect.getType().equals(PotionEffectType.POISON)) { ticks
-                 * += effect.getDuration();
-                 * p.removePotionEffect(PotionEffectType.POISON); break; } }
-                 */
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 0), true);
+            if (hasAbility(p) && new Random().nextInt(chance) == 0) {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, potionLength * 20, multiplier), true);
                 int hunger = p.getFoodLevel();
-                hunger += 2;
+                hunger += addHunger;
                 if (hunger > 20)
                     hunger = 20;
                 p.setFoodLevel(hunger);

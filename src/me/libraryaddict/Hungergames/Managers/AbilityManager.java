@@ -45,7 +45,7 @@ public class AbilityManager {
                     }
                     abilities.put(abilityClass.getSimpleName(), abilityListener);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.print("Error while loading ability : " + abilityClass.getSimpleName() + ", " + e.getMessage());
                 }
             }
         }

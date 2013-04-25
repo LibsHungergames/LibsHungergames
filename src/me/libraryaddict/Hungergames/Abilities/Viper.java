@@ -13,6 +13,10 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Viper extends AbilityListener {
 
+    public int chance = 3;
+    public int multiplier = 1;
+    public int length = 5;
+
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled())
@@ -20,17 +24,8 @@ public class Viper extends AbilityListener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) event.getEntity();
             Player p = (Player) event.getDamager();
-            if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SWORD") && hasAbility(p)
-                    && new Random().nextInt(3) == 1) {
-                /*
-                 * int ticks =
-                 * p.getItemInHand().getEnchantmentLevel(Enchants.POISON) * 60;
-                 * for (PotionEffect effect : entity.getActivePotionEffects()) {
-                 * if (effect.getType().equals(PotionEffectType.POISON)) { ticks
-                 * += effect.getDuration();
-                 * p.removePotionEffect(PotionEffectType.POISON); break; } }
-                 */
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0), true);
+            if (hasAbility(p) && new Random().nextInt(chance) == 1) {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, length * 20, multiplier), true);
             }
         }
     }

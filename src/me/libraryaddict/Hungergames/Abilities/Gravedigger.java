@@ -22,11 +22,12 @@ public class Gravedigger extends AbilityListener {
     public void onKilled(PlayerKilledEvent event) {
         if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
             Block center = event.getDropsLocation().getBlock();
-            for (BlockFace face : faces)
-                if (center.getRelative(face).getType() == Material.AIR) {
-                    center.getRelative(face).setType(Material.CHEST);
-                    break;
-                }
+            if (event.getDrops().size() > 54)
+                for (BlockFace face : faces)
+                    if (center.getRelative(face).getType() == Material.AIR) {
+                        center.getRelative(face).setType(Material.CHEST);
+                        break;
+                    }
             center.setType(Material.CHEST);
             Inventory inv = ((InventoryHolder) center.getState()).getInventory();
             Iterator<ItemStack> itel = event.getDrops().iterator();
@@ -34,7 +35,7 @@ public class Gravedigger extends AbilityListener {
                 ItemStack item = itel.next();
                 if (item == null || item.getType() == Material.AIR || item.containsEnchantment(Enchants.UNLOOTABLE))
                     continue;
-                if (HungergamesApi.getKitManager().canFit(inv, new ItemStack[]{item}))
+                if (HungergamesApi.getKitManager().canFit(inv, new ItemStack[] { item }))
                     inv.addItem(item);
                 else {
                     if (item.hasItemMeta())

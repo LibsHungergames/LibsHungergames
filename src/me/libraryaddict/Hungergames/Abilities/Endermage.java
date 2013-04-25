@@ -22,6 +22,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class Endermage extends AbilityListener {
+    public int invincibleTicks = 100;
+    public boolean doInstantKO = true;
+    public int instanceKOExpires = 5;
 
     @EventHandler
     public void onPlace(PlayerInteractEvent event) {
@@ -48,8 +51,10 @@ public class Endermage extends AbilityListener {
                         for (Gamer gamer : HungergamesApi.getPlayerManager().getAliveGamers()) {
                             Player p = gamer.getPlayer();
                             if (p != mager.getPlayer() && isEnderable(portal, p.getLocation())) {
-                                p.setMetadata("InstantKill" + mager.getName(),
-                                        new FixedMetadataValue(HungergamesApi.getHungergames(), System.currentTimeMillis() + 5000));
+                                if (doInstantKO)
+                                    p.setMetadata("InstantKill" + mager.getName(),
+                                            new FixedMetadataValue(HungergamesApi.getHungergames(), System.currentTimeMillis()
+                                                    + (instanceKOExpires * 1000)));
                                 if (gamer.isAlive()) {
                                     if (p.getLocation().distance(portal) > 4) {
                                         p.playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 9);
@@ -57,6 +62,8 @@ public class Endermage extends AbilityListener {
                                         p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1.2F);
                                         p.playSound(portal, Sound.ENDERMAN_TELEPORT, 1, 1.2F);
                                     }
+                                    if (invincibleTicks > 0)
+                                        p.setNoDamageTicks(invincibleTicks);
                                     p.teleport(portal);
                                 }
                             }
@@ -86,11 +93,12 @@ public class Endermage extends AbilityListener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player
-                && event.getDamager().hasMetadata("InstantKill" + ((Player) event.getEntity()).getName())
-                && event.getDamager().getMetadata("InstantKill" + ((Player) event.getEntity()).getName()).get(0).asLong() < System
-                        .currentTimeMillis())
-            event.setDamage(9999);
+        if (doInstantKO)
+            if (event.getEntity() instanceof Player
+                    && event.getDamager().hasMetadata("InstantKill" + ((Player) event.getEntity()).getName())
+                    && event.getDamager().getMetadata("InstantKill" + ((Player) event.getEntity()).getName()).get(0).asLong() < System
+                            .currentTimeMillis())
+                event.setDamage(9999);
     }
 
 }

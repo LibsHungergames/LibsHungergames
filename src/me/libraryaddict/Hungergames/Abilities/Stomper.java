@@ -18,6 +18,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.util.Vector;
 
 public class Stomper extends AbilityListener {
+    public boolean reduceStompDamageByDistance = true;
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -50,7 +51,9 @@ public class Stomper extends AbilityListener {
                 }
                 for (Entity entity : p.getNearbyEntities(area * 2, area, area * 2))
                     if (entity instanceof LivingEntity) {
-                        int hisDmg = (int) (dmg / (entity.getLocation().distance(center) + 1));
+                        int hisDmg = dmg;
+                        if (reduceStompDamageByDistance)
+                            hisDmg = (int) (dmg / (entity.getLocation().distance(center) + 1));
                         if (entity.getLocation().getBlockY() - 1 > center.getBlockY())
                             continue;
                         if (entity instanceof Player) {
@@ -65,8 +68,8 @@ public class Stomper extends AbilityListener {
                         if (hisDmg >= ((LivingEntity) entity).getHealth() && entity instanceof Player) {
                             Gamer gamer = HungergamesApi.getPlayerManager().getGamer(entity);
                             if (gamer.isAlive())
-                                HungergamesApi.getPlayerManager().killPlayer(gamer, p, entity.getLocation(), gamer.getInventory(), gamer.getName()
-                                        + " was stomped by " + p.getName());
+                                HungergamesApi.getPlayerManager().killPlayer(gamer, p, entity.getLocation(),
+                                        gamer.getInventory(), gamer.getName() + " was stomped by " + p.getName());
                         } else
                             ((LivingEntity) entity).damage(hisDmg);
                     }

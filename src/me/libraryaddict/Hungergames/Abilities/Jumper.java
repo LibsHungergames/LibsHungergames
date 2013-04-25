@@ -17,30 +17,33 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Jumper extends AbilityListener {
     private transient HashMap<Block, Integer> platformTaskIds = new HashMap<Block, Integer>();
+    public boolean generatePlatform = true;
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof EnderPearl
-                && event.getEntity() == ((Projectile) event.getDamager()).getShooter()
-                && hasAbility((Player) event.getEntity())) {
+                && event.getEntity() == ((Projectile) event.getDamager()).getShooter() && hasAbility((Player) event.getEntity())) {
             event.setCancelled(true);
-            for (int x = -2; x < 3; x++) {
-                for (int z = -2; z < 3; z++) {
-                    final Block b = event.getEntity().getLocation().clone().add(x, -1, z).getBlock();
-                    if (platformTaskIds.containsKey(b))
-                        Bukkit.getScheduler().cancelTask(platformTaskIds.remove(b));
-                    if (b.getType() == Material.AIR) {
-                        b.setType(Material.GLASS);
-                        platformTaskIds.put(b,
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-                                    public void run() {
-                                        b.setType(Material.AIR);
-                                        platformTaskIds.remove(platformTaskIds.get(b));
-                                    }
-                                }, 5 * 20));
+            if (generatePlatform)
+                for (int x = -2; x < 3; x++) {
+                    for (int z = -2; z < 3; z++) {
+                        final Block b = event.getEntity().getLocation().clone().add(x, -1, z).getBlock();
+                        if (platformTaskIds.containsKey(b))
+                            Bukkit.getScheduler().cancelTask(platformTaskIds.remove(b));
+                        if (b.getType() == Material.AIR) {
+                            b.setType(Material.GLASS);
+                            platformTaskIds.put(
+                                    b,
+                                    Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(),
+                                            new Runnable() {
+                                                public void run() {
+                                                    b.setType(Material.AIR);
+                                                    platformTaskIds.remove(platformTaskIds.get(b));
+                                                }
+                                            }, 5 * 20));
+                        }
                     }
                 }
-            }
         }
     }
 

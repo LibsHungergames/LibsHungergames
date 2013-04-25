@@ -24,8 +24,9 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Spiderman extends AbilityListener {
 
-    private HashMap<String, ArrayList<Long>> cooldown = new HashMap<String, ArrayList<Long>>();
-    private int cooldownMilliseconds = 30000;
+    private HashMap<String, ArrayList<Long>> cooldownMap = new HashMap<String, ArrayList<Long>>();
+    public int cooldown = 30;
+    public int maxBallsThrown = 3;
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
@@ -35,13 +36,13 @@ public class Spiderman extends AbilityListener {
                 if (!hasAbility(p))
                     return;
                 ArrayList<Long> cooldowns;
-                if (cooldown.containsKey(p.getName()))
-                    cooldowns = cooldown.get(p.getName());
+                if (cooldownMap.containsKey(p.getName()))
+                    cooldowns = cooldownMap.get(p.getName());
                 else {
                     cooldowns = new ArrayList<Long>();
-                    cooldown.put(p.getName(), cooldowns);
+                    cooldownMap.put(p.getName(), cooldowns);
                 }
-                if (cooldowns.size() == 3) {
+                if (cooldowns.size() == maxBallsThrown) {
                     if (cooldowns.get(0) >= System.currentTimeMillis()) {
                         event.setCancelled(true);
                         p.updateInventory();
@@ -52,8 +53,9 @@ public class Spiderman extends AbilityListener {
                     }
                     cooldowns.remove(0);
                 }
-                event.getEntity().setMetadata("Spiderball", new FixedMetadataValue(HungergamesApi.getHungergames(), "Spiderball"));
-                cooldowns.add(System.currentTimeMillis() + cooldownMilliseconds);
+                event.getEntity()
+                        .setMetadata("Spiderball", new FixedMetadataValue(HungergamesApi.getHungergames(), "Spiderball"));
+                cooldowns.add(System.currentTimeMillis() + (cooldown * 1000));
             }
         }
     }

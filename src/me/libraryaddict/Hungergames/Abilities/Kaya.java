@@ -27,6 +27,8 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 public class Kaya extends AbilityListener {
 
     private transient HashMap<Block, Player> kayaBlocks = new HashMap<Block, Player>();
+    public int distanceFromBlocks = 3;
+    public int heightFromBlocks = 2;
 
     public Kaya() {
         ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.GRASS));
@@ -88,9 +90,9 @@ public class Kaya extends AbilityListener {
         Gamer gamer = HungergamesApi.getPlayerManager().getGamer(event.getPlayer());
         if (gamer.isAlive()) {
             Location loc = event.getPlayer().getLocation();
-            for (int z = -3; z <= 3; z++) {
-                for (int x = -3; x <= 3; x++) {
-                    for (int y = -2; y <= 1; y++) {
+            for (int z = -distanceFromBlocks; z <= distanceFromBlocks; z++) {
+                for (int x = -distanceFromBlocks; x <= distanceFromBlocks; x++) {
+                    for (int y = -heightFromBlocks; y < heightFromBlocks; y++) {
                         Block block = loc.clone().add(x, y, z).getBlock();
                         if (kayaBlocks.containsKey(block) && block.getType() == Material.GRASS) {
                             if (kayaBlocks.get(block) != event.getPlayer()) {

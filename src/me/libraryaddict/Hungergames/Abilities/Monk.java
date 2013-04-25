@@ -14,7 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 public class Monk extends AbilityListener {
 
     private transient HashMap<ItemStack, Long> monkStaff = new HashMap<ItemStack, Long>();
-    private int coolDownMilliseconds = 15000;
+    public int cooldown = 15;
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {
@@ -26,10 +26,10 @@ public class Monk extends AbilityListener {
             if (monkStaff.containsKey(item))
                 lastUsed = monkStaff.get(item);
 
-            if (lastUsed + coolDownMilliseconds > System.currentTimeMillis()) {
+            if (lastUsed + (1000 * cooldown) > System.currentTimeMillis()) {
                 event.getPlayer().sendMessage(
                         ChatColor.BLUE + "You may monk them again in "
-                                + (-((System.currentTimeMillis() - (lastUsed + 15000)) / 1000)) + " seconds!");
+                                + (-((System.currentTimeMillis() - (lastUsed + (1000 * cooldown))) / 1000)) + " seconds!");
             } else {
                 PlayerInventory inv = ((Player) event.getRightClicked()).getInventory();
                 int slot = new Random().nextInt(36);

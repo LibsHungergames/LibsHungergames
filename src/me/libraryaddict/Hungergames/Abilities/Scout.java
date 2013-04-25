@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class Scout extends AbilityListener {
+    public int givePotionsEverySoSeconds = 600;
+    public boolean cancelFall = true;
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {
@@ -23,14 +25,15 @@ public class Scout extends AbilityListener {
                     if (hasAbility(p.getName()))
                         HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.POTION, 2, (short) 16418));
             }
-        }, 10 * 60 * 20, 10 * 60 * 20);
+        }, givePotionsEverySoSeconds, givePotionsEverySoSeconds);
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getCause() == DamageCause.FALL && event.getEntity() instanceof Player
-                && hasAbility(((Player) event.getEntity()).getName())
-                && ((Player) event.getEntity()).hasPotionEffect(PotionEffectType.SPEED))
-            event.setCancelled(true);
+        if (cancelFall)
+            if (event.getCause() == DamageCause.FALL && event.getEntity() instanceof Player
+                    && hasAbility(((Player) event.getEntity()).getName())
+                    && ((Player) event.getEntity()).hasPotionEffect(PotionEffectType.SPEED))
+                event.setCancelled(true);
     }
 }

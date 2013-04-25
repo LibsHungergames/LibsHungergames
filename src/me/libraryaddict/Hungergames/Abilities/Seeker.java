@@ -18,6 +18,9 @@ public class Seeker extends AbilityListener {
     private List<Material> transparent = Arrays.asList(new Material[] { Material.STONE, Material.LEAVES, Material.GRASS,
             Material.DIRT, Material.LOG, Material.SAND, Material.SANDSTONE, Material.ICE, Material.QUARTZ_BLOCK, Material.GRAVEL,
             Material.COBBLESTONE, Material.OBSIDIAN, Material.BEDROCK });
+    public int xrayRadius = 10;
+    public boolean doCircle = true;
+    public int cooldown = 120;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -31,7 +34,7 @@ public class Seeker extends AbilityListener {
             long last = 0;
             if (lastClicked.containsKey(item))
                 last = lastClicked.get(item);
-            if (120000 - System.currentTimeMillis() > last) {
+            if ((cooldown * 1000) - System.currentTimeMillis() > last) {
                 lastClicked.put(item, System.currentTimeMillis());
                 event.getPlayer()
                         .sendMessage(
@@ -39,11 +42,12 @@ public class Seeker extends AbilityListener {
                                         + "You body slam the ghost eye into your socket. Not gonna recover from that for a few minutes..");
                 // Turn into glass
                 Location beginning = event.getClickedBlock().getLocation().clone().add(0.5, 0.5, 0.5);
-                for (int x = -20; x <= 20; x++) {
-                    for (int y = -20; y <= 20; y++) {
-                        for (int z = -20; z <= 20; z++) {
+                int dist = (doCircle ? xrayRadius * 2 : xrayRadius);
+                for (int x = -dist; x <= dist; x++) {
+                    for (int y = -dist; y <= dist; y++) {
+                        for (int z = -dist; z <= dist; z++) {
                             Location loc = event.getClickedBlock().getLocation().clone().add(x, y, z).add(0.5, 0.5, 0.5);
-                            if (beginning.distance(loc) <= 10 && transparent.contains(loc.getBlock().getType()))
+                            if ((!doCircle || beginning.distance(loc) <= 10) && transparent.contains(loc.getBlock().getType()))
                                 event.getPlayer().sendBlockChange(loc, Material.GLASS, (byte) 0);
                         }
                     }
@@ -51,7 +55,7 @@ public class Seeker extends AbilityListener {
             } else {
                 event.getPlayer().sendMessage(
                         ChatColor.BLUE + "The ghost eye will be usable in "
-                                + ((120000 - System.currentTimeMillis() - last) / 1000) + " seconds");
+                                + (((cooldown * 1000) - System.currentTimeMillis() - last) / 1000) + " seconds");
             }
         }
     }
