@@ -28,6 +28,7 @@ public class Array extends AbilityListener {
 
     private transient HashMap<HealArray, Player> beacons = new HashMap<HealArray, Player>();
     private transient PlayerManager pm = HungergamesApi.getPlayerManager();
+    public int arrayExpireTime = 30;
 
     class HealArray {
         Block[] blocks;
@@ -41,7 +42,7 @@ public class Array extends AbilityListener {
             // Create beacon
             Block b = event.getBlock();
             HealArray heal = new HealArray();
-            heal.expires = System.currentTimeMillis() + 30000;
+            heal.expires = System.currentTimeMillis() + (arrayExpireTime * 1000);
             heal.blocks = new Block[3];
             for (int i = 0; i < 3; i++) {
                 heal.blocks[i] = b;

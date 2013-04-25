@@ -23,18 +23,20 @@ public class Backpacker extends AbilityListener {
 
     private transient HashMap<Player, Inventory> backpack = new HashMap<Player, Inventory>();
     private transient HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
+    public int backpackItem = Material.ENDER_CHEST.getId();
+    public int size = 54;
 
     @Override
     public void registerPlayer(Player p) {
         super.registerPlayer(p);
-        ItemStack item = new ItemStack(Material.ENDER_CHEST);
+        ItemStack item = new ItemStack(backpackItem);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Backpack");
         List<String> lore = new ArrayList<String>();
         lore.add(ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC + "Double click this chest to open your backpack!");
         meta.setLore(lore);
         item.setItemMeta(meta);
-        backpack.put(p, Bukkit.createInventory(null, 54, "Backpack"));
+        backpack.put(p, Bukkit.createInventory(null, size, "Backpack"));
         p.getInventory().setItem(9, item);
     }
 

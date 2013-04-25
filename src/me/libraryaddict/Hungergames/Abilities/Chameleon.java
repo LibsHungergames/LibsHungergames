@@ -59,7 +59,7 @@ public class Chameleon extends AbilityListener {
 
     private void disguise(Entity entity, Player p) {
         if (entity instanceof Creature) {
-            if (pm.getGamer(p).isAlive() && hasAbility(p)) {
+            if (hasAbility(p)) {
                 if (!DisguiseAPI.isDisguised(p))
                     DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 else {

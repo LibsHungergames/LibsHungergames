@@ -27,7 +27,7 @@ public class Pussy extends AbilityListener {
     @EventHandler
     public void onSprint(PlayerToggleSprintEvent event) {
         final Player p = event.getPlayer();
-        if (hasAbility(p.getName()) && (HungergamesApi.getPlayerManager().getGamer(p).isAlive())) {
+        if (hasAbility(p)) {
             if (event.isSprinting()) {
                 int id = Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {

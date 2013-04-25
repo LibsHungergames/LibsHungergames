@@ -220,6 +220,7 @@ public class PlayerManager {
         if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
         ScoreboardManager.updateKills();
+        HungergamesApi.getAbilityManager().unregisterPlayer(p);
     }
 
     public void setSpectator(Gamer gamer) {
