@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import net.milkbowl.vault.economy.Economy;
 import net.minecraft.server.v1_5_R2.EntityPlayer;
 import net.minecraft.server.v1_5_R2.Packet201PlayerInfo;
@@ -15,6 +16,7 @@ import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.scoreboard.DisplaySlot;
 
 public class Gamer {
 
@@ -272,13 +274,14 @@ public class Gamer {
     public boolean isAlive() {
         return !isSpectator() && hg.currentTime >= 0;
     }
-    
+
     public int getKills() {
         return kills;
     }
-    
+
     public void addKill() {
         kills++;
+        ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getName(), getKills());
     }
 
     public long getChunkCooldown() {

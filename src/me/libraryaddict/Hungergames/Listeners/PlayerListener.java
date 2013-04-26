@@ -53,6 +53,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
@@ -105,11 +106,12 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
-        p.setScoreboard(ScoreboardManager.getMainScoreboard());
+        p.setScoreboard(ScoreboardManager.getScoreboard(DisplaySlot.SIDEBAR));
         p.setAllowFlight(true);
         if (gamer.isVip() && gamer.getPlayer().equals(gamer.getName()))
             gamer.getPlayer().setDisplayName(ChatColor.GREEN + gamer.getName());
         if (hg.currentTime >= 0) {
+            p.setScoreboard(ScoreboardManager.getScoreboard(DisplaySlot.PLAYER_LIST));
             pm.setSpectator(gamer);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
@@ -117,7 +119,7 @@ public class PlayerListener implements Listener {
                 }
             }, 0L);
         } else {
-            ScoreboardManager.makeScore(ChatColor.GREEN + "Players: ", Bukkit.getOnlinePlayers().length);
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", Bukkit.getOnlinePlayers().length);
             gamer.clearInventory();
             if (config.useKitSelector())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {

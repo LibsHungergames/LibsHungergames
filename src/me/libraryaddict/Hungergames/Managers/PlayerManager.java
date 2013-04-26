@@ -24,6 +24,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
 
 import me.libraryaddict.Hungergames.Hungergames;
@@ -195,7 +196,7 @@ public class PlayerManager {
         if (event.getDeathMessage() != null)
             Bukkit.broadcastMessage(event.getDeathMessage());
         setSpectator(killed);
-        ScoreboardManager.makeScore(ChatColor.GREEN + "Players: ", getAliveGamers().size());
+        ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", getAliveGamers().size());
         hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())
@@ -219,7 +220,6 @@ public class PlayerManager {
         }
         if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
-        ScoreboardManager.updateKills();
         HungergamesApi.getAbilityManager().unregisterPlayer(p);
     }
 

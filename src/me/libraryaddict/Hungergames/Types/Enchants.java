@@ -22,7 +22,7 @@ public class Enchants {
     public static Enchantment UNLOOTABLE;
     public static Enchantment DOUBLEJUMP;
 
-    public Enchants() {
+    static {
         enchantNames.put(Enchantment.DAMAGE_ALL, "Sharpness");
         enchantNames.put(Enchantment.ARROW_FIRE, "Flame");
         enchantNames.put(Enchantment.ARROW_INFINITE, "Infinite Arrows");
