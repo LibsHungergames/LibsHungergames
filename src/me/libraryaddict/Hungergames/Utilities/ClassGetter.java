@@ -2,12 +2,9 @@
 
     package me.libraryaddict.Hungergames.Utilities;
      
-    import org.bukkit.Bukkit;
     import org.bukkit.plugin.java.JavaPlugin;
      
-    import java.io.File;
     import java.io.IOException;
-    import java.net.URISyntaxException;
     import java.net.URL;
     import java.security.CodeSource;
     import java.util.ArrayList;

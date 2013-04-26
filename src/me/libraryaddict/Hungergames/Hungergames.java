@@ -15,7 +15,6 @@ import me.libraryaddict.Hungergames.Listeners.GeneralListener;
 import me.libraryaddict.Hungergames.Listeners.LibsCommandsListener;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;

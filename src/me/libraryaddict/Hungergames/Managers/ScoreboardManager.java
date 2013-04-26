@@ -1,12 +1,7 @@
 package me.libraryaddict.Hungergames.Managers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
@@ -30,7 +25,7 @@ public class ScoreboardManager {
 
     public static void resetScoreboard(DisplaySlot slot) {
         boards.put(slot.name(), Bukkit.getScoreboardManager().getNewScoreboard());
-        final Objective objective = boards.get(slot.name()).registerNewObjective(slot.toString(), "dummy");
+        Objective objective = boards.get(slot.name()).registerNewObjective(slot.toString(), "dummy");
         objective.setDisplaySlot(slot);
     }
 

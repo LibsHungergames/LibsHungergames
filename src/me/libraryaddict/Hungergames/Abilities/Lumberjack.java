@@ -2,7 +2,6 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
