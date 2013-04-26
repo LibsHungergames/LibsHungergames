@@ -11,12 +11,12 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class ScoreboardManager {
-    private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
+    private static HashMap<DisplaySlot, Scoreboard> boards = new HashMap<DisplaySlot, Scoreboard>();
 
     public static Scoreboard getScoreboard(DisplaySlot slot) {
-        if (!boards.containsKey(slot.name()))
+        if (!boards.containsKey(slot))
             resetScoreboard(slot);
-        return boards.get(slot.name());
+        return boards.get(slot);
     }
 
     public static Objective getObjective(DisplaySlot slot) {
@@ -24,8 +24,11 @@ public class ScoreboardManager {
     }
 
     public static void resetScoreboard(DisplaySlot slot) {
-        boards.put(slot.name(), Bukkit.getScoreboardManager().getNewScoreboard());
-        Objective objective = boards.get(slot.name()).registerNewObjective(slot.toString(), "dummy");
+        if (!boards.containsKey(slot))
+            boards.put(slot, Bukkit.getScoreboardManager().getNewScoreboard());
+        if (boards.get(slot).getObjective(slot.name()) != null)
+            boards.get(slot).getObjective(slot.name()).unregister();
+        Objective objective = boards.get(slot).registerNewObjective(slot.name(), "dummy");
         objective.setDisplaySlot(slot);
     }
 
