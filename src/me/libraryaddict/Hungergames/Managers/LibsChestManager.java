@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Interfaces.ChestManager;
 import me.libraryaddict.Hungergames.Types.RandomItem;
 
 import org.bukkit.Material;
@@ -11,11 +12,11 @@ import org.bukkit.block.DoubleChest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ChestManager {
+public class LibsChestManager implements ChestManager {
 
     public ArrayList<RandomItem> randomItems;
 
-    public ChestManager() {
+    public LibsChestManager() {
         randomItems = new ArrayList<RandomItem>();
         randomItems.add(new RandomItem(5, Material.DIAMOND, 0, 1, 4));
         randomItems.add(new RandomItem(5, Material.DIAMOND_BOOTS, 0, 1, 1));

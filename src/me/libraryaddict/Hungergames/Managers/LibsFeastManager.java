@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Interfaces.ChestManager;
+import me.libraryaddict.Hungergames.Interfaces.FeastManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
@@ -17,12 +19,12 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class FeastManager {
+public class LibsFeastManager implements FeastManager {
     // This manages the chests, The buildings
     List<BlockFace> faces = new ArrayList<BlockFace>();
     List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
 
-    public FeastManager() {
+    public LibsFeastManager() {
         faces.add(BlockFace.UP);
         faces.add(BlockFace.DOWN);
         faces.add(BlockFace.SOUTH);
@@ -48,7 +50,7 @@ public class FeastManager {
         }
     }
 
-    private int getHeight(ArrayList<Integer> heights, int radius) {
+    public int getHeight(ArrayList<Integer> heights, int radius) {
         List<List<Integer>> commons = new ArrayList<List<Integer>>();
         for (int i = 0; i < heights.size(); i++) {
             List<Integer> numbers = new ArrayList<Integer>();

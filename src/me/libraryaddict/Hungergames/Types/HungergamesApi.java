@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Types;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Interfaces.ChestManager;
+import me.libraryaddict.Hungergames.Interfaces.FeastManager;
 import me.libraryaddict.Hungergames.Managers.*;
 
 public class HungergamesApi {
@@ -48,13 +50,21 @@ public class HungergamesApi {
 
     public static ChestManager getChestManager() {
         if (cm == null)
-            cm = new ChestManager();
+            cm = new LibsChestManager();
         return cm;
+    }
+
+    public static void setChestManager(ChestManager manager) {
+        cm = manager;
+    }
+
+    public static void setFeastManager(FeastManager manager) {
+        fm = manager;
     }
 
     public static FeastManager getFeastManager() {
         if (fm == null)
-            fm = new FeastManager();
+            fm = new LibsFeastManager();
         return fm;
     }
 
@@ -65,7 +75,7 @@ public class HungergamesApi {
     }
 
     public static AbilityManager getAbilityManager() {
-        if(abilityManager == null)
+        if (abilityManager == null)
             abilityManager = new AbilityManager(new AbilityConfigManager(getHungergames()));
         return abilityManager;
     }

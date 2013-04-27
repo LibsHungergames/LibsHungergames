@@ -1,8 +1,9 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Interfaces.FeastManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
-import me.libraryaddict.Hungergames.Managers.FeastManager;
+import me.libraryaddict.Hungergames.Managers.LibsFeastManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
