@@ -41,11 +41,9 @@ public class KitManager {
      */
     public ArrayList<Kit> kits = new ArrayList<Kit>();
     public String defaultKit;
-    private static KitManager kitty;
     private Hungergames hg = HungergamesApi.getHungergames();
 
     public KitManager() {
-        kitty = this;
         hg.saveDefaultConfig();
         ConfigurationSection config = hg.getConfig();
         defaultKit = config.getString("DefaultKit");
