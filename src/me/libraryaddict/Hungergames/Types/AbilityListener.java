@@ -56,7 +56,11 @@ public abstract class AbilityListener implements Listener {
                         section.set(field.getName(), field.get(this));
                         modified = true;
                     }
-                    field.set(this, value);
+                    if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
+                        double d = (Double) value;
+                        field.set(this, ((float) d));
+                    } else
+                        field.set(this, value);
                 } catch (IllegalAccessException ignored) {
                 }
         }

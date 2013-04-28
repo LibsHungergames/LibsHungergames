@@ -28,8 +28,10 @@ public class AbilityManager {
 
     /**
      * 
-     * @param Your plugin
-     * @param Package name containing your abilities
+     * @param Your
+     *            plugin
+     * @param Package
+     *            name containing your abilities
      */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
@@ -60,8 +62,10 @@ public class AbilityManager {
 
     /**
      * 
-     * @param Name of the ability
-     * @param Ability listener
+     * @param Name
+     *            of the ability
+     * @param Ability
+     *            listener
      */
     public void addAbility(String name, AbilityListener abilityListener) {
         abilities.put(name, abilityListener);
