@@ -41,7 +41,7 @@ public class GiveKitThread extends Thread {
         SQLconnect();
         try {
             Statement stmt = con.createStatement();
-            stmt.execute("INSERT INTO HGKits (Name, Kit) VALUES ('" + playerName + "', '" + kitName + "')");
+            stmt.execute("INSERT INTO HGKits (Name, KitName) VALUES ('" + playerName + "', '" + kitName + "')");
             stmt.close();
         } catch (Exception ex) {
             ex.printStackTrace();
