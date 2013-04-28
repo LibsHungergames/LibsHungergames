@@ -26,6 +26,11 @@ public class AbilityManager {
         initializeAllAbilitiesInPackage(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Abilities");
     }
 
+    /**
+     * 
+     * @param Your plugin
+     * @param Package name containing your abilities
+     */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
         Bukkit.getLogger().info(
@@ -53,11 +58,19 @@ public class AbilityManager {
             abilityConfigManager.save();
     }
 
+    /**
+     * 
+     * @param Name of the ability
+     * @param Ability listener
+     */
     public void addAbility(String name, AbilityListener abilityListener) {
         abilities.put(name, abilityListener);
         Bukkit.getLogger().info("[HungerGames] Added ability: " + name);
     }
 
+    /**
+     * Register the abilitys in the plugin manager because the game started!
+     */
     public void registerAbilityListeners() {
         for (AbilityListener abilityListener : abilities.values())
             Bukkit.getPluginManager().registerEvents(abilityListener, HungergamesApi.getHungergames());

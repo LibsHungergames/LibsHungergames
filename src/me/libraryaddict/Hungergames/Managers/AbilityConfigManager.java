@@ -10,9 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * User: Austin
- * Date: 11/7/12
- * Time: 12:04 PM
+ * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class AbilityConfigManager {
     private File configFile;
@@ -58,8 +56,7 @@ public class AbilityConfigManager {
 
     public ConfigurationSection getConfigSection(String abilityName) {
         ConfigurationSection section = config.getConfigurationSection(abilityName);
-        if(section == null)
-        {
+        if (section == null) {
             section = config.createSection(abilityName);
         }
         return section;

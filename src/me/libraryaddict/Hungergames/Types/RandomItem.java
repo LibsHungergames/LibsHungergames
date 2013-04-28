@@ -12,6 +12,19 @@ public class RandomItem {
     short data;
     int min, max, id;
 
+    /**
+     * 
+     * @param Chance
+     *            of being used, out of a hundred. 0 = no chance
+     * @param ID
+     *            of the item
+     * @param Datavalue
+     *            of the item
+     * @param Min
+     *            amount of the item
+     * @param Max
+     *            amount of the item
+     */
     public RandomItem(double newChance, int newId, int newData, int newMin, int newMax) {
         chance = newChance;
         id = newId;
@@ -20,6 +33,19 @@ public class RandomItem {
         max = newMax;
     }
 
+    /**
+     * 
+     * @param Chance
+     *            of being used, out of a hundred. 0 = no chance
+     * @param Material
+     *            of the item
+     * @param Datavalue
+     *            of the item
+     * @param Min
+     *            amount of the item
+     * @param Max
+     *            amount of the item
+     */
     public RandomItem(double newChance, Material mat, int newData, int newMin, int newMax) {
         chance = newChance;
         id = mat.getId();
@@ -28,10 +54,18 @@ public class RandomItem {
         max = newMax;
     }
 
+    /**
+     * 
+     * @return Is the chance of being selected true?
+     */
     public boolean hasChance() {
         return (new Random().nextInt(10000) < chance * 100);
     }
 
+    /**
+     * 
+     * @return Randomized itemstack
+     */
     public ItemStack getItemStack() {
         return new ItemStack(id, (new Random().nextInt((max - min) + 1) + min), data);
     }
