@@ -25,7 +25,7 @@ public class Scout extends AbilityListener {
                     if (hasAbility(p.getName()))
                         HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.POTION, 2, (short) 16418));
             }
-        }, givePotionsEverySoSeconds, givePotionsEverySoSeconds);
+        }, 0, givePotionsEverySoSeconds * 20);
     }
 
     @EventHandler
