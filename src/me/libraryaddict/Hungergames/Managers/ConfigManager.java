@@ -52,6 +52,9 @@ public class ConfigManager {
     private boolean generatePillars;
     private ItemStack pillarCorner;
     private ItemStack pillarInsides;
+    private boolean forceCords;
+    private int x;
+    private int z;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -151,6 +154,9 @@ public class ConfigManager {
         feastInsides = parseItem(hg.getConfig().getString("FeastInsides"));
         pillarCorner = parseItem(hg.getConfig().getString("PillarCorner"));
         pillarInsides = parseItem(hg.getConfig().getString("PillarInsides"));
+        forceCords = hg.getConfig().getBoolean("ForceCords", true);
+        x = hg.getConfig().getInt("ForceX", 0);
+        z = hg.getConfig().getInt("ForceZ", 0);
 
         // Create the times where it broadcasts and advertises the feast
         for (int i = 1; i < 6; i++)
@@ -173,6 +179,18 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
+    }
+    
+    public boolean forceCords() {
+        return forceCords;
+    }
+    
+    public int getSpawnX() {
+        return x;
+    }
+    
+    public int getSpawnZ() {
+        return z;
     }
 
     private ItemStack parseItem(String string) {

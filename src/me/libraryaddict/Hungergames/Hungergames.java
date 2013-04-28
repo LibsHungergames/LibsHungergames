@@ -137,8 +137,9 @@ public class Hungergames extends JavaPlugin {
             public void run() {
                 world = Bukkit.getWorlds().get(0);
                 world.setTime(0);
-                world.getChunkAt(0, 0).load();
-                world.setSpawnLocation(0, world.getHighestBlockYAt(0, 0), 0);
+                if (config.forceCords())
+                    world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
+                            config.getSpawnZ());
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
                         world.getSpawnLocation().clone().add(x * 16, 0, z * 16).getChunk().load();

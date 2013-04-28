@@ -106,6 +106,12 @@ PillarInsides: GLASS 0
 # Change disguise config to a better version for HG?
 ChangeDisguiseConfig: true
 
+# Force cords? Means the map center is always here. Nice for people when they use F3
+# This changes the worlds spawn
+ForceCords: true
+ForceX: 0
+ForceZ: 0
+
 
 # Kits - Any kits you add can be done normally here.
 DefaultKit: Boxer
