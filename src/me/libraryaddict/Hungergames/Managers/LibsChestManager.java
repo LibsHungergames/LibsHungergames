@@ -66,14 +66,15 @@ public class LibsChestManager implements ChestManager {
 
     private void fillChest(Inventory inv, boolean doubleChest) {
         inv.clear();
-        while (countItems(inv) < (doubleChest ? 10 : 4)) {
-            Collections.shuffle(randomItems, new Random());
-            for (RandomItem item : randomItems) {
-                if (item.hasChance()) {
-                    inv.setItem(new Random().nextInt(inv.getSize()), item.getItemStack());
+        if (randomItems.size() > 0)
+            while (countItems(inv) < (doubleChest ? 10 : 4)) {
+                Collections.shuffle(randomItems, new Random());
+                for (RandomItem item : randomItems) {
+                    if (item.hasChance()) {
+                        inv.setItem(new Random().nextInt(inv.getSize()), item.getItemStack());
+                    }
                 }
             }
-        }
     }
 
     public void fillChest(Inventory inv) {
@@ -81,6 +82,18 @@ public class LibsChestManager implements ChestManager {
             fillChest(inv, true);
         else
             fillChest(inv, false);
+    }
+
+    public void clearRandomItems() {
+        randomItems.clear();
+    }
+
+    public void addRandomItem(RandomItem item) {
+        randomItems.add(item);
+    }
+
+    public ArrayList<RandomItem> getRandomItems() {
+        return randomItems;
     }
 
 }
