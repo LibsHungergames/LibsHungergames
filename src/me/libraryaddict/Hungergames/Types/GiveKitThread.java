@@ -30,9 +30,8 @@ public class GiveKitThread extends Thread {
                     + HungergamesApi.getMySqlManager().SQL_DATA;
             con = DriverManager.getConnection(conn, HungergamesApi.getMySqlManager().SQL_USER,
                     HungergamesApi.getMySqlManager().SQL_PASS);
-        } catch (ClassNotFoundException ex) {
-        } catch (SQLException ex) {
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -45,7 +44,7 @@ public class GiveKitThread extends Thread {
             stmt.execute("INSERT INTO HGKits (Name, Kit) VALUES ('" + playerName + "', '" + kitName + "')");
             stmt.close();
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
         SQLdisconnect();
     }
