@@ -169,7 +169,7 @@ public class ConfigManager {
                 hg.getConfig().getString("GameStartingMotd", "&2Game starting in %time%."));
         gameStartedMotd = ChatColor.translateAlternateColorCodes('&',
                 hg.getConfig().getString("GameStartedMotd", "&4Game in progress."));
-        kitSelector = hg.getConfig().getBoolean("KitSelector", true);
+        kitSelector = hg.getConfig().getBoolean("UseKitSelector", true);
         feastTnt = hg.getConfig().getBoolean("FeastTnt", true);
         feastGround = parseItem(hg.getConfig().getString("FeastGround"));
         feast = parseItem(hg.getConfig().getString("Feast"));
