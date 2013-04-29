@@ -19,7 +19,7 @@ public class Pyro extends AbilityListener {
                 && hasAbility(event.getPlayer())) {
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
-                item.setType(Material.AIR);
+               event.getPlayer().setItemInHand(new ItemStack(0));
             Fireball ball = event.getPlayer().launchProjectile(Fireball.class);
             ball.setIsIncendiary(true);
             ball.setYield(ball.getYield() * fireballExplosiveMultiplier);
