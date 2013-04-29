@@ -280,14 +280,6 @@ public class KitManager {
         return null;
     }
 
-    private List<Kit> otherKits(Player p) {
-        List<Kit> otherKit = new ArrayList<Kit>();
-        for (Kit kit : kits)
-            if (!ownsKit(p, kit))
-                otherKit.add(kit);
-        return otherKit;
-    }
-
     public void showKits(Player p) {
         List<String> hisKits = new ArrayList<String>();
         List<String> otherKits = new ArrayList<String>();
