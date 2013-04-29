@@ -196,7 +196,7 @@ public class PlayerManager {
         if (event.getDeathMessage() != null)
             Bukkit.broadcastMessage(event.getDeathMessage());
         setSpectator(killed);
-        ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", getAliveGamers().size());
+        ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", getAliveGamers().size());
         hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())

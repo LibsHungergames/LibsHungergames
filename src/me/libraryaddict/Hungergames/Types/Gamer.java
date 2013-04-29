@@ -281,7 +281,7 @@ public class Gamer {
 
     public void addKill() {
         kills++;
-        ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getName(), getKills());
+        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getName(), getKills());
     }
 
     public long getChunkCooldown() {

@@ -106,12 +106,11 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
-        p.setScoreboard(ScoreboardManager.getScoreboard(DisplaySlot.SIDEBAR));
+        p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         p.setAllowFlight(true);
         if (gamer.isVip() && gamer.getPlayer().equals(gamer.getName()))
             gamer.getPlayer().setDisplayName(ChatColor.GREEN + gamer.getName());
         if (hg.currentTime >= 0) {
-            p.setScoreboard(ScoreboardManager.getScoreboard(DisplaySlot.PLAYER_LIST));
             pm.setSpectator(gamer);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
@@ -119,7 +118,8 @@ public class PlayerListener implements Listener {
                 }
             }, 0L);
         } else {
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", Bukkit.getOnlinePlayers().length);
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ",
+                    Bukkit.getOnlinePlayers().length);
             gamer.clearInventory();
             if (config.useKitSelector())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {

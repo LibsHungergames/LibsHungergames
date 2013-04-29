@@ -267,7 +267,7 @@ public class Hungergames extends JavaPlugin {
         }
         if (currentTime < 0) {
             world.setTime(0);
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in", -currentTime);
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in", -currentTime);
             if (config.displayMessages())
                 if (config.advertiseGameStarting(currentTime))
                     Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
@@ -280,12 +280,12 @@ public class Hungergames extends JavaPlugin {
             startGame();
             return;
         } else if (currentTime == config.getTimeFeastStarts()) {
-            ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in");
+            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in");
             HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
             Bukkit.broadcastMessage(ChatColor.RED + "The feast has begun!");
             ScoreboardManager.updateStage();
         } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in", config.feastStartsIn());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in", config.feastStartsIn());
             if (config.advertiseFeast(currentTime)) {
                 if (feastLoc.getBlockY() == 0) {
                     feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
@@ -298,15 +298,17 @@ public class Hungergames extends JavaPlugin {
                         + (config.feastStartsIn() > 10 ? "\nUse /feast to fix your compass on it!" : ""));
             }
         } else if (config.doesBorderCloseIn() && currentTime > config.getTimeFeastStarts()) {
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GREEN + "BorderSize: ", (int) config.getBorderSize());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "BorderSize: ",
+                    (int) config.getBorderSize());
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
         }
         if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible", config.invincibilityWearsOffIn());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible",
+                    config.invincibilityWearsOffIn());
             if (currentTime == config.getInvincibilityTime()) {
                 Bukkit.broadcastMessage(ChatColor.RED + "Invincibility has worn off!");
                 ScoreboardManager.updateStage();
-                ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible");
+                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible");
             } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
                 Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in "
                         + returnTime(config.invincibilityWearsOffIn()) + "!");
@@ -318,9 +320,11 @@ public class Hungergames extends JavaPlugin {
     public void startGame() {
         currentTime = 0;
         ScoreboardManager.updateStage();
-        ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in");
+        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in");
+        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
         if (config.getInvincibilityTime() > 0)
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible", config.getInvincibilityTime());
+            ScoreboardManager
+                    .makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible", config.getInvincibilityTime());
         Bukkit.broadcastMessage(ChatColor.RED + "The game has started!");
         if (config.getInvincibilityTime() > 0 && config.displayMessages())
             Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(config.getInvincibilityTime())
@@ -329,7 +333,6 @@ public class Hungergames extends JavaPlugin {
             gamer.setRiding(false);
             gamer.clearInventory();
             Player p = gamer.getPlayer();
-            p.setScoreboard(ScoreboardManager.getScoreboard(DisplaySlot.PLAYER_LIST));
             p.setAllowFlight(false);
             p.setFireTicks(0);
             gamer.seeInvis(false);
