@@ -68,6 +68,23 @@ public class KitManager {
         kits = newKit;
     }
 
+    public void addKit(Kit newKit) {
+        kits.add(newKit);
+        if (newKit.isFree())
+            defaultKits.add(newKit);
+        List<String> kitNames = new ArrayList<String>();
+        for (Kit kit : kits)
+            kitNames.add(kit.getName());
+        Collections.sort(kitNames);
+        ArrayList<Kit> newKits = new ArrayList<Kit>();
+        for (int i = 0; i < kitNames.size(); i++) {
+            Kit kit = getKitByName(kitNames.get(i));
+            kit.setId(i);
+            newKits.add(kit);
+        }
+        kits = newKits;
+    }
+
     public boolean setKit(Player p, String name) {
         Kit kit = getKitByName(name);
         if (kit == null)
@@ -79,7 +96,7 @@ public class KitManager {
         return true;
     }
 
-    private Kit parseKit(ConfigurationSection path) {
+    public Kit parseKit(ConfigurationSection path) {
         String desc = ChatColor.translateAlternateColorCodes('&', path.getString("Description"));
         String name = path.getString("Name");
         if (name == null)
@@ -263,7 +280,7 @@ public class KitManager {
         return null;
     }
 
-    List<Kit> otherKits(Player p) {
+    private List<Kit> otherKits(Player p) {
         List<Kit> otherKit = new ArrayList<Kit>();
         for (Kit kit : kits)
             if (!ownsKit(p, kit))
