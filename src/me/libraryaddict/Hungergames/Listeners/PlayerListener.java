@@ -13,6 +13,7 @@ import me.libraryaddict.Hungergames.Managers.KitSelectorManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
+import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
@@ -21,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
@@ -38,6 +40,7 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
@@ -372,6 +375,16 @@ public class PlayerListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
             event.setCancelled(true);
+        }
+        if (event.getView().getTopInventory().getType() == InventoryType.ANVIL && event.getCurrentItem() != null
+                && event.getCurrentItem().getType() != Material.AIR) {
+            for (Enchantment enchant : event.getCurrentItem().getEnchantments().keySet())
+                if (!Enchants.isNatural(enchant)) {
+                    event.setCancelled(true);
+                    ((Player) event.getWhoClicked()).sendMessage(ChatColor.RED
+                            + "Minecraft will crash if you attempt to put this in");
+                    return;
+                }
         }
         if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getInventory().getTitle())) {
             event.setCancelled(true);

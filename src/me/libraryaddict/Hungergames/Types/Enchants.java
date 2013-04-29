@@ -95,7 +95,7 @@ public class Enchants {
         return item;
     }
 
-    private static boolean isNatural(Enchantment ench) {
+    public static boolean isNatural(Enchantment ench) {
         if (customEnchants.contains(ench.getId()))
             return false;
         return true;
