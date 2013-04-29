@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.ArrayList;
 
+import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
@@ -18,10 +19,11 @@ public class Salamander extends AbilityListener {
 
     private transient ArrayList<Player> salamanders = new ArrayList<Player>();
 
-    public void registerPlayer(String name) {
-        Player p = Bukkit.getPlayerExact(name);
-        if (p != null)
-            salamanders.add(p);
+    @EventHandler
+    public void gameStart(GameStartEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers())
+            if (hasAbility(p))
+                salamanders.add(p);
     }
 
     @EventHandler

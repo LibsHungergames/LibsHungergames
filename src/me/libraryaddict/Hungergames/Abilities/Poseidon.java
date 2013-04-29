@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 
@@ -17,10 +18,11 @@ public class Poseidon extends AbilityListener {
     ArrayList<Player> waterBreathers = new ArrayList<Player>();
     public int potionMultiplier = 1;
 
-    public void registerPlayer(String name) {
-        Player p = Bukkit.getPlayerExact(name);
-        if (p != null)
-            waterBreathers.add(p);
+    @EventHandler
+    public void gameStart(GameStartEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers())
+            if (hasAbility(p))
+                waterBreathers.add(p);
     }
 
     @EventHandler
