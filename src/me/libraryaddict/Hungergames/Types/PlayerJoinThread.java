@@ -43,11 +43,11 @@ public class PlayerJoinThread extends Thread {
                     + "/" + mysql.SQL_DATA;
             con = DriverManager.getConnection(conn, mysql.SQL_USER, mysql.SQL_PASS);
         } catch (ClassNotFoundException ex) {
-            System.err.println("[GamerJoinThread] No MySQL driver found!");
+            System.err.println("[GamerJoinThread] No MySQL driver found! " + ex.getMessage());
         } catch (SQLException ex) {
-            System.err.println("[GamerJoinThread] Error while fetching MySQL connection!");
+            System.err.println("[GamerJoinThread] Error while fetching MySQL connection! " + ex.getMessage());
         } catch (Exception ex) {
-            System.err.println("[GamerJoinThread] Unknown error while fetchting MySQL connection.");
+            System.err.println("[GamerJoinThread] Unknown error while fetchting MySQL connection. " + ex.getMessage());
         }
         checkTables("HGKits", "CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
                 + "Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL)");
@@ -89,7 +89,7 @@ public class PlayerJoinThread extends Thread {
                     if (kits.hisKits.containsKey(gamer.getName()))
                         hisKits = kits.hisKits.get(gamer.getName());
                     while (r.next()) {
-                        Kit kit = kits.getKitByName(r.getString("Kit"));
+                        Kit kit = kits.getKitByName(r.getString("KitName"));
                         if (!hisKits.contains(kit))
                             hisKits.add(kit);
                     }
@@ -97,9 +97,9 @@ public class PlayerJoinThread extends Thread {
                     r.close();
                     stmt.close();
                 } catch (SQLException ex) {
-                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s stats: " + ex);
+                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s kits: " + ex);
                 } catch (NullPointerException ex) {
-                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s stats: " + ex);
+                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s kitss: " + ex);
                 }
             }
             if (pm.loadGamer.peek() == null) {

@@ -7,15 +7,11 @@ public class MySqlManager  {
     public String SQL_PASS = "";
     public String SQL_DATA = "";
     public String SQL_HOST = "";
-    public boolean enabled = false;
     private PlayerJoinThread joinThread;
 
-    public MySqlManager() {
+    public void startJoinThread() {
         joinThread = new PlayerJoinThread(this);
         joinThread.start();
-        // joinThread.start();
-        // quitThread.start();
-        // pointsThread.start();*/
     }
 
     public PlayerJoinThread getPlayerJoinThread() {

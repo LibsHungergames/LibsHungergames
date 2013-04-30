@@ -315,7 +315,7 @@ public class KitManager {
             return true;
         if (player.hasPermission(kit.getPermission()))
             return true;
-        return hisKits.containsKey(player) && hisKits.get(player).contains(kit);
+        return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
     }
 
     public void sendDescription(CommandSender p, String name) {

@@ -36,7 +36,7 @@ public class BuyKit implements CommandExecutor {
                     }
                     if (!HungergamesApi.getConfigManager().isMySqlEnabled()) {
                         sender.sendMessage(ChatColor.AQUA
-                                + "Magical forces render you powerless and- No. The server owner did not setup mysql.");
+                                + "Magical forces render you powerless and- Just kidding. The server owner did not setup mysql.");
                         return true;
                     }
                     gamer.addBalance(-kit.getPrice());

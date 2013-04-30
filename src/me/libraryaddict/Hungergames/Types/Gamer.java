@@ -72,7 +72,7 @@ public class Gamer {
             if (newBalance > 0)
                 economy.depositPlayer(getName(), newBalance);
             else
-                economy.withdrawPlayer(getName(), newBalance);
+                economy.withdrawPlayer(getName(), -newBalance);
         }
     }
 
@@ -281,7 +281,7 @@ public class Gamer {
 
     public void addKill() {
         kills++;
-        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getName(), getKills());
+        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
     }
 
     public long getChunkCooldown() {

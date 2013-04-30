@@ -85,6 +85,7 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
         mysql.SQL_USER = getConfig().getString("MySqlUser");
+        mysql.startJoinThread();
         KitManager kits = HungergamesApi.getKitManager();
         ArrayList<ItemStack> kitList = new ArrayList<ItemStack>();
         for (me.libraryaddict.Hungergames.Types.Kit kit : kits.kits) {
