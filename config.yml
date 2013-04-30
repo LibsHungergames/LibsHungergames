@@ -31,6 +31,12 @@ LoadMap: false
 # So you want this to point at the folder containing the maps. It will then load a random map from there.
 # This is auctally untested. So report if its bugged or so on.
 MapPath: '../../../Maps/'
+# Turn this to false if you want to define the entire map path in 'MapPath'
+# Only recommended if you know the map path. Aka linuix installations and so on.
+# Not recommended if you have to google 'What is a map path and how do I find it'
+# So instead of the default mappath. you could use '/Minecraft/Maps/'
+MapPathStartsPluginFolder: true
+
 
 # Should the plugin use the mysql database? Untested ofc.
 UseMySql: false

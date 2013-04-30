@@ -106,13 +106,16 @@ public class Hungergames extends JavaPlugin {
         if (getConfig().getBoolean("LoadMap", false)) {
             File path = this.getDataFolder().getAbsoluteFile();
             if (getConfig().contains("MapPath")) {
-                String[] mapPath = getConfig().getString("MapPath").split("/");
-                for (String string : mapPath) {
-                    if (string.equalsIgnoreCase(".."))
-                        path = path.getParentFile();
-                    else
-                        path = new File(path.toString() + "/" + string + "/");
-                }
+                if (getConfig().getBoolean("MapPathStartsPluginFolder")) {
+                    String[] mapPath = getConfig().getString("MapPath").split("/");
+                    for (String string : mapPath) {
+                        if (string.equalsIgnoreCase(".."))
+                            path = path.getParentFile();
+                        else
+                            path = new File(path.toString() + "/" + string + "/");
+                    }
+                } else
+                    path = new File(getConfig().getString("MapPath"));
                 List<File> maps = new ArrayList<File>();
                 if (path.exists())
                     for (File file : path.listFiles())
