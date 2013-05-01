@@ -31,6 +31,7 @@ public class ChatManager {
     private String commandBuyKitAlreadyOwn = ChatColor.AQUA + "You already own this kit!";
     private String commandBuyKitCantAfford = ChatColor.AQUA + "You can't afford this kit!";
     private String commandBuyKitCantBuyKit = ChatColor.AQUA + "You can't buy this kit!";
+    private String commandBuyKitKitsNotLoaded = ChatColor.AQUA + "Your kits have not loaded yet!";
     private String commandBuyKitMysqlNotEnabled = ChatColor.GREEN
             + "Magical forces render you powerless and- Just kidding. The server owner did not setup mysql.";
     private String commandBuyKitNoArgs = ChatColor.AQUA + "You must define a kit id or name";
@@ -1147,5 +1148,9 @@ public class ChatManager {
 
     public String getTimeFormatSecondsAndMinutes() {
         return timeFormatSecondsAndMinutes;
+    }
+
+    public String getCommandBuyKitKitsNotLoaded() {
+        return commandBuyKitKitsNotLoaded;
     }
 }

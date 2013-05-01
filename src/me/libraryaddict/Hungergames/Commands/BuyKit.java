@@ -1,6 +1,5 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import java.util.ArrayList;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
@@ -39,12 +38,14 @@ public class BuyKit implements CommandExecutor {
                     sender.sendMessage(cm.getCommandBuyKitMysqlNotEnabled());
                     return true;
                 }
-                gamer.addBalance(-kit.getPrice());
-                if (!kits.hisKits.containsKey(gamer.getName()))
-                    kits.hisKits.put(gamer.getName(), new ArrayList<me.libraryaddict.Hungergames.Types.Kit>());
-                kits.hisKits.get(gamer.getName()).add(kit);
-                new GiveKitThread(gamer.getName(), kit.getName()).start();
-                sender.sendMessage(cm.getCommandBuyKitPurchasedKit());
+                if (!kits.hisKits.containsKey(gamer.getName())) {
+                    sender.sendMessage(cm.getCommandBuyKitKitsNotLoaded());
+                } else {
+                    gamer.addBalance(-kit.getPrice());
+                    kits.hisKits.get(gamer.getName()).add(kit);
+                    new GiveKitThread(gamer.getName(), kit.getName()).start();
+                    sender.sendMessage(cm.getCommandBuyKitPurchasedKit());
+                }
                 return true;
             }
         }
