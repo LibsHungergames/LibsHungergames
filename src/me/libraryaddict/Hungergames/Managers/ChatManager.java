@@ -139,7 +139,8 @@ public class ChatManager {
     private String kickNobodyWonMessage = "Nobody won..\n\nThat could of been you!";
     private String kickSpectatorsDisabled = "Spectators have been disabled!";
     private String killMessageFellToDeath = "%s fell to his death";
-    private String killMessageFormatPlayerKit = "%s(%s)";
+    private String killMessageFormatPlayerKit = ChatColor.RED + "%s" + ChatColor.DARK_RED + "(" + ChatColor.RED + "%s"
+            + ChatColor.DARK_RED + ")";
     private String killMessageKilledByBorder = "%s believed the rumors of a better life beyond the border";
     private String killMessageLeavingGame = "%s was slaughtered for leaving the game";
     private String killMessageNoKit = "None";
