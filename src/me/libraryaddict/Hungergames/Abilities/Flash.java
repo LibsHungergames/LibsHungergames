@@ -31,6 +31,10 @@ public class Flash extends AbilityListener {
     public int maxTeleportDistance = 200;
     public boolean addMoreCooldownForLargeDistances = true;
     public int normalCooldown = 30;
+    public String cooldownMessage = ChatColor.BLUE + "You can use this again in %s seconds!";
+    public String flashItemName = ChatColor.WHITE + "Flash";
+    public int flashOnItemId = Material.REDSTONE_TORCH_ON.getId();
+    public int flashOffItemId = Material.REDSTONE_TORCH_OFF.getId();
 
     public Flash() {
         ignoreBlockTypes.add((byte) 0);
@@ -65,14 +69,14 @@ public class Flash extends AbilityListener {
                             itel.remove();
                             for (ItemStack i : gamer.getPlayer().getInventory().getContents()) {
                                 if (i.equals(item)) {
-                                    i.setType(Material.REDSTONE_TORCH_ON);
+                                    i.setTypeId(flashOnItemId);
                                     carryOn = true;
                                     break;
                                 }
                             }
                         }
                         if (gamer.getPlayer().getItemOnCursor() != null && gamer.getPlayer().getItemOnCursor().equals(item)) {
-                            gamer.getPlayer().getItemOnCursor().setType(Material.REDSTONE_TORCH_ON);
+                            gamer.getPlayer().getItemOnCursor().setTypeId(flashOnItemId);
                             carryOn = true;
                             break;
                         }
@@ -82,7 +86,7 @@ public class Flash extends AbilityListener {
                     for (Item itemEntity : HungergamesApi.getHungergames().world.getEntitiesByClass(Item.class)) {
                         if (itemEntity.getItemStack().equals(item)) {
                             itel.remove();
-                            itemEntity.getItemStack().setType(Material.REDSTONE_TORCH_ON);
+                            itemEntity.getItemStack().setTypeId(flashOnItemId);
                             break;
                         }
                     }
@@ -95,21 +99,21 @@ public class Flash extends AbilityListener {
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (item != null && item.hasItemMeta() && event.getAction().name().contains("RIGHT")) {
-            if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
-                    && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Flash")) {
+            if (isSpecialItem(item, flashItemName)) {
                 event.setCancelled(true);
                 event.getPlayer().updateInventory();
-                if (item.getType() == Material.REDSTONE_TORCH_OFF) {
-                    event.getPlayer().sendMessage(
-                            ChatColor.BLUE + "You can use this again in "
-                                    + (-(HungergamesApi.getHungergames().currentTime - cooldown.get(item))) + " seconds!");
+                if (item.getTypeId() == flashOffItemId) {
+                    event.getPlayer()
+                            .sendMessage(
+                                    String.format(cooldownMessage,
+                                            (-(HungergamesApi.getHungergames().currentTime - cooldown.get(item)))));
                 } else if (item.getType() == Material.REDSTONE_TORCH_ON) {
                     List<Block> b = event.getPlayer().getLastTwoTargetBlocks(ignoreBlockTypes, maxTeleportDistance);
                     if (b.size() > 1 && b.get(1).getType() != Material.AIR) {
                         double dist = event.getPlayer().getLocation().distance(b.get(0).getLocation());
                         if (dist > 2) {
                             Location loc = b.get(0).getLocation().clone().add(0.5, 0.5, 0.5);
-                            item.setType(Material.REDSTONE_TORCH_OFF);
+                            item.setTypeId(flashOnItemId);
                             int hisCooldown = normalCooldown;
                             if (addMoreCooldownForLargeDistances && (dist / 2) > 30)
                                 hisCooldown = (int) (dist / 2);

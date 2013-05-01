@@ -11,6 +11,7 @@ import me.libraryaddict.Hungergames.Types.FakeFurnace;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_5_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -22,6 +23,10 @@ import org.bukkit.inventory.ItemStack;
 public class Crafter extends AbilityListener {
 
     private transient Map<ItemStack, FakeFurnace> furnaces = new HashMap<ItemStack, FakeFurnace>();
+    public String craftingStarItemName = ChatColor.WHITE + "Crafting Star";
+    public String furnacePowderItemName = ChatColor.WHITE + "Furnace Powder";
+    public int furnacePowderItemId = Material.BLAZE_POWDER.getId();
+    public int craftingStarItemId = Material.NETHER_STAR.getId();
 
     public Crafter() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
@@ -35,17 +40,15 @@ public class Crafter extends AbilityListener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && item != null
-                && item.getItemMeta().hasDisplayName()) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
             Player p = event.getPlayer();
-            if (item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Crafting Star")) {
+            if (isSpecialItem(item, craftingStarItemName) && furnacePowderItemId == item.getTypeId()) {
                 p.openWorkbench(null, true);
-            } else if (item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
-                    && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Furnace Powder")) {
+            } else if (isSpecialItem(item, furnacePowderItemName) && furnacePowderItemId == item.getTypeId()) {
                 if (!furnaces.containsKey(item)) {
                     furnaces.put(item, new FakeFurnace());
                 }
-                ((CraftPlayer) event.getPlayer()).getHandle().openFurnace(furnaces.get(item));
+                ((CraftPlayer) p).getHandle().openFurnace(furnaces.get(item));
             }
         }
     }

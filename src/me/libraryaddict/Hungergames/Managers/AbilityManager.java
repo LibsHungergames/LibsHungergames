@@ -20,6 +20,7 @@ public class AbilityManager {
     private HashMap<String, AbilityListener> abilities = new HashMap<String, AbilityListener>();
     private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
     private AbilityConfigManager abilityConfigManager;
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     public AbilityManager(AbilityConfigManager abilityConfigManager) {
         this.abilityConfigManager = abilityConfigManager;
@@ -35,12 +36,11 @@ public class AbilityManager {
      */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
-        Bukkit.getLogger().info(
-                "[Hunger Games] Initializing all classes found in " + plugin.getName() + " in the " + packageName + " package");
+        Bukkit.getLogger().info(String.format(cm.getLoggerLoadAbilitysInPackage(), plugin.getName(), packageName));
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {
-                    Bukkit.getLogger().info("[HungerGames] Found ability " + abilityClass.getSimpleName());
+                    Bukkit.getLogger().info(String.format(cm.getLoggerFoundAbilityInPackage(), abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
                     final boolean modified = abilityListener.load(abilityConfigManager.getConfigSection(abilityClass
                             .getSimpleName()));
@@ -52,7 +52,8 @@ public class AbilityManager {
                     }
                     abilities.put(abilityClass.getSimpleName(), abilityListener);
                 } catch (Exception e) {
-                    System.out.print("Error while loading ability : " + abilityClass.getSimpleName() + ", " + e.getMessage());
+                    System.out.print(String.format(cm.getLoggerErrorWhileLoadingAbility(), abilityClass.getSimpleName(),
+                            e.getMessage()));
                 }
             }
         }
@@ -69,7 +70,7 @@ public class AbilityManager {
      */
     public void addAbility(String name, AbilityListener abilityListener) {
         abilities.put(name, abilityListener);
-        Bukkit.getLogger().info("[HungerGames] Added ability: " + name);
+        Bukkit.getLogger().info(String.format(cm.getLoggerAddAbility(), name));
     }
 
     /**
@@ -111,12 +112,7 @@ public class AbilityManager {
             abilityListener.registerPlayer(player);
         } else
             Bukkit.getLogger().info(
-                    "[HungerGames] Tried to register " + player.getName() + " for the " + abilityName
-                            + " ability but it does not exist.");
+                    String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
         getPlayerAbilities(player.getName()).add(abilityName);
-    }
-
-    public AbilityConfigManager getAbilityConfigManager() {
-        return abilityConfigManager;
     }
 }

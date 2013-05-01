@@ -4,37 +4,36 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
     private Connection con = null;
+    private ChatManager cm = HungergamesApi.getChatManager();
     MySqlManager mysql;
 
     public PlayerJoinThread(MySqlManager mysql) {
         this.mysql = mysql;
     }
 
-    public void SQLdisconnect() {
+    public void mySqlDisconnect() {
         try {
-            System.out.println("[GamerJoinThread] Disconnecting from MySQL database...");
+            System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
             this.con.close();
-        } catch (SQLException ex) {
-            System.err.println("[GamerJoinThread] Error while closing the connection...");
-        } catch (NullPointerException ex) {
-            System.err.println("[GamerJoinThread] Error while closing the connection...");
+        } catch (Exception ex) {
+            System.err.println(String.format(cm.getLoggerMySqlClosingError(), getClass().getSimpleName()));
         }
     }
 
-    public void SQLconnect() {
+    public void mySqlConnect() {
         try {
-            System.out.println("[GamerJoinThread] Connecting to MySQL database...");
+            System.out.println(String.format(cm.getLoggerMySqlConnecting(), getClass().getSimpleName()));
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             String conn = "jdbc:mysql://" + mysql.SQL_HOST/*
                                                            * + ":" +
@@ -42,12 +41,8 @@ public class PlayerJoinThread extends Thread {
                                                            */
                     + "/" + mysql.SQL_DATA;
             con = DriverManager.getConnection(conn, mysql.SQL_USER, mysql.SQL_PASS);
-        } catch (ClassNotFoundException ex) {
-            System.err.println("[GamerJoinThread] No MySQL driver found! " + ex.getMessage());
-        } catch (SQLException ex) {
-            System.err.println("[GamerJoinThread] Error while fetching MySQL connection! " + ex.getMessage());
         } catch (Exception ex) {
-            System.err.println("[GamerJoinThread] Unknown error while fetchting MySQL connection. " + ex.getMessage());
+            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }
         checkTables("HGKits", "CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
                 + "Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL)");
@@ -65,17 +60,15 @@ public class PlayerJoinThread extends Thread {
                 stmt.execute(query);
                 stmt.close();
             }
-        } catch (SQLException ex) {
-            System.err.println("[GamerJoinThread] Error while fetching deal tables: " + ex);
         } catch (Exception ex) {
-            System.err.println("[GamerJoinThread] Unknown error while fetching MySQL connection: " + ex);
+            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName()));
         }
     }
 
     public void run() {
         if (!HungergamesApi.getConfigManager().isMySqlEnabled())
             return;
-        SQLconnect();
+        mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();
         PlayerManager pm = HungergamesApi.getPlayerManager();
         while (true) {
@@ -96,10 +89,8 @@ public class PlayerJoinThread extends Thread {
                     kits.hisKits.put(gamer.getName(), hisKits);
                     r.close();
                     stmt.close();
-                } catch (SQLException ex) {
-                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s kits: " + ex);
-                } catch (NullPointerException ex) {
-                    System.out.println("[GamerJoinThread] Error while fetching " + gamer.getName() + "'s kitss: " + ex);
+                } catch (Exception ex) {
+                    System.out.println(String.format(cm.getLoggerMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));
                 }
             }
             if (pm.loadGamer.peek() == null) {

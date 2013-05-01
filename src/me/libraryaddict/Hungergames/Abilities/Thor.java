@@ -21,12 +21,14 @@ public class Thor extends AbilityListener {
     public int cooldown = 5;
     public boolean doNetherackAndFire = true;
     public boolean protectThorer = true;
+    public String cooldownMessage = ChatColor.RED + "You may not do that at this time";
+    public int thorItemId = Material.WOOD_AXE.getId();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player p = event.getPlayer();
-            if (hasAbility(p) && event.getItem() != null && event.getItem().getType() == Material.WOOD_AXE) {
+            if (hasAbility(p) && event.getItem() != null && event.getItem().getTypeId() == thorItemId) {
                 if (!lastThored.containsKey(p.getName()) || lastThored.get(p.getName()) < System.currentTimeMillis()) {
                     lastThored.put(p.getName(), System.currentTimeMillis() + (cooldown * 1000));
                     if (doNetherackAndFire) {
@@ -40,7 +42,7 @@ public class Thor extends AbilityListener {
                     if (protectThorer)
                         strike.setMetadata("DontHurt", new FixedMetadataValue(HungergamesApi.getHungergames(), p.getName()));
                 } else
-                    p.sendMessage(ChatColor.RED + "You may not do that at this time");
+                    p.sendMessage(cooldownMessage);
             }
         }
     }

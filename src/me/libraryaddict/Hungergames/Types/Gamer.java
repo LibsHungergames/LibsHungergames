@@ -30,25 +30,19 @@ public class Gamer {
      */
     private boolean seeInvis = true;
     private boolean canRide = false;
-    private boolean vip = false;
     private long cooldown = 0;
     private static Economy economy = null;
     private static PlayerManager pm = HungergamesApi.getPlayerManager();
     private static Hungergames hg = HungergamesApi.getHungergames();
     private int kills = 0;
 
-    public Gamer(Player player, boolean isVip) {
-        vip = isVip;
+    public Gamer(Player player) {
         this.player = player;
         if (hg.currentTime >= 0) {
             seeInvis = false;
             spectating = true;
         }
         setupEconomy();
-    }
-
-    public boolean isVip() {
-        return vip;
     }
 
     private void setupEconomy() {

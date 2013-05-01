@@ -27,6 +27,12 @@ public class Pickpocket extends AbilityListener {
     public int cooldown = 30;
     public int maxItems = 4;
     public boolean stealHotbar = false;
+    public String thievingStickItemName = ChatColor.WHITE + "Thieving Stick";
+    public String cooldownThieving = ChatColor.BLUE + "You may not pickpocket again for %s seconds!";
+    public String attemptedToStealHotbar = ChatColor.BLUE + "Thats their hotbar!";
+    public String pickpocketedMax = ChatColor.BLUE + "You have pickpocketed your max!";
+    public String attemptedToPickpocketWhilePickpocketing = ChatColor.BLUE + "Cannot touch that!";
+    public int thievingStickItemId = Material.BLAZE_ROD.getId();
 
     // Pickpocket. Multiple people can pickpocket at the time.
     // Store itemstack. Its used to measure the cooldown and items you can
@@ -43,16 +49,14 @@ public class Pickpocket extends AbilityListener {
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
         ItemStack item = event.getPlayer().getItemInHand();
-        if (event.getRightClicked() instanceof Player && item != null && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().startsWith(ChatColor.WHITE + "")
-                && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Thieving Stick")) {
+        if (event.getRightClicked() instanceof Player && isSpecialItem(item, thievingStickItemName)
+                && item.getTypeId() == thievingStickItemId) {
             Pick pick = new Pick();
             if (pickpockets.containsKey(item))
                 pick = pickpockets.get(item);
             if (pick.lastUsed > System.currentTimeMillis()) {
                 event.getPlayer().sendMessage(
-                        ChatColor.BLUE + "You may not pickpocket again for "
-                                + (-((System.currentTimeMillis() - pick.lastUsed) / 1000)) + " seconds!");
+                        String.format(cooldownThieving, +(-((System.currentTimeMillis() - pick.lastUsed) / 1000))));
             } else {
                 pickpockets.put(item, pick);
                 pick.lastUsed = System.currentTimeMillis() + (cooldown * 1000);
@@ -94,7 +98,7 @@ public class Pickpocket extends AbilityListener {
         if (event.getCurrentItem() != null && pickpockets.containsKey(event.getCurrentItem())
                 && pickpockets.get(event.getCurrentItem()).pickpocket != null) {
             event.setCancelled(true);
-            ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "You cannot touch that!");
+            ((Player) event.getWhoClicked()).sendMessage(attemptedToPickpocketWhilePickpocketing);
             ((Player) event.getWhoClicked()).updateInventory();
         }
         List<Player> peverts = this.getPerverts(event.getInventory());
@@ -107,12 +111,12 @@ public class Pickpocket extends AbilityListener {
                             pick.itemsStolen++;
                     } else {
                         event.setCancelled(true);
-                        ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "Thats their hotbar!");
+                        ((Player) event.getWhoClicked()).sendMessage(attemptedToStealHotbar);
                         ((Player) event.getWhoClicked()).updateInventory();
                     }
                 } else {
                     event.setCancelled(true);
-                    ((Player) event.getWhoClicked()).sendMessage(ChatColor.BLUE + "You have pickpocketed your max!");
+                    ((Player) event.getWhoClicked()).sendMessage(pickpocketedMax);
                     ((Player) event.getWhoClicked()).updateInventory();
                 }
             }

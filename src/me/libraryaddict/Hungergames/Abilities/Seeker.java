@@ -21,13 +21,16 @@ public class Seeker extends AbilityListener {
     public int xrayRadius = 10;
     public boolean doCircle = true;
     public int cooldown = 120;
+    public String seekerItemName = ChatColor.WHITE + "Ghost Eye";
+    private String usedSeekerEye = ChatColor.BLUE
+            + "You body slam the ghost eye into your socket. Not gonna recover from that for a few minutes..";
+    private String cooldownMessage = ChatColor.BLUE + "The ghost eye will be usable in %s seconds!";
+    public int seekerItemId = Material.EYE_OF_ENDER.getId();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().startsWith("" + ChatColor.WHITE)
-                && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Ghost Eye")) {
+        if (isSpecialItem(item, seekerItemName) && item.getTypeId() == seekerItemId) {
             event.setCancelled(true);
             if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
                 return;
@@ -36,10 +39,7 @@ public class Seeker extends AbilityListener {
                 last = lastClicked.get(item);
             if ((cooldown * 1000) - System.currentTimeMillis() > last) {
                 lastClicked.put(item, System.currentTimeMillis());
-                event.getPlayer()
-                        .sendMessage(
-                                ChatColor.BLUE
-                                        + "You body slam the ghost eye into your socket. Not gonna recover from that for a few minutes..");
+                event.getPlayer().sendMessage(usedSeekerEye);
                 // Turn into glass
                 Location beginning = event.getClickedBlock().getLocation().clone().add(0.5, 0.5, 0.5);
                 int dist = (doCircle ? xrayRadius * 2 : xrayRadius);
@@ -54,8 +54,7 @@ public class Seeker extends AbilityListener {
                 }
             } else {
                 event.getPlayer().sendMessage(
-                        ChatColor.BLUE + "The ghost eye will be usable in "
-                                + (((cooldown * 1000) - System.currentTimeMillis() - last) / 1000) + " seconds");
+                        String.format(cooldownMessage, (((cooldown * 1000) - System.currentTimeMillis() - last) / 1000)));
             }
         }
     }

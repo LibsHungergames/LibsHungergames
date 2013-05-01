@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.Iterator;
 
+import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Gravedigger extends AbilityListener {
@@ -33,7 +33,7 @@ public class Gravedigger extends AbilityListener {
             Iterator<ItemStack> itel = event.getDrops().iterator();
             while (itel.hasNext()) {
                 ItemStack item = itel.next();
-                if (item == null || item.getType() == Material.AIR || item.containsEnchantment(Enchants.UNLOOTABLE))
+                if (item == null || item.getType() == Material.AIR || item.containsEnchantment(EnchantmentManager.UNLOOTABLE))
                     continue;
                 if (HungergamesApi.getKitManager().canFit(inv, new ItemStack[] { item }))
                     inv.addItem(item);

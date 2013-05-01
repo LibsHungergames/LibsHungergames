@@ -15,7 +15,7 @@ public class GiveKitThread extends Thread {
         playerName = player;
     }
 
-    public void SQLdisconnect() {
+    public void mySqlDisconnect() {
         try {
             this.con.close();
         } catch (SQLException ex) {
@@ -23,7 +23,7 @@ public class GiveKitThread extends Thread {
         }
     }
 
-    public void SQLconnect() {
+    public void mySqlConnect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             String conn = "jdbc:mysql://" + HungergamesApi.getMySqlManager().SQL_HOST + "/"
@@ -38,7 +38,7 @@ public class GiveKitThread extends Thread {
     public void run() {
         if (!HungergamesApi.getConfigManager().isMySqlEnabled())
             return;
-        SQLconnect();
+        mySqlConnect();
         try {
             Statement stmt = con.createStatement();
             stmt.execute("INSERT INTO HGKits (Name, KitName) VALUES ('" + playerName + "', '" + kitName + "')");
@@ -46,6 +46,6 @@ public class GiveKitThread extends Thread {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        SQLdisconnect();
+        mySqlDisconnect();
     }
 }

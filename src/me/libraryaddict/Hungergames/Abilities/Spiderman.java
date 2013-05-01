@@ -27,6 +27,7 @@ public class Spiderman extends AbilityListener {
     private HashMap<String, ArrayList<Long>> cooldownMap = new HashMap<String, ArrayList<Long>>();
     public int cooldown = 30;
     public int maxBallsThrown = 3;
+    public String cooldownMessage = ChatColor.BLUE + "Your web shooters havn't refilled yet! Wait %s seconds!";
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
@@ -46,8 +47,8 @@ public class Spiderman extends AbilityListener {
                     if (cooldowns.get(0) >= System.currentTimeMillis()) {
                         event.setCancelled(true);
                         p.updateInventory();
-                        p.sendMessage(ChatColor.BLUE + "Your web shooters havn't refilled yet! Wait "
-                                + (((cooldowns.get(0) - System.currentTimeMillis()) / 1000) + 1) + " seconds!");
+                        p.sendMessage(String.format(cooldownMessage,
+                                (((cooldowns.get(0) - System.currentTimeMillis()) / 1000) + 1)));
                         HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.SNOW_BALL));
                         return;
                     }

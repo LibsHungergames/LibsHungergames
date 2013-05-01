@@ -1,7 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -25,16 +25,18 @@ public class Endermage extends AbilityListener {
     public int invincibleTicks = 100;
     public boolean doInstantKO = true;
     public int instanceKOExpires = 5;
+    public String endermagePortalName = ChatColor.WHITE + "Endermage Portal";
+    public int endermagePortalId = Material.ENDER_PORTAL.getId();
+    public int endermagePortalBlockId = Material.ENDER_PORTAL.getId();
 
     @EventHandler
     public void onPlace(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && item != null && item.getType() == Material.ENDER_PORTAL
-                && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Endermage Portal")) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && item != null && item.getTypeId() == endermagePortalId
+                && isSpecialItem(item, endermagePortalName)) {
             event.setCancelled(true);
             final Block b = event.getClickedBlock();
-            if (b.getType() == Material.ENDER_PORTAL)
+            if (b.getTypeId() == endermagePortalBlockId)
                 return;
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
@@ -42,7 +44,7 @@ public class Endermage extends AbilityListener {
             final Location portal = b.getLocation().clone().add(0.5, 0.5, 0.5);
             final Material material = b.getType();
             final byte dataValue = b.getData();
-            portal.getBlock().setType(Material.ENDER_PORTAL);
+            portal.getBlock().setTypeId(endermagePortalBlockId);
             final Gamer mager = HungergamesApi.getPlayerManager().getGamer(event.getPlayer());
             for (int i = 0; i <= 5; i++) {
                 final int no = i;
@@ -71,12 +73,12 @@ public class Endermage extends AbilityListener {
                         if (no == 5) {
                             portal.getBlock().setTypeIdAndData(material.getId(), dataValue, true);
                             if (mager.isAlive()) {
-                                ItemStack item = new ItemStack(Material.ENDER_PORTAL);
+                                ItemStack item = new ItemStack(endermagePortalId);
                                 ItemMeta meta = item.getItemMeta();
-                                meta.setDisplayName(ChatColor.WHITE + "Endermage Portal");
+                                meta.setDisplayName(endermagePortalName);
                                 item.setItemMeta(meta);
-                                item.addEnchantment(Enchants.UNLOOTABLE, 1);
-                                Enchants.updateEnchants(item);
+                                item.addEnchantment(EnchantmentManager.UNLOOTABLE, 1);
+                                EnchantmentManager.updateEnchants(item);
                                 HungergamesApi.getKitManager().addItem(mager.getPlayer(), item);
                             }
                         }

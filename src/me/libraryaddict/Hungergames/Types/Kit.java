@@ -21,7 +21,7 @@ public class Kit {
     private ItemStack[] items;
     private List<String> players = new ArrayList<String>();
     private String permission;
-    private String description = "No description was provided for this kit";
+    private String description = HungergamesApi.getChatManager().getKitDescriptionDefault();
     private String[] abilities;
     private boolean isFree = false;
     private int price = -1;

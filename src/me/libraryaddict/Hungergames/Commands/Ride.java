@@ -1,11 +1,11 @@
 package me.libraryaddict.Hungergames.Commands;
 
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,10 +13,11 @@ import org.bukkit.entity.Player;
 
 public class Ride implements CommandExecutor {
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
-        if (args.length == 1 && args[0].equals("rideall") && sender.isOp()) {
+        if (args.length == 1 && args[0].equalsIgnoreCase(cm.getCommandRideNameOfRideall()) && sender.isOp()) {
             Player p = Bukkit.getPlayerExact(sender.getName());
             Player last = p;
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -26,10 +27,10 @@ public class Ride implements CommandExecutor {
                     last = player;
                 }
             }
-            Bukkit.broadcastMessage(ChatColor.RED + "Giddy up horsie!");
+            Bukkit.broadcastMessage(cm.getCommandRideRideAll());
         } else {
             gamer.setRiding(!gamer.canRide());
-            sender.sendMessage(ChatColor.GREEN + "Toggled riding to " + gamer.canRide() + "! Yee-haw!");
+            sender.sendMessage(String.format(cm.getCommandRideToggle(), gamer.canRide()));
         }
         return true;
     }

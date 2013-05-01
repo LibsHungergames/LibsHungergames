@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
+import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -29,6 +29,8 @@ public class Array extends AbilityListener {
     private transient HashMap<HealArray, Player> beacons = new HashMap<HealArray, Player>();
     private transient PlayerManager pm = HungergamesApi.getPlayerManager();
     public int arrayExpireTime = 30;
+    public String arrayItemName = ChatColor.WHITE + "Array";
+    public int arrayBeaconId = Material.BEACON.getId();
 
     class HealArray {
         Block[] blocks;
@@ -37,8 +39,7 @@ public class Array extends AbilityListener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.BEACON && event.getItemInHand().getItemMeta().hasDisplayName()
-                && ChatColor.stripColor(event.getItemInHand().getItemMeta().getDisplayName()).equals("Array")) {
+        if (isSpecialItem(event.getItemInHand(), arrayItemName) && event.getItemInHand().getTypeId() == arrayBeaconId) {
             // Create beacon
             Block b = event.getBlock();
             HealArray heal = new HealArray();
@@ -74,12 +75,12 @@ public class Array extends AbilityListener {
             HealArray heal = itel.next();
             Player player = beacons.get(heal);
             if (heal.expires < System.currentTimeMillis()) {
-                ItemStack item = new ItemStack(Material.BEACON);
+                ItemStack item = new ItemStack(arrayBeaconId);
                 ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(ChatColor.WHITE + "Array");
+                meta.setDisplayName(arrayItemName);
                 item.setItemMeta(meta);
-                item.addEnchantment(Enchants.UNLOOTABLE, 1);
-                Enchants.updateEnchants(item);
+                item.addEnchantment(EnchantmentManager.UNLOOTABLE, 1);
+                EnchantmentManager.updateEnchants(item);
                 HungergamesApi.getKitManager().addItem(player, item);
                 for (Block b : heal.blocks)
                     b.setType(Material.AIR);

@@ -23,10 +23,13 @@ public class Chameleon extends AbilityListener {
     public boolean breakDisguiseOnAttacked = true;
     public boolean disguiseAsAnimal = true;
     public boolean disguiseAsMonster = true;
+    public String chameleonDisguiseBroken = ChatColor.GREEN + "Your disguise was broken!";
+    public String chameleonBreakDisguise = ChatColor.GREEN + "You broke out of your disguise!";
+    public String chameleonNowDisguised = ChatColor.GREEN + "Now disguised as a %s!";
 
     public Chameleon() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
-            throw new Exception("iDisguise not found");
+            throw new Exception(String.format(HungergamesApi.getChatManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
     }
 
     @EventHandler
@@ -40,7 +43,7 @@ public class Chameleon extends AbilityListener {
             Player p = (Player) event.getEntity();
             if (DisguiseAPI.isDisguised(p)) {
                 DisguiseAPI.undisguiseToAll(p);
-                p.sendMessage(ChatColor.GREEN + "Your disguise was broken!");
+                p.sendMessage(chameleonDisguiseBroken);
             }
         }
         if (isChameleon(damager)) {
@@ -48,7 +51,7 @@ public class Chameleon extends AbilityListener {
             if (event.getEntity() instanceof Player && DisguiseAPI.isDisguised(p)) {
                 if (breakDisguiseOnAttackPlayer) {
                     DisguiseAPI.undisguiseToAll(p);
-                    p.sendMessage(ChatColor.GREEN + "You broke out of your disguise!");
+                    p.sendMessage(chameleonBreakDisguise);
                 }
             } else
                 disguise(event.getEntity(), p);
@@ -72,8 +75,8 @@ public class Chameleon extends AbilityListener {
                         return;
                     DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
                 }
-                p.sendMessage(ChatColor.GREEN + "Now disguised as a "
-                        + HungergamesApi.getKitManager().toReadable(entity.getType().getName()) + "!");
+                p.sendMessage(String.format(chameleonNowDisguised,
+                        HungergamesApi.getKitManager().toReadable(entity.getType().getName())));
             }
         }
     }

@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import me.libraryaddict.Hungergames.Commands.*;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
+import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.GeneralListener;
@@ -67,17 +68,18 @@ public class Hungergames extends JavaPlugin {
     private ConfigManager config;
     public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
     private PlayerListener playerListener;
+    private ChatManager cm;
 
     public void onEnable() {
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
             if (metrics.isOptOut())
-                this.getLogger().log(Level.INFO,
-                        "Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..");
+                this.getLogger().log(Level.INFO, cm.getLoggerMetricsMessage());
         } catch (IOException e) {
         }
         HungergamesApi.init(this);
+        cm = HungergamesApi.getChatManager();
         pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
@@ -99,7 +101,7 @@ public class Hungergames extends JavaPlugin {
             kitList.add(item);
         }
         String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
-        HungergamesApi.getKitSelector().createInventory(ChatColor.DARK_RED + "Select kit", kitList);
+        HungergamesApi.getKitSelector().createInventory(cm.getInventoryWindowSelectKitTitle(), kitList);
         if (getConfig().getBoolean("DeleteWorld", true))
             FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
                     + worldName));
@@ -132,9 +134,9 @@ public class Hungergames extends JavaPlugin {
                     } catch (IOException e) {
 
                     }
-                    System.out.print("Successfully loaded map " + toLoad.getName());
+                    System.out.print(cm.getLoggerSucessfullyLoadedMap());
                 } else
-                    System.out.print("There are no maps to be found in " + path.toString());
+                    System.out.print(String.format(cm.getLoggerNoMapsFound(), path.toString()));
             }
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
@@ -172,7 +174,6 @@ public class Hungergames extends JavaPlugin {
         getCommand("kit").setExecutor(new Kit());
         getCommand("kitinfo").setExecutor(new KitInfo());
         getCommand("kititems").setExecutor(new KitItems());
-        // getCommand("track").setExecutor(new Track());
         getCommand("feast").setExecutor(new Feast());
         getCommand("chunk").setExecutor(new Chunk());
         getCommand("kill").setExecutor(new Kill());
@@ -245,7 +246,7 @@ public class Hungergames extends JavaPlugin {
         if (!hurt)
             hurt = Math.abs(fromSpawn) >= border;
         if (!loc.equals(tpTo))
-            p.sendMessage(ChatColor.YELLOW + "You are approaching the border!");
+            p.sendMessage(cm.getMessagePlayerApproachingBorder());
         if (hurt) {
             if (gamer.isAlive()) {
                 // Damage and potentially kill.
@@ -256,8 +257,8 @@ public class Hungergames extends JavaPlugin {
                     List<ItemStack> list = new ArrayList<ItemStack>();
                     for (ItemStack item : p.getInventory())
                         list.add(item);
-                    pm.killPlayer(gamer, null, loc, gamer.getInventory(), gamer.getName()
-                            + " believed the rumors of a better life beyond the border");
+                    pm.killPlayer(gamer, null, loc, gamer.getInventory(),
+                            String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
                 }
             } else
                 gamer.getPlayer().teleport(tpTo);
@@ -271,25 +272,25 @@ public class Hungergames extends JavaPlugin {
         }
         if (currentTime < 0) {
             world.setTime(0);
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in", -currentTime);
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn(), -currentTime);
             if (config.displayMessages())
                 if (config.advertiseGameStarting(currentTime))
-                    Bukkit.broadcastMessage(ChatColor.RED + "The game will start in " + returnTime(currentTime));
+                    Bukkit.broadcastMessage(String.format(cm.getBroadcastGameStartingIn(), returnTime(currentTime)));
         } else if (currentTime == 0) {
             if (pm.getGamers().size() < config.getMinPlayers()) {
                 currentTime = -90;
-                Bukkit.broadcastMessage(ChatColor.RED + "You need more people!");
+                Bukkit.broadcastMessage(cm.getBroadcastNotEnoughPlayers());
                 return;
             }
             startGame();
             return;
         } else if (currentTime == config.getTimeFeastStarts()) {
-            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in");
+            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn());
             HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
-            Bukkit.broadcastMessage(ChatColor.RED + "The feast has begun!");
+            Bukkit.broadcastMessage(cm.getBroadcastFeastBegun());
             ScoreboardManager.updateStage();
         } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Feast in", config.feastStartsIn());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn(), config.feastStartsIn());
             if (config.advertiseFeast(currentTime)) {
                 if (feastLoc.getBlockY() == 0) {
                     feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
@@ -297,25 +298,25 @@ public class Hungergames extends JavaPlugin {
                     HungergamesApi.getFeastManager().generateSpawn(feastLoc, feastHeight, config.getFeastSize());
                     ScoreboardManager.updateStage();
                 }
-                Bukkit.broadcastMessage(ChatColor.RED + "The feast will begin at (" + feastLoc.getBlockX() + ", "
-                        + feastLoc.getBlockY() + ", " + feastLoc.getBlockZ() + ") in " + returnTime(config.feastStartsIn()) + "!"
-                        + (config.feastStartsIn() > 10 ? "\nUse /feast to fix your compass on it!" : ""));
+                Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),
+                        feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn())));
+                if (config.feastStartsIn() > 10)
+                    Bukkit.broadcastMessage(cm.getBroadcastFeastStartingCompassMessage());
             }
         } else if (config.doesBorderCloseIn() && currentTime > config.getTimeFeastStarts()) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "BorderSize: ",
-                    (int) config.getBorderSize());
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());
         }
         if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible",
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
                     config.invincibilityWearsOffIn());
             if (currentTime == config.getInvincibilityTime()) {
-                Bukkit.broadcastMessage(ChatColor.RED + "Invincibility has worn off!");
+                Bukkit.broadcastMessage(cm.getBroadcastInvincibilityWornOff());
                 ScoreboardManager.updateStage();
-                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible");
+                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
             } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
-                Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in "
-                        + returnTime(config.invincibilityWearsOffIn()) + "!");
+                Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
+                        returnTime(config.invincibilityWearsOffIn()) + "!"));
             }
 
         }
@@ -324,15 +325,15 @@ public class Hungergames extends JavaPlugin {
     public void startGame() {
         currentTime = 0;
         ScoreboardManager.updateStage();
-        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Starting in");
+        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
         if (config.getInvincibilityTime() > 0)
-            ScoreboardManager
-                    .makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GOLD + "Invincible", config.getInvincibilityTime());
-        Bukkit.broadcastMessage(ChatColor.RED + "The game has started!");
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
+                    config.getInvincibilityTime());
+        Bukkit.broadcastMessage(cm.getBroadcastGameStartedMessage());
         if (config.getInvincibilityTime() > 0 && config.displayMessages())
-            Bukkit.broadcastMessage(ChatColor.RED + "Invincibility wears off in " + returnTime(config.getInvincibilityTime())
-                    + "!");
+            Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
+                    returnTime(config.getInvincibilityTime())));
         for (Gamer gamer : pm.getGamers()) {
             gamer.setRiding(false);
             gamer.clearInventory();
@@ -368,22 +369,27 @@ public class Hungergames extends JavaPlugin {
     public String returnTime(Integer i) {
         i = Math.abs(i);
         int remainder = i % 3600, minutes = remainder / 60, seconds = remainder % 60;
-        String time = "";
-        if (minutes > 0) {
-            time += minutes + " minute";
-            if (minutes > 1)
-                time += "s";
+        if (seconds == 0 && minutes == 0)
+            return cm.getTimeFormatNoTime();
+        if (minutes == 0) {
+            if (seconds == 1)
+                return String.format(cm.getTimeFormatSecond(), seconds);
+            return String.format(cm.getTimeFormatSeconds(), seconds);
         }
-        if (seconds > 0) {
-            if (minutes > 0)
-                time += ", ";
-            time += seconds + " second";
-            if (seconds > 1)
-                time += "s";
+        if (seconds == 0) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatMinute(), minutes);
+            return String.format(cm.getTimeFormatMinutes(), minutes);
         }
-        if (time.equals(""))
-            time = "no time at all";
-        return time;
+        if (seconds == 1) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatSecondAndMinute(), minutes, seconds);
+            return String.format(cm.getTimeFormatSecondAndMinutes(), minutes, seconds);
+        }
+        if (minutes == 1) {
+            return String.format(cm.getTimeFormatSecondsAndMinute(), minutes, seconds);
+        }
+        return String.format(cm.getTimeFormatSecondsAndMinutes(), minutes, seconds);
     }
 
     public boolean isNumeric(String str) {
@@ -401,18 +407,19 @@ public class Hungergames extends JavaPlugin {
             if (aliveGamers.size() == 1) {
                 doSeconds = false;
                 final Gamer winner = aliveGamers.get(0);
+                Bukkit.getPluginManager().callEvent(new PlayerWinEvent(winner));
                 int reward = getPrize(1);
                 if (reward > 0)
                     winner.addBalance(reward);
                 winner.getPlayer().setAllowFlight(true);
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
-                        Bukkit.broadcastMessage(ChatColor.RED + winner.getName() + " won!");
+                        Bukkit.broadcastMessage(String.format(cm.getBroadcastWinnerWon(), winner.getName()));
                     }
                 }, 0, config.getWinnerBroadcastDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
-                        String kick = config.getKickMessage().replace("%winner%", winner.getName()).replace("\\n", "\n");
+                        String kick = String.format(cm.getKickMessageWon(), winner.getName());
                         for (Player p : Bukkit.getOnlinePlayers())
                             p.kickPlayer(kick);
                         shutdown();
@@ -421,7 +428,7 @@ public class Hungergames extends JavaPlugin {
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
                 for (Player p : Bukkit.getOnlinePlayers())
-                    p.kickPlayer("Nobody won..\n\nThat could of been you!");
+                    p.kickPlayer(cm.getKickNobodyWonMessage());
                 shutdown();
             }
         }
@@ -429,31 +436,31 @@ public class Hungergames extends JavaPlugin {
 
     public void onDisable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer("The game was shut down by a admin.");
+            p.kickPlayer(cm.getKickGameShutdownUnexpected());
             PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
             playerListener.onQuit(event);
         }
         if (!config.isMySqlEnabled())
             return;
         while (pm.loadGamer.size() > 0) {
-            System.out.print("Waiting for load gamer to complete, " + pm.loadGamer.size() + " left!");
+            System.out.print(String.format(cm.getLoggerWaitingForLoadGamerToComplete(), pm.loadGamer.size()));
             try {
                 Thread.sleep(1000);
             } catch (Exception ex) {
 
             }
         }
-        HungergamesApi.getMySqlManager().getPlayerJoinThread().SQLdisconnect();
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
 
     public void shutdown() {
-        getLogger().log(Level.INFO, "Hungergames is now shutting the server down!");
+        getLogger().log(Level.INFO, cm.getLoggerShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled())
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
         else
-            getLogger().log(Level.SEVERE, "Shutdown event was cancelled by some plugin");
+            getLogger().log(Level.SEVERE, cm.getLoggerShutdownCancelled());
     }
 }

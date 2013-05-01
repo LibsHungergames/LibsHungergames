@@ -25,29 +25,27 @@ public class Backpacker extends AbilityListener {
     private transient HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
     public int backpackItem = Material.ENDER_CHEST.getId();
     public int backpackInventoryRows = 6;
+    public String backPackItemDescription = ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC
+            + "Double click this chest to open your backpack!";
+    public String backPackItemName = ChatColor.LIGHT_PURPLE + "Backpack";
 
     @Override
     public void registerPlayer(Player p) {
         super.registerPlayer(p);
         ItemStack item = new ItemStack(backpackItem);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Backpack");
+        meta.setDisplayName(backPackItemName);
         List<String> lore = new ArrayList<String>();
-        lore.add(ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC + "Double click this chest to open your backpack!");
+        lore.add(backPackItemDescription);
         meta.setLore(lore);
         item.setItemMeta(meta);
-        backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, "Backpack"));
+        backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, backPackItemName));
         p.getInventory().setItem(9, item);
-    }
-
-    private boolean isBackpack(ItemStack item) {
-        return item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "Backpack");
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (isBackpack(event.getCurrentItem())) {
+        if (isSpecialItem(event.getCurrentItem(), backPackItemName) && event.getCurrentItem().getTypeId() == backpackItem) {
             event.setCancelled(true);
             final Player p = (Player) event.getWhoClicked();
             if (chestClick.containsKey(p) && chestClick.get(p) > System.currentTimeMillis() - 1000) {
@@ -71,11 +69,13 @@ public class Backpacker extends AbilityListener {
         Player p = event.getKilled().getPlayer();
         chestClick.remove(event.getKilled().getPlayer());
         Iterator<ItemStack> itel = event.getDrops().iterator();
-        while (itel.hasNext())
-            if (isBackpack(itel.next())) {
+        while (itel.hasNext()) {
+            ItemStack item = itel.next();
+            if (isSpecialItem(item, backPackItemName) && item.getTypeId() == backpackItem) {
                 itel.remove();
                 break;
             }
+        }
         if (backpack.containsKey(p)) {
             for (ItemStack item : backpack.remove(p)) {
                 if (item == null || item.getType() == Material.AIR)

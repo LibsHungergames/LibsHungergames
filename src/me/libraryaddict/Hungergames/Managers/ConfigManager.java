@@ -7,7 +7,6 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -29,14 +28,10 @@ public class ConfigManager {
     private int chestLayers;
     private boolean mushroomStew;
     private int mushroomStewRestores;
-    private String gameStartingMotd;
-    private String gameStartedMotd;
-    private String kickMessage;
     private int minPlayers;
     private boolean fireSpread;
     private int wonBroadcastsDelay;
     private int gameShutdownDelay;
-    private boolean shortenTime;
     private boolean displayMessages;
     private boolean displayScoreboards;
     private boolean mysqlEnabled;
@@ -79,22 +74,6 @@ public class ConfigManager {
 
     /**
      * 
-     * @return Whats the motd the players see before the game starts
-     */
-    public String getGameStartingMotd() {
-        return gameStartingMotd;
-    }
-
-    /**
-     * 
-     * @return Whats the motd they see when the game started
-     */
-    public String getGameStartedMotd() {
-        return gameStartedMotd;
-    }
-
-    /**
-     * 
      * @return How many players are required to start the game
      */
     public int getMinPlayers() {
@@ -106,6 +85,7 @@ public class ConfigManager {
      */
     public void loadConfig() {
         hg.saveDefaultConfig();
+        final ChatManager cm = HungergamesApi.getChatManager();
         if (Bukkit.getServer().getAllowEnd() && hg.getConfig().getBoolean("DisableEnd", true)) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
             config.set("settings.allow-end", false);
@@ -114,15 +94,15 @@ public class ConfigManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Disabled the end");
+            System.out.println(cm.getLoggerDisabledEnd());
         }
         if (hg.getServer().getAllowNether() && hg.getConfig().getBoolean("DisableNether", true)) {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("allow-nether", false);
-            System.out.println("Disabled the nether");
+            System.out.println(cm.getLoggerDisabledNether());
         }
         if (hg.getServer().getSpawnRadius() > 0 && hg.getConfig().getBoolean("ChangeSpawnLimit", true)) {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
-            System.out.println("Changed spawn radius to 0");
+            System.out.println(cm.getLoggerChangedSpawnRadius());
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
@@ -130,30 +110,29 @@ public class ConfigManager {
                     if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
                         iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
                         FileConfiguration config = disguise.getConfig();
-                        config.set("save-disguises", false);
-                        config.set("undisguise-on-hit", false);
-                        try {
-                            config.save(new File("plugins/iDisguise/Config.yml"));
-                        } catch (IOException e) {
-                            System.out.print("Failed to change iDisguise config");
+                        if (config.getBoolean("save-disguises") || config.getBoolean("undisguise-on-hit")) {
+                            config.set("save-disguises", false);
+                            config.set("undisguise-on-hit", false);
+                            try {
+                                config.save(new File("plugins/iDisguise/Config.yml"));
+                                disguise.config.loadConfig();
+                                System.out.print(cm.getLoggerChangedIDisguiseConfig());
+                            } catch (IOException e) {
+                                System.out.print(cm.getLoggerFailedToChangIDisguiseConfig());
+                            }
                         }
-                        disguise.config.loadConfig();
                     }
                 }
             }
         });
         hg.currentTime = -Math.abs(hg.getConfig().getInt("Countdown", 270));
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
-        shortenTime = hg.getConfig().getBoolean("ShortenTime", false);
         displayScoreboards = hg.getConfig().getBoolean("Scoreboards", false);
         displayMessages = hg.getConfig().getBoolean("Messages", true);
-        shortenTime = hg.getConfig().getBoolean("ShortenTime", false);
         minPlayers = hg.getConfig().getInt("MinPlayers", 2);
         fireSpread = hg.getConfig().getBoolean("DisableFireSpread", false);
         wonBroadcastsDelay = hg.getConfig().getInt("WinnerBroadcastingDelay");
         gameShutdownDelay = hg.getConfig().getInt("GameShutdownDelay");
-        kickMessage = ChatColor.translateAlternateColorCodes('&',
-                hg.getConfig().getString("KickMessage", "&6%winner% won!\n\nPlugin provided by libraryaddict"));
         feastSize = hg.getConfig().getInt("FeastSize", 20);
         invincibility = hg.getConfig().getInt("Invincibility", 120);
         border = hg.getConfig().getInt("BorderSize", 500);
@@ -165,10 +144,6 @@ public class ConfigManager {
         spectators = hg.getConfig().getBoolean("Spectators", true);
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
         mushroomStewRestores = hg.getConfig().getInt("MushroomStewRestores", 5);
-        gameStartingMotd = ChatColor.translateAlternateColorCodes('&',
-                hg.getConfig().getString("GameStartingMotd", "&2Game starting in %time%."));
-        gameStartedMotd = ChatColor.translateAlternateColorCodes('&',
-                hg.getConfig().getString("GameStartedMotd", "&4Game in progress."));
         kitSelector = hg.getConfig().getBoolean("UseKitSelector", true);
         feastTnt = hg.getConfig().getBoolean("FeastTnt", true);
         feastGround = parseItem(hg.getConfig().getString("FeastGround"));
@@ -482,14 +457,6 @@ public class ConfigManager {
 
     /**
      * 
-     * @return Should the motd shorten seconds to secs and minutes to mins
-     */
-    public boolean shortenTime() {
-        return shortenTime;
-    }
-
-    /**
-     * 
      * @return How much delay before crowing the name of the winner?
      */
     public int getWinnerBroadcastDelay() {
@@ -502,14 +469,6 @@ public class ConfigManager {
      */
     public int getGameShutdownDelay() {
         return gameShutdownDelay;
-    }
-
-    /**
-     * 
-     * @return What message to kick them with?
-     */
-    public String getKickMessage() {
-        return kickMessage;
     }
 
     /**

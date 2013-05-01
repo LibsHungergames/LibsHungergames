@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Bukkit;
@@ -30,17 +29,16 @@ import org.bukkit.util.Vector;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class PlayerManager {
 
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
-    public ConcurrentHashMap<String, Long> vips = new ConcurrentHashMap<String, Long>();
     public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
     public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
     Hungergames hg = HungergamesApi.getHungergames();
+    ChatManager cm = HungergamesApi.getChatManager();
     KitManager kits = HungergamesApi.getKitManager();
 
     public synchronized Gamer getGamer(Entity entity) {
@@ -58,7 +56,7 @@ public class PlayerManager {
     }
 
     public Gamer registerGamer(Player p) {
-        Gamer gamer = new Gamer(p, (p.isOp() || vips.contains(p.getName())));
+        Gamer gamer = new Gamer(p);
         gamers.add(gamer);
         gamer.clearInventory();
         return gamer;
@@ -141,6 +139,13 @@ public class PlayerManager {
         manageDeath(event);
     }
 
+    private String formatDeathMessage(String deathMessage, String name) {
+        String kitName = cm.getKillMessageNoKit();
+        if (kits.getKitByPlayer(name) != null)
+            kitName = kits.getKitByPlayer(name).getName();
+        return deathMessage.replaceAll(name, String.format(cm.getKillMessageFormatPlayerKit(), name, kitName));
+    }
+
     public void manageDeath(PlayerKilledEvent event) {
         Gamer killed = event.getKilled();
         final Player p = killed.getPlayer();
@@ -162,22 +167,10 @@ public class PlayerManager {
             event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
         p.setLevel(0);
         p.setExp(0F);
-        event.setDeathMessage(event.getDeathMessage().replace(
-                p.getName(),
-                ChatColor.RED + p.getName() + ChatColor.DARK_RED + "(" + ChatColor.RED
-                        + (kits.getKitByPlayer(p.getName()) == null ? "None" : kits.getKitByPlayer(p.getName()).getName())
-                        + ChatColor.DARK_RED + ")"));
+        event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), p.getName()));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
-            event.setDeathMessage(event.getDeathMessage().replace(
-                    event.getKillerPlayer().getName(),
-                    ChatColor.RED
-                            + event.getKillerPlayer().getName()
-                            + ChatColor.DARK_RED
-                            + "("
-                            + ChatColor.RED
-                            + (kits.getKitByPlayer(event.getKillerPlayer().getName()) == null ? "None" : kits.getKitByPlayer(
-                                    event.getKillerPlayer().getName()).getName()) + ChatColor.DARK_RED + ")"));
+            event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getName()));
         }
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
@@ -186,7 +179,7 @@ public class PlayerManager {
         killed.clearInventory();
         World world = p.getWorld();
         for (ItemStack item : event.getDrops()) {
-            if (item == null || item.getType() == Material.AIR || item.containsEnchantment(Enchants.UNLOOTABLE))
+            if (item == null || item.getType() == Material.AIR || item.containsEnchantment(EnchantmentManager.UNLOOTABLE))
                 continue;
             else if (item.hasItemMeta())
                 world.dropItemNaturally(event.getDropsLocation(), item.clone()).getItemStack().setItemMeta(item.getItemMeta());
@@ -196,7 +189,7 @@ public class PlayerManager {
         if (event.getDeathMessage() != null)
             Bukkit.broadcastMessage(event.getDeathMessage());
         setSpectator(killed);
-        ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ", getAliveGamers().size());
+        ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
         hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())

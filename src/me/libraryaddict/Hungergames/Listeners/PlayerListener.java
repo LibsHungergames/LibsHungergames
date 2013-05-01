@@ -1,19 +1,19 @@
 package me.libraryaddict.Hungergames.Listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
+import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.KitSelectorManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
@@ -60,27 +60,12 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
-    private List<String> deathMessages = new ArrayList<String>();
     PlayerManager pm = HungergamesApi.getPlayerManager();
     ConfigManager config = HungergamesApi.getConfigManager();
     KitManager kits = HungergamesApi.getKitManager();
     KitSelectorManager icon = HungergamesApi.getKitSelector();
     Hungergames hg = HungergamesApi.getHungergames();
-
-    public PlayerListener() {
-        deathMessages.add("%Killer% dual wielded a %Weapon% and laid waste upon %Killed%");
-        deathMessages.add("%Killer% slid a %Weapon% into %Killed% when he wasn't looking");
-        deathMessages.add("%Killed% was murdered in cold blood by %Killer% with a %Weapon%");
-        deathMessages.add("%Killed% gasped his last breath as %Killer% savagely stabbed him with a %Weapon%");
-        deathMessages.add("%Killed% screamed in agnoy as he was bludgeoned over the head with a %Weapon% by %Killer%");
-        deathMessages.add("%Killed% was killed by %Killer% with a %Weapon%");
-        deathMessages.add("%Killer% gave %Killed% a helping hand into death's sweet embrace with his trusty %Weapon%");
-        deathMessages.add("%Killer%'s %Weapon% could not resist killing %Killed%");
-        deathMessages.add("%Killer% and his trusty %Weapon% slew %Killed%");
-        deathMessages.add("%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!");
-        // deathMessages
-        // .add("%Killed% and %Killer% did paper, sissors, rock. %Killed% used paper. %Killer% used %Weapon%. %Killed% was slaughtered");
-    }
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     @EventHandler
     public void onExpChange(PlayerExpChangeEvent event) {
@@ -111,8 +96,6 @@ public class PlayerListener implements Listener {
         Player p = gamer.getPlayer();
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         p.setAllowFlight(true);
-        if (gamer.isVip() && gamer.getPlayer().equals(gamer.getName()))
-            gamer.getPlayer().setDisplayName(ChatColor.GREEN + gamer.getName());
         if (hg.currentTime >= 0) {
             pm.setSpectator(gamer);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
@@ -121,7 +104,7 @@ public class PlayerListener implements Listener {
                 }
             }, 0L);
         } else {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, ChatColor.GREEN + "Players: ",
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length);
             gamer.clearInventory();
             if (config.useKitSelector())
@@ -130,12 +113,8 @@ public class PlayerListener implements Listener {
                         gamer.getPlayer()
                                 .getInventory()
                                 .addItem(
-                                        icon.generateItem(
-                                                Material.FEATHER,
-                                                0,
-                                                "Kit Selector",
-                                                Arrays.asList(new String[] { "Right click with this",
-                                                        "to open a kit selection screen!" })));
+                                        icon.generateItem(Material.FEATHER, 0, icon.getKitSelectorName(),
+                                                Arrays.asList(icon.getKitSelectorDescription().split("\n"))));
                     }
                 }, 0L);
         }
@@ -159,11 +138,12 @@ public class PlayerListener implements Listener {
                 ItemStack item = dmg.getInventory().getItemInHand();
                 if (item != null && item.getType() != Material.AIR)
                     weapon = kits.toReadable(item.getType().name());
-                deathMessage = deathMessages.get(new Random().nextInt(deathMessages.size())).replace("%Killed%", p.getName())
-                        .replace("%Killer%", dmg.getName()).replace("%Weapon%", weapon);
+                deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
+                deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
+                        .replace("%Weapon%", weapon);
             }
         } else if (cause.getCause() == DamageCause.FALL)
-            deathMessage = p.getName() + " fell to his death";
+            deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
         Gamer gamer = pm.getGamer(p);
         pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
         event.setDeathMessage(null);
@@ -171,14 +151,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
-        if (event.getResult() == Result.KICK_FULL && !pm.vips.containsKey(event.getPlayer().getName()))
-            event.disallow(Result.KICK_OTHER, "The game is full!");
+        if (event.getResult() == Result.KICK_FULL)
+            event.disallow(Result.KICK_FULL, cm.getKickGameFull());
         else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
-            event.disallow(Result.KICK_OTHER, "Spectators have been disabled!");
-        // else if (!(event.getPlayer().isOp() ||
-        // pm.vips.containsKey(event.getPlayer().getName())))
-        // event.disallow(Result.KICK_OTHER,
-        // "Only VIP's may spectate!\nBuy idk at www.blabla.com");
+            event.disallow(Result.KICK_OTHER, cm.getKickSpectatorsDisabled());
     }
 
     @EventHandler
@@ -191,8 +167,8 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
         Gamer gamer = pm.getGamer(event.getPlayer());
         if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
-            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(), gamer.getName()
-                    + " was slaughtered for leaving the game");
+            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
+                    String.format(cm.getKillMessageLeavingGame(), gamer.getName()));
         }
         pm.unregisterGamer(gamer);
     }
@@ -271,14 +247,38 @@ public class PlayerListener implements Listener {
              * event.getClickedBlock().getState()).getInventory()); }
              */
         }
+        ItemStack item = event.getItem();
+        if (item != null && item.getType() == Material.COMPASS && event.getAction() != Action.PHYSICAL) {
+            double distance = 10000;
+            Player victim = null;
+            for (Gamer game : HungergamesApi.getPlayerManager().getAliveGamers()) {
+                double distOfPlayerToVictim = p.getLocation().distance(game.getPlayer().getLocation());
+                if (distOfPlayerToVictim < distance && distOfPlayerToVictim > 15) {
+                    distance = distOfPlayerToVictim;
+                    victim = game.getPlayer();
+                }
+            }
+            PlayerTrackEvent trackEvent = new PlayerTrackEvent(gamer, victim,
+                    (victim == null ? cm.getMessagePlayerTrackNoVictim() : String.format(cm.getMessagePlayerTrack(),
+                            victim.getName())));
+            Bukkit.getPluginManager().callEvent(trackEvent);
+            if (!trackEvent.isCancelled()) {
+                p.sendMessage(trackEvent.getMessage());
+                if (victim != null) {
+                    p.setCompassTarget(victim.getLocation());
+                } else {
+                    p.setCompassTarget(p.getWorld().getSpawnLocation());
+
+                }
+            }
+        }
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (gamer.isAlive() && gamer.canRide())
                 if (p.isInsideVehicle() == true)
                     p.leaveVehicle();
-            ItemStack item = event.getItem();
             if (item != null) {
                 if (item.getType() == Material.FEATHER && item.getItemMeta().hasDisplayName()
-                        && item.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Kit Selector")) {
+                        && item.getItemMeta().getDisplayName().equals(icon.getKitSelectorName())) {
                     p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
@@ -317,8 +317,8 @@ public class PlayerListener implements Listener {
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
                 Player p = event.getPlayer();
-                p.sendMessage(ChatColor.RED + victim.getName() + ChatColor.RED + " has " + victim.getHealth() + "/20 health");
-                p.sendMessage(ChatColor.RED + victim.getName() + ChatColor.RED + " has " + victim.getFoodLevel() + "/20 hunger");
+                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), victim.getHealth(),
+                        victim.getName(), victim.getFoodLevel()));
             }
             if (gamer.canRide()) {
                 if (event.getPlayer().isInsideVehicle() == false && event.getRightClicked().getVehicle() != event.getPlayer())
@@ -379,10 +379,9 @@ public class PlayerListener implements Listener {
         if (event.getView().getTopInventory().getType() == InventoryType.ANVIL && event.getCurrentItem() != null
                 && event.getCurrentItem().getType() != Material.AIR) {
             for (Enchantment enchant : event.getCurrentItem().getEnchantments().keySet())
-                if (!Enchants.isNatural(enchant)) {
+                if (!EnchantmentManager.isNatural(enchant)) {
                     event.setCancelled(true);
-                    ((Player) event.getWhoClicked()).sendMessage(ChatColor.RED
-                            + "Minecraft will crash if you attempt to put this in");
+                    ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
                     return;
                 }
         }

@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Listeners;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -24,9 +25,10 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class GeneralListener implements Listener {
 
-    Hungergames hg = HungergamesApi.getHungergames();
-    ConfigManager config = HungergamesApi.getConfigManager();
-    PlayerManager pm = HungergamesApi.getPlayerManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private ConfigManager config = HungergamesApi.getConfigManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     @EventHandler
     public void onTarget(EntityTargetEvent event) {
@@ -83,23 +85,38 @@ public class GeneralListener implements Listener {
         event.setCancelled(true);
     }
 
+    private String returnTime(Integer i) {
+        i = Math.abs(i);
+        int remainder = i % 3600, minutes = remainder / 60, seconds = remainder % 60;
+        if (seconds == 0 && minutes == 0)
+            return cm.getTimeFormatNoTime();
+        if (minutes == 0) {
+            if (seconds == 1)
+                return String.format(cm.getTimeFormatMotdSecond(), seconds);
+            return String.format(cm.getTimeFormatMotdSeconds(), seconds);
+        }
+        if (seconds == 0) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatMotdMinute(), minutes);
+            return String.format(cm.getTimeFormatMotdMinutes(), minutes);
+        }
+        if (seconds == 1) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatMotdSecondAndMinute(), minutes, seconds);
+            return String.format(cm.getTimeFormatMotdSecondAndMinutes(), minutes, seconds);
+        }
+        if (minutes == 1) {
+            return String.format(cm.getTimeFormatMotdSecondsAndMinute(), minutes, seconds);
+        }
+        return String.format(cm.getTimeFormatMotdSecondsAndMinutes(), minutes, seconds);
+    }
+
     @EventHandler
     public void onServerPing(ServerListPingEvent event) {
         if (hg.currentTime >= 0)
-            event.setMotd(config.getGameStartedMotd());
-        else {
-            String curTime = "";
-            if (hg.currentTime < -60) {
-                curTime = (int) Math.floor(Math.abs(hg.currentTime) / 60) + " " + (config.shortenTime() ? "min" : "minute");
-                if (hg.currentTime <= -120)
-                    curTime += "s";
-            } else {
-                curTime = Math.abs(hg.currentTime) + " " + (config.shortenTime() ? "sec" : "second");
-                if (hg.currentTime < -1)
-                    curTime += "s";
-            }
-            event.setMotd(config.getGameStartingMotd().replaceAll("%time%", curTime));
-        }
+            event.setMotd(cm.getGameStartedMotd());
+        else
+            event.setMotd(returnTime(hg.currentTime));
     }
 
 }

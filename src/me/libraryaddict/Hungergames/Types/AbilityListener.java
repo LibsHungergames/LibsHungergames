@@ -1,9 +1,13 @@
 package me.libraryaddict.Hungergames.Types;
 
+import me.libraryaddict.Hungergames.Managers.ChatManager;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -14,9 +18,6 @@ import java.util.*;
  */
 public abstract class AbilityListener implements Listener {
 
-    // RNG for all abilitylisteners to use for convenience
-    public static transient Random random = new Random();
-
     private transient Set<String> myPlayers = new HashSet<String>();
 
     public void registerPlayer(Player player) {
@@ -25,6 +26,23 @@ public abstract class AbilityListener implements Listener {
 
     public void unregisterPlayer(Player player) {
         myPlayers.remove(player.getName());
+    }
+
+    /**
+     * 
+     * Is this items displayname set by the plugin and matches this. Aka. It
+     * checks the displayname has a chatcolor in it. Unsettable by the client.
+     * Then it compares the stripped colors to the string fed.
+     */
+    public boolean isSpecialItem(ItemStack item, String displayName) {
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+            String itemName = item.getItemMeta().getDisplayName();
+            if (!itemName.equals(ChatColor.stripColor(itemName))
+                    && ChatColor.stripColor(itemName).equals(ChatColor.stripColor(displayName))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<Player> getMyPlayers() {
@@ -46,22 +64,36 @@ public abstract class AbilityListener implements Listener {
     }
 
     public boolean load(ConfigurationSection section) {
+        ChatManager cm = HungergamesApi.getChatManager();
         boolean modified = false;
         for (Field field : getClass().getDeclaredFields()) {
-            if (!Modifier.isTransient(field.getModifiers()))
+            if (!Modifier.isTransient(field.getModifiers()) && Modifier.isPublic(field.getModifiers()))
                 try {
                     Object value = section.get(field.getName());
+                    if (value instanceof String) {
+                        value = ((String) value).replace("\n", "\\n");
+                        value = ((String) value).replace("§", "&");
+                    }
                     if (value == null) {
                         value = field.get(this);
                         section.set(field.getName(), field.get(this));
                         modified = true;
                     }
+                    if (value instanceof String) {
+                        value = ((String) value).replace("\\n", "\n");
+                        value = ((String) value).replace("&", "§");
+                    }
                     if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
                         double d = (Double) value;
                         field.set(this, ((float) d));
+                    } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
+                        List<Object> array = (List<Object>) value;
+                        String[] strings = array.toArray(new String[array.size()]);
+                        field.set(this, strings);
                     } else
                         field.set(this, value);
-                } catch (IllegalAccessException ignored) {
+                } catch (Exception e) {
+                    System.out.print(String.format(cm.getLoggerErrorWhileLoadingAbility(), e.getMessage()));
                 }
         }
         return modified;

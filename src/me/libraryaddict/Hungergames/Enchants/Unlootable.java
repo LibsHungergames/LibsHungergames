@@ -1,5 +1,7 @@
 package me.libraryaddict.Hungergames.Enchants;
 
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +34,7 @@ public class Unlootable extends Enchantment {
 
     @Override
     public String getName() {
-        return "Unlootable";
+        return HungergamesApi.getChatManager().getEnchantNameUnlootable();
     }
 
     @Override

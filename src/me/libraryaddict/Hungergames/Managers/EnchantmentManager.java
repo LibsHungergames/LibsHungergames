@@ -1,55 +1,51 @@
-package me.libraryaddict.Hungergames.Types;
+package me.libraryaddict.Hungergames.Managers;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import me.libraryaddict.Hungergames.Enchants.DoubleJump;
-import me.libraryaddict.Hungergames.Enchants.ExplosiveBow;
 import me.libraryaddict.Hungergames.Enchants.Unlootable;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Enchants {
+public class EnchantmentManager {
 
     private static HashMap<Enchantment, String> enchantNames = new HashMap<Enchantment, String>();
     private static List<Integer> customEnchants = new ArrayList<Integer>();
-    public static Enchantment EXPLOSIVE;
     public static Enchantment UNLOOTABLE;
-    public static Enchantment DOUBLEJUMP;
 
     static {
-        enchantNames.put(Enchantment.DAMAGE_ALL, "Sharpness");
-        enchantNames.put(Enchantment.ARROW_FIRE, "Flame");
-        enchantNames.put(Enchantment.ARROW_INFINITE, "Infinite Arrows");
-        enchantNames.put(Enchantment.ARROW_DAMAGE, "Power");
-        enchantNames.put(Enchantment.ARROW_KNOCKBACK, "Punch");
-        enchantNames.put(Enchantment.DAMAGE_ARTHROPODS, "Bane of Arthropods");
-        enchantNames.put(Enchantment.DAMAGE_UNDEAD, "Smite");
-        enchantNames.put(Enchantment.LOOT_BONUS_MOBS, "Looting");
-        enchantNames.put(Enchantment.LOOT_BONUS_BLOCKS, "Fortune");
-        enchantNames.put(Enchantment.WATER_WORKER, "Aqua Affinity");
-        enchantNames.put(Enchantment.OXYGEN, "Respiration");
-        enchantNames.put(Enchantment.DIG_SPEED, "Efficiency");
-        enchantNames.put(Enchantment.DURABILITY, "Unbreaking");
-        enchantNames.put(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection");
-        enchantNames.put(Enchantment.PROTECTION_FALL, "Feather Falling");
-        enchantNames.put(Enchantment.PROTECTION_EXPLOSIONS, "Blast Protection");
-        enchantNames.put(Enchantment.PROTECTION_PROJECTILE, "Projectile Protection");
-        enchantNames.put(Enchantment.PROTECTION_FIRE, "Fire Protection");
-        enchantNames.put(Enchantment.SILK_TOUCH, "Silk Touch");
-        enchantNames.put(Enchantment.THORNS, "Thorns");
-        EXPLOSIVE = new ExplosiveBow(getId());
+        ChatManager cm = HungergamesApi.getChatManager();
+        enchantNames.put(Enchantment.DAMAGE_ALL, cm.getEnchantNameSharpness());
+        enchantNames.put(Enchantment.ARROW_FIRE, cm.getEnchantNameArrowFire());
+        enchantNames.put(Enchantment.ARROW_INFINITE, cm.getEnchantNameArrowInfinite());
+        enchantNames.put(Enchantment.ARROW_DAMAGE, cm.getEnchantNameArrowDamage());
+        enchantNames.put(Enchantment.ARROW_KNOCKBACK, cm.getEnchantNameArrowKnockback());
+        enchantNames.put(Enchantment.DAMAGE_ARTHROPODS, cm.getEnchantNameDamageSpiders());
+        enchantNames.put(Enchantment.DAMAGE_UNDEAD, cm.getEnchantNameDamageUndead());
+        enchantNames.put(Enchantment.LOOT_BONUS_MOBS, cm.getEnchantNameLootMobs());
+        enchantNames.put(Enchantment.LOOT_BONUS_BLOCKS, cm.getEnchantNameLootBlocks());
+        enchantNames.put(Enchantment.WATER_WORKER, cm.getEnchantNameAquaAffinity());
+        enchantNames.put(Enchantment.OXYGEN, cm.getEnchantNameRespiration());
+        enchantNames.put(Enchantment.DIG_SPEED, cm.getEnchantNameDigSpeed());
+        enchantNames.put(Enchantment.DURABILITY, cm.getEnchantNameDurability());
+        enchantNames.put(Enchantment.PROTECTION_ENVIRONMENTAL, cm.getEnchantNameProtection());
+        enchantNames.put(Enchantment.PROTECTION_FALL, cm.getEnchantNameProtectionFall());
+        enchantNames.put(Enchantment.PROTECTION_EXPLOSIONS, cm.getEnchantNameProtectionBlast());
+        enchantNames.put(Enchantment.PROTECTION_PROJECTILE, cm.getEnchantNameProtectionProjectiles());
+        enchantNames.put(Enchantment.PROTECTION_FIRE, cm.getEnchantNameProtectionFire());
+        enchantNames.put(Enchantment.SILK_TOUCH, cm.getEnchantNameSilkTouch());
+        enchantNames.put(Enchantment.THORNS, cm.getEnchantNameSilkTouch());
         UNLOOTABLE = new Unlootable(getId());
-        DOUBLEJUMP = new DoubleJump(getId());
         try {
             Field field = Enchantment.class.getDeclaredField("acceptingNew");
             field.setAccessible(true);
-            field.setBoolean(Enchants.EXPLOSIVE, true);
+            field.setBoolean(EnchantmentManager.UNLOOTABLE, true);
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
@@ -59,11 +55,7 @@ public class Enchants {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        if (Enchantment.getById(EXPLOSIVE.getId()) == null) {
-            Enchantment.registerEnchantment(EXPLOSIVE);
-            customEnchants.add(EXPLOSIVE.getId());
-            Enchantment.registerEnchantment(DOUBLEJUMP);
-            customEnchants.add(DOUBLEJUMP.getId());
+        if (Enchantment.getById(UNLOOTABLE.getId()) == null) {
             Enchantment.registerEnchantment(UNLOOTABLE);
             customEnchants.add(UNLOOTABLE.getId());
         }
@@ -107,8 +99,8 @@ public class Enchants {
 
     // =========================================================== binaryToRoman
     private static String toRoman(int binary) {
-        if (binary <= 0 || binary >= 4000) {
-            throw new NumberFormatException("Value outside roman numeral range.");
+        if (binary <= 0) {
+            return "";
         }
         String roman = "";
         for (int i = 0; i < RCODE.length; i++) {

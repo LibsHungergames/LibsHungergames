@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Salvager extends AbilityListener {
@@ -23,7 +23,7 @@ public class Salvager extends AbilityListener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ANVIL && hasAbility(p)) {
             ItemStack item = event.getItem();
             if (item != null && item.getType() != Material.AIR && item.getType() != Material.ANVIL
-                    && item.getType() != Material.COMPASS && !item.containsEnchantment(Enchants.UNLOOTABLE)) {
+                    && item.getType() != Material.COMPASS && !item.containsEnchantment(EnchantmentManager.UNLOOTABLE)) {
                 for (Recipe recipe : Bukkit.getRecipesFor(item)) {
                     if (recipe.getResult().getAmount() > item.getAmount())
                         continue;

@@ -3,6 +3,8 @@ package me.libraryaddict.Hungergames.Managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -35,6 +37,14 @@ public class KitSelectorManager {
         }
         item.setItemMeta(meta);
         return item;
+    }
+
+    public String getKitSelectorName() {
+        return HungergamesApi.getChatManager().getItemKitSelectorName();
+    }
+    
+    public String getKitSelectorDescription() {
+        return HungergamesApi.getChatManager().getItemKitSelectorDescription();
     }
 
     public Inventory getInventory() {

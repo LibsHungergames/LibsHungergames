@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Types.Enchants;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
@@ -20,6 +20,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -42,11 +43,17 @@ public class KitManager {
     public ArrayList<Kit> kits = new ArrayList<Kit>();
     public String defaultKit;
     private Hungergames hg = HungergamesApi.getHungergames();
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     public KitManager() {
-        hg.saveDefaultConfig();
-        ConfigurationSection config = hg.getConfig();
-        defaultKit = config.getString("DefaultKit");
+        File file = new File(hg.getDataFolder().toString() + "/kits.yml");
+        ConfigurationSection config;
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            hg.saveResource("kits.yml", false);
+        }
+        config = YamlConfiguration.loadConfiguration(file);
+        defaultKit = config.getString("DefaultKit", null);
         for (String string : config.getConfigurationSection("Kits").getKeys(false)) {
             if (config.contains("BadKits") && config.getStringList("BadKits").contains(string))
                 continue;
@@ -201,7 +208,7 @@ public class KitManager {
                         : (Material.getMaterial(args[0].toUpperCase()) == null ? Material.AIR : Material.getMaterial(args[0]
                                 .toUpperCase())).getId();
                 if (id == 0) {
-                    System.out.print("Failed to recognise item ID " + args[0]);
+                    System.out.print(String.format(cm.getLoggerUnrecognisedItemId(), args[0]));
                     return new ItemStack[] { null };
                 }
                 ItemStack item = new ItemStack(id, (int) amount, (short) Integer.parseInt(args[1]));
@@ -245,13 +252,13 @@ public class KitManager {
                     item.addUnsafeEnchantment(ench, Integer.parseInt(newArgs[n + 1]));
                     n++;
                 }
-                item = Enchants.updateEnchants(item);
+                item = EnchantmentManager.updateEnchants(item);
                 amount = amount - 64;
                 items[i] = item;
             }
             return items;
         } catch (Exception ex) {
-            System.out.print("Error while parsing itemstack line " + string + ", " + ex.getMessage());
+            System.out.print(String.format(cm.getLoggerErrorWhileParsingItemStack(), string, ex.getMessage()));
         }
         return new ItemStack[] { null };
     }
@@ -283,7 +290,7 @@ public class KitManager {
     public void showKits(Player p) {
         List<String> hisKits = new ArrayList<String>();
         List<String> otherKits = new ArrayList<String>();
-        String currentKit = "None";
+        String currentKit = cm.getMessagePlayerShowKitsNoKit();
         if (getKitByPlayer(p.getName()) != null)
             currentKit = getKitByPlayer(p.getName()).getName();
         for (Kit kit : kits)
@@ -294,20 +301,20 @@ public class KitManager {
         Collections.sort(hisKits, String.CASE_INSENSITIVE_ORDER);
         Collections.sort(otherKits, String.CASE_INSENSITIVE_ORDER);
         if (getKitByPlayer(p.getName()) != null)
-            p.sendMessage(ChatColor.GREEN + "Your current kit: " + ChatColor.RESET + currentKit);
+            p.sendMessage(String.format(cm.getMessagePlayerShowKitsCurrentSelectedKit(), currentKit));
         if (hisKits.size() == 0)
-            p.sendMessage(ChatColor.GREEN + "Your kits: " + ChatColor.RESET + "No kits available..");
+            p.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), cm.getMessagePlayerShowKitsNoKits()));
         else {
             String list = StringUtils.join(hisKits, ", ");
-            p.sendMessage(ChatColor.GREEN + "Your kits: " + ChatColor.RESET + list + ".");
+            p.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), list));
         }
         if (otherKits.size() == 0)
-            p.sendMessage(ChatColor.GREEN + "Other kits: " + ChatColor.RESET + "No kits available..");
+            p.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), cm.getMessagePlayerShowKitsNoKits()));
         else {
             String list = StringUtils.join(otherKits, ", ");
-            p.sendMessage(ChatColor.GREEN + "Other kits: " + ChatColor.RESET + list + ".");
+            p.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), list));
         }
-        p.sendMessage(ChatColor.GREEN + "To view the information on a kit, Use /kitinfo <Kit>");
+        p.sendMessage(cm.getMessagePlayerShowKitsUseKitInfo());
     }
 
     public boolean ownsKit(Player player, Kit kit) {
@@ -321,31 +328,32 @@ public class KitManager {
     public void sendDescription(CommandSender p, String name) {
         Kit kit = getKitByName(name);
         if (kit == null) {
-            p.sendMessage(ChatColor.RED + "This kit does not exist!");
+            p.sendMessage(cm.getMessagePlayerKitDescriptionDoesntExist());
             return;
         }
-        p.sendMessage(ChatColor.DARK_AQUA + "Name: " + ChatColor.AQUA + kit.getName());
-        p.sendMessage(ChatColor.DARK_AQUA + "Kit Id: " + ChatColor.AQUA + kit.getId());
-        p.sendMessage(ChatColor.AQUA + kit.getDescription());
+        p.sendMessage(String.format(cm.getMessagePlayerKitDescriptionName(), kit.getName()));
+        p.sendMessage(String.format(cm.getMessagePlayerKitDesciptionId(), kit.getId()));
+        p.sendMessage(kit.getDescription());
         if (kit.isFree())
-            p.sendMessage(ChatColor.DARK_AQUA + "Price: " + ChatColor.AQUA + "Free");
+            p.sendMessage(cm.getMessagePlayerKitDesciprionPriceFree());
         else if (kit.getPrice() == -1)
-            p.sendMessage(ChatColor.DARK_AQUA + "Price: " + ChatColor.AQUA + "Unbuyable");
+            p.sendMessage(cm.getMessagePlayerKitDesciprionPriceUnbuyable());
         else
-            p.sendMessage(ChatColor.DARK_AQUA + "Price: " + ChatColor.AQUA + "$" + kit.getPrice());
-        p.sendMessage(ChatColor.AQUA + "Use /kititems " + kit.getName() + " to view the items given with this kit");
-        p.sendMessage(ChatColor.AQUA + "Use /buykit " + kit.getName() + " to purchase a kit");
+            p.sendMessage(String.format(cm.getMessagePlayerKitDesciprionPrice(), kit.getPrice()));
+        p.sendMessage(String.format(cm.getMessagePlayerKitDescritionMoreInfo(), kit.getName()));
     }
 
     private String itemToName(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR)
-            return "No Item";
+        // No chat translation given here
+        // TODO
+        if (item == null)
+            return "null";
         String name = (item.getAmount() > 1 ? item.getAmount() + " " : "")
                 + (item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? ChatColor.stripColor(item.getItemMeta()
                         .getDisplayName()) : this.toReadable(item.getType().name())) + (item.getAmount() > 1 ? "s" : "");
         ArrayList<String> enchants = new ArrayList<String>();
         for (Enchantment enchant : item.getEnchantments().keySet()) {
-            String eName = Enchants.getReadableName(enchant);
+            String eName = EnchantmentManager.getReadableName(enchant);
             enchants.add(this.toReadable((eName.contains("%no%") ? eName.replace("%no%", "" + item.getEnchantmentLevel(enchant))
                     : eName + " " + item.getEnchantmentLevel(enchant))));
         }
@@ -358,19 +366,19 @@ public class KitManager {
     public void sendKitItems(CommandSender p, String name) {
         Kit kit = getKitByName(name);
         if (kit == null) {
-            p.sendMessage(ChatColor.RED + "This kit does not exist!");
+            p.sendMessage(cm.getMessagePlayerSendKitItemsDoesntExist());
             return;
         }
-        p.sendMessage(ChatColor.DARK_AQUA + "Kit Name: " + ChatColor.AQUA + kit.getName());
-        p.sendMessage(ChatColor.DARK_AQUA + "Helmet: " + ChatColor.AQUA + itemToName(kit.getArmor()[3]));
-        p.sendMessage(ChatColor.DARK_AQUA + "Chestplate: " + ChatColor.AQUA + itemToName(kit.getArmor()[2]));
-        p.sendMessage(ChatColor.DARK_AQUA + "Leggings: " + ChatColor.AQUA + itemToName(kit.getArmor()[1]));
-        p.sendMessage(ChatColor.DARK_AQUA + "Boots: " + ChatColor.AQUA + itemToName(kit.getArmor()[0]));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitName(), kit.getName()));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitHelmet(), itemToName(kit.getArmor()[3])));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitChestplate(), itemToName(kit.getArmor()[2])));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitLeggings(), itemToName(kit.getArmor()[1])));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitBoots(), itemToName(kit.getArmor()[0])));
         ArrayList<String> items = new ArrayList<String>();
         for (ItemStack item : kit.getItems())
             items.add(itemToName(item));
         Collections.sort(items);
-        p.sendMessage(ChatColor.DARK_AQUA + "Other items: " + ChatColor.AQUA
-                + (items.size() > 0 ? StringUtils.join(items, ", ") + "." : "No other items to display"));
+        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsOtherItems(),
+                (items.size() > 0 ? StringUtils.join(items, ", ") + "." : cm.getMessagePlayerSendKitItemsNoItems())));
     }
 }

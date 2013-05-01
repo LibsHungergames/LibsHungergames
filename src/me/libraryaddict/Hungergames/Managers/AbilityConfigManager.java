@@ -1,5 +1,7 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,11 +17,11 @@ import java.io.IOException;
 public class AbilityConfigManager {
     private File configFile;
     private YamlConfiguration config;
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     public AbilityConfigManager(JavaPlugin parent) {
         parent.getDataFolder().mkdir();
         configFile = new File(parent.getDataFolder(), "abilities.yml");
-        Bukkit.getLogger().info("Creating config file");
         config = new YamlConfiguration();
 
         try {
@@ -27,6 +29,7 @@ public class AbilityConfigManager {
             save();
         } catch (FileNotFoundException e) {
             try {
+                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitysConfig());
                 configFile.createNewFile();
                 save();
             } catch (IOException x) {

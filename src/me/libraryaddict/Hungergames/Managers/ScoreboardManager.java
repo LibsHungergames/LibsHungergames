@@ -5,7 +5,6 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -49,16 +48,17 @@ public class ScoreboardManager {
     public static void updateStage() {
         Hungergames hg = HungergamesApi.getHungergames();
         ConfigManager config = HungergamesApi.getConfigManager();
+        ChatManager cm = HungergamesApi.getChatManager();
         if (hg.currentTime < 0)
-            setDisplayName("Main", DisplaySlot.SIDEBAR, ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Pregame");
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
         else if (hg.currentTime < config.getInvincibilityTime())
-            setDisplayName("Main", DisplaySlot.SIDEBAR, ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Invincibility");
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
         else if (hg.currentTime < config.getTimeFeastStarts() - (5 * 60))
-            setDisplayName("Main", DisplaySlot.SIDEBAR, ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Fighting");
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
         else if (hg.currentTime >= config.getTimeFeastStarts() - (5 * 60) && hg.currentTime < config.getTimeFeastStarts())
-            setDisplayName("Main", DisplaySlot.SIDEBAR, ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Pre-Feast");
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreFeast());
         else
-            setDisplayName("Main", DisplaySlot.SIDEBAR, ChatColor.DARK_AQUA + "Stage: " + ChatColor.AQUA + "Finishing up");
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFeastHappened());
     }
 
 }

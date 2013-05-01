@@ -27,6 +27,7 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 
 public class Hades extends AbilityListener {
     private transient HashMap<Zombie, Player> tamed = new HashMap<Zombie, Player>();
+    private int itemToUse = Material.ROTTEN_FLESH.getId();
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
@@ -56,7 +57,7 @@ public class Hades extends AbilityListener {
     public void onInteract(PlayerInteractEntityEvent event) {
         if (hasAbility(event.getPlayer()) && event.getRightClicked() instanceof Zombie) {
             ItemStack item = event.getPlayer().getItemInHand();
-            if (item != null && item.getType() == Material.ROTTEN_FLESH && !tamed.containsKey(event.getRightClicked())) {
+            if (item != null && item.getTypeId() == itemToUse && !tamed.containsKey(event.getRightClicked())) {
                 item.setAmount(item.getAmount() - 1);
                 if (item.getAmount() == 0)
                     event.getPlayer().setItemInHand(new ItemStack(0));

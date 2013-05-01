@@ -15,9 +15,16 @@ public class HungergamesApi {
     private static KitSelectorManager icon;
     private static ConfigManager config;
     private static AbilityManager abilityManager;
+    private static ChatManager chatManager;
 
     public static void init(Hungergames hunger) {
         hg = hunger;
+    }
+    
+    public static ChatManager getChatManager() {
+        if (chatManager == null)
+            chatManager = new ChatManager();
+        return chatManager;
     }
 
     public static Hungergames getHungergames() {

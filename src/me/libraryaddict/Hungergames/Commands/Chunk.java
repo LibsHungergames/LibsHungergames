@@ -1,12 +1,12 @@
 package me.libraryaddict.Hungergames.Commands;
 
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import net.minecraft.server.v1_5_R2.ChunkCoordIntPair;
 import net.minecraft.server.v1_5_R2.EntityPlayer;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,13 +15,14 @@ import org.bukkit.entity.Player;
 
 public class Chunk implements CommandExecutor {
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private ChatManager cm = HungergamesApi.getChatManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (gamer.getChunkCooldown() < System.currentTimeMillis() / 1000L) {
             Player p = gamer.getPlayer();
             gamer.setChunkCooldown((System.currentTimeMillis() / 1000) + 10);
-            System.out.print("Reloading " + p.getName() + "'s chunks");
+            System.out.print(String.format(cm.getCommandChunkLoggerReloadingChunks(), p.getName()));
             org.bukkit.Chunk chunk = p.getWorld().getChunkAt(p.getLocation());
             EntityPlayer player = ((CraftPlayer) p).getHandle();
             for (int i = -16; i <= 16; i = i + 16) {
@@ -32,9 +33,9 @@ public class Chunk implements CommandExecutor {
                 }
             }
             p.teleport(p.getLocation().add(0, 0.5, 0));
-            sender.sendMessage(ChatColor.RED + "Chunks reloaded!");
+            sender.sendMessage(cm.getCommandChunkReloadedChunks());
         } else
-            sender.sendMessage(ChatColor.RED + "You may not do this again yet!");
+            sender.sendMessage(cm.getCommandChunkCooldown());
         return true;
     }
 }

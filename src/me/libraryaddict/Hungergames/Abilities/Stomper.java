@@ -19,6 +19,7 @@ import org.bukkit.util.Vector;
 
 public class Stomper extends AbilityListener {
     public boolean reduceStompDamageByDistance = true;
+    public String stompedMessage = "%1$2s was stomped by %2$2s";
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -69,7 +70,7 @@ public class Stomper extends AbilityListener {
                             Gamer gamer = HungergamesApi.getPlayerManager().getGamer(entity);
                             if (gamer.isAlive())
                                 HungergamesApi.getPlayerManager().killPlayer(gamer, p, entity.getLocation(),
-                                        gamer.getInventory(), gamer.getName() + " was stomped by " + p.getName());
+                                        gamer.getInventory(), String.format(stompedMessage, gamer.getName(), p.getName()));
                         } else
                             ((LivingEntity) entity).damage(hisDmg);
                     }
