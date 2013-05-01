@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Managers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitSelectorManager {
     Inventory icon;
+    ItemStack kitSelector = null;
 
     public void createInventory(String invName, ArrayList<ItemStack> items) {
         int size = (int) (Math.ceil((double) items.size() / 9)) * 9;
@@ -39,10 +41,17 @@ public class KitSelectorManager {
         return item;
     }
 
+    public ItemStack getKitSelector() {
+        if (kitSelector == null)
+            kitSelector = generateItem(Material.FEATHER, 0, getKitSelectorName(),
+                    Arrays.asList(getKitSelectorDescription().split("\n")));
+        return kitSelector;
+    }
+
     public String getKitSelectorName() {
         return HungergamesApi.getChatManager().getItemKitSelectorName();
     }
-    
+
     public String getKitSelectorDescription() {
         return HungergamesApi.getChatManager().getItemKitSelectorDescription();
     }

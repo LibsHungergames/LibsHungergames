@@ -111,11 +111,7 @@ public class PlayerListener implements Listener {
             if (config.useKitSelector())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                     public void run() {
-                        gamer.getPlayer()
-                                .getInventory()
-                                .addItem(
-                                        icon.generateItem(Material.FEATHER, 0, icon.getKitSelectorName(),
-                                                Arrays.asList(icon.getKitSelectorDescription().split("\n"))));
+                        gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
                     }
                 }, 0L);
         }
@@ -278,8 +274,7 @@ public class PlayerListener implements Listener {
                 if (p.isInsideVehicle() == true)
                     p.leaveVehicle();
             if (item != null) {
-                if (item.getType() == Material.FEATHER && item.getItemMeta().hasDisplayName()
-                        && item.getItemMeta().getDisplayName().equals(icon.getKitSelectorName())) {
+                if (item.equals(icon.getKitSelector())) {
                     p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }

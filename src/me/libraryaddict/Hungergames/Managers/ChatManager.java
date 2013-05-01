@@ -183,9 +183,9 @@ public class ChatManager {
     private String loggerUnrecognisedItemId = "Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
-    private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_AQUA + "Your current kit:" + ChatColor.AQUA + " %s";
+    private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_GREEN + "Your current kit:" + ChatColor.RESET + " %s";
     private String messagePlayerHasHealthAndHunger = ChatColor.RED + "%1$2s has %2$2s/20 health\n%3$2s has %4$2s/20 health";
-    private String messagePlayerShowKitsHisKits = ChatColor.DARK_AQUA + "Your kits:" + ChatColor.AQUA + " %s";
+    private String messagePlayerShowKitsHisKits = ChatColor.DARK_GREEN + "Your kits:" + ChatColor.RESET + " %s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
@@ -195,7 +195,7 @@ public class ChatManager {
     private String messagePlayerKitDescritionMoreInfo = "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
     private String messagePlayerShowKitsNoKit = "None";
     private String messagePlayerShowKitsNoKits = "No kits available..";
-    private String messagePlayerShowKitsOtherKits = ChatColor.DARK_AQUA + "Other kits:" + ChatColor.AQUA + " %s";
+    private String messagePlayerShowKitsOtherKits = ChatColor.DARK_GREEN + "Other kits:" + ChatColor.RESET + " %s";
     private String messagePlayerSendKitItemsDoesntExist = "This kit does not exist!";
     private String messagePlayerSendKitItemsKitBoots = ChatColor.DARK_AQUA + "Kit Boots:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitChestplate = ChatColor.DARK_AQUA + "Kit Chestplate:" + ChatColor.AQUA + " %s";
@@ -286,12 +286,10 @@ public class ChatManager {
                                 value = ((String) value).replace("\\n", "\n");
                             }
                             if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
-                                double d = (Double) value;
-                                field.set(this, ((float) d));
+                                field.set(this, ((float) (double) (Double) value));
                             } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                                 List<Object> array = (List<Object>) value;
-                                String[] strings = array.toArray(new String[array.size()]);
-                                field.set(this, strings);
+                                field.set(this, array.toArray(new String[array.size()]));
                             } else
                                 field.set(this, value);
                             if (field.getName().equals("commandCreator")
