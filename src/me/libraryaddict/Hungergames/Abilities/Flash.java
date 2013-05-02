@@ -113,7 +113,7 @@ public class Flash extends AbilityListener {
                         double dist = event.getPlayer().getLocation().distance(b.get(0).getLocation());
                         if (dist > 2) {
                             Location loc = b.get(0).getLocation().clone().add(0.5, 0.5, 0.5);
-                            item.setTypeId(flashOnItemId);
+                            item.setTypeId(flashOffItemId);
                             int hisCooldown = normalCooldown;
                             if (addMoreCooldownForLargeDistances && (dist / 2) > 30)
                                 hisCooldown = (int) (dist / 2);
