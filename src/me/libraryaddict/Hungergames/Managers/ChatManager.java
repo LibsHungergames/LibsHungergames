@@ -162,7 +162,7 @@ public class ChatManager {
     private String loggerDependencyNotFound = "%s not found";
     private String loggerDisabledEnd = "Disabled the end";
     private String loggerDisabledNether = "Disabled the nether";
-    private String loggerErrorWhileLoadingAbility = "[Hungergames] Error while loading ability: %s, %s";
+    private String loggerErrorWhileLoadingAbility = "[Hungergames] Error while loading ability: %s - %s";
     private String loggerErrorWhileLoadingTranslation = "[Hungergames] Error while loading the translation: %s";
     private String loggerErrorWhileParsingItemStack = "Error while parsing itemstack line %s, %s";
     private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungerames] Tried to register %s for the %s ability but it does not exist";
@@ -275,21 +275,29 @@ public class ChatManager {
                             if (value == null) {
                                 value = field.get(this);
                                 if (value instanceof String) {
-                                    value = ((String) value).replace("\n", "\\n");
-                                    value = ((String) value).replace("§", "&");
+                                    value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                                }
+                                if (field.getType().isArray() && value.getClass() == ArrayList.class) {
+                                    List<Object> array = (List<Object>) value;
+                                    String[] strings = array.toArray(new String[array.size()]);
+                                    for (int i = 0; i < strings.length; i++)
+                                        strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                    value = strings;
                                 }
                                 config.set(field.getName(), value);
                                 modified = true;
                             }
                             if (value instanceof String) {
-                                value = ((String) value).replace("&", "§");
-                                value = ((String) value).replace("\\n", "\n");
+                                value = ((String) value).replace("\\n", "\n").replace("&", "§");
+                            }
+                            if (value instanceof String[]) {
+                                String[] strings = (String[]) value;
+                                for (int i = 0; i < strings.length; i++)
+                                    strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                value = strings;
                             }
                             if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
                                 field.set(this, ((float) (double) (Double) value));
-                            } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
-                                List<Object> array = (List<Object>) value;
-                                field.set(this, array.toArray(new String[array.size()]));
                             } else
                                 field.set(this, value);
                             if (field.getName().equals("commandCreator")

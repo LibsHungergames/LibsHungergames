@@ -70,26 +70,32 @@ public abstract class AbilityListener implements Listener {
             if (!Modifier.isTransient(field.getModifiers()) && Modifier.isPublic(field.getModifiers()))
                 try {
                     Object value = section.get(field.getName());
-                    if (value instanceof String) {
-                        value = ((String) value).replace("\n", "\\n");
-                        value = ((String) value).replace("§", "&");
-                    }
                     if (value == null) {
                         value = field.get(this);
-                        section.set(field.getName(), field.get(this));
+                        if (value instanceof String) {
+                            value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                        }
+                        if (field.getType().isArray() && value.getClass() == ArrayList.class) {
+                            List<Object> array = (List<Object>) value;
+                            String[] strings = array.toArray(new String[array.size()]);
+                            for (int i = 0; i < strings.length; i++)
+                                strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                            value = strings;
+                        }
+                        section.set(field.getName(), value);
                         modified = true;
                     }
                     if (value instanceof String) {
-                        value = ((String) value).replace("\\n", "\n");
-                        value = ((String) value).replace("&", "§");
+                        value = ((String) value).replace("\\n", "\n").replace("&", "§");
+                    }
+                    if (value instanceof String[]) {
+                        String[] strings = (String[]) value;
+                        for (int i = 0; i < strings.length; i++)
+                            strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                        value = strings;
                     }
                     if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
-                        double d = (Double) value;
-                        field.set(this, ((float) d));
-                    } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
-                        List<Object> array = (List<Object>) value;
-                        String[] strings = array.toArray(new String[array.size()]);
-                        field.set(this, strings);
+                        field.set(this, ((float) (double) (Double) value));
                     } else
                         field.set(this, value);
                 } catch (Exception e) {
