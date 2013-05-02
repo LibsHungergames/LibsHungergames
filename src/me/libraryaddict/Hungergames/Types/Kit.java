@@ -140,6 +140,20 @@ public class Kit {
         }
     }
 
+    public ItemStack prepareToGive(ItemStack item) {
+        if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().contains("UniqueIdentifier")) {
+            ItemStack itemStack = item.clone();
+            ItemMeta meta = itemStack.getItemMeta();
+            String string = meta.getDisplayName().replace("UniqueIdentifier", "");
+            for (char c : ("" + identifier++).toCharArray())
+                string = string + ChatColor.COLOR_CHAR + c;
+            meta.setDisplayName(string);
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        } else
+            return item.clone();
+    }
+
     public void giveKit(Player p) {
         PlayerInventory inv = p.getInventory();
         ItemStack[] arm = inv.getArmorContents();
@@ -151,17 +165,7 @@ public class Kit {
         }
         inv.setArmorContents(arm);
         for (ItemStack item : items) {
-            if (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().contains("UniqueIdentifier")) {
-                ItemStack itemStack = item.clone();
-                ItemMeta meta = itemStack.getItemMeta();
-                String string = meta.getDisplayName().replace("UniqueIdentifier", "");
-                for (char c : ("" + identifier++).toCharArray())
-                    string = string + ChatColor.COLOR_CHAR + c;
-                meta.setDisplayName(string);
-                itemStack.setItemMeta(meta);
-                inv.addItem(itemStack);
-            } else
-                inv.addItem(item.clone());
+            inv.addItem(prepareToGive(item));
         }
     }
 }
