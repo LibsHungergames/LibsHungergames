@@ -444,14 +444,14 @@ public class Hungergames extends JavaPlugin {
         }
         if (!config.isMySqlEnabled())
             return;
-        while (pm.loadGamer.size() > 0) {
+       /* while (pm.loadGamer.size() > 0) {
             System.out.print(String.format(cm.getLoggerWaitingForLoadGamerToComplete(), pm.loadGamer.size()));
             try {
                 Thread.sleep(1000);
             } catch (Exception ex) {
 
             }
-        }
+        }*/
         HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
