@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Digger extends AbilityListener {
-    public int delayInTicks = 30;
+    public int delayInTicks = 30; 
     public int diggerBlock = Material.DRAGON_EGG.getId();
     public int goDownY = 5;
     public int goSideways = 5;

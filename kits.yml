@@ -420,7 +420,7 @@ Kits:
     Description: 'The Santa kit is an excellent teaming kit, every minute you''ll be given a random present with a kit on it, Gift the present to someone who has the kit, and they''ll get their starting items back! So for example, gift a Chemist the Chemist present and they''ll get their potions back, The present has a insult from the author, and present colors are randomized! However some kits are on the naughty list, This means these kits have a lower chance of being gifted as a present, such as Urgal...'
     Free: true
     Price: 0
-    Icon: PAPER 0 1
+    Icon: WRITTEN_BOOK 0 1
     Ability:
       - Santa
   Scout:
