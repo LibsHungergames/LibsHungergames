@@ -29,7 +29,6 @@ public class Monk extends AbilityListener {
             long lastUsed = 0;
             if (monkStaff.containsKey(item))
                 lastUsed = monkStaff.get(item);
-
             if (lastUsed + (1000 * cooldown) > System.currentTimeMillis()) {
                 event.getPlayer().sendMessage(
                         String.format(monkCooldownMessage,
@@ -45,6 +44,7 @@ public class Monk extends AbilityListener {
                     replacer = new ItemStack(0);
                 inv.setItemInHand(replacer);
                 inv.setItem(slot, replaced);
+                monkStaff.put(item, System.currentTimeMillis());
                 event.getPlayer().sendMessage(monkedMessage);
             }
         }

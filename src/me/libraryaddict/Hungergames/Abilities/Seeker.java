@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Seeker extends AbilityListener {
-    private transient HashMap<ItemStack, Long> lastClicked = new HashMap<ItemStack, Long>();
+    private transient HashMap<ItemStack, Long> canUseAgain = new HashMap<ItemStack, Long>();
     private List<Material> transparent = Arrays.asList(new Material[] { Material.STONE, Material.LEAVES, Material.GRASS,
             Material.DIRT, Material.LOG, Material.SAND, Material.SANDSTONE, Material.ICE, Material.QUARTZ_BLOCK, Material.GRAVEL,
             Material.COBBLESTONE, Material.OBSIDIAN, Material.BEDROCK });
@@ -34,11 +34,11 @@ public class Seeker extends AbilityListener {
             event.setCancelled(true);
             if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
                 return;
-            long last = 0;
-            if (lastClicked.containsKey(item))
-                last = lastClicked.get(item);
-            if ((cooldown * 1000) - System.currentTimeMillis() > last) {
-                lastClicked.put(item, System.currentTimeMillis());
+            long lastUsed = 0;
+            if (canUseAgain.containsKey(item))
+                lastUsed = canUseAgain.get(item);
+            if (System.currentTimeMillis() > lastUsed) {
+                canUseAgain.put(item, System.currentTimeMillis() + (cooldown * 1000));
                 event.getPlayer().sendMessage(usedSeekerEye);
                 // Turn into glass
                 Location beginning = event.getClickedBlock().getLocation().clone().add(0.5, 0.5, 0.5);
@@ -53,8 +53,8 @@ public class Seeker extends AbilityListener {
                     }
                 }
             } else {
-                event.getPlayer().sendMessage(
-                        String.format(cooldownMessage, (((cooldown * 1000) - System.currentTimeMillis() - last) / 1000)));
+
+                event.getPlayer().sendMessage(String.format(cooldownMessage, -((System.currentTimeMillis() - lastUsed) / 1000)));
             }
         }
     }
