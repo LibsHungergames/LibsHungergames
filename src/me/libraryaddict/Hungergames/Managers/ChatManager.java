@@ -286,7 +286,7 @@ public class ChatManager {
                                 }
                                 config.set(field.getName(), value);
                                 modified = true;
-                            } else {
+                            } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                                 List<Object> array = (List<Object>) value;
                                 value = array.toArray(new String[array.size()]);
                             }

@@ -84,7 +84,7 @@ public abstract class AbilityListener implements Listener {
                         }
                         section.set(field.getName(), value);
                         modified = true;
-                    } else {
+                    } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                         List<Object> array = (List<Object>) value;
                         value = array.toArray(new String[array.size()]);
                     }
@@ -102,7 +102,6 @@ public abstract class AbilityListener implements Listener {
                     } else
                         field.set(this, value);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     System.out.print(String.format(cm.getLoggerErrorWhileLoadingAbility(), e.getMessage()));
                 }
         }
