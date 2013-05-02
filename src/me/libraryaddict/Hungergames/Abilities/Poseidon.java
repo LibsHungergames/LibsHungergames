@@ -35,7 +35,7 @@ public class Poseidon extends AbilityListener {
     public void onSecond(TimeSecondEvent event) {
         for (Player p : waterBreathers) {
             if (p.getLocation().getBlock().isLiquid()) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, potionMultiplier));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, potionMultiplier), true);
             }
         }
     }
