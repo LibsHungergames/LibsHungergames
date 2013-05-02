@@ -94,7 +94,7 @@ public abstract class AbilityListener implements Listener {
                     if (value instanceof String[]) {
                         String[] strings = (String[]) value;
                         for (int i = 0; i < strings.length; i++)
-                            strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                            strings[i] = strings[i].replace("\\n", "\n").replace("&", "§");
                         value = strings;
                     }
                     if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
