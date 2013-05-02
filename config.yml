@@ -41,7 +41,7 @@ MapPathStartsPluginFolder: true
 StopServerCommand: stop
 
 
-# Should the plugin use the mysql database? Untested ofc.
+# Should the plugin use the mysql database?
 UseMySql: false
 
 # And setup connection details here.

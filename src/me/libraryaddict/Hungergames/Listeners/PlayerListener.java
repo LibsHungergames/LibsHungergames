@@ -1,6 +1,5 @@
 package me.libraryaddict.Hungergames.Listeners;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 

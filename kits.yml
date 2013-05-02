@@ -4,7 +4,6 @@ DefaultKit: Boxer
 BadKits:
   - Barbarian
   - Burrower
-  - Digger
   #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
   - Explorer
@@ -16,8 +15,6 @@ BadKits:
   - Miner
   - Reaper
   - Rider
-  - Santa
-  - Tarzan
 Kits:
   Archer:
     Description: 'The archer kit allows you to shoot others. Hmm. Thats pretty much it. You also get a bow and 10 arrows'
@@ -147,11 +144,9 @@ Kits:
     Description: 'The digger kit will give you 6 dragon eggs, once you place the egg down, you have a bit more then a second (Trust me, it''s enough!) to get out of the way before a 5x5 hole appears straight under where you placed it. The perfect kit to trap your enemies!'
     Free: true
     Price: 0
-    Icon: STONE_SPADE
+    Icon: DRAGON_EGG 0 1
     Items:
-      - DRAGON_EGG 0 6 Unlootable 1
-    Ability:
-      - Digger
+      - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole
   Doctor:
     Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove their all their potion effects.'
     Free: true
@@ -422,12 +417,10 @@ Kits:
     Ability:
       - Salvager
   Santa:
-    Description: 'The Santa kit is an excellent teaming kit, every minute you''ll be given a random present with a kit on it. Gift the present to someone who has the kit, and they''ll get their starting items back! So for example, gift a Chemist the Chemist present and they''ll get their potions back. This is vital for players who use Monk, Endermage or Burrower and find it difficult to get their items back. The present also has a nice Christmas wish from the McPVP staff, and present colors are randomized! But, some kits are on the naughty list! This means these kits have a lower chance of being gifted as a present, such as Urgal...'
+    Description: 'The Santa kit is an excellent teaming kit, every minute you''ll be given a random present with a kit on it, Gift the present to someone who has the kit, and they''ll get their starting items back! So for example, gift a Chemist the Chemist present and they''ll get their potions back, The present has a insult from the author, and present colors are randomized! However some kits are on the naughty list, This means these kits have a lower chance of being gifted as a present, such as Urgal...'
     Free: true
     Price: 0
     Icon: PAPER 0 1
-    Items:
-      - WRITTEN_BOOK 0 1 Name=Book_Explaining_What_This_Does Unlootable 1
     Ability:
       - Santa
   Scout:
