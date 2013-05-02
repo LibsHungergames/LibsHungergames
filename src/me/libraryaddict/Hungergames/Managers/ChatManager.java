@@ -286,6 +286,9 @@ public class ChatManager {
                                 }
                                 config.set(field.getName(), value);
                                 modified = true;
+                            } else {
+                                List<Object> array = (List<Object>) value;
+                                value = array.toArray(new String[array.size()]);
                             }
                             if (value instanceof String) {
                                 value = ((String) value).replace("\\n", "\n").replace("&", "§");
