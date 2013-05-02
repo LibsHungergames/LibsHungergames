@@ -146,14 +146,16 @@ public class Hungergames extends JavaPlugin {
                 if (config.forceCords())
                     world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
                             config.getSpawnZ());
+                Location spawn = world.getSpawnLocation();
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
-                        world.getSpawnLocation().clone().add(x * 16, 0, z * 16).getChunk().load();
+                        spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
                     world.setStorm(false);
                 world.setWeatherDuration(999999999);
-                feastLoc = new Location(world, new Random().nextInt(200) - 100, 0, new Random().nextInt(200) - 100);
+                feastLoc = new Location(world, spawn.getX() + (new Random().nextInt(200) - 100), 0, spawn.getZ()
+                        + (new Random().nextInt(200) - 100));
                 ScoreboardManager.updateStage();
             }
         });
