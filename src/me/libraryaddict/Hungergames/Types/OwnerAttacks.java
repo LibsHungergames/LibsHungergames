@@ -1,18 +1,18 @@
 package me.libraryaddict.Hungergames.Types;
 
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_5_R2.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_5_R3.event.CraftEventFactory;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
-import net.minecraft.server.v1_5_R2.EntityCreature;
-import net.minecraft.server.v1_5_R2.EntityHuman;
-import net.minecraft.server.v1_5_R2.EntityLiving;
-import net.minecraft.server.v1_5_R2.EntityTameableAnimal;
-import net.minecraft.server.v1_5_R2.MathHelper;
-import net.minecraft.server.v1_5_R2.PathEntity;
-import net.minecraft.server.v1_5_R2.PathPoint;
-import net.minecraft.server.v1_5_R2.PathfinderGoalTarget;
+import net.minecraft.server.v1_5_R3.EntityCreature;
+import net.minecraft.server.v1_5_R3.EntityHuman;
+import net.minecraft.server.v1_5_R3.EntityLiving;
+import net.minecraft.server.v1_5_R3.EntityTameableAnimal;
+import net.minecraft.server.v1_5_R3.MathHelper;
+import net.minecraft.server.v1_5_R3.PathEntity;
+import net.minecraft.server.v1_5_R3.PathPoint;
+import net.minecraft.server.v1_5_R3.PathfinderGoalTarget;
 
 public class OwnerAttacks extends PathfinderGoalTarget {
     EntityLiving d;
@@ -71,7 +71,7 @@ public class OwnerAttacks extends PathfinderGoalTarget {
         if (!this.d.d(MathHelper.floor(entityliving.locX), MathHelper.floor(entityliving.locY),
                 MathHelper.floor(entityliving.locZ)))
             return false;
-        if ((this.f) && (!this.d.aD().canSee(entityliving))) {
+        if ((this.f) && (!this.d.getEntitySenses().canSee(entityliving))) {
             return false;
         }
         if (this.a) {

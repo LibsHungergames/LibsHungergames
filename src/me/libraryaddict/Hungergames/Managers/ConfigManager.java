@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_5_R3.CraftServer;
 import org.bukkit.inventory.ItemStack;
 
 import de.robingrether.idisguise.iDisguise;

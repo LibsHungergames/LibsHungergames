@@ -4,13 +4,13 @@ import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
-import net.minecraft.server.v1_5_R2.ChunkCoordIntPair;
-import net.minecraft.server.v1_5_R2.EntityPlayer;
+import net.minecraft.server.v1_5_R3.ChunkCoordIntPair;
+import net.minecraft.server.v1_5_R3.EntityPlayer;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Chunk implements CommandExecutor {

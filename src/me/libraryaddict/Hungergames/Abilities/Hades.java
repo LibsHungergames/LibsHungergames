@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Types.*;
-import net.minecraft.server.v1_5_R2.EntityLiving;
-import net.minecraft.server.v1_5_R2.PathfinderGoalMeleeAttack;
-import net.minecraft.server.v1_5_R2.PathfinderGoalSelector;
+import net.minecraft.server.v1_5_R3.PathfinderGoalMeleeAttack;
+import net.minecraft.server.v1_5_R3.PathfinderGoalSelector;
+import net.minecraft.server.v1_5_R3.EntityLiving;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;

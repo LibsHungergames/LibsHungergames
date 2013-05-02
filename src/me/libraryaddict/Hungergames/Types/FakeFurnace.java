@@ -1,9 +1,9 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.*;
-import net.minecraft.server.v1_5_R2.*;
+import net.minecraft.server.v1_5_R3.*;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 
 public class FakeFurnace extends TileEntityFurnace {
