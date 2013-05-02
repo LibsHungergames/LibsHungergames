@@ -1,0 +1,537 @@
+# Kits - Any kits you add can be done normally here.
+DefaultKit: Boxer
+# Bad kits is kits which will not be usable.
+BadKits:
+  - Barbarian
+  - Burrower
+  #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
+  - Endermage
+  - Explorer
+  - Frosty
+  - Gambler
+  - Hermit
+  - Jackhammer
+  - Milkman
+  - Miner
+  - Reaper
+  - Rider
+Kits:
+  Archer:
+    Description: 'The archer kit allows you to shoot others. Hmm. Thats pretty much it. You also get a bow and 10 arrows'
+    Free: true
+    Price: 0
+    Icon: BOW 0 1
+    Items:
+      - BOW 0 1
+      - ARROW 0 10
+  Array:
+    Description: 'The array kit supplies you with 3 beacons, place them to create a array. This gives all players in a radius of 6 blocks regeneration II making this a great team kit.'
+    Free: true
+    Price: 0
+    Icon: BEACON 0 1
+    Items:
+      - BEACON 0 3 Name=Array Unlootable 1
+    Ability:
+      - Array
+  Backpacker:
+    Description: 'The backpacker kit starts you with a backpack, it''s located on the left top corner of your inventory. When you double click on the backpack, you will open the backpack, and enough storage to equal a double chest is available for you!'
+    Free: true
+    Price: 0
+    Icon: ENDER_CHEST 0 1
+    Ability:
+      - Backpacker
+  Barbarian:
+    Description: 'The Barbarian kit is excellent for getting the upper hand at the start of the game, but also later in game, you start with the sword "Tyrfing", a magic sword that levels up along with you, as you kill players and get experience, the sword becomes more powerful, eventually growing out from wood to diamond (Even with enchantments!). (Note: Due to a limitation of minecraft, the sword sometimes appears to break, but it is in fact not gone, just keep hitting and you''ll do the same damage you did with the sword.)'
+    Free: true
+    Price: 0
+    Icon: WOOD_SWORD 0 1
+    Items:
+      - WOOD_SWORD 0 1 Name=Tyfing Unlootable 1
+    Ability:
+      - Barbarian
+  Beastmaster:
+    Description: 'The Beastmaster kit allows you to instantly tame the 3 wolves you spawn. As well as 4 bones. The wolves can be very useful when in 1 vs 1 combat, and often gives you that winning edge over your enemy in fights! You also have a 100% chance to tame any wolf, so no bone shall be wasted!'
+    Free: true
+    Price: 0
+    Icon: MONSTER_EGG 93 1
+    Items:
+      - MONSTER_EGG 95 3
+      - BONE 0 4
+    Ability:
+      - Beastmaster
+  Berserker:
+    Description: 'The Berserker kit is not for the weak! When you kill a player, you get Nausea II effect and Strength II effect for around 30 seconds, killing a mob gives you Nausea I and Strength I. This kit is brilliant for taking out teams!'
+    Free: true
+    Price: 0
+    Icon: POTION 16425 1
+    Ability:
+      - Berserker
+  Boxer:
+    Description: 'The Boxer kit is an excellent all-rounder. It''s excellent at the start, giving you the element of surprise to victims, and is brilliant late-game since the damage reduction can often save your life! Your fist does almost eqivelent to a stone sword and you take half a heart less damage!'
+    Free: true
+    Price: 0
+    Icon: STONE_SWORD 0 1
+    Ability:
+      - Boxer
+  Burrower:
+    Description: 'The Burrower kit is an excellent defensive kit for yourself, when on your last few hearts with no soups left, you can create your panic room and refill or sneak to make your enemy move onto a different target. Your slime balls will regenerate 5 minutes after use.'
+    Free: true
+    Price: 0
+    Icon: SLIME_BALL 0 1
+    Items:
+      - SLIME_BALL 0 2
+    Ability:
+      - Burrower
+  Cannibal:
+    Description: 'The Cannibal kit is vital for you hungry PVP''ers! With Cannibal, every time you inflict damage on someone you receive a hunger-bar boost. When you inflict damage on them, they receive a hunger effect (same as eating zombie flesh) You start with a raw fish and ocelot egg, use the fish as food or use the fish to tame your ocelot to scare away creepers.'
+    Free: true
+    Price: 0
+    Icon: MONSTER_EGG 98 1
+    Items:
+      - MONSTER_EGG 98 1
+      - RAW_FISH 0 1
+    Ability:
+      - Cannibal
+  Chameleon:
+    Description: 'The Chameleon kit is a very sneaky one! If you like to lurk around, then this kit is for you! You are disguised when you hit a mob, you are undisguised when you are attacked or attack a player! Be careful not to act weirdly when around your target! Remember, just because they think you are a pig. It doesn''t mean their compass is fooled!'
+    Free: true
+    Price: 0
+    Icon: MONSTER_EGG 0 1
+    Ability:
+      - Chameleon
+  Chemist:
+    Description: 'The Chemist kit is a good attacking and supportive kit. It starts with three splash potions, poison II (0:16), instant damage II and weakness (3:00). Use these potions on your enemies to gain an advantage over them; early or late game - it doesn''t matter!'
+    Free: true
+    Price: 0
+    Icon: POTION 16428 1
+    Items:
+      - POTION 16428 1 Unlootable 1
+      - POTION 16420 1 Unlootable 1
+      - POTION 16424 1 Unlootable 1
+  Crafter:
+    Description: 'The crafter kit will allow you to craft and smelt everywhere. You start out with a crafting star and furnace powder, you''ll be able to right click the crafting star to open up a crafting window, and the furnace powder to open up a furnace. The furnace stays smelting whats inside, even while being closed!'
+    Free: true
+    Price: 0
+    Icon: BLAZE_POWDER 0 1
+    Items:
+      - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1
+      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem
+  Creeper:
+    Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
+    Free: true
+    Price: 0
+    Icon: SULPHUR 0 1
+    Ability:
+      - Creeper
+  Cultivator:
+    Description: 'The Cultivator kit allows you to immediately grow wheat and trees by placing seeds on hoed dirt, and placing saplings on dirt/grass. This is an excellent team and solo kit perfect for every game.'
+    Free: true
+    Price: 0
+    Icon: SEEDS 0 1
+    Ability:
+      - Cultivator
+  Demoman:
+    Description: 'The Demoman kit is brilliant for defense. Your victims and enemies wont suspect that a stone pressure plate on gravel will kill them! The explosion is a bit more than a TNT setting off. Careful however! You can set off your own landmines!'
+    Free: true
+    Price: 0
+    Icon: TNT 0 1
+    Items:
+      - GRAVEL 0 2
+      - STONE_PLATE 0 2
+    Ability:
+      - Demoman
+  Digger:
+    Description: 'The digger kit will give you 6 dragon eggs, once you place the egg down, you have a bit more then a second (Trust me, it''s enough!) to get out of the way before a 5x5 hole appears straight under where you placed it. The perfect kit to trap your enemies!'
+    Free: true
+    Price: 0
+    Icon: DRAGON_EGG 0 1
+    Items:
+      - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole
+  Doctor:
+    Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove their all their potion effects.'
+    Free: true
+    Price: 0
+    Icon: Shears 0 1
+    Items:
+      - Shears 0 1 Name=Pair_Of_Forceps Unlootable 1
+  Endermage:
+    Description: 'Warp em up. Warp em down. Warp em all around! The endermage places a enderportal and warps all players directly above and below him with a distance more then 3 to the enderportal. They are then invincible for 5 seconds and are able to instantly KO you. Surely you didn''t think there would be no drawbacks?!'
+    Free: true
+    Price: 0
+    Icon: ENDER_PORTAL 0 1
+    Items:
+      - ENDER_PORTAL 0 1 Name=Endermage_Portal Unlootable 1
+  Explorer:
+    Description: 'The Explorer kit will give you a map, that automatically updates the whole map, so you will be able to see everything on the map, mini feasts and the feast will also be visibly marked on the map.'
+    Free: true
+    Price: 0
+    Icon: Map 0 1
+    Items:
+      - MAP 0 1
+    Ability:
+      - Explorer
+  Fireman:
+    Description: 'The fireman kit gives you a water bucket when you spawn! Use the water to move around and hinder others. Or find lava and get a lava bucket instead!'
+    Free: true
+    Price: 0
+    Icon: WATER_BUCKET 0 1
+    Items:
+      - WATER_BUCKET 0 1
+    Ability:
+      - Fireman
+  Fisherman:
+    Description: 'The Fisherman kit starts with a fishing rod, use the fishing rod in a clever way and this kit can be quite useful! This is one of the most *cough* unbalanced kits in the game.'
+    Free: true
+    Price: 0
+    Icon: FISHING_ROD 0 1
+    Items:
+      - FISHING_ROD 0 1
+  Flash:
+    Description: 'The Flash kit will allow you to instantly teleport to the location you''re aiming at with a swing of your redstone torch. Once you get teleported, you will receive half of the distance you teleported in Weakness II. Once you teleport, lightning will strike at the position you flashed to, and a teleportation effect (Like that of Enderman) will lead towards the position you flashed to. Your redstone torch will turn off on use, and when the cooldown is over, it will turn on again.'
+    Free: true
+    Price: 0
+    Icon: REDSTONE_TORCH_ON 0 1
+    Items:
+      - REDSTONE_TORCH_ON 0 1 Name=Flash UniqueItem Unlootable 1
+    Ability:
+      - Flash
+  Fletcher:
+    Description: 'The Fletcher kit is the perfect match for someone with the Archer kit. The fletcher can make more arrows, while the Archer can fend off foes with their bow!'
+    Free: true
+    Price: 0
+    Icon: ARROW 0 1
+    Ability:
+      - Fletcher
+  Forger:
+    Description: 'The Forger kit gives you the ability to instantly smelt ores if you have enough coal to smelt it. By clicking the coal on an ore in your inventory it will immediately be smelted to an ingot at a 1 coal : 1 ingot ratio, so using 15 coal on a stack of 35 iron ore, will result in 15 iron ingots and 20 iron ore.'
+    Free: true
+    Price: 0
+    Icon: COAL 0 1
+    Items:
+      - COAL 0 3
+    Ability:
+      - Forger
+  Frosty:
+    Description: 'The frosty kit will give the player a huge advantage over others when in a snow biome. The player can also bring the advantage outside of the snow biome with snowballs. This kit gives an all game advantage that also counters poseidons.'
+    Free: true
+    Price: 0
+    Icon: SNOW 0 1
+    Items:
+      - SNOW_BALL 0 5
+    Ability:
+      - Frosty
+  Gambler:
+    Description: 'The Gambler kit is perfect for people who like to chance things! . Effects include slowness, poison, instant-death (1/1000 chance), hunger, weakness, strength, full diamond-armor, (1/1000 chance) regeneration, full-hunger and speed.'
+    Free: true
+    Price: 0
+    Icon: STONE_BUTTON 0 1
+    Items:
+      - STONE_BUTTON 0 1
+    Ability:
+      - Gambler
+  Grandpa:
+    Description: 'The Grandpa kit is really useful when on hilly situations, or when you want someone to leave you alone! The stick has Knockback II, sending your enemies miles (6 or so blocks) away when they come within range!'
+    Free: true
+    Price: 0
+    Icon: STICK 0 1 KNOCKBACK 2
+    Items:
+      - Stick 0 1 Name=Grandpa's_Cane KNOCKBACK 2 Unlootable 1
+  Gravedigger:
+    Description: 'The Gravedigger kit allows you to effectively manage your inventory. The chest that spawns when you kill a player makes it convenient for you to be able to choose and select what items you want to take. Very handy when people drop lots and lots of items!'
+    Free: true
+    Price: 0
+    Icon: DIAMOND_SPADE 0 1
+    Ability:
+      - Gravedigger
+  Hades:
+    Description: 'The Hades kit will allow you to turn zombies into your minions! Once you right click a Zombie with a rotten flesh, they will turn into your minion and follow you around! They will attack whatever you attack, and attack whatever attacks you! Just like wolves they will teleport towards you once they get out of a 10 blocks radius from you. All minions have a diamond helmet!'
+    Free: true
+    Price: 0
+    Icon: ROTTEN_FLESH 0 1
+    Items:
+      - ROTTEN_FLESH 0 4
+    Ability:
+      - Hades
+  Hermit:
+    Description: 'The Hermit kit is useful for people who prefer to start at points with soup. The hermit kit will try to place you to any biome with soup as far away as possible. In this order: Swamp -> Rainforest -> Desert. If none of these biomes are available it will spawn you at least 300 blocks out.'
+    Free: true
+    Price: 0
+    Icon: Map 0 1
+    Ability:
+      - Hermit
+  Hunter:
+    Description: 'The Hunter kit is pretty neat when surrounded by edible animals. This kit saves you time, since you wont have to cook the raw and bloody meat that they normally drop!'
+    Free: true
+    Price: 0
+    Icon: PORK 0 1
+    Ability:
+      - Hunter
+  Jackhammer:
+    Description: 'The Jackhammer kit gives you the ability to break every single block above a single block once you break it with your Stone Axe (Hammer), as soon as you break it every block above it will gradually start to disappear, the sky is the limit. After 5 uses, cooldown will kick in.'
+    Free: true
+    Price: 0
+    Icon: STONE_AXE 0 1
+    Items:
+      - STONE_AXE 0 1 Name=Hammer Unlootable 1
+    Ability:
+      - Jackhammer
+  Jumper:
+    Description: 'The Jumper kit is excellent for getting to places quicker than everyone else, or escaping tough scenarios. This kit is useful, in all aspects of the game! When you throw an enderpearl, you will take no damage from the teleport, and a 4x4 platform will appear under you, lasting for 5 seconds and securing your landing wherever you go.'
+    Free: true
+    Price: 0
+    Icon: ENDER_PEARL 0 1
+    Items:
+      - ENDER_PEARL 0 5
+    Ability:
+      - Jumper
+  Kaya:
+    Description: 'The Kaya kit is awesome for planting traps and annoying unsuspecting victims! Kaya can use their grass blocks to make a platform, but when they try to walk on it. It disappears!'
+    Free: true
+    Price: 0
+    Icon: GRASS 0 1
+    Items:
+      - GRASS 0 16
+    Ability:
+      - Kaya
+  Lumberjack:
+    Description: 'The Lumberjack kit is effective at the start of the game, or in jungles. Your axe can be used to make every wood block above the one you chopped, break and fall!'
+    Free: true
+    Price: 0
+    Icon: LOG 0 1
+    Items:
+      - WOOD_AXE 0 1
+    Ability:
+      - Lumberjack
+  Milkman:
+    Description: 'The Milkman kit gives you a "Milkman''s Bucket" filled with milk, once you drink the milk, you will get 45 seconds of Regeneration I, Fire Resistance I and Speed I, but you will make a tribute to the milkman by saying "I am the milkman, my milk is delicious" on use, you can use the bucket for 5 times, after that, the Milkman''s effect on the bucket will wear off.'
+    Free: true
+    Price: 0
+    Icon: MILK_BUCKET 0 1
+    Items:
+      - MILK_BUCKET 0 1
+    Ability:
+      - Milkman
+  Miner:
+    Description: 'The Miner kit is for people who want to get iron instantly. The speed boost is really useful when mining, too! Eat an apple with full health, full hunger and mine.'
+    Free: true
+    Price: 0
+    Icon: STONE_PICKAXE 0 1
+    Items:
+      - STONE_PICKAXE 0 1
+    Ability:
+      - Miner
+  Miser:
+    Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
+    Free: true
+    Price: 0
+    Icon: CHEST 0 1
+    Items:
+    Ability:
+      - Miser
+  Monk:
+    Description: 'Right click someone with your blaze rod and their currently held item will switch with a random item in their inventory!'
+    Free: true
+    Price: 0
+    Icon: BLAZE_ROD 0 1
+    Items:
+      - BLAZE_ROD 0 1 Name=Monk_Staff Unlootable 1 UniqueItem
+  Monster:
+    Description: 'The Monster kit is the perfect kit for mining safely, or attacking during the night without being disturbed! Alternately if you are just sick of creepers!'
+    Free: true
+    Price: 0
+    Icon: SKULL_ITEM 2 1
+    Ability:
+      - Monster
+  Necro:
+    Description: 'The Necro kit is great for those who hates the zombies and skeletons! Instantly KO them as they approach you!'
+    Free: true
+    Price: 0
+    Icon: SKULL_ITEM 0 1
+    Ability:
+      - Necro
+  Pickpocket:
+    Description: 'The pickpocket kit allows you to right click players with your blaze rod to open up their inventory, where you can steal up to 4 items outside of their hotbar (The top row) before receiving a 10 second cooldown, if the player runs out of range, the inventory closes.'
+    Free: true
+    Price: 0
+    Icon: BLAZE_ROD 0 1
+    Items:
+      - BLAZE_ROD 0 1 Unlootable 1 Name=Thieving_Stick UniqueItem
+    Ability:
+      - Pickpocket
+  Poseidon:
+    Description: 'The Poseidon kit is brilliant when maneuvering in water. Strength I, Speed II and the ability to not drown when moving in water can really help, and give that pvp-boost when in fights!'
+    Free: true
+    Price: 0
+    Icon: WATER 0 1
+    Ability:
+      - Poseidon
+  Pussy:
+    Description: 'Ever get accused of being a pussy? Now you can rub it in! Turn into a kitty cat after 10 seconds of sprinting! Wonderful if you want to become hard to see while you are doing your trademark pussying!'
+    Free: true
+    Price: 0
+    Icon: POTION 16418 1
+    Ability:
+      - Pussy
+  Pyro:
+    Description: 'The Pyro kit is useful for the start and late game. The flint and steel has many uses and can be quite effective when supporting a team, or attacking others! The fire charges can be right click, and when they hit something, everything nearby sets on fire!'
+    Free: true
+    Price: 0
+    Icon: FIRE 0 1
+    Items:
+      - FLINT_AND_STEEL 0 1
+      - FIREBALL 0 5
+    Ability:
+      - Pyro
+  Reaper:
+    Description: 'The Reaper kit will allow you to curse players by hitting them with your wooden hoe, the players will get the wither effect and get damage over time.'
+    Free: true
+    Price: 0
+    Icon: WOOD_HOE 0 1
+    Items:
+      - WOOD_HOE -1000 1 Name=Death_Scythe Unlootable 1
+    Ability:
+      - Reaper
+  Rider:
+    Description: 'The Rider kit allows you to ride almost any passive mob by right clicking them without your riding whip (A stick), once you are riding them, you can use your stick to steer the mob, increase and decrease speed by left clicking and right clicking the mob you''re riding, stop/start with a right click, and jump with a left click. (This information can be found by hovering over the stick in your inventory as well)'
+    Free: true
+    Price: 0
+    Icon: CARROT_STICK 0 1
+    Items:
+      - STICK 0 1 Name=Riding_Whip Unlootable 1
+    Ability:
+      - Rider
+  Salamander:
+    Description: 'The salamander kit is a very nice kit for those who just cannot stop burning! You no longer must fear fire! Swim in lava! Bath in flames! However you seem to be allergic to water..'
+    Free: true
+    Price: 0
+    Icon: LAVA 0 1
+    Ability:
+      - Salamander
+  Salvager:
+    Description: 'The Salvager kit will give you an anvil, when you place that anvil down, you can right click a item on the anvil, and you will receive the building materials back, ie. a iron helmet will give you back 5 iron ingots.'
+    Free: true
+    Price: 0
+    Icon: WORKBENCH 0 1
+    Items:
+      - ANVIL 0 1
+    Ability:
+      - Salvager
+  Santa:
+    Description: 'The Santa kit is an excellent teaming kit, every minute you''ll be given a random present with a kit on it, Gift the present to someone who has the kit, and they''ll get their starting items back! So for example, gift a Chemist the Chemist present and they''ll get their potions back, The present has a insult from the author, and present colors are randomized! However some kits are on the naughty list, This means these kits have a lower chance of being gifted as a present, such as Urgal...'
+    Free: true
+    Price: 0
+    Icon: WRITTEN_BOOK 0 1
+    Ability:
+      - Santa
+  Scout:
+    Description: 'The Scout kit can be used at the start, or towards the end of the game. With 2 speed potions, you can use the potions as you please depending on your strategy! When speed is in effect, you take no fall damage! Every 10 minutes you get 2 new potions as well!'
+    Free: true
+    Price: 0
+    Icon: FEATHER 0 1
+    Items:
+      - POTION 16418 2
+    Ability:
+      - Scout
+  Seeker:
+    Description: 'The Seeker kit allows you to see the unseeable by using your eyes of ender. When you use them, up to 65 blocks ahead of where you look, all ground blocks are turned to glass, except for ores, lava, water, etc. This allows you to easily find ores and see undergound.'
+    Free: true
+    Price: 0
+    Icon: EYE_OF_ENDER 0 1
+    Items:
+      - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1 UniqueItem
+  Snail:
+    Description: 'The Snail kit gives you the ability that as you do damage to players, you have a 33% chance to slow them with slowness II.'
+    Free: true
+    Price: 0
+    Icon: WEB 0 1
+    Ability:
+      - Snail
+  Spiderman:
+    Description: 'The Spiderman kit will give you 6 snowballs (which you will be able to replenish of course), which will create a 2x2 spider web at the location they spawn at, and right in front of any mob if they are hit head on. You can only throw 3 snowballs after each other, before getting a 30 second cooldown. You also get Speed II while in the cobwebs.'
+    Free: true
+    Price: 0
+    Icon: SNOW_BALL 0 1
+    Items:
+      - SNOW_BALL 0 6
+    Ability:
+      - Spiderman
+  Stomper:
+    Description: 'The Stomper kit is really effective and useful on a large scale. You take 2 hearts of fall damage, regardless of the height you fall. And if you fall onto someone else, the damage you would normally take is passed onto them. the closer they are, The more damage they take. A ''stomp'' penetrates armor, too! To counter it be higher then the stomper or sneak to reduce damage by half'
+    Free: true
+    Price: 0
+    Icon: ANVIL 0 1
+    Ability:
+      - Stomper
+  Summoner:
+    Description: 'The Summoner kit will give you the ability to capture any mob that has a spawn egg. You can use the spawn egg to place down a mob that can fight in your stead, do know it might attack you as well!'
+    Free: true
+    Price: 0
+    Icon: MOB_SPAWNER 0 1
+    Items:
+      - EGG 0 3
+    Ability:
+      - Summoner
+  Tarzan:
+    Description: 'The Tarzan kit will make all blocks around you become covered with vines as long as you''re holding your vine, this will give you the chance to evade combat, climb up and down ravines, everything you can think of!'
+    Free: true
+    Price: 0
+    Icon: VINE 0 1
+    Items:
+      - VINE 0 1
+    Ability:
+      - Tarzan
+  Thor:
+    Description: 'Right click with your wooden axe on a block to call down lightning! This excellent kit is great for aggressive players, and is brilliant for countering towers, and also gives you a nice boost in PVP! You can craft another wooden axe in case you die, or if you lose it.'
+    Free: true
+    Price: 0
+    Icon: WOOD_AXE 0 1
+    Items:
+      - WOOD_AXE 0 1
+    Ability:
+      - Thor
+  Tracker:
+    Description: 'You know the ways of your fellow allies and foes. And so you have a very special set of skills, Skills you have acquired over a very long career, Skills that make you a nightmare for people like them. You are able to tell precisely how far away someone is! What their location is and automatically update your compass if they move! By using /track <Player> you can even track a certain person!'
+    Free: true
+    Price: 0
+    Icon: COMPASS 0 1
+    Ability:
+      - Tracker
+  Turtle:
+    Description: 'The Turtle kit review is the ultimate-defense kit, or decoy kit. You can crouch and block and you''ll take half a heart, however you cannot attack if you''re crouched.'
+    Free: true
+    Price: 0
+    Icon: IRON_DOOR_BLOCK 0 1
+    Ability:
+      - Turtle
+  Urgal:
+    Description: 'The Urgal kit starts with three Strength I potions. You can use the pots early, or late game depending on your strategy. It really is an excellent, attacking kit that can be supportive or solo intended.'
+    Free: true
+    Price: 0
+    Icon: POTION 8201 3
+    Items:
+      - POTION 8201 3 Unlootable 1
+    Ability:
+      - Urgal
+  Vampire:
+    Description: 'The Vampire kit is superb for attacking and dominating teams. You get a big health boost when killing players, a smaller health boost when killing monsters and a even smaller health boost when killing animals. If you do not need the health however when you kill a player. You get a health potion!'
+    Free: true
+    Price: 0
+    Icon: Potion 16421 1
+    Ability:
+      - Vampire
+  Viper:
+    Description: 'The Viper kit is really useful for getting that extra bit of damage done to your opponent in key battles. There''s a 33% chance of poisoning your enemy everytime you hit him.'
+    Free: true
+    Price: 0
+    Icon: Potion 8196 1
+    Ability:
+      - Viper
+  Werewolf:
+    Description: 'The Werewolf kit is perfect for night-time battles. During the night you have constant Strength I and Speed I effect, however during the day you have Weakness I. Wolves will never attack you, either. Spawn with a clock to check the time of day!'
+    Free: true
+    Price: 0
+    Icon: WATCH 0 1
+    Items:
+      - WATCH 0 1 Unlootable 1
+    Ability:
+      - Werewolf
