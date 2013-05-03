@@ -10,7 +10,7 @@
 		<sourceDirectory>src</sourceDirectory>
 		<defaultGoal>clean package</defaultGoal>
 		<directory>target</directory>
-		<finalName>Hungergames</finalName>
+		<finalName>LibsHungergames</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
