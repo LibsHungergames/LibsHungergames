@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Beastmaster extends AbilityListener {
+public class Beastmasterh extends AbilityListener {
     
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
