@@ -75,7 +75,7 @@ public class Hungergames extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             metrics.start();
             if (metrics.isOptOut())
-                this.getLogger().log(Level.INFO, cm.getLoggerMetricsMessage());
+                System.out.print(cm.getLoggerMetricsMessage());
         } catch (IOException e) {
         }
         HungergamesApi.init(this);
@@ -442,22 +442,12 @@ public class Hungergames extends JavaPlugin {
             PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
             playerListener.onQuit(event);
         }
-        if (!config.isMySqlEnabled())
-            return;
-       /* while (pm.loadGamer.size() > 0) {
-            System.out.print(String.format(cm.getLoggerWaitingForLoadGamerToComplete(), pm.loadGamer.size()));
-            try {
-                Thread.sleep(1000);
-            } catch (Exception ex) {
-
-            }
-        }*/
         HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
 
     public void shutdown() {
-        getLogger().log(Level.INFO, cm.getLoggerShuttingDown());
+        System.out.print(cm.getLoggerShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled())

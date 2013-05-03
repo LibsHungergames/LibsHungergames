@@ -23,6 +23,8 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void mySqlDisconnect() {
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+            return;
         try {
             System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
             this.con.close();
