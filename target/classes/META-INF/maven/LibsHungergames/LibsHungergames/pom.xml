@@ -25,7 +25,7 @@
 			<resource>
 				<targetPath>.</targetPath>
 				<filtering>true</filtering>
-				<directory>${basedir}</directory>
+				<directory>${project.basedir}</directory>
 				<includes>
 					<include>plugin.yml</include>
 					<include>config.yml</include>
@@ -43,6 +43,11 @@
 	</properties>
 	<url>http://dev.bukkit.org/server-mods/hunger-games/</url>
 	<repositories>
+		<repository>
+			<id>project.local</id>
+			<name>local repo</name>
+			<url>file:${project.basedir}\lib</url>
+		</repository>
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
@@ -65,14 +70,14 @@
 			<version>1.2.26-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>me.libraryaddict</groupId>
-			<artifactId>LibsCommands</artifactId>
-			<version>1</version>
+			<groupId>iDisguise</groupId>
+			<artifactId>idisguise</artifactId>
+			<version>v1.6.6</version>
 		</dependency>
 		<dependency>
-			<groupId>de.robingrether.idisguise</groupId>
-			<artifactId>iDisguise</artifactId>
-			<version>v1.6.6</version>
+			<groupId>LibsCommands</groupId>
+			<artifactId>libscommands</artifactId>
+			<version>v1.0</version>
 		</dependency>
 	</dependencies>
 </project>
