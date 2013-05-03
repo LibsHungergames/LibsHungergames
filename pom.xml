@@ -36,7 +36,7 @@
 		</resources>
 	</build>
 
-	<version>1.8</version>
+	<version>v1.8</version>
 
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
@@ -46,7 +46,7 @@
 		<repository>
 			<id>project.local</id>
 			<name>local repo</name>
-			<url>file:${project.basedir}\lib</url>
+			<url>file:${project.basedir}/lib</url>
 		</repository>
 		<repository>
 			<id>bukkit-repo</id>

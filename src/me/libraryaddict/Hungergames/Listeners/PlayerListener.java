@@ -93,7 +93,7 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
-        p.sendMessage(cm.getMessagePlayerWhosePlugin());
+        p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion()));
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         p.setAllowFlight(true);
         if (hg.currentTime >= 0) {
