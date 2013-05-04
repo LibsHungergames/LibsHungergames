@@ -111,7 +111,7 @@ public class PlayerManager {
     }
 
     public void sendToSpawn(Gamer gamer) {
-        Player p = gamer.getPlayer();
+        final Player p = gamer.getPlayer();
         Location spawn = p.getWorld().getSpawnLocation().clone();
         int chances = 0;
         if (p.isInsideVehicle())
@@ -143,7 +143,13 @@ public class PlayerManager {
                 spawn.setY(spawn.getY() + 1);
             }
         }
-        p.teleport(spawn.add(0.5, 0.1, 0.5));
+        final Location destination = spawn.add(0.5, 0.1, 0.5);
+        p.teleport(destination);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                p.teleport(destination);
+            }
+        });
     }
 
     public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
