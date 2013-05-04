@@ -317,7 +317,7 @@ public class ChatManager {
                                         Bukkit.broadcastMessage(ChatColor.RED
                                                 + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
                                     }
-                                }, 20 * 60 * 5, 20 * 60 * 5);
+                                }, 20 * 60 * 10, 20 * 60 * 10);
                             }
                         } catch (Exception e) {
                             System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
