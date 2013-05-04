@@ -262,7 +262,7 @@ public class PlayerListener implements Listener {
             if (!trackEvent.isCancelled()) {
                 p.sendMessage(trackEvent.getMessage());
                 if (victim != null) {
-                    p.setCompassTarget(victim.getLocation());
+                    p.setCompassTarget(victim.getLocation().clone());
                 } else {
                     p.setCompassTarget(p.getWorld().getSpawnLocation());
 
