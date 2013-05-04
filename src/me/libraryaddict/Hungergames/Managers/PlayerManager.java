@@ -106,25 +106,23 @@ public class PlayerManager {
         return game;
     }
 
-    public int returnChance(int Chance) {
-        return new Random().nextInt(Chance);
+    public static int returnChance(int start, int end) {
+        return start + (int) (Math.random() * ((end - start) + 1));
     }
 
     public void sendToSpawn(Gamer gamer) {
-        final Player p = gamer.getPlayer();
-        Location spawn = gamer.getPlayer().getWorld().getSpawnLocation();
+        Player p = gamer.getPlayer();
+        Location spawn = p.getWorld().getSpawnLocation().clone();
         int chances = 0;
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
         int spawnRadius = 8;
-        int spawnHeight = 3;
+        int spawnHeight = 5;
         while (chances < 100) {
             chances++;
-            Location newLoc = new Location(spawn.getWorld(),
-                    spawn.getX() + (new Random().nextInt(spawnRadius * 2) - spawnRadius), spawn.getY()
-                            + new Random().nextInt(spawnHeight), spawn.getZ()
-                            + (new Random().nextInt(spawnRadius * 2) - spawnRadius));
+            Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
+                    + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
             if (nonSolid.contains(newLoc.getBlock().getTypeId())
                     && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
                 while (newLoc.getBlockY() >= 1 && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
@@ -133,24 +131,19 @@ public class PlayerManager {
                 if (newLoc.getBlockY() <= 1)
                     continue;
                 spawn = newLoc;
+                break;
             }
         }
-        if (spawn.equals(spawn.getWorld().getSpawnLocation())) {
-            spawn = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(spawnRadius * 2) - spawnRadius), 10,
-                    spawn.getZ() + (new Random().nextInt(spawnRadius * 2) - spawnRadius));
+        if (spawn.equals(p.getWorld().getSpawnLocation())) {
+            spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
+                    + returnChance(-spawnRadius, spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
             if (gamer.isAlive() && spawn.getY() <= 1) {
                 spawn.getBlock().setType(Material.GLASS);
                 spawn.setY(spawn.getY() + 1);
             }
         }
-        final Location destination = spawn.add(0.5, 0.5, 0.5);
-        p.teleport(destination);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                p.teleport(destination);
-            }
-        });
+        p.teleport(spawn.add(0.5, 0.1, 0.5));
     }
 
     public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
