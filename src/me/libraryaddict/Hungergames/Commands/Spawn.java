@@ -16,7 +16,7 @@ public class Spawn implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
         if (!gamer.isAlive()) {
-            pm.sendToSpawn(gamer.getPlayer());
+            pm.sendToSpawn(gamer);
             return true;
         } else
             gamer.getPlayer().sendMessage(cm.getCommandSpawnFail());

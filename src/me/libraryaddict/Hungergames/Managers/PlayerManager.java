@@ -40,6 +40,27 @@ public class PlayerManager {
     Hungergames hg = HungergamesApi.getHungergames();
     ChatManager cm = HungergamesApi.getChatManager();
     KitManager kits = HungergamesApi.getKitManager();
+    private ArrayList<Integer> nonSolid = new ArrayList<Integer>();
+
+    public PlayerManager() {
+        nonSolid.add(0);
+        for (int b = 8; b < 12; b++)
+            nonSolid.add(b);
+        nonSolid.add(Material.SNOW.getId());
+        nonSolid.add(Material.LONG_GRASS.getId());
+        nonSolid.add(Material.RED_MUSHROOM.getId());
+        nonSolid.add(Material.RED_ROSE.getId());
+        nonSolid.add(Material.YELLOW_FLOWER.getId());
+        nonSolid.add(Material.BROWN_MUSHROOM.getId());
+        nonSolid.add(Material.SIGN_POST.getId());
+        nonSolid.add(Material.WALL_SIGN.getId());
+        nonSolid.add(Material.FIRE.getId());
+        nonSolid.add(Material.TORCH.getId());
+        nonSolid.add(Material.REDSTONE_WIRE.getId());
+        nonSolid.add(Material.REDSTONE_TORCH_OFF.getId());
+        nonSolid.add(Material.REDSTONE_TORCH_ON.getId());
+        nonSolid.add(Material.VINE.getId());
+    }
 
     public synchronized Gamer getGamer(Entity entity) {
         for (Gamer g : gamers)
@@ -89,35 +110,41 @@ public class PlayerManager {
         return new Random().nextInt(Chance);
     }
 
-    public void sendToSpawn(final Player p) {
-        p.setFlying(false);
-        Location spawn = hg.world.getSpawnLocation().clone();
+    public void sendToSpawn(Gamer gamer) {
+        final Player p = gamer.getPlayer();
+        Location spawn = gamer.getPlayer().getWorld().getSpawnLocation();
         int chances = 0;
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        while (true) {
-            Location hisSpawn = new Location(spawn.getWorld(), spawn.getX() + (returnChance(10 * 2) - 10), spawn.getY()
-                    + new Random().nextInt(10), spawn.getZ() + (returnChance(10 * 2) - 10));
-            chances = chances + 1;
-            while (hisSpawn.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                if (hisSpawn.getY() > 0)
-                    hisSpawn.add(0, -1, 0);
-                else
+        int spawnRadius = 8;
+        int spawnHeight = 3;
+        while (chances < 100) {
+            chances++;
+            Location newLoc = new Location(spawn.getWorld(),
+                    spawn.getX() + (new Random().nextInt(spawnRadius * 2) - spawnRadius), spawn.getY()
+                            + new Random().nextInt(spawnHeight), spawn.getZ()
+                            + (new Random().nextInt(spawnRadius * 2) - spawnRadius));
+            if (nonSolid.contains(newLoc.getBlock().getTypeId())
+                    && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
+                while (newLoc.getBlockY() >= 1 && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
+                    newLoc = newLoc.add(0, -1, 0);
+                }
+                if (newLoc.getBlockY() <= 1)
                     continue;
-            }
-            if (hisSpawn.getBlock().getType() == Material.AIR
-                    && hisSpawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR) {
-                spawn = hisSpawn.clone();
-                break;
-            }
-            if (chances == 300) {
-                hisSpawn.setY(p.getWorld().getHighestBlockYAt(hisSpawn));
-                spawn = hisSpawn.clone();
-                break;
+                spawn = newLoc;
             }
         }
-        final Location destination = spawn.add(0.5, 0, 0.5).clone();
+        if (spawn.equals(spawn.getWorld().getSpawnLocation())) {
+            spawn = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(spawnRadius * 2) - spawnRadius), 10,
+                    spawn.getZ() + (new Random().nextInt(spawnRadius * 2) - spawnRadius));
+            spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
+            if (gamer.isAlive() && spawn.getY() <= 1) {
+                spawn.getBlock().setType(Material.GLASS);
+                spawn.setY(spawn.getY() + 1);
+            }
+        }
+        final Location destination = spawn.add(0.5, 0.5, 0.5);
         p.teleport(destination);
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {

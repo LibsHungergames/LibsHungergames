@@ -344,9 +344,9 @@ public class Hungergames extends JavaPlugin {
             gamer.seeInvis(false);
             p.setFallDistance(0);
             gamer.setSpectating(false);
-            pm.sendToSpawn(p);
-            p.playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
+            pm.sendToSpawn(gamer);
         }
+        world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         checkWinner();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {

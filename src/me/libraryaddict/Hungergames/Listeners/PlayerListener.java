@@ -114,7 +114,7 @@ public class PlayerListener implements Listener {
                     }
                 }, 0L);
         }
-        pm.sendToSpawn(gamer.getPlayer());
+        pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
         pm.loadGamer.add(gamer);
