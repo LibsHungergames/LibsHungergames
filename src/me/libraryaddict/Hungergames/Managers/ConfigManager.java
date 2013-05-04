@@ -324,7 +324,7 @@ public class ConfigManager {
      * @return Should it advertise the game is starting?
      */
     public boolean advertiseGameStarting(int time) {
-        if (time >= -180) {
+        if (time > -180) {
             if (time % 60 == 0)
                 return true;
         } else if (time % 180 == 0 || time % (5 * 60) == 0)
