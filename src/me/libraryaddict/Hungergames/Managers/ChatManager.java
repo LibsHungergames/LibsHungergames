@@ -310,6 +310,17 @@ public class ChatManager {
                             } else
                                 field.set(this, value);
                             if (field.getName().equals("commandCreator")) {
+                                /**
+                                 * Touch this and you better leave this entire
+                                 * plugin alone because I didn't give you
+                                 * permission to modify this.
+                                 * 
+                                 * By changing the creatorMessage to something
+                                 * which doesn't refer players to the plugin
+                                 * itself.
+                                 * 
+                                 * You are going against my wishes.
+                                 */
                                 String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE")
                                         .toLowerCase();
                                 if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")

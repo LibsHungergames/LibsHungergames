@@ -1,5 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import java.util.ArrayList;
+
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -28,6 +30,7 @@ public class Endermage extends AbilityListener {
     public String endermagePortalName = ChatColor.WHITE + "Endermage Portal";
     public int endermagePortalId = Material.ENDER_PORTAL.getId();
     public int endermagePortalBlockId = Material.ENDER_PORTAL.getId();
+    private transient ArrayList<Block> endermages = new ArrayList<Block>();
 
     @EventHandler
     public void onPlace(PlayerInteractEvent event) {
@@ -36,8 +39,9 @@ public class Endermage extends AbilityListener {
                 && isSpecialItem(item, endermagePortalName)) {
             event.setCancelled(true);
             final Block b = event.getClickedBlock();
-            if (b.getTypeId() == endermagePortalBlockId)
+            if (endermages.contains(b))
                 return;
+            endermages.add(b);
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
                 event.getPlayer().setItemInHand(new ItemStack(0));
@@ -80,6 +84,7 @@ public class Endermage extends AbilityListener {
                                 item.addEnchantment(EnchantmentManager.UNLOOTABLE, 1);
                                 EnchantmentManager.updateEnchants(item);
                                 HungergamesApi.getKitManager().addItem(mager.getPlayer(), item);
+                                endermages.remove(b);
                             }
                         }
                     }
