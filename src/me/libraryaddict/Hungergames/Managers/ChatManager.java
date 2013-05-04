@@ -309,15 +309,22 @@ public class ChatManager {
                                 field.set(this, ((float) (double) (Double) value));
                             } else
                                 field.set(this, value);
-                            if (field.getName().equals("commandCreator")
-                                    && !String.format(((String) value), "libraryaddict", "site").toLowerCase()
-                                            .contains("libraryaddict")) {
-                                Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
-                                    public void run() {
-                                        Bukkit.broadcastMessage(ChatColor.RED
-                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
-                                    }
-                                }, 20 * 60 * 10, 20 * 60 * 10);
+                            if (field.getName().equals("commandCreator")) {
+                                String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE")
+                                        .toLowerCase();
+                                if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")
+                                        && !message.contains("dev.bukkit.org/server-mods/hunger-games")
+                                        && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
+                                    Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
+                                            new Runnable() {
+                                                public void run() {
+                                                    Bukkit.broadcastMessage(ChatColor.DARK_AQUA
+                                                            + "[Hungergames] "
+                                                            + ChatColor.AQUA
+                                                            + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
+                                                }
+                                            }, 20 * 60 * 10, 20 * 60 * 10);
+                                }
                             }
                         } catch (Exception e) {
                             System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
