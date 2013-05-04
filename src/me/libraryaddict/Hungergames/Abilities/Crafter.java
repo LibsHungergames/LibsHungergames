@@ -42,7 +42,7 @@ public class Crafter extends AbilityListener {
         ItemStack item = event.getItem();
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
             Player p = event.getPlayer();
-            if (isSpecialItem(item, craftingStarItemName) && furnacePowderItemId == item.getTypeId()) {
+            if (isSpecialItem(item, craftingStarItemName) && craftingStarItemId == item.getTypeId()) {
                 p.openWorkbench(null, true);
             } else if (isSpecialItem(item, furnacePowderItemName) && furnacePowderItemId == item.getTypeId()) {
                 if (!furnaces.containsKey(item)) {
