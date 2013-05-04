@@ -347,7 +347,6 @@ public class Hungergames extends JavaPlugin {
             pm.sendToSpawn(gamer);
         }
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
-        checkWinner();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 for (Gamer gamer : pm.getAliveGamers())
@@ -361,6 +360,7 @@ public class Hungergames extends JavaPlugin {
         for (Location l : entitys.keySet())
             l.getWorld().spawnEntity(l, entitys.get(l));
         entitys.clear();
+        checkWinner();
     }
 
     public void cannon() {

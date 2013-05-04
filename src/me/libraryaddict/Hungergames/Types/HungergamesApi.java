@@ -15,12 +15,13 @@ public class HungergamesApi {
     private static KitSelectorManager icon;
     private static ConfigManager config;
     private static AbilityManager abilityManager;
+    private static AbilityConfigManager abilityConfigManager;
     private static ChatManager chatManager;
 
     public static void init(Hungergames hunger) {
         hg = hunger;
     }
-    
+
     public static ChatManager getChatManager() {
         if (chatManager == null)
             chatManager = new ChatManager();
@@ -83,7 +84,13 @@ public class HungergamesApi {
 
     public static AbilityManager getAbilityManager() {
         if (abilityManager == null)
-            abilityManager = new AbilityManager(new AbilityConfigManager(getHungergames()));
+            abilityManager = new AbilityManager();
         return abilityManager;
+    }
+
+    public static AbilityConfigManager getAbilityConfigManager() {
+        if (abilityConfigManager == null)
+            abilityConfigManager = new AbilityConfigManager();
+        return abilityConfigManager;
     }
 }

@@ -19,11 +19,10 @@ public class AbilityManager {
 
     private HashMap<String, AbilityListener> abilities = new HashMap<String, AbilityListener>();
     private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
-    private AbilityConfigManager abilityConfigManager;
+    private AbilityConfigManager abilityConfigManager = HungergamesApi.getAbilityConfigManager();
     private ChatManager cm = HungergamesApi.getChatManager();
 
-    public AbilityManager(AbilityConfigManager abilityConfigManager) {
-        this.abilityConfigManager = abilityConfigManager;
+    public AbilityManager() {
         initializeAllAbilitiesInPackage(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Abilities");
     }
 
@@ -42,8 +41,9 @@ public class AbilityManager {
                 try {
                     Bukkit.getLogger().info(String.format(cm.getLoggerFoundAbilityInPackage(), abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
-                    final boolean modified = abilityListener.load(abilityConfigManager.getConfigSection(abilityClass
-                            .getSimpleName()));
+                    final boolean modified = abilityListener
+                            .load(abilityConfigManager.getConfigSection(abilityClass.getSimpleName()),
+                                    abilityConfigManager.isNewFile());
                     if (modified)
                         saveConfig = true;
                     if (abilityListener instanceof CommandExecutor && abilityListener.getCommand() != null) {

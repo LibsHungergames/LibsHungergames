@@ -64,6 +64,10 @@ public abstract class AbilityListener implements Listener {
     }
 
     public boolean load(ConfigurationSection section) {
+        return load(section, true);
+    }
+
+    public boolean load(ConfigurationSection section, boolean isNewFile) {
         ChatManager cm = HungergamesApi.getChatManager();
         boolean modified = false;
         for (Field field : getClass().getDeclaredFields()) {
@@ -84,6 +88,9 @@ public abstract class AbilityListener implements Listener {
                         }
                         section.set(field.getName(), value);
                         modified = true;
+                        if (!isNewFile)
+                            System.out.print(String.format(cm.getLoggerAbilityMissingValue(), getClass().getSimpleName(),
+                                    field.getName()));
                     } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                         List<Object> array = (List<Object>) value;
                         value = array.toArray(new String[array.size()]);

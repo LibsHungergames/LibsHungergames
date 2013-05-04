@@ -154,13 +154,13 @@ public class ChatManager {
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
+    private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s% missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
-    private String loggerTranslationMissingValue = "[Hungergames] Translation config missing value '%s' - Defaults restored";
-    private String loggerCreatingAbilitysConfig = "[Hungergames] Creating config file";
+    private String loggerCreatingAbilitysConfig = "[Hungergames] Creating ability config file";
     private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation file";
-    private String loggerDependencyNotFound = "[Hungergames] Dependency %s not found";
+    private String loggerDependencyNotFound = "Dependency %s not found";
     private String loggerDisabledEnd = "[Hungergames] Disabled the end";
     private String loggerDisabledNether = "[Hungergames] Disabled the nether";
     private String loggerErrorWhileLoadingAbility = "[Hungergames] Error while loading ability: %s - %s";
@@ -181,12 +181,11 @@ public class ChatManager {
     private String loggerShutdownCancelled = "[Hungergames] Shutdown event was cancelled by some plugin!";
     private String loggerShuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
     private String loggerSucessfullyLoadedMap = "[Hungergames] Sucessfully loaded map %s";
+    private String loggerTranslationMissingValue = "[Hungergames] Restored translation missing config '%s'";
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
-    private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_GREEN + "Your current kit:" + ChatColor.RESET + " %s";
     private String messagePlayerHasHealthAndHunger = ChatColor.RED + "%1$2s has %2$2s/20 health\n%3$2s has %4$2s/20 hunger";
-    private String messagePlayerShowKitsHisKits = ChatColor.DARK_GREEN + "Your kits:" + ChatColor.RESET + " %s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
@@ -194,9 +193,6 @@ public class ChatManager {
     private String messagePlayerKitDescriptionDoesntExist = "This kit does not exist!";
     private String messagePlayerKitDescriptionName = ChatColor.DARK_AQUA + "Name:" + ChatColor.AQUA + " %s";
     private String messagePlayerKitDescritionMoreInfo = "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
-    private String messagePlayerShowKitsNoKit = "None";
-    private String messagePlayerShowKitsNoKits = "No kits available..";
-    private String messagePlayerShowKitsOtherKits = ChatColor.DARK_GREEN + "Other kits:" + ChatColor.RESET + " %s";
     private String messagePlayerSendKitItemsDoesntExist = "This kit does not exist!";
     private String messagePlayerSendKitItemsKitBoots = ChatColor.DARK_AQUA + "Kit Boots:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitChestplate = ChatColor.DARK_AQUA + "Kit Chestplate:" + ChatColor.AQUA + " %s";
@@ -205,12 +201,16 @@ public class ChatManager {
     private String messagePlayerSendKitItemsKitName = ChatColor.DARK_AQUA + "Kit Name:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsNoItems = "No other items to display";
     private String messagePlayerSendKitItemsOtherItems = ChatColor.DARK_AQUA + "Other items:" + ChatColor.AQUA + " %s";
+    private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_GREEN + "Your current kit:" + ChatColor.RESET + " %s";
+    private String messagePlayerShowKitsHisKits = ChatColor.DARK_GREEN + "Your kits:" + ChatColor.RESET + " %s";
+    private String messagePlayerShowKitsNoKit = "None";
+    private String messagePlayerShowKitsNoKits = "No kits available..";
+    private String messagePlayerShowKitsOtherKits = ChatColor.DARK_GREEN + "Other kits:" + ChatColor.RESET + " %s";
+    private String messagePlayerShowKitsUseKitInfo = "To view the information on a kit, Use /kitinfo <Kit Name>";
     private String messagePlayerTrack = "Compass pointing at %s";
     private String messagePlayerTrackNoVictim = "No players found, Pointing at spawn";
-    private String messagePlayerShowKitsUseKitInfo = "To view the information on a kit, Use /kitinfo <Kit Name>";
     private String messagePlayerWarningForgeUnstableEnchants = ChatColor.RED
             + "Minecraft will crash if you attempt to put this in";
-    private boolean shouldIMessagePlayersWhosePlugin = true;
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize: ";
@@ -223,6 +223,7 @@ public class ChatManager {
     private String scoreboardStageInvincibility = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Invincibility";
     private String scoreboardStagePreFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pre-Feast";
     private String scoreboardStagePreGame = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pregame";
+    private boolean shouldIMessagePlayersWhosePlugin = true;
     private String timeFormatMinute = "%s minute";
     private String timeFormatMinutes = "%s minutes";
     private String timeFormatMotdMinute = ChatColor.DARK_GREEN + "Game starting in %s minute.";
@@ -242,32 +243,33 @@ public class ChatManager {
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
     private transient File configFile;
     private transient YamlConfiguration config;
+    private transient boolean newFile = false;
 
     public ChatManager() {
+        configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "translation.yml");
+        config = new YamlConfiguration();
+        load();
         loadConfig();
     }
 
-    public void loadConfig() {
-        File parent = HungergamesApi.getHungergames().getDataFolder();
-        parent.mkdir();
-        configFile = new File(parent, "translation.yml");
-        config = new YamlConfiguration();
+    public boolean isNewFile() {
+        return newFile;
+    }
+
+    public void load() {
         try {
-            load();
+            if (!configFile.exists())
+                save();
+            else
+                newFile = false;
+            config.load(configFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void load() {
+    public void loadConfig() {
         try {
-            boolean newConfig = false;
-            if (!configFile.exists()) {
-                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
-                configFile.createNewFile();
-                newConfig = true;
-            }
-            config.load(configFile);
             boolean saveConfig = false;
             System.out.print(getLoggerLoadTranslationConfig());
             try {
@@ -290,7 +292,7 @@ public class ChatManager {
                                 }
                                 config.set(field.getName(), value);
                                 modified = true;
-                                if (!newConfig)
+                                if (!newFile)
                                     System.out.print(String.format(getLoggerTranslationMissingValue(), field.getName()));
                             } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                                 List<Object> array = (List<Object>) value;
@@ -356,7 +358,12 @@ public class ChatManager {
 
     public void save() {
         try {
-            configFile.createNewFile();
+            if (!configFile.exists()) {
+                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+                newFile = true;
+            }
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -1201,5 +1208,9 @@ public class ChatManager {
 
     public String getLoggerTranslationMissingValue() {
         return loggerTranslationMissingValue;
+    }
+
+    public String getLoggerAbilityMissingValue() {
+        return loggerAbilityMissingValue;
     }
 }

@@ -5,10 +5,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -18,30 +15,20 @@ public class AbilityConfigManager {
     private File configFile;
     private YamlConfiguration config;
     private ChatManager cm = HungergamesApi.getChatManager();
+    private boolean newFile = false;
 
-    public AbilityConfigManager(JavaPlugin parent) {
-        parent.getDataFolder().mkdir();
-        configFile = new File(parent.getDataFolder(), "abilities.yml");
+    public AbilityConfigManager() {
+        configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "abilities.yml");
         config = new YamlConfiguration();
-
-        try {
-            config.load(configFile);
-            save();
-        } catch (FileNotFoundException e) {
-            try {
-                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitysConfig());
-                configFile.createNewFile();
-                save();
-            } catch (IOException x) {
-                x.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        load();
     }
 
     public void load() {
         try {
+            if (!configFile.exists())
+                save();
+            else
+                newFile = false;
             config.load(configFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +37,12 @@ public class AbilityConfigManager {
 
     public void save() {
         try {
-            configFile.createNewFile();
+            if (!configFile.exists()) {
+                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitysConfig());
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+                newFile = true;
+            }
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,5 +55,9 @@ public class AbilityConfigManager {
             section = config.createSection(abilityName);
         }
         return section;
+    }
+
+    public boolean isNewFile() {
+        return newFile;
     }
 }
