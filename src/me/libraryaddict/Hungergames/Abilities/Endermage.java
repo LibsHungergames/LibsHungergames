@@ -45,7 +45,7 @@ public class Endermage extends AbilityListener {
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
                 event.getPlayer().setItemInHand(new ItemStack(0));
-            final Location portal = b.getLocation().clone().add(0.5, 0.5, 0.5);
+            final Location portal = b.getLocation().clone().add(0.5, 0, 0.5);
             final Material material = b.getType();
             final byte dataValue = b.getData();
             portal.getBlock().setTypeId(endermagePortalBlockId);
