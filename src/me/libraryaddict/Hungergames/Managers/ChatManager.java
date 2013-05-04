@@ -210,6 +210,7 @@ public class ChatManager {
     private String messagePlayerShowKitsUseKitInfo = "To view the information on a kit, Use /kitinfo <Kit Name>";
     private String messagePlayerWarningForgeUnstableEnchants = ChatColor.RED
             + "Minecraft will crash if you attempt to put this in";
+    private boolean shouldIMessagePlayersWhosePlugin = true;
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize: ";
@@ -1170,6 +1171,10 @@ public class ChatManager {
 
     public String getCommandBuyKitKitsNotLoaded() {
         return commandBuyKitKitsNotLoaded;
+    }
+
+    public boolean getShouldIMessagePlayersWhosePlugin() {
+        return shouldIMessagePlayersWhosePlugin;
     }
 
     public String getMessagePlayerWhosePlugin() {
