@@ -471,6 +471,13 @@ Kits:
       - EGG 0 3
     Ability:
       - Summoner
+  Surprise:
+    Description: 'The Surprise kit will turn you into one of all the kits as soon as the game starts, even kits that you do not own, making this a nice kit to try out kits you might not own yet, and get a little variation!'
+    Free: true
+    Price: 0
+    Icon: CAKE_BLOCK 0 1
+    Ability:
+      - Surprise
   Tarzan:
     Description: 'The Tarzan kit will make all blocks around you become covered with vines as long as you''re holding your vine, this will give you the chance to evade combat, climb up and down ravines, everything you can think of!'
     Free: true
