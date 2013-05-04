@@ -157,6 +157,7 @@ public class ChatManager {
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
+    private String loggerTranslationMissingValue = "[Hungergames] Translation config missing value '%s' - Defaults restored";
     private String loggerCreatingAbilitysConfig = "[Hungergames] Creating config file";
     private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation file";
     private String loggerDependencyNotFound = "[Hungergames] Dependency %s not found";
@@ -251,10 +252,6 @@ public class ChatManager {
         configFile = new File(parent, "translation.yml");
         config = new YamlConfiguration();
         try {
-            if (!configFile.exists()) {
-                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
-                configFile.createNewFile();
-            }
             load();
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,6 +260,12 @@ public class ChatManager {
 
     public void load() {
         try {
+            boolean newConfig = false;
+            if (!configFile.exists()) {
+                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
+                configFile.createNewFile();
+                newConfig = true;
+            }
             config.load(configFile);
             boolean saveConfig = false;
             System.out.print(getLoggerLoadTranslationConfig());
@@ -286,6 +289,8 @@ public class ChatManager {
                                 }
                                 config.set(field.getName(), value);
                                 modified = true;
+                                if (!newConfig)
+                                    System.out.print(String.format(getLoggerTranslationMissingValue(), field.getName()));
                             } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                                 List<Object> array = (List<Object>) value;
                                 value = array.toArray(new String[array.size()]);
@@ -317,8 +322,9 @@ public class ChatManager {
                             System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
                         }
                 }
-                if (modified)
+                if (modified) {
                     saveConfig = true;
+                }
             } catch (Exception e) {
                 System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
             }
@@ -1168,5 +1174,9 @@ public class ChatManager {
 
     public String getMessagePlayerWhosePlugin() {
         return messagePlayerWhosePlugin;
+    }
+
+    public String getLoggerTranslationMissingValue() {
+        return loggerTranslationMissingValue;
     }
 }
