@@ -54,12 +54,12 @@ public class GeneralListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player
-                || (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed())) {
-            if ((event.getEntity() instanceof Player && (!hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive()))
-                    || hg.currentTime <= config.getInvincibilityTime())
+        if (event.getEntity() instanceof Player) {
+            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive())
                 event.setCancelled(true);
-        }
+        } else if (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed()
+                && hg.currentTime <= config.getInvincibilityTime())
+            event.setCancelled(true);
     }
 
     @EventHandler
@@ -68,16 +68,6 @@ public class GeneralListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        /*
-         * if (event.getPlayer() != null) {
-         * Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-         * public void run() { ItemStack item =
-         * event.getPlayer().getItemInHand(); if (item != null && item.getType()
-         * == Material.FLINT_AND_STEEL) { item.setDurability((short)
-         * (item.getDurability() + 10)); if (item.getDurability() > 63)
-         * event.getPlayer().setItemInHand(new ItemStack(Material.AIR)); } } });
-         * }
-         */
     }
 
     @EventHandler
