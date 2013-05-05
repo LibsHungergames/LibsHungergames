@@ -80,15 +80,9 @@ public class PlayerJoinThread extends Thread {
                     Statement stmt = con.createStatement();
                     ResultSet r = stmt.executeQuery("SELECT * FROM `HGKits` WHERE `Name` = '" + gamer.getName() + "' ;");
                     r.beforeFirst();
-                    List<Kit> hisKits = new ArrayList<Kit>();
-                    if (kits.hisKits.containsKey(gamer.getName()))
-                        hisKits = kits.hisKits.get(gamer.getName());
                     while (r.next()) {
-                        Kit kit = kits.getKitByName(r.getString("KitName"));
-                        if (!hisKits.contains(kit))
-                            hisKits.add(kit);
+                        kits.addKitToPlayer(gamer.getPlayer(), kits.getKitByName(r.getString("KitName")));
                     }
-                    kits.hisKits.put(gamer.getName(), hisKits);
                     r.close();
                     stmt.close();
                 } catch (Exception ex) {

@@ -38,11 +38,10 @@ public class BuyKit implements CommandExecutor {
                     sender.sendMessage(cm.getCommandBuyKitMysqlNotEnabled());
                     return true;
                 }
-                if (!kits.hisKits.containsKey(gamer.getName())) {
+                if (!kits.addKitToPlayer(gamer.getPlayer(), kit)) {
                     sender.sendMessage(cm.getCommandBuyKitKitsNotLoaded());
                 } else {
                     gamer.addBalance(-kit.getPrice());
-                    kits.hisKits.get(gamer.getName()).add(kit);
                     new GiveKitThread(gamer.getName(), kit.getName()).start();
                     sender.sendMessage(cm.getCommandBuyKitPurchasedKit());
                 }

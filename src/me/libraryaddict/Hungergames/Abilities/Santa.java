@@ -52,7 +52,7 @@ public class Santa extends AbilityListener {
 
     private Kit findViableKit() {
         ArrayList<Kit> randomKits = new ArrayList<Kit>();
-        for (Kit kit : kits.kits) {
+        for (Kit kit : kits.getKits()) {
             if (hasChance(kit)) {
                 randomKits.add(kit);
             }
@@ -83,7 +83,7 @@ public class Santa extends AbilityListener {
         ItemStack item = event.getItemInHand();
         if (preventPlacing && item != null && item.getTypeId() == presentID && item.hasItemMeta()
                 && item.getItemMeta().hasDisplayName()) {
-            for (Kit kit : kits.kits)
+            for (Kit kit : kits.getKits())
                 if (String.format(presentName, kit.getName()).equals(item.getItemMeta().getDisplayName())) {
                     event.setCancelled(true);
                     event.getPlayer().updateInventory();

@@ -1,5 +1,9 @@
 package me.libraryaddict.Hungergames.Commands;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
@@ -24,11 +28,11 @@ public class Kit implements CommandExecutor {
                 String kitName = StringUtils.join(args, " ");
                 me.libraryaddict.Hungergames.Types.Kit kit = kits.getKitByName(kitName);
                 if (kit == null) {
-                    p.sendMessage(cm.getCommandKitKitDoesntExist());
+                    sender.sendMessage(cm.getCommandKitKitDoesntExist());
                     return true;
                 }
                 if (!kits.ownsKit((Player) sender, kit)) {
-                    p.sendMessage(cm.getCommandKitNoPermission());
+                    sender.sendMessage(cm.getCommandKitNoPermission());
                     return true;
                 }
                 if (kit == kits.getKitByPlayer(p)) {
@@ -36,12 +40,38 @@ public class Kit implements CommandExecutor {
                     return true;
                 }
                 kits.setKit(p, kit.getName());
-                p.sendMessage(String.format(cm.getCommandKitNowUsingKit(), kit.getName()));
+                sender.sendMessage(String.format(cm.getCommandKitNowUsingKit(), kit.getName()));
             } else {
-                p.sendMessage(cm.getCommandKitGameAlreadyStarted());
+                sender.sendMessage(cm.getCommandKitGameAlreadyStarted());
             }
         } else {
-            kits.showKits(p);
+            List<String> hisKits = new ArrayList<String>();
+            List<String> otherKits = new ArrayList<String>();
+            String currentKit = cm.getMessagePlayerShowKitsNoKit();
+            if (kits.getKitByPlayer(p) != null)
+                currentKit = kits.getKitByPlayer(p).getName();
+            for (me.libraryaddict.Hungergames.Types.Kit kit : kits.getKits())
+                if (kits.ownsKit(p, kit))
+                    hisKits.add(kit.getName());
+                else
+                    otherKits.add(kit.getName());
+            Collections.sort(hisKits, String.CASE_INSENSITIVE_ORDER);
+            Collections.sort(otherKits, String.CASE_INSENSITIVE_ORDER);
+            if (kits.getKitByPlayer(p) != null)
+                sender.sendMessage(String.format(cm.getMessagePlayerShowKitsCurrentSelectedKit(), currentKit));
+            if (hisKits.size() == 0)
+                sender.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), cm.getMessagePlayerShowKitsNoKits()));
+            else {
+                String list = StringUtils.join(hisKits, ", ");
+                sender.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), list));
+            }
+            if (otherKits.size() == 0)
+                sender.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), cm.getMessagePlayerShowKitsNoKits()));
+            else {
+                String list = StringUtils.join(otherKits, ", ");
+                sender.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), list));
+            }
+            sender.sendMessage(cm.getMessagePlayerShowKitsUseKitInfo());
         }
         return true;
     }

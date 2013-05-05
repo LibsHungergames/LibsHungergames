@@ -32,16 +32,10 @@ public class KitManager {
     /**
      * Kits every player gets by default
      */
-    public ConcurrentLinkedQueue<Kit> defaultKits = new ConcurrentLinkedQueue<Kit>();
-    public ConcurrentHashMap<String, List<Kit>> hisKits = new ConcurrentHashMap<String, List<Kit>>();
-    /**
-     * Kits every player has
-     */
-    /**
-     * List of every kit
-     */
-    public ArrayList<Kit> kits = new ArrayList<Kit>();
-    public String defaultKit;
+    private ConcurrentLinkedQueue<Kit> defaultKits = new ConcurrentLinkedQueue<Kit>();
+    private ConcurrentHashMap<String, List<Kit>> hisKits = new ConcurrentHashMap<String, List<Kit>>();
+    private ArrayList<Kit> kits = new ArrayList<Kit>();
+    public String defaultKitName;
     private Hungergames hg = HungergamesApi.getHungergames();
     private ChatManager cm = HungergamesApi.getChatManager();
 
@@ -53,7 +47,7 @@ public class KitManager {
             hg.saveResource("kits.yml", false);
         }
         config = YamlConfiguration.loadConfiguration(file);
-        defaultKit = config.getString("DefaultKit", null);
+        defaultKitName = config.getString("DefaultKit", null);
         for (String string : config.getConfigurationSection("Kits").getKeys(false)) {
             if (config.contains("BadKits") && config.getStringList("BadKits").contains(string))
                 continue;
@@ -148,13 +142,6 @@ public class KitManager {
         return kit;
     }
 
-    /*
-     * public boolean hasAbility(Player p, String ability) { if (hg.currentTime
-     * < 0) return false; if (p == null) return false; Kit kit =
-     * kitty.getKitByPlayer(p.getName()); if (kit == null ||
-     * !kit.hasAbility(ability)) return false; return true; }
-     */
-
     public boolean canFit(Inventory pInv, ItemStack[] items) {
         Inventory inv = Bukkit.createInventory(null, pInv.getContents().length);
         for (int i = 0; i < inv.getSize(); i++) {
@@ -187,12 +174,6 @@ public class KitManager {
             }
         }
     }
-
-    /*
-     * public boolean hasAbility(String player, String ability) { Kit kit =
-     * kitty.getKitByPlayer(player); if (kit == null ||
-     * !kit.hasAbility(ability)) return false; return true; }
-     */
 
     private ItemStack[] parseItem(String string) {
         if (string == null)
@@ -287,36 +268,6 @@ public class KitManager {
         return null;
     }
 
-    public void showKits(Player p) {
-        List<String> hisKits = new ArrayList<String>();
-        List<String> otherKits = new ArrayList<String>();
-        String currentKit = cm.getMessagePlayerShowKitsNoKit();
-        if (getKitByPlayer(p) != null)
-            currentKit = getKitByPlayer(p).getName();
-        for (Kit kit : kits)
-            if (ownsKit(p, kit))
-                hisKits.add(kit.getName());
-            else
-                otherKits.add(kit.getName());
-        Collections.sort(hisKits, String.CASE_INSENSITIVE_ORDER);
-        Collections.sort(otherKits, String.CASE_INSENSITIVE_ORDER);
-        if (getKitByPlayer(p) != null)
-            p.sendMessage(String.format(cm.getMessagePlayerShowKitsCurrentSelectedKit(), currentKit));
-        if (hisKits.size() == 0)
-            p.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), cm.getMessagePlayerShowKitsNoKits()));
-        else {
-            String list = StringUtils.join(hisKits, ", ");
-            p.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), list));
-        }
-        if (otherKits.size() == 0)
-            p.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), cm.getMessagePlayerShowKitsNoKits()));
-        else {
-            String list = StringUtils.join(otherKits, ", ");
-            p.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), list));
-        }
-        p.sendMessage(cm.getMessagePlayerShowKitsUseKitInfo());
-    }
-
     public boolean ownsKit(Player player, Kit kit) {
         if (defaultKits.contains(kit))
             return true;
@@ -325,60 +276,27 @@ public class KitManager {
         return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
     }
 
-    public void sendDescription(CommandSender p, String name) {
-        Kit kit = getKitByName(name);
-        if (kit == null) {
-            p.sendMessage(cm.getMessagePlayerKitDescriptionDoesntExist());
-            return;
-        }
-        p.sendMessage(String.format(cm.getMessagePlayerKitDescriptionName(), kit.getName()));
-        p.sendMessage(String.format(cm.getMessagePlayerKitDesciptionId(), kit.getId()));
-        p.sendMessage(kit.getDescription());
-        if (kit.isFree())
-            p.sendMessage(cm.getMessagePlayerKitDesciprionPriceFree());
-        else if (kit.getPrice() == -1)
-            p.sendMessage(cm.getMessagePlayerKitDesciprionPriceUnbuyable());
-        else
-            p.sendMessage(String.format(cm.getMessagePlayerKitDesciprionPrice(), kit.getPrice()));
-        p.sendMessage(String.format(cm.getMessagePlayerKitDescritionMoreInfo(), kit.getName()));
+    public ArrayList<Kit> getKits() {
+        return kits;
     }
 
-    private String itemToName(ItemStack item) {
-        // No chat translation given here
-        // TODO
-        if (item == null)
-            return "null";
-        String name = (item.getAmount() > 1 ? item.getAmount() + " " : "")
-                + (item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? ChatColor.stripColor(item.getItemMeta()
-                        .getDisplayName()) : this.toReadable(item.getType().name())) + (item.getAmount() > 1 ? "s" : "");
-        ArrayList<String> enchants = new ArrayList<String>();
-        for (Enchantment enchant : item.getEnchantments().keySet()) {
-            String eName = EnchantmentManager.getReadableName(enchant);
-            enchants.add(this.toReadable((eName.contains("%no%") ? eName.replace("%no%", "" + item.getEnchantmentLevel(enchant))
-                    : eName + " " + item.getEnchantmentLevel(enchant))));
-        }
-        Collections.sort(enchants);
-        if (enchants.size() > 0)
-            name += " with enchant" + (enchants.size() > 1 ? "s" : "") + ": " + StringUtils.join(enchants, ", ");
-        return name;
+    public List<Kit> getPlayersKits(Player player) {
+        return hisKits.get(player.getName());
     }
 
-    public void sendKitItems(CommandSender p, String name) {
-        Kit kit = getKitByName(name);
-        if (kit == null) {
-            p.sendMessage(cm.getMessagePlayerSendKitItemsDoesntExist());
-            return;
-        }
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitName(), kit.getName()));
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitHelmet(), itemToName(kit.getArmor()[3])));
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitChestplate(), itemToName(kit.getArmor()[2])));
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitLeggings(), itemToName(kit.getArmor()[1])));
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitBoots(), itemToName(kit.getArmor()[0])));
-        ArrayList<String> items = new ArrayList<String>();
-        for (ItemStack item : kit.getItems())
-            items.add(itemToName(item));
-        Collections.sort(items);
-        p.sendMessage(String.format(cm.getMessagePlayerSendKitItemsOtherItems(),
-                (items.size() > 0 ? StringUtils.join(items, ", ") + "." : cm.getMessagePlayerSendKitItemsNoItems())));
+    public boolean removeKitFromPlayer(Player player, Kit kit) {
+        if (!hisKits.containsKey(player.getName()))
+            return false;
+        return hisKits.get(player.getName()).remove(kit);
+    }
+
+    public boolean addKitToPlayer(Player player, Kit kit) {
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+            return false;
+        if (!hisKits.containsKey(player.getName()))
+            hisKits.put(player.getName(), new ArrayList<Kit>());
+        if (!hisKits.get(player.getName()).contains(kit))
+            hisKits.get(player.getName()).add(kit);
+        return true;
     }
 }

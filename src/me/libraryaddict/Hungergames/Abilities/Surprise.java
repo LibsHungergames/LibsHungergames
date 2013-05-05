@@ -46,7 +46,7 @@ public class Surprise extends AbilityListener {
     private Kit getViableKit(Player player) {
         KitManager kits = HungergamesApi.getKitManager();
         ArrayList<Kit> randomKit = new ArrayList<Kit>();
-        for (Kit kit : kits.kits) {
+        for (Kit kit : kits.getKits()) {
             if ((!onlyKitsYouOwn || kits.ownsKit(player, kit)) && !isBadKit(kit)) {
                 randomKit.add(kit);
             }

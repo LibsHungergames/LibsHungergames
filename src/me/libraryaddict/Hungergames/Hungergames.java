@@ -89,7 +89,7 @@ public class Hungergames extends JavaPlugin {
         mysql.startJoinThread();
         KitManager kits = HungergamesApi.getKitManager();
         ArrayList<ItemStack> kitList = new ArrayList<ItemStack>();
-        for (me.libraryaddict.Hungergames.Types.Kit kit : kits.kits) {
+        for (me.libraryaddict.Hungergames.Types.Kit kit : kits.getKits()) {
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + kit.getName());
@@ -351,7 +351,7 @@ public class Hungergames extends JavaPlugin {
             public void run() {
                 for (Gamer gamer : pm.getAliveGamers())
                     gamer.getPlayer().getInventory().addItem(new ItemStack(Material.COMPASS));
-                for (me.libraryaddict.Hungergames.Types.Kit kit : HungergamesApi.getKitManager().kits)
+                for (me.libraryaddict.Hungergames.Types.Kit kit : HungergamesApi.getKitManager().getKits())
                     kit.giveKit();
                 HungergamesApi.getAbilityManager().registerAbilityListeners();
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());

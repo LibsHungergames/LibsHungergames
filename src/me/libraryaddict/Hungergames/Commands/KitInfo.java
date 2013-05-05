@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Commands;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Types.Kit;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
@@ -14,9 +15,23 @@ public class KitInfo implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (args.length > 0)
-            kits.sendDescription(sender, StringUtils.join(args, " "));
-        else
+        if (args.length > 0) {
+            Kit kit = kits.getKitByName(StringUtils.join(args, " "));
+            if (kit == null) {
+                sender.sendMessage(cm.getMessagePlayerKitDescriptionDoesntExist());
+                return true;
+            }
+            sender.sendMessage(String.format(cm.getMessagePlayerKitDescriptionName(), kit.getName()));
+            sender.sendMessage(String.format(cm.getMessagePlayerKitDesciptionId(), kit.getId()));
+            sender.sendMessage(kit.getDescription());
+            if (kit.isFree())
+                sender.sendMessage(cm.getMessagePlayerKitDesciprionPriceFree());
+            else if (kit.getPrice() == -1)
+                sender.sendMessage(cm.getMessagePlayerKitDesciprionPriceUnbuyable());
+            else
+                sender.sendMessage(String.format(cm.getMessagePlayerKitDesciprionPrice(), kit.getPrice()));
+            sender.sendMessage(String.format(cm.getMessagePlayerKitDescritionMoreInfo(), kit.getName()));
+        } else
             sender.sendMessage(cm.getCommandKitInfoDefineKitName());
         return true;
     }

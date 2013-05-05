@@ -89,7 +89,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (kits.getKitByPlayer(event.getPlayer()) == null)
-            kits.setKit(event.getPlayer(), kits.defaultKit);
+            kits.setKit(event.getPlayer(), kits.defaultKitName);
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
