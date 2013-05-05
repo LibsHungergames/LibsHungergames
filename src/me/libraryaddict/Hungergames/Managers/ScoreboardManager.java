@@ -34,16 +34,22 @@ public class ScoreboardManager {
     }
 
     public static void setDisplayName(String scoreboardName, DisplaySlot slot, String string) {
+        if (string.length() > 16)
+            string = string.substring(0, 16);
         if (HungergamesApi.getConfigManager().displayScoreboards())
             getObjective(getScoreboard(scoreboardName), slot).setDisplayName(string);
     }
 
     public static void makeScore(String scoreboardName, DisplaySlot slot, String name, int score) {
+        if (name.length() > 16)
+            name = name.substring(0, 16);
         if (HungergamesApi.getConfigManager().displayScoreboards())
             getObjective(getScoreboard(scoreboardName), slot).getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
     }
 
     public static void hideScore(String scoreboardName, DisplaySlot slot, String name) {
+        if (name.length() > 16)
+            name = name.substring(0, 16);
         if (HungergamesApi.getConfigManager().displayScoreboards())
             getScoreboard(scoreboardName).resetScores(Bukkit.getOfflinePlayer(name));
     }
