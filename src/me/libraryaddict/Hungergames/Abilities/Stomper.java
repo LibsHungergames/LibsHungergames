@@ -20,6 +20,8 @@ import org.bukkit.util.Vector;
 public class Stomper extends AbilityListener {
     public boolean reduceStompDamageByDistance = true;
     public String stompedMessage = "%1$2s was stomped by %2$2s";
+    public int stomperFallDamage = 4;
+    public boolean changeStomperFallDamage = true;
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -33,7 +35,8 @@ public class Stomper extends AbilityListener {
                 if (area > 3)
                     area = 3;
                 event.setCancelled(true);
-                p.damage(4);
+                if (changeStomperFallDamage && stomperFallDamage > 0)
+                    p.damage(stomperFallDamage);
                 Location center = p.getLocation();
                 for (int x = -area; x <= area; x++) {
                     for (int z = -area; z <= area; z++) {
