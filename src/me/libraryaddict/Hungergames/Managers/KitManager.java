@@ -96,10 +96,10 @@ public class KitManager {
         Kit kit = getKitByName(name);
         if (kit == null)
             return false;
-        Kit kita = getKitByPlayer(p.getName());
+        Kit kita = getKitByPlayer(p);
         if (kita != null)
-            kita.removePlayer(p.getName());
-        kit.addPlayer(p.getName());
+            kita.removePlayer(p);
+        kit.addPlayer(p);
         return true;
     }
 
@@ -280,9 +280,9 @@ public class KitManager {
         return null;
     }
 
-    public Kit getKitByPlayer(String name) {
+    public Kit getKitByPlayer(Player player) {
         for (Kit kit : kits)
-            if (kit.getPlayers().contains(name))
+            if (kit.getPlayers().contains(player))
                 return kit;
         return null;
     }
@@ -291,8 +291,8 @@ public class KitManager {
         List<String> hisKits = new ArrayList<String>();
         List<String> otherKits = new ArrayList<String>();
         String currentKit = cm.getMessagePlayerShowKitsNoKit();
-        if (getKitByPlayer(p.getName()) != null)
-            currentKit = getKitByPlayer(p.getName()).getName();
+        if (getKitByPlayer(p) != null)
+            currentKit = getKitByPlayer(p).getName();
         for (Kit kit : kits)
             if (ownsKit(p, kit))
                 hisKits.add(kit.getName());
@@ -300,7 +300,7 @@ public class KitManager {
                 otherKits.add(kit.getName());
         Collections.sort(hisKits, String.CASE_INSENSITIVE_ORDER);
         Collections.sort(otherKits, String.CASE_INSENSITIVE_ORDER);
-        if (getKitByPlayer(p.getName()) != null)
+        if (getKitByPlayer(p) != null)
             p.sendMessage(String.format(cm.getMessagePlayerShowKitsCurrentSelectedKit(), currentKit));
         if (hisKits.size() == 0)
             p.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), cm.getMessagePlayerShowKitsNoKits()));

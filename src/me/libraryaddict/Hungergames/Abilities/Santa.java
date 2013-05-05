@@ -96,7 +96,7 @@ public class Santa extends AbilityListener {
     public void onInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         ItemStack item = p.getItemInHand();
-        Kit kit = kits.getKitByPlayer(p.getName());
+        Kit kit = kits.getKitByPlayer(p);
         if (kit != null && item != null && event.getAction().name().contains("RIGHT")
                 && isSpecialItem(item, String.format(presentName, kit.getName()))) {
             event.setCancelled(true);

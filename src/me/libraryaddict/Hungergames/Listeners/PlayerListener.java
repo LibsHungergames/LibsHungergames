@@ -88,7 +88,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (kits.getKitByPlayer(event.getPlayer().getName()) == null)
+        if (kits.getKitByPlayer(event.getPlayer()) == null)
             kits.setKit(event.getPlayer(), kits.defaultKit);
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
@@ -163,6 +163,9 @@ public class PlayerListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         Gamer gamer = pm.getGamer(event.getPlayer());
+        Kit kit = kits.getKitByPlayer(event.getPlayer());
+        if (kit != null)
+            kit.removePlayer(event.getPlayer());
         if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
             pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
                     String.format(cm.getKillMessageLeavingGame(), gamer.getName()));

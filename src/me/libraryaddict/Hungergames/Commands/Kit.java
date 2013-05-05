@@ -31,7 +31,7 @@ public class Kit implements CommandExecutor {
                     p.sendMessage(cm.getCommandKitNoPermission());
                     return true;
                 }
-                if (kit == kits.getKitByPlayer(sender.getName())) {
+                if (kit == kits.getKitByPlayer(p)) {
                     sender.sendMessage(String.format(cm.getCommandKitAlreadyUsing(), kit.getName()));
                     return true;
                 }

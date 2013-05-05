@@ -165,11 +165,11 @@ public class PlayerManager {
         manageDeath(event);
     }
 
-    private String formatDeathMessage(String deathMessage, String name) {
+    private String formatDeathMessage(String deathMessage, Player p) {
         String kitName = cm.getKillMessageNoKit();
-        if (kits.getKitByPlayer(name) != null)
-            kitName = kits.getKitByPlayer(name).getName();
-        return deathMessage.replaceAll(name, String.format(cm.getKillMessageFormatPlayerKit(), name, kitName));
+        if (kits.getKitByPlayer(p) != null)
+            kitName = kits.getKitByPlayer(p).getName();
+        return deathMessage.replaceAll(p.getName(), String.format(cm.getKillMessageFormatPlayerKit(), p.getName(), kitName));
     }
 
     public void manageDeath(PlayerKilledEvent event) {
@@ -193,10 +193,10 @@ public class PlayerManager {
             event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
         p.setLevel(0);
         p.setExp(0F);
-        event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), p.getName()));
+        event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), p));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
-            event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getName()));
+            event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
         }
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)

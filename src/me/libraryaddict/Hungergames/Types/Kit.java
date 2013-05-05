@@ -19,7 +19,7 @@ public class Kit {
     private ItemStack icon;
     private ItemStack[] armor;
     private ItemStack[] items;
-    private List<String> players = new ArrayList<String>();
+    private List<Player> players = new ArrayList<Player>();
     private String permission;
     private String description = HungergamesApi.getChatManager().getKitDescriptionDefault();
     private String[] abilities;
@@ -27,7 +27,7 @@ public class Kit {
     private int price = -1;
     private int id;
     private static int identifier = 0;
-    static private int cId = 0;
+    private static int cId = 0;
 
     public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
         id = cId;
@@ -85,7 +85,7 @@ public class Kit {
         return isFree;
     }
 
-    public List<String> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -93,13 +93,21 @@ public class Kit {
         return permission;
     }
 
-    public void addPlayer(String player) {
-        if (!players.contains(player))
+    public void addPlayer(Player player) {
+        if (!players.contains(player)) {
+            for (String abilityName : abilities) {
+                HungergamesApi.getAbilityManager().registerPlayerAbility(player, abilityName);
+            }
             players.add(player);
+        }
     }
 
-    public void removePlayer(String player) {
-        players.remove(player);
+    public void removePlayer(Player p) {
+        players.remove(p);
+        for (String abilityName : abilities) {
+            HungergamesApi.getAbilityManager().unregisterPlayerAbility(p, abilityName);
+        }
+
     }
 
     public String getName() {
@@ -121,22 +129,13 @@ public class Kit {
     public void giveKit() {
         double time = 0;
         Hungergames hg = HungergamesApi.getHungergames();
-        for (final String player : players) {
-            Player p = Bukkit.getPlayerExact(player);
-            if (p == null)
-                continue;
+        for (final Player p : players) {
             time += 0.1;
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
-                    Player p = Bukkit.getPlayerExact(player);
-                    if (p == null)
-                        return;
                     giveKit(p);
                 }
             }, Math.round(Math.floor(time)));
-            for (String abilityName : abilities) {
-                HungergamesApi.getAbilityManager().registerPlayerAbility(p, abilityName);
-            }
         }
     }
 
