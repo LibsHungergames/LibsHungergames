@@ -1,5 +1,6 @@
 # Kits - Any kits you add can be done normally here.
-DefaultKit: Boxer
+# Default kit is Surprise which is a random kit
+DefaultKit: Surprise
 # Bad kits is kits which will not be usable.
 BadKits:
   - Barbarian
