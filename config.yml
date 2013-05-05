@@ -29,7 +29,9 @@ LoadMap: false
 # '..' means move up a level. So its going from its plugin folder. To /plugins. To /serverfolder then to /serverfolder/maps/
 # Its surrounded by single quotes just incase.
 # So you want this to point at the folder containing the maps. It will then load a random map from there.
-# This is auctally untested. So report if its bugged or so on.
+# By default it starts in /Server/plugins/LibsHungergames/
+# This setting makes it go to the folder the server is in.
+# Like you are in a folder with 2 folders. The maps folder and the server folder. Three guesses whats in what.
 MapPath: '../../../Maps/'
 # Turn this to false if you want to define the entire map path in 'MapPath'
 # Only recommended if you know the map path. Aka linuix installations and so on.
