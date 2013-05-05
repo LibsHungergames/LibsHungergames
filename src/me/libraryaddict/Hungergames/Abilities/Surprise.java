@@ -28,6 +28,8 @@ public class Surprise extends AbilityListener {
                 Kit kit = getViableKit(p);
                 if (kit != null) {
                     HungergamesApi.getKitManager().setKit(p, kit.getName());
+                    kit.giveKit(p);
+                    p.sendMessage(String.format(messageOnGive, kit.getName()));
                 } else
                     p.sendMessage(messageWhenNoKitFound);
             }
