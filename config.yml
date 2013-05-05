@@ -84,7 +84,10 @@ GameShutdownDelay: 33
 # Enables the kit selector
 EnableKitSelector: true
 
-# ID of the feast, Its MATERIAL/ID DATAVALUE
+# Change the kit selector, Its MATERIAL/ID DATA_VALUE
+KitSelectorIcon: FEATHER 0
+
+# ID of the feast, Its MATERIAL/ID DATA_VALUE
 FeastGround: QUARTZ_BLOCK 0
 Feast: QUARTZ_BLOCK 1
 FeastInsides: TNT 0

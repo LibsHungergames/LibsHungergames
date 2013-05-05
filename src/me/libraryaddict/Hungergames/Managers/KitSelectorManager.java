@@ -24,12 +24,12 @@ public class KitSelectorManager {
             icon.setItem(i, items.get(i));
     }
 
-    public ItemStack generateItem(Material type, int i, String name, List<String> lore) {
-        return generateItem(type.getId(), i, name, lore);
+    public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
+        return generateItem(type.getId(), dataValue, name, lore);
     }
 
-    public ItemStack generateItem(int id, int data, String name, List<String> lore) {
-        ItemStack item = new ItemStack(id, 1, (short) data);
+    public ItemStack generateItem(int id, int dataValue, String name, List<String> lore) {
+        ItemStack item = new ItemStack(id, 1, (short) dataValue);
         ItemMeta meta = item.getItemMeta();
         if (name != null) {
             meta.setDisplayName(ChatColor.WHITE + name);
@@ -42,9 +42,11 @@ public class KitSelectorManager {
     }
 
     public ItemStack getKitSelector() {
-        if (kitSelector == null)
-            kitSelector = generateItem(Material.FEATHER, 0, getKitSelectorName(),
+        if (kitSelector == null) {
+            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
+            kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(),
                     Arrays.asList(getKitSelectorDescription().split("\n")));
+        }
         return kitSelector;
     }
 

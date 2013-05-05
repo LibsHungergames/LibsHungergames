@@ -50,6 +50,7 @@ public class ConfigManager {
     private boolean forceCords;
     private int x;
     private int z;
+    private ItemStack kitSelectorIcon;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -155,6 +156,9 @@ public class ConfigManager {
         forceCords = hg.getConfig().getBoolean("ForceCords", true);
         x = hg.getConfig().getInt("ForceX", 0);
         z = hg.getConfig().getInt("ForceZ", 0);
+        kitSelectorIcon = parseItem(hg.getConfig().getString("KitSelectorIcon"));
+        if (kitSelectorIcon == null)
+            kitSelectorIcon = new ItemStack(Material.FEATHER);
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -187,6 +191,13 @@ public class ConfigManager {
      */
     public boolean forceCords() {
         return forceCords;
+    }
+    
+    /**
+     * @return Get the item which will be displayed as the kit selector
+     */
+    public ItemStack getKitSelectorIcon() {
+        return kitSelectorIcon;
     }
 
     /**
