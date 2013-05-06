@@ -213,11 +213,11 @@ public class ChatManager {
             + "Minecraft will crash if you attempt to put this in";
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
-    private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize: ";
+    private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
     private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in";
     private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in";
     private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible";
-    private String scoreboardPlayersLength = ChatColor.GREEN + "Players: ";
+    private String scoreboardPlayersLength = ChatColor.GREEN + "Players:";
     private String scoreboardStageFeastHappened = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Finishing Up";
     private String scoreboardStageFighting = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Fighting";
     private String scoreboardStageInvincibility = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Invincibility";

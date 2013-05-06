@@ -278,7 +278,8 @@ public class PlayerListener implements Listener {
                     p.leaveVehicle();
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
-                    p.openInventory(icon.getInventory());
+                    icon.openInventory(p);
+                    //p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
@@ -383,15 +384,6 @@ public class PlayerListener implements Listener {
                     ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
                     return;
                 }
-        }
-        if (event.getView().getTitle() != null && event.getView().getTitle().equals(icon.getInventory().getTitle())) {
-            event.setCancelled(true);
-            ItemStack item = event.getCurrentItem();
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                Kit kit = kits.getKitByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                if (kit != null)
-                    Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());
-            }
         }
     }
 }

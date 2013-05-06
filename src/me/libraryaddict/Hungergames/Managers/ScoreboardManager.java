@@ -34,8 +34,6 @@ public class ScoreboardManager {
     }
 
     public static void setDisplayName(String scoreboardName, DisplaySlot slot, String string) {
-        if (string.length() > 16)
-            string = string.substring(0, 16);
         if (HungergamesApi.getConfigManager().displayScoreboards())
             getObjective(getScoreboard(scoreboardName), slot).setDisplayName(string);
     }

@@ -93,7 +93,6 @@ public class Hungergames extends JavaPlugin {
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + kit.getName());
-            meta.setLore(wrap(kit.getDescription()));
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
                 item.setAmount(0);
@@ -191,24 +190,6 @@ public class Hungergames extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("LibsCommands") != null)
             Bukkit.getPluginManager().registerEvents(new LibsCommandsListener(), this);
         HungergamesApi.getAbilityManager();
-    }
-
-    private List<String> wrap(String string) {
-        String[] split = string.split(" ");
-        string = "";
-        ChatColor color = ChatColor.BLUE;
-        ArrayList<String> newString = new ArrayList<String>();
-        for (int i = 0; i < split.length; i++) {
-            if (string.length() > 20 || string.endsWith(".") || string.endsWith("!")) {
-                newString.add(color + string);
-                if (string.endsWith(".") || string.endsWith("!"))
-                    newString.add("");
-                string = "";
-            }
-            string += (string.length() == 0 ? "" : " ") + split[i];
-        }
-        newString.add(color + string);
-        return newString;
     }
 
     public int getPrize(int pos) {

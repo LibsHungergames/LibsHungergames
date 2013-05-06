@@ -5,16 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Types.KitInventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitSelectorManager {
-    
+
     Inventory icon;
     ItemStack kitSelector = null;
 
@@ -35,7 +37,7 @@ public class KitSelectorManager {
         if (name != null) {
             meta.setDisplayName(ChatColor.WHITE + name);
         }
-        if (lore != null) {
+        if (lore != null && lore.size() > 0) {
             meta.setLore(lore);
         }
         item.setItemMeta(meta);
@@ -57,6 +59,12 @@ public class KitSelectorManager {
 
     public String getKitSelectorDescription() {
         return HungergamesApi.getChatManager().getItemKitSelectorDescription();
+    }
+    
+    public void openInventory(Player p) {
+        KitInventory inv = new KitInventory(p);
+        inv.addKits();
+        inv.openInventory();
     }
 
     public Inventory getInventory() {
