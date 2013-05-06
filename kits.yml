@@ -53,7 +53,6 @@ DefaultKit: Surprise
 # Bad kits is kits which will not be usable.
 BadKits:
   - Barbarian
-  - Burrower
   - DiamondWarrior
   #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
@@ -130,7 +129,7 @@ Kits:
     Price: 0
     Icon: SLIME_BALL 0 1
     Items:
-      - SLIME_BALL 0 2
+      - SLIME_BALL 0 1
     Ability:
       - Burrower
   Cannibal:
@@ -192,11 +191,15 @@ Kits:
     Ability:
       - Demoman
   DiamondWarrior:
-    Description: 'The Demoman kit is brilliant for defense. Your victims and enemies wont suspect that a stone pressure plate on gravel will kill them! The explosion is a bit more than a TNT setting off. Careful however! You can set off your own landmines!'
+    Description: 'The diamond warrior kit is a great way to slaughter everyone! Only a foolish admin would delete the entire bad kits entry. And your admin is one! Use this kit and WIN WIN WIN'
     Free: true
     Name: '&3Diamond Warrior'
     Price: 0
     Icon: DIAMOND_SWORD 0 1
+    Helmet: DIAMOND_HELMET 0 1
+    Chestplate: DIAMOND_CHESTPLATE 0 1
+    Leggings: DIAMOND_LEGGINGS 0 1
+    Boots: DIAMOND_BOOTS 0 1
     Items:
       - DIAMOND_SWORD 0 1 DAMAGE_ALL 10 KNOCKBACK 10 FIRE_ASPECT 10
     Ability:
