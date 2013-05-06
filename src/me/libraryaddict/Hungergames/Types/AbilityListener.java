@@ -96,12 +96,12 @@ public abstract class AbilityListener implements Listener {
                         value = array.toArray(new String[array.size()]);
                     }
                     if (value instanceof String) {
-                        value = ChatColor.translateAlternateColorCodes('&', ((String) value));
+                        value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
                     }
                     if (value instanceof String[]) {
                         String[] strings = (String[]) value;
                         for (int i = 0; i < strings.length; i++)
-                            strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]);
+                            strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]).replace("\\n", "\n");
                         value = strings;
                     }
                     if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {

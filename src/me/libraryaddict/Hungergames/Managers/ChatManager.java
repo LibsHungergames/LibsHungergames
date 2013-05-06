@@ -132,6 +132,10 @@ public class ChatManager {
     private String inventoryWindowSelectKitTitle = ChatColor.DARK_RED + "Select Kit";
     private String itemKitSelectorDescription = ChatColor.LIGHT_PURPLE + "Right click with this\n" + ChatColor.LIGHT_PURPLE
             + "to open a kit selection screen!";
+    private String itemKitSelectorBackName = ChatColor.RED + "Back";
+    private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
+    private String itemKitSelectorBackDescription = ChatColor.LIGHT_PURPLE + "Click this to move\nback a page";
+    private String itemKitSelectorForwardsDescription = ChatColor.LIGHT_PURPLE + "Click this to move\nforwards a page";
     private String itemKitSelectorName = ChatColor.WHITE + "Kit Selector";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
@@ -299,12 +303,12 @@ public class ChatManager {
                                 value = array.toArray(new String[array.size()]);
                             }
                             if (value instanceof String) {
-                                value = ChatColor.translateAlternateColorCodes('&', ((String) value));
+                                value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
                             }
                             if (value instanceof String[]) {
                                 String[] strings = (String[]) value;
                                 for (int i = 0; i < strings.length; i++)
-                                    strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]);
+                                    strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]).replace("\\n", "\n");
                                 value = strings;
                             }
                             if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
@@ -1212,5 +1216,21 @@ public class ChatManager {
 
     public String getLoggerAbilityMissingValue() {
         return loggerAbilityMissingValue;
+    }
+
+    public String getItemKitSelectorBackName() {
+        return itemKitSelectorBackName;
+    }
+
+    public String getItemKitSelectorForwardsName() {
+        return itemKitSelectorForwardsName;
+    }
+
+    public String getItemKitSelectorBackDescription() {
+        return itemKitSelectorBackDescription;
+    }
+
+    public String getItemKitSelectorForwardsDescription() {
+        return itemKitSelectorForwardsDescription;
     }
 }
