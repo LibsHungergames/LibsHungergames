@@ -160,7 +160,7 @@ public class ChatManager {
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
-    private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s% missing config '%s'";
+    private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s' missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
