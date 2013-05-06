@@ -35,8 +35,8 @@ public class KitInventory implements Listener {
 
     public KitInventory(Player player) {
         user = player;
-        Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
         title = HungergamesApi.getChatManager().getInventoryWindowSelectKitTitle();
+        Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
     }
 
     public ItemStack getBackPage() {
@@ -70,6 +70,14 @@ public class KitInventory implements Listener {
     }
 
     public void openInventory() {
+        if (inv == null) {
+            int size = maxInvSize;
+            if (pages.size() > 0) {
+                size = pages.values().iterator().next().length;
+            }
+            inv = Bukkit.createInventory(null, size, title);
+            setPage(currentPage);
+        }
         user.openInventory(inv);
     }
 
@@ -77,34 +85,21 @@ public class KitInventory implements Listener {
         pages.clear();
         KitManager kits = HungergamesApi.getKitManager();
         boolean usePages = kits.getKits().size() > maxInvSize;
-        // Max chest size is maxInvSize. So we need to make the pages thingy use
-        // the
-        // bottom row. So maxInvSize-9
-        // Then account for the 1 being a zero. Its maxInvSize-10
         ItemStack[] items = null;
         int currentSlot = 0;
         ArrayList<Kit> allKits = kits.getKits();
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
             if (items == null) {
-                // Get the inventory size.
-                // If there are pages. Then its maxInvSize. Else its according
-                // to the
-                // kits
-                // Alternately
                 int size = maxInvSize;
-                // If the inv size is according to how much needs to fit in
                 if (dymanicInventorySize) {
                     size = allKits.size() - currentKit;
-                    size += (usePages ? 9 : 0);
-                    // Size is now how many kits are left
+                    if (usePages)
+                        size += 9;
                 }
-
-                // If its over maxInvSize. Then we set it to maxInvSize.
-                if (usePages && !dymanicInventorySize)
+                if (!dymanicInventorySize)
                     size = maxInvSize;
                 items = generatePage(size);
             }
-            // Set the current slot
             Kit kit = allKits.get(currentKit);
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
@@ -114,14 +109,10 @@ public class KitInventory implements Listener {
             if (item.getAmount() == 1)
                 item.setAmount(0);
             items[currentSlot++] = item;
-            // If its the last page, Or no more kits can fit in current page
-            if ((currentSlot > items.length - (1 + (usePages ? 9 : 0)) && usePages) || currentKit + 1 == allKits.size()) {
-                // Now create the next page and back a page.
-                // Check if I make a 'back a page'
+            if (currentSlot == items.length - (usePages ? 9 : 0) || currentKit + 1 == allKits.size()) {
                 if (usePages) {
                     if (currentPage != 0)
                         items[items.length - 9] = getBackPage();
-                    // Check if I can make forwards page
                     if (currentKit + 1 < allKits.size())
                         items[items.length - 1] = getForwardsPage();
                 }
@@ -169,15 +160,15 @@ public class KitInventory implements Listener {
                 });
             } else
                 inv.setContents(pageItems);
-            // TODO Potentially display title for page
+            // TODO Potentially display title for page no
         }
     }
 
     public ItemStack[] generatePage(int itemsSize) {
-        int size = (int) (Math.ceil((double) itemsSize / 9)) * 9;
-        if (size > maxInvSize)
-            size = maxInvSize;
-        return new ItemStack[size];
+        if (itemsSize > maxInvSize)
+            itemsSize = maxInvSize;
+        itemsSize = (int) (Math.ceil((double) itemsSize / 9)) * 9;
+        return new ItemStack[itemsSize];
     }
 
     @EventHandler

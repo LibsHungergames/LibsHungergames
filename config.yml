@@ -90,11 +90,12 @@ EnableKitSelector: true
 KitSelectorIcon: FEATHER 0
 
 # Does the size if the kit selector inventory change according to the space required?
+# This still takes max inventory size as set below into consideration
 KitSelectorDymanicSize: true
 
-# If false. Then whats the size of the inventory?
+# If false. Then whats the max size of the inventory?
 # Try keep it in a multiple of 9. I'll fix it if it isn't however.
-KitSelectorInventorySize: 64
+KitSelectorInventorySize: 54
 
 # What item is the button to go forward
 KitSelectorForward: SUGAR_CANE_BLOCK 0
