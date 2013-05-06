@@ -30,7 +30,6 @@ public class PlayerKilledEvent extends Event implements Cancellable {
             List<ItemStack> itemsToDrop) {
         PlayerManager pm = HungergamesApi.getPlayerManager();
         this.killed = killed;
-        killed.setSpectating(true);
         this.killer = killer;
         this.deathMessage = deathMessage;
         this.dropItems = itemsDrop;
