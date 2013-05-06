@@ -115,8 +115,8 @@ Kits:
     Price: 0
     Icon: BLAZE_POWDER 0 1
     Items:
-      - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1
-      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem
+      - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1 Lore=Right_click_with_this\nto_open_a_crafting_table
+      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem Lore=Right_click_with_this\nto_open_a_furnace
   Creeper:
     Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
     Free: true
@@ -147,7 +147,7 @@ Kits:
     Price: 0
     Icon: DRAGON_EGG 0 1
     Items:
-      - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole
+      - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole Lore=Place_this_and_run
   Doctor:
     Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove their all their potion effects.'
     Free: true
