@@ -7,12 +7,12 @@ import org.bukkit.craftbukkit.v1_5_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 
 public class FakeFurnace extends TileEntityFurnace {
+    /**
+     * Code taken from http://dev.bukkit.org/server-mods/virtualpack/
+     */
     // For custom stuff
     private double burnSpeed;
     private ItemStack[] contents = new ItemStack[3];
-    // Increases performance (or should at least)
-    @SuppressWarnings("unused")
-    private long lastCheck;
     // Call me paranoid, but this has to be checked
     private int lastID;
     // To access the chests
@@ -32,7 +32,6 @@ public class FakeFurnace extends TileEntityFurnace {
         burnTime = 0;
         ticksForCurrentFuel = 0;
         lastID = 0;
-        lastCheck = 0;
     }
 
     // Read from save
