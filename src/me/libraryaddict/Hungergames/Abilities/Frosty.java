@@ -21,18 +21,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
-import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
-import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 
 public class Frosty extends AbilityListener {
-    ArrayList<Player> snowRunners = new ArrayList<Player>();
     public int potionMultiplier = 1;
     public int iceRadius = 3;
+    public int iceHeight = 1;
     public boolean snowballsScheduler = true;
     private HashMap<Entity, Integer> ids = new HashMap<Entity, Integer>();
     private ArrayList<BlockFace> faces = new ArrayList<BlockFace>();
@@ -48,18 +47,16 @@ public class Frosty extends AbilityListener {
     public void gameStart(GameStartEvent event) {
         if (!snowballsScheduler)
             ProjectileLaunchEvent.getHandlerList().unregister(this);
-        else
-            ProjectileHitEvent.getHandlerList().unregister(this);
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (hasAbility(p))
-                snowRunners.add(p);
     }
 
     @EventHandler
     public void onHit(ProjectileHitEvent event) {
-        if (event.getEntity().getType() == EntityType.SNOWBALL && event.getEntity().getShooter() != null
-                && event.getEntity().getShooter() instanceof Player && hasAbility((Player) event.getEntity().getShooter())) {
-            transform(event.getEntity().getLocation().clone());
+        if ((snowballsScheduler && ids.containsKey(event.getEntity()))
+                || (event.getEntity().getType() == EntityType.SNOWBALL && event.getEntity().getShooter() != null
+                        && event.getEntity().getShooter() instanceof Player && hasAbility((Player) event.getEntity().getShooter()))) {
+            transform(event.getEntity());
+            if (ids.containsKey(event.getEntity()))
+                Bukkit.getScheduler().cancelTask(ids.get(event.getEntity()));
         }
     }
 
@@ -72,7 +69,7 @@ public class Frosty extends AbilityListener {
                 public void run() {
                     Material type = snowball.getLocation().getBlock().getType();
                     if (snowball.isDead() || type == Material.WATER || type == Material.STATIONARY_WATER) {
-                        transform(snowball.getLocation().clone());
+                        transform(snowball);
                         if (!snowball.isDead())
                             snowball.remove();
                         Bukkit.getScheduler().cancelTask(ids.remove(snowball));
@@ -82,28 +79,34 @@ public class Frosty extends AbilityListener {
         }
     }
 
-    private void transform(Location loc) {
-        loc.add(loc.getBlockX() + 0.5, 0.1, loc.getBlockZ() + 0.5);
-        if (loc.getBlock().getType() == Material.AIR && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), loc.getBlockX(),
-                loc.getBlockY(), loc.getBlockZ()))
+    private void transform(Entity entity) {
+        Location loc = entity.getLocation();
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
+            loc = loc.getBlock().getRelative(BlockFace.DOWN).getLocation();
+        if (loc.getBlock().getType() == Material.AIR
+                && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), loc.getBlockX(),
+                        loc.getBlockY(), loc.getBlockZ()))
             loc.getBlock().setType(Material.SNOW);
         else {
             Collections.shuffle(faces, new Random());
             for (BlockFace face : faces) {
                 Block b = loc.getBlock().getRelative(face);
-                if (b.getType() == Material.AIR && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), b.getX(),
-                        b.getY(), b.getZ())) {
-                    loc.getBlock().setType(Material.SNOW);
+                if (b.getType() == Material.AIR
+                        && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), b.getX(),
+                                b.getY(), b.getZ())) {
+                    b.setType(Material.SNOW);
                     break;
                 }
             }
         }
         for (int x = -iceRadius; x <= iceRadius; x++) {
             for (int z = -iceRadius; z <= iceRadius; z++) {
-                Block b = loc.clone().add(x, 0, z).getBlock();
-                if (b.getLocation().distance(loc) < iceRadius
-                        && (b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)) {
-                    b.setType(Material.ICE);
+                for (int y = -iceHeight; y <= iceHeight; y++) {
+                    Block b = loc.clone().add(x, y, z).getBlock();
+                    if (b.getLocation().distance(loc) < iceRadius
+                            && (b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)) {
+                        b.setType(Material.ICE);
+                    }
                 }
             }
         }
@@ -117,23 +120,15 @@ public class Frosty extends AbilityListener {
                         .contains("SPADE"))) {
             event.getBlock()
                     .getWorld()
-                    .dropItemNaturally(event.getBlock().getLocation().clone().add(0.5, 0.5, 0.5),
-                            new ItemStack(Material.SNOW_BALL));
+                    .dropItemNaturally(event.getBlock().getLocation().clone().add(0.5, 0, 0.5), new ItemStack(Material.SNOW_BALL));
         }
     }
 
     @EventHandler
-    public void onSecond(TimeSecondEvent event) {
-        for (Player p : snowRunners) {
-            if (p.getLocation().getBlock().getType() == Material.SNOW) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, potionMultiplier), true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        snowRunners.remove(event.getKilled().getPlayer());
+    public void onMove(PlayerMoveEvent event) {
+        if (hasAbility(event.getPlayer()))
+            if (event.getPlayer().getLocation().getBlock().getType() == Material.SNOW)
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, potionMultiplier), true);
     }
 
 }
