@@ -17,48 +17,159 @@ import de.robingrether.idisguise.iDisguise;
 
 public class ConfigManager {
 
-    private int feastSize;
-    private int invincibility;
+    private double border;
     private boolean borderCloseIn;
+    private double borderClosesIn;
+    private int chestLayers;
+    private boolean displayMessages;
+    private boolean displayScoreboards;
+    private ItemStack feast;
+    private ArrayList<Integer> feastBroadcastTimes = new ArrayList<Integer>();
+    private ItemStack feastGround;
+    private ItemStack feastInsides;
+    private int feastSize;
+    private boolean feastTnt;
+    private boolean fireSpread;
+    private boolean forceCords;
+    private int gameShutdownDelay;
+    private ArrayList<Integer> gameStartingBroadcastTimes = new ArrayList<Integer>();
+    private boolean generatePillars;
+    private Hungergames hg;
+    private int invincibility;
+    private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
+    private boolean kitSelector;
+    private ItemStack kitSelectorBack;
+    private boolean kitSelectorDynamicSize;
+    private ItemStack kitSelectorForward;
+    private ItemStack kitSelectorIcon;
+    private int kitSelectorInventorySize;
+    private int minPlayers;
+    private boolean mushroomStew;
+    private int mushroomStewRestores;
+    private boolean mysqlEnabled;
+    private ItemStack pillarCorner;
+    private ItemStack pillarInsides;
     private boolean spectatorChat;
     private boolean spectators;
     private int timeTillFeast;
-    private double border;
-    private double borderClosesIn;
-    private int chestLayers;
-    private boolean mushroomStew;
-    private int mushroomStewRestores;
-    private int minPlayers;
-    private boolean fireSpread;
     private int wonBroadcastsDelay;
-    private int gameShutdownDelay;
-    private boolean displayMessages;
-    private boolean displayScoreboards;
-    private boolean mysqlEnabled;
-    private ArrayList<Integer> feastBroadcastTimes = new ArrayList<Integer>();
-    private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
-    private ArrayList<Integer> gameStartingBroadcastTimes = new ArrayList<Integer>();
-    private Hungergames hg;
-    private boolean kitSelector;
-    private ItemStack feastGround;
-    private ItemStack feast;
-    private ItemStack feastInsides;
-    private boolean feastTnt;
-    private boolean generatePillars;
-    private ItemStack pillarCorner;
-    private ItemStack pillarInsides;
-    private boolean forceCords;
     private int x;
     private int z;
-    private ItemStack kitSelectorIcon;
-    private ItemStack kitSelectorForward;
-    private ItemStack kitSelectorBack;
-    private boolean kitSelectorDynamicSize;
-    private int kitSelectorInventorySize;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
         loadConfig();
+    }
+
+    /**
+     * 
+     * @param Current
+     *            time
+     * @return Should it advertise about the feast?
+     */
+    public boolean advertiseFeast(int time) {
+        time = timeTillFeast - time;
+        if (time % 60 == 0)
+            return true;
+        if (time <= 180) {
+            if (time % 60 == 0)
+                return true;
+        } else if (time % 180 == 0)
+            return true;
+        return feastBroadcastTimes.contains(time);
+    }
+
+    /**
+     * @param time
+     *            till game starts
+     * @return Should it advertise the game is starting?
+     */
+    public boolean advertiseGameStarting(int time) {
+        if (time > -180) {
+            if (time % 60 == 0)
+                return true;
+        } else if (time % 180 == 0 || time % (5 * 60) == 0)
+            return true;
+        return gameStartingBroadcastTimes.contains(time);
+    }
+
+    /**
+     * 
+     * @param Currenttime
+     * @return Should it advertise about invincibility?
+     */
+    public boolean advertiseInvincibility(int time) {
+        time = invincibility - time;
+        if (time <= 180) {
+            if (time % 60 == 0)
+                return true;
+        } else if (time % 180 == 0 || time % (5 * 60) == 0)
+            return true;
+        return invincibilityBroadcastTimes.contains(time);
+    }
+
+    /**
+     * 
+     * @return Should it display messages about the game starting in bla bla?
+     */
+    public boolean displayMessages() {
+        return displayMessages;
+    }
+
+    /**
+     * 
+     * @return Should it use scoreboards at all?
+     */
+    public boolean displayScoreboards() {
+        return displayScoreboards;
+    }
+
+    /**
+     * 
+     * @return Does the border close in after the feast starts?
+     */
+    public boolean doesBorderCloseIn() {
+        return borderCloseIn;
+    }
+
+    /**
+     * 
+     * @return The feast starts in T-Minus <Seconds>
+     */
+    public int feastStartsIn() {
+        return timeTillFeast - hg.currentTime;
+    }
+
+    /**
+     * 
+     * @return Should the plugin force the worlds spawn to be here
+     */
+    public boolean forceCords() {
+        return forceCords;
+    }
+
+    /**
+     * 
+     * @return Should it generate pillars beneath spawn to make it realistic
+     */
+    public boolean generatePillars() {
+        return generatePillars;
+    }
+
+    /**
+     * 
+     * @return How much does the border close in per second?
+     */
+    public double getBorderCloseInRate() {
+        return borderClosesIn;
+    }
+
+    /**
+     * 
+     * @return Whats the current size of the border?
+     */
+    public double getBorderSize() {
+        return border;
     }
 
     /**
@@ -71,6 +182,31 @@ public class ConfigManager {
 
     /**
      * 
+     * @return Whats the material used for the outside covering of the feast
+     */
+    public ItemStack getFeast() {
+        return feast;
+    }
+
+    /**
+     * 
+     * @return Whats the material used for the feast ground
+     */
+    public ItemStack getFeastGround() {
+        return feastGround;
+    }
+
+    /**
+     * 
+     * @return Whats the material used for the inside of the feast where no one
+     *         sees
+     */
+    public ItemStack getFeastInsides() {
+        return feastInsides;
+    }
+
+    /**
+     * 
      * @return How big is the feast generation
      */
     public int getFeastSize() {
@@ -79,10 +215,161 @@ public class ConfigManager {
 
     /**
      * 
+     * @return How much delay before shutting the game down?
+     */
+    public int getGameShutdownDelay() {
+        return gameShutdownDelay;
+    }
+
+    /**
+     * 
+     * @return How long does invincibility last?
+     */
+    public int getInvincibilityTime() {
+        return invincibility;
+    }
+
+    /**
+     * @return Get the item which will is the kit selectors 'forward'
+     */
+    public ItemStack getKitSelectorBack() {
+        return kitSelectorBack;
+    }
+
+    /**
+     * @return Get the item which will is the kit selectors 'back'
+     */
+    public ItemStack getKitSelectorForward() {
+        return kitSelectorForward;
+    }
+
+    /**
+     * @return Get the item which will be displayed as the kit selector
+     */
+    public ItemStack getKitSelectorIcon() {
+        return kitSelectorIcon;
+    }
+
+    public int getKitSelectorInventorySize() {
+        return kitSelectorInventorySize;
+    }
+
+    /**
+     * 
      * @return How many players are required to start the game
      */
     public int getMinPlayers() {
         return minPlayers;
+    }
+
+    /**
+     * 
+     * @return Whats the material used for the pillars corners
+     */
+    public ItemStack getPillarCorner() {
+        return pillarCorner;
+    }
+
+    /**
+     * 
+     * @return Whats the material used for the rest of the pillars
+     */
+    public ItemStack getPillarInsides() {
+        return pillarInsides;
+    }
+
+    /**
+     * 
+     * @return Whats the X its forcing spawn to be
+     */
+    public int getSpawnX() {
+        return x;
+    }
+
+    /**
+     * 
+     * @return Whats the Z its forcing spawn to be
+     */
+    public int getSpawnZ() {
+        return z;
+    }
+
+    /**
+     * 
+     * @return How long until the feast starts?
+     */
+    public int getTimeFeastStarts() {
+        return timeTillFeast;
+    }
+
+    /**
+     * 
+     * @return How much delay before crowing the name of the winner?
+     */
+    public int getWinnerBroadcastDelay() {
+        return wonBroadcastsDelay;
+    }
+
+    /**
+     * 
+     * @return Invincibility wears off in T-Minus <Seconds>
+     */
+    public int invincibilityWearsOffIn() {
+        return invincibility - hg.currentTime;
+    }
+
+    /**
+     * 
+     * @return Does the topmost tnt hidden under the enchanting table ignite on
+     *         punch?
+     */
+    public boolean isFeastTntIgnite() {
+        return feastTnt;
+    }
+
+    /**
+     * 
+     * @return Should there be forest fires before the game starts?
+     */
+    public boolean isFireSpreadDisabled() {
+        return fireSpread;
+    }
+
+    public boolean isKitSelectorDynamicSize() {
+        return kitSelectorDynamicSize;
+    }
+
+    /**
+     * 
+     * @return Is mushroom stew enabled?
+     */
+    public boolean isMushroomStew() {
+        return mushroomStew;
+    }
+
+    /**
+     * 
+     * @return Is the plugin using mysql
+     */
+    public boolean isMySqlEnabled() {
+        return mysqlEnabled;
+    }
+
+    /**
+     * 
+     * @return Is spectator chat hidden from mortal eyes to prevent the giving
+     *         away of tactics and distractions?
+     */
+    public boolean isSpectatorChatHidden() {
+        return spectatorChat;
+    }
+
+    /**
+     * 
+     * @return Do players spectate when killed? Or joining? Or are they kicked?
+     */
+    public boolean isSpectatorsEnabled() {
+        return spectators;
     }
 
     /**
@@ -199,47 +486,10 @@ public class ConfigManager {
 
     /**
      * 
-     * @return Should the plugin force the worlds spawn to be here
+     * @return How much hearts or hunger should soup restore
      */
-    public boolean forceCords() {
-        return forceCords;
-    }
-
-    /**
-     * @return Get the item which will be displayed as the kit selector
-     */
-    public ItemStack getKitSelectorIcon() {
-        return kitSelectorIcon;
-    }
-
-    /**
-     * @return Get the item which will is the kit selectors 'forward'
-     */
-    public ItemStack getKitSelectorBack() {
-        return kitSelectorBack;
-    }
-
-    /**
-     * @return Get the item which will is the kit selectors 'back'
-     */
-    public ItemStack getKitSelectorForward() {
-        return kitSelectorForward;
-    }
-
-    /**
-     * 
-     * @return Whats the X its forcing spawn to be
-     */
-    public int getSpawnX() {
-        return x;
-    }
-
-    /**
-     * 
-     * @return Whats the Z its forcing spawn to be
-     */
-    public int getSpawnZ() {
-        return z;
+    public int mushroomStewRestores() {
+        return mushroomStewRestores;
     }
 
     /**
@@ -258,216 +508,6 @@ public class ConfigManager {
 
     /**
      * 
-     * @return Should it generate pillars beneath spawn to make it realistic
-     */
-    public boolean generatePillars() {
-        return generatePillars;
-    }
-
-    /**
-     * 
-     * @return Whats the material used for the pillars corners
-     */
-    public ItemStack getPillarCorner() {
-        return pillarCorner;
-    }
-
-    /**
-     * 
-     * @return Whats the material used for the rest of the pillars
-     */
-    public ItemStack getPillarInsides() {
-        return pillarInsides;
-    }
-
-    /**
-     * 
-     * @return Whats the material used for the feast ground
-     */
-    public ItemStack getFeastGround() {
-        return feastGround;
-    }
-
-    /**
-     * 
-     * @return Whats the material used for the outside covering of the feast
-     */
-    public ItemStack getFeast() {
-        return feast;
-    }
-
-    /**
-     * 
-     * @return Whats the material used for the inside of the feast where no one
-     *         sees
-     */
-    public ItemStack getFeastInsides() {
-        return feastInsides;
-    }
-
-    /**
-     * 
-     * @return Does the topmost tnt hidden under the enchanting table ignite on
-     *         punch?
-     */
-    public boolean isFeastTntIgnite() {
-        return feastTnt;
-    }
-
-    /**
-     * 
-     * @return Is the plugin using mysql
-     */
-    public boolean isMySqlEnabled() {
-        return mysqlEnabled;
-    }
-
-    /**
-     * 
-     * @return Should it give players that fancy kit selector
-     */
-    public boolean useKitSelector() {
-        return kitSelector;
-    }
-
-    /**
-     * 
-     * @return The feast starts in T-Minus <Seconds>
-     */
-    public int feastStartsIn() {
-        return timeTillFeast - hg.currentTime;
-    }
-
-    /**
-     * 
-     * @return Invincibility wears off in T-Minus <Seconds>
-     */
-    public int invincibilityWearsOffIn() {
-        return invincibility - hg.currentTime;
-    }
-
-    /**
-     * 
-     * @return Is mushroom stew enabled?
-     */
-    public boolean isMushroomStew() {
-        return mushroomStew;
-    }
-
-    /**
-     * @param time
-     *            till game starts
-     * @return Should it advertise the game is starting?
-     */
-    public boolean advertiseGameStarting(int time) {
-        if (time > -180) {
-            if (time % 60 == 0)
-                return true;
-        } else if (time % 180 == 0 || time % (5 * 60) == 0)
-            return true;
-        return gameStartingBroadcastTimes.contains(time);
-    }
-
-    /**
-     * 
-     * @param Currenttime
-     * @return Should it advertise about invincibility?
-     */
-    public boolean advertiseInvincibility(int time) {
-        time = invincibility - time;
-        if (time <= 180) {
-            if (time % 60 == 0)
-                return true;
-        } else if (time % 180 == 0 || time % (5 * 60) == 0)
-            return true;
-        return invincibilityBroadcastTimes.contains(time);
-    }
-
-    /**
-     * 
-     * @param Current
-     *            time
-     * @return Should it advertise about the feast?
-     */
-    public boolean advertiseFeast(int time) {
-        time = timeTillFeast - time;
-        if (time % 60 == 0)
-            return true;
-        if (time <= 180) {
-            if (time % 60 == 0)
-                return true;
-        } else if (time % 180 == 0)
-            return true;
-        return feastBroadcastTimes.contains(time);
-    }
-
-    /**
-     * 
-     * @return How much hearts or hunger should soup restore
-     */
-    public int mushroomStewRestores() {
-        return mushroomStewRestores;
-    }
-
-    /**
-     * 
-     * @return Do players spectate when killed? Or joining? Or are they kicked?
-     */
-    public boolean isSpectatorsEnabled() {
-        return spectators;
-    }
-
-    /**
-     * 
-     * @return Is spectator chat hidden from mortal eyes to prevent the giving
-     *         away of tactics and distractions?
-     */
-    public boolean isSpectatorChatHidden() {
-        return spectatorChat;
-    }
-
-    /**
-     * 
-     * @return Does the border close in after the feast starts?
-     */
-    public boolean doesBorderCloseIn() {
-        return borderCloseIn;
-    }
-
-    /**
-     * 
-     * @return How much does the border close in per second?
-     */
-    public double getBorderCloseInRate() {
-        return borderClosesIn;
-    }
-
-    /**
-     * 
-     * @return How long until the feast starts?
-     */
-    public int getTimeFeastStarts() {
-        return timeTillFeast;
-    }
-
-    /**
-     * 
-     * @return How long does invincibility last?
-     */
-    public int getInvincibilityTime() {
-        return invincibility;
-    }
-
-    /**
-     * 
-     * @return Whats the current size of the border?
-     */
-    public double getBorderSize() {
-        return border;
-    }
-
-    /**
-     * 
      * @param Whats
      *            the new border size?
      */
@@ -477,49 +517,9 @@ public class ConfigManager {
 
     /**
      * 
-     * @return Should it display messages about the game starting in bla bla?
+     * @return Should it give players that fancy kit selector
      */
-    public boolean displayMessages() {
-        return displayMessages;
-    }
-
-    /**
-     * 
-     * @return Should it use scoreboards at all?
-     */
-    public boolean displayScoreboards() {
-        return displayScoreboards;
-    }
-
-    /**
-     * 
-     * @return How much delay before crowing the name of the winner?
-     */
-    public int getWinnerBroadcastDelay() {
-        return wonBroadcastsDelay;
-    }
-
-    /**
-     * 
-     * @return How much delay before shutting the game down?
-     */
-    public int getGameShutdownDelay() {
-        return gameShutdownDelay;
-    }
-
-    /**
-     * 
-     * @return Should there be forest fires before the game starts?
-     */
-    public boolean isFireSpreadDisabled() {
-        return fireSpread;
-    }
-
-    public boolean isKitSelectorDynamicSize() {
-        return kitSelectorDynamicSize;
-    }
-
-    public int getKitSelectorInventorySize() {
-        return kitSelectorInventorySize;
+    public boolean useKitSelector() {
+        return kitSelector;
     }
 }

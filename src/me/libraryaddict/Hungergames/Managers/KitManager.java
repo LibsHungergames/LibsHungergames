@@ -28,15 +28,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class KitManager {
-    /**
-     * Kits every player gets by default
-     */
+    private ChatManager cm = HungergamesApi.getChatManager();
+    public String defaultKitName;
     private ConcurrentLinkedQueue<Kit> defaultKits = new ConcurrentLinkedQueue<Kit>();
+    private Hungergames hg = HungergamesApi.getHungergames();
     private ConcurrentHashMap<String, List<Kit>> hisKits = new ConcurrentHashMap<String, List<Kit>>();
     private ArrayList<Kit> kits = new ArrayList<Kit>();
-    public String defaultKitName;
-    private Hungergames hg = HungergamesApi.getHungergames();
-    private ChatManager cm = HungergamesApi.getChatManager();
 
     public KitManager() {
         File file = new File(hg.getDataFolder().toString() + "/kits.yml");
@@ -68,6 +65,23 @@ public class KitManager {
         kits = newKit;
     }
 
+    public void addItem(Player p, ItemStack item) {
+        int repeat = item.getAmount();
+        item.setAmount(1);
+        for (int i = 0; i < repeat; i++) {
+            if (canFit(p.getInventory(), new ItemStack[] { item }))
+                p.getInventory().addItem(item);
+            else {
+                if (item == null || item.getType() == Material.AIR)
+                    continue;
+                else if (item.hasItemMeta())
+                    p.getWorld().dropItemNaturally(p.getLocation(), item.clone()).getItemStack().setItemMeta(item.getItemMeta());
+                else
+                    p.getWorld().dropItemNaturally(p.getLocation(), item);
+            }
+        }
+    }
+
     public void addKit(Kit newKit) {
         kits.add(newKit);
         if (newKit.isFree())
@@ -85,60 +99,14 @@ public class KitManager {
         kits = newKits;
     }
 
-    public boolean setKit(Player p, String name) {
-        Kit kit = getKitByName(name);
-        if (kit == null)
+    public boolean addKitToPlayer(Player player, Kit kit) {
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
             return false;
-        Kit kita = getKitByPlayer(p);
-        if (kita != null)
-            kita.removePlayer(p);
-        kit.addPlayer(p);
+        if (!hisKits.containsKey(player.getName()))
+            hisKits.put(player.getName(), new ArrayList<Kit>());
+        if (!hisKits.get(player.getName()).contains(kit))
+            hisKits.get(player.getName()).add(kit);
         return true;
-    }
-
-    public Kit parseKit(ConfigurationSection path) {
-        String desc = ChatColor.translateAlternateColorCodes('&', path.getString("Description"));
-        String name = path.getString("Name");
-        if (name == null)
-            name = path.getName();
-        name = ChatColor.translateAlternateColorCodes('&', name);
-        ItemStack[] armor = new ItemStack[4];
-        armor[3] = parseItem(path.getString("Helmet"))[0];
-        armor[2] = parseItem(path.getString("Chestplate"))[0];
-        armor[1] = parseItem(path.getString("Leggings"))[0];
-        armor[0] = parseItem(path.getString("Boots"))[0];
-        List<String> itemList = path.getStringList("Items");
-        ArrayList<ItemStack> item = new ArrayList<ItemStack>();
-        if (itemList != null)
-            for (String string : itemList) {
-                ItemStack[] itemstacks = parseItem(string);
-                for (ItemStack itemstack : itemstacks)
-                    if (itemstack != null)
-                        item.add(itemstack);
-            }
-        ItemStack[] items = new ItemStack[item.size()];
-        for (int n = 0; n < item.size(); n++)
-            items[n] = item.get(n);
-        List<String> abilityList = path.getStringList("Ability");
-        String[] ability;
-        if (abilityList != null) {
-            ability = new String[abilityList.size()];
-            for (int n = 0; n < abilityList.size(); n++)
-                ability[n] = abilityList.get(n);
-        } else
-            ability = new String[0];
-        ItemStack icon = new ItemStack(Material.STONE);
-        if (path.contains("Icon")) {
-            icon = this.parseItem(path.getString("Icon"))[0];
-            if (icon == null)
-                icon = new ItemStack(Material.STONE);
-        }
-        Kit kit = new Kit(name, icon, armor, items, desc, ability);
-        if (path.getBoolean("Free", false) == true)
-            kit.setFree(true);
-        if (path.getInt("Price", -1) != -1)
-            kit.setPrice(path.getInt("Price"));
-        return kit;
     }
 
     public boolean canFit(Inventory pInv, ItemStack[] items) {
@@ -157,21 +125,36 @@ public class KitManager {
         return true;
     }
 
-    public void addItem(Player p, ItemStack item) {
-        int repeat = item.getAmount();
-        item.setAmount(1);
-        for (int i = 0; i < repeat; i++) {
-            if (canFit(p.getInventory(), new ItemStack[] { item }))
-                p.getInventory().addItem(item);
-            else {
-                if (item == null || item.getType() == Material.AIR)
-                    continue;
-                else if (item.hasItemMeta())
-                    p.getWorld().dropItemNaturally(p.getLocation(), item.clone()).getItemStack().setItemMeta(item.getItemMeta());
-                else
-                    p.getWorld().dropItemNaturally(p.getLocation(), item);
-            }
-        }
+    public Kit getKitByName(String name) {
+        for (Kit kit : kits)
+            if (ChatColor.stripColor(kit.getName()).equalsIgnoreCase(name))
+                return kit;
+            else if (hg.isNumeric(name) && Integer.parseInt(name) == kit.getId())
+                return kit;
+        return null;
+    }
+
+    public Kit getKitByPlayer(Player player) {
+        for (Kit kit : kits)
+            if (kit.getPlayers().contains(player))
+                return kit;
+        return null;
+    }
+
+    public ArrayList<Kit> getKits() {
+        return kits;
+    }
+
+    public List<Kit> getPlayersKits(Player player) {
+        return hisKits.get(player.getName());
+    }
+
+    public boolean ownsKit(Player player, Kit kit) {
+        if (defaultKits.contains(kit))
+            return true;
+        if (player.hasPermission(kit.getPermission()))
+            return true;
+        return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
     }
 
     public ItemStack[] parseItem(String string) {
@@ -254,44 +237,49 @@ public class KitManager {
         return new ItemStack[] { null };
     }
 
-    public String toReadable(String string) {
-        String[] names = string.split("_");
-        for (int i = 0; i < names.length; i++) {
-            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
+    public Kit parseKit(ConfigurationSection path) {
+        String desc = ChatColor.translateAlternateColorCodes('&', path.getString("Description"));
+        String name = path.getString("Name");
+        if (name == null)
+            name = path.getName();
+        name = ChatColor.translateAlternateColorCodes('&', name);
+        ItemStack[] armor = new ItemStack[4];
+        armor[3] = parseItem(path.getString("Helmet"))[0];
+        armor[2] = parseItem(path.getString("Chestplate"))[0];
+        armor[1] = parseItem(path.getString("Leggings"))[0];
+        armor[0] = parseItem(path.getString("Boots"))[0];
+        List<String> itemList = path.getStringList("Items");
+        ArrayList<ItemStack> item = new ArrayList<ItemStack>();
+        if (itemList != null)
+            for (String string : itemList) {
+                ItemStack[] itemstacks = parseItem(string);
+                for (ItemStack itemstack : itemstacks)
+                    if (itemstack != null)
+                        item.add(itemstack);
+            }
+        ItemStack[] items = new ItemStack[item.size()];
+        for (int n = 0; n < item.size(); n++)
+            items[n] = item.get(n);
+        List<String> abilityList = path.getStringList("Ability");
+        String[] ability;
+        if (abilityList != null) {
+            ability = new String[abilityList.size()];
+            for (int n = 0; n < abilityList.size(); n++)
+                ability[n] = abilityList.get(n);
+        } else
+            ability = new String[0];
+        ItemStack icon = new ItemStack(Material.STONE);
+        if (path.contains("Icon")) {
+            icon = this.parseItem(path.getString("Icon"))[0];
+            if (icon == null)
+                icon = new ItemStack(Material.STONE);
         }
-        return (StringUtils.join(names, " "));
-    }
-
-    public Kit getKitByName(String name) {
-        for (Kit kit : kits)
-            if (ChatColor.stripColor(kit.getName()).equalsIgnoreCase(name))
-                return kit;
-            else if (hg.isNumeric(name) && Integer.parseInt(name) == kit.getId())
-                return kit;
-        return null;
-    }
-
-    public Kit getKitByPlayer(Player player) {
-        for (Kit kit : kits)
-            if (kit.getPlayers().contains(player))
-                return kit;
-        return null;
-    }
-
-    public boolean ownsKit(Player player, Kit kit) {
-        if (defaultKits.contains(kit))
-            return true;
-        if (player.hasPermission(kit.getPermission()))
-            return true;
-        return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
-    }
-
-    public ArrayList<Kit> getKits() {
-        return kits;
-    }
-
-    public List<Kit> getPlayersKits(Player player) {
-        return hisKits.get(player.getName());
+        Kit kit = new Kit(name, icon, armor, items, desc, ability);
+        if (path.getBoolean("Free", false) == true)
+            kit.setFree(true);
+        if (path.getInt("Price", -1) != -1)
+            kit.setPrice(path.getInt("Price"));
+        return kit;
     }
 
     public boolean removeKitFromPlayer(Player player, Kit kit) {
@@ -300,13 +288,22 @@ public class KitManager {
         return hisKits.get(player.getName()).remove(kit);
     }
 
-    public boolean addKitToPlayer(Player player, Kit kit) {
-        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+    public boolean setKit(Player p, String name) {
+        Kit kit = getKitByName(name);
+        if (kit == null)
             return false;
-        if (!hisKits.containsKey(player.getName()))
-            hisKits.put(player.getName(), new ArrayList<Kit>());
-        if (!hisKits.get(player.getName()).contains(kit))
-            hisKits.get(player.getName()).add(kit);
+        Kit kita = getKitByPlayer(p);
+        if (kita != null)
+            kita.removePlayer(p);
+        kit.addPlayer(p);
         return true;
+    }
+
+    public String toReadable(String string) {
+        String[] names = string.split("_");
+        for (int i = 0; i < names.length; i++) {
+            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
+        }
+        return StringUtils.join(names, " ");
     }
 }

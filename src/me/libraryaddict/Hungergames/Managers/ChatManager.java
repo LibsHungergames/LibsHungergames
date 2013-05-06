@@ -130,14 +130,14 @@ public class ChatManager {
     private String enchantNameUnlootable = "Unlootable";
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
     private String inventoryWindowSelectKitTitle = ChatColor.DARK_RED + "Select Kit";
-    private String[] itemKitSelectorDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this",
-            ChatColor.LIGHT_PURPLE + "to open a kit selection screen!" };
-    private String itemKitSelectorBackName = ChatColor.RED + "Back";
-    private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
     private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "back a page" };
+    private String itemKitSelectorBackName = ChatColor.RED + "Back";
+    private String[] itemKitSelectorDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this",
+            ChatColor.LIGHT_PURPLE + "to open a kit selection screen!" };
     private String[] itemKitSelectorForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "forwards a page" };
+    private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
     private String itemKitSelectorName = ChatColor.WHITE + "Kit Selector";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
@@ -247,8 +247,8 @@ public class ChatManager {
     private String timeFormatSeconds = "%s seconds";
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
-    private transient File configFile;
     private transient YamlConfiguration config;
+    private transient File configFile;
     private transient boolean newFile = false;
 
     public ChatManager() {
@@ -258,137 +258,8 @@ public class ChatManager {
         loadConfig();
     }
 
-    public boolean isNewFile() {
-        return newFile;
-    }
-
-    public void load() {
-        try {
-            if (!configFile.exists())
-                save();
-            else
-                newFile = false;
-            config.load(configFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadConfig() {
-        try {
-            boolean saveConfig = false;
-            System.out.print(getLoggerLoadTranslationConfig());
-            try {
-                boolean modified = false;
-                for (Field field : getClass().getDeclaredFields()) {
-                    if (!Modifier.isTransient(field.getModifiers()))
-                        try {
-                            Object value = config.get(field.getName());
-                            if (value == null) {
-                                value = field.get(this);
-                                if (value instanceof String) {
-                                    value = ((String) value).replace("\n", "\\n").replace("§", "&");
-                                }
-                                if (value instanceof String[]) {
-                                    String[] strings = (String[]) value;
-                                    for (int i = 0; i < strings.length; i++)
-                                        strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
-                                    value = strings;
-                                }
-                                config.set(field.getName(), value);
-                                modified = true;
-                                if (!newFile)
-                                    System.out.print(String.format(getLoggerTranslationMissingValue(), field.getName()));
-                            } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
-                                List<Object> array = (List<Object>) value;
-                                value = array.toArray(new String[array.size()]);
-                            }
-                            if (value instanceof String) {
-                                value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
-                            }
-                            if (value instanceof String[]) {
-                                String[] strings = (String[]) value;
-                                for (int i = 0; i < strings.length; i++)
-                                    strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]).replace("\\n", "\n");
-                                value = strings;
-                            }
-                            if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
-                                field.set(this, ((float) (double) (Double) value));
-                            } else
-                                field.set(this, value);
-                            if (field.getName().equals("commandCreator")) {
-                                /**
-                                 * Touch this and you better leave this entire
-                                 * plugin alone because I didn't give you
-                                 * permission to modify this.
-                                 * 
-                                 * By changing the creatorMessage to something
-                                 * which doesn't refer players to the plugin
-                                 * itself.
-                                 * 
-                                 * You are going against my wishes.
-                                 */
-                                String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE")
-                                        .toLowerCase();
-                                if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")
-                                        && !message.contains("dev.bukkit.org/server-mods/hunger-games")
-                                        && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
-                                    Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
-                                            new Runnable() {
-                                                public void run() {
-                                                    Bukkit.broadcastMessage(ChatColor.DARK_AQUA
-                                                            + "[Hungergames] "
-                                                            + ChatColor.AQUA
-                                                            + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
-                                                }
-                                            }, 20 * 60 * 10, 20 * 60 * 10);
-                                }
-                            }
-                        } catch (Exception e) {
-                            System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
-                        }
-                }
-                if (modified) {
-                    saveConfig = true;
-                }
-            } catch (Exception e) {
-                System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
-            }
-            if (saveConfig)
-                save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save() {
-        try {
-            if (!configFile.exists()) {
-                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
-                configFile.getParentFile().mkdirs();
-                configFile.createNewFile();
-                newFile = true;
-            }
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getLoggerErrorWhileLoadingTranslation() {
-        return loggerErrorWhileLoadingTranslation;
-    }
-
-    private String getLoggerLoadTranslationConfig() {
-        return loggerLoadTranslationConfig;
-    }
-
     public String getBroadcastFeastBegun() {
         return broadcastFeastBegun;
-    }
-
-    private String getLoggerCreatingTranslationConfig() {
-        return loggerCreatingTranslationConfig;
     }
 
     public String getBroadcastFeastStartingCompassMessage() {
@@ -453,6 +324,10 @@ public class ChatManager {
 
     public String getCommandBuyKitCantBuyKit() {
         return commandBuyKitCantBuyKit;
+    }
+
+    public String getCommandBuyKitKitsNotLoaded() {
+        return commandBuyKitKitsNotLoaded;
     }
 
     public String getCommandBuyKitMysqlNotEnabled() {
@@ -831,8 +706,24 @@ public class ChatManager {
         return inventoryWindowSelectKitTitle;
     }
 
+    public String[] getItemKitSelectorBackDescription() {
+        return itemKitSelectorBackDescription;
+    }
+
+    public String getItemKitSelectorBackName() {
+        return itemKitSelectorBackName;
+    }
+
     public String[] getItemKitSelectorDescription() {
         return itemKitSelectorDescription;
+    }
+
+    public String[] getItemKitSelectorForwardsDescription() {
+        return itemKitSelectorForwardsDescription;
+    }
+
+    public String getItemKitSelectorForwardsName() {
+        return itemKitSelectorForwardsName;
     }
 
     public String getItemKitSelectorName() {
@@ -887,6 +778,10 @@ public class ChatManager {
         return kitDescriptionDefault;
     }
 
+    public String getLoggerAbilityMissingValue() {
+        return loggerAbilityMissingValue;
+    }
+
     public String getLoggerAddAbility() {
         return loggerAddAbility;
     }
@@ -903,6 +798,10 @@ public class ChatManager {
         return loggerCreatingAbilitysConfig;
     }
 
+    private String getLoggerCreatingTranslationConfig() {
+        return loggerCreatingTranslationConfig;
+    }
+
     public String getLoggerDependencyNotFound() {
         return loggerDependencyNotFound;
     }
@@ -917,6 +816,10 @@ public class ChatManager {
 
     public String getLoggerErrorWhileLoadingAbility() {
         return loggerErrorWhileLoadingAbility;
+    }
+
+    private String getLoggerErrorWhileLoadingTranslation() {
+        return loggerErrorWhileLoadingTranslation;
     }
 
     public String getLoggerErrorWhileParsingItemStack() {
@@ -937,6 +840,10 @@ public class ChatManager {
 
     public String getLoggerLoadAbilitysInPackage() {
         return loggerLoadAbilitysInPackage;
+    }
+
+    private String getLoggerLoadTranslationConfig() {
+        return loggerLoadTranslationConfig;
     }
 
     public String getLoggerMetricsMessage() {
@@ -979,6 +886,10 @@ public class ChatManager {
         return loggerSucessfullyLoadedMap;
     }
 
+    public String getLoggerTranslationMissingValue() {
+        return loggerTranslationMissingValue;
+    }
+
     public String getLoggerUnrecognisedItemId() {
         return loggerUnrecognisedItemId;
     }
@@ -991,16 +902,8 @@ public class ChatManager {
         return messagePlayerApproachingBorder;
     }
 
-    public String getMessagePlayerShowKitsCurrentSelectedKit() {
-        return messagePlayerShowKitsCurrentSelectedKit;
-    }
-
     public String getMessagePlayerHasHealthAndHunger() {
         return messagePlayerHasHealthAndHunger;
-    }
-
-    public String getMessagePlayerShowKitsHisKits() {
-        return messagePlayerShowKitsHisKits;
     }
 
     public String getMessagePlayerKitDesciprionPrice() {
@@ -1029,18 +932,6 @@ public class ChatManager {
 
     public String getMessagePlayerKitDescritionMoreInfo() {
         return messagePlayerKitDescritionMoreInfo;
-    }
-
-    public String getMessagePlayerShowKitsNoKit() {
-        return messagePlayerShowKitsNoKit;
-    }
-
-    public String getMessagePlayerShowKitsNoKits() {
-        return messagePlayerShowKitsNoKits;
-    }
-
-    public String getMessagePlayerShowKitsOtherKits() {
-        return messagePlayerShowKitsOtherKits;
     }
 
     public String getMessagePlayerSendKitItemsDoesntExist() {
@@ -1075,6 +966,30 @@ public class ChatManager {
         return messagePlayerSendKitItemsOtherItems;
     }
 
+    public String getMessagePlayerShowKitsCurrentSelectedKit() {
+        return messagePlayerShowKitsCurrentSelectedKit;
+    }
+
+    public String getMessagePlayerShowKitsHisKits() {
+        return messagePlayerShowKitsHisKits;
+    }
+
+    public String getMessagePlayerShowKitsNoKit() {
+        return messagePlayerShowKitsNoKit;
+    }
+
+    public String getMessagePlayerShowKitsNoKits() {
+        return messagePlayerShowKitsNoKits;
+    }
+
+    public String getMessagePlayerShowKitsOtherKits() {
+        return messagePlayerShowKitsOtherKits;
+    }
+
+    public String getMessagePlayerShowKitsUseKitInfo() {
+        return messagePlayerShowKitsUseKitInfo;
+    }
+
     public String getMessagePlayerTrack() {
         return messagePlayerTrack;
     }
@@ -1083,12 +998,12 @@ public class ChatManager {
         return messagePlayerTrackNoVictim;
     }
 
-    public String getMessagePlayerShowKitsUseKitInfo() {
-        return messagePlayerShowKitsUseKitInfo;
-    }
-
     public String getMessagePlayerWarningForgeUnstableEnchants() {
         return messagePlayerWarningForgeUnstableEnchants;
+    }
+
+    public String getMessagePlayerWhosePlugin() {
+        return messagePlayerWhosePlugin;
     }
 
     public String getScoreboardBorderSize() {
@@ -1129,6 +1044,10 @@ public class ChatManager {
 
     public String getScoreboardStagePreGame() {
         return scoreboardStagePreGame;
+    }
+
+    public boolean getShouldIMessagePlayersWhosePlugin() {
+        return shouldIMessagePlayersWhosePlugin;
     }
 
     public String getTimeFormatMinute() {
@@ -1199,39 +1118,120 @@ public class ChatManager {
         return timeFormatSecondsAndMinutes;
     }
 
-    public String getCommandBuyKitKitsNotLoaded() {
-        return commandBuyKitKitsNotLoaded;
+    public boolean isNewFile() {
+        return newFile;
     }
 
-    public boolean getShouldIMessagePlayersWhosePlugin() {
-        return shouldIMessagePlayersWhosePlugin;
+    public void load() {
+        try {
+            if (!configFile.exists())
+                save();
+            else
+                newFile = false;
+            config.load(configFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public String getMessagePlayerWhosePlugin() {
-        return messagePlayerWhosePlugin;
+    public void loadConfig() {
+        try {
+            boolean saveConfig = false;
+            System.out.print(getLoggerLoadTranslationConfig());
+            try {
+                boolean modified = false;
+                for (Field field : getClass().getDeclaredFields()) {
+                    if (!Modifier.isTransient(field.getModifiers()))
+                        try {
+                            Object value = config.get(field.getName());
+                            if (value == null) {
+                                value = field.get(this);
+                                if (value instanceof String) {
+                                    value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                                }
+                                if (value instanceof String[]) {
+                                    String[] strings = (String[]) value;
+                                    for (int i = 0; i < strings.length; i++)
+                                        strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                    value = strings;
+                                }
+                                config.set(field.getName(), value);
+                                modified = true;
+                                if (!newFile)
+                                    System.out.print(String.format(getLoggerTranslationMissingValue(), field.getName()));
+                            } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
+                                List<Object> array = (List<Object>) value;
+                                value = array.toArray(new String[array.size()]);
+                            }
+                            if (value instanceof String) {
+                                value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
+                            }
+                            if (value instanceof String[]) {
+                                String[] strings = (String[]) value;
+                                for (int i = 0; i < strings.length; i++)
+                                    strings[i] = ChatColor.translateAlternateColorCodes('&', strings[i]).replace("\\n", "\n");
+                                value = strings;
+                            }
+                            if (field.getType().getSimpleName().equals("float") && value.getClass() == Double.class) {
+                                field.set(this, ((float) (double) (Double) value));
+                            } else
+                                field.set(this, value);
+                            if (field.getName().equals("commandCreator")) {
+                                /**
+                                 * Touch this and you better leave this entire
+                                 * plugin alone because I didn't give you
+                                 * permission to modify this.
+                                 * 
+                                 * By changing the creatorMessage to something
+                                 * which doesn't refer players to the plugin
+                                 * itself.
+                                 * 
+                                 * You are going against my wishes.
+                                 */
+                                String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE")
+                                        .toLowerCase();
+                                if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")
+                                        && !message.contains("dev.bukkit.org/server-mods/hunger-games")
+                                        && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
+                                    Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
+                                            new Runnable() {
+                                                public void run() {
+                                                    Bukkit.broadcastMessage(ChatColor.DARK_AQUA
+                                                            + "[Hungergames] "
+                                                            + ChatColor.AQUA
+                                                            + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
+                                                }
+                                            }, 20 * 60 * 10, 20 * 60 * 10);
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
+                        }
+                }
+                if (modified) {
+                    saveConfig = true;
+                }
+            } catch (Exception e) {
+                System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
+            }
+            if (saveConfig)
+                save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public String getLoggerTranslationMissingValue() {
-        return loggerTranslationMissingValue;
-    }
-
-    public String getLoggerAbilityMissingValue() {
-        return loggerAbilityMissingValue;
-    }
-
-    public String getItemKitSelectorBackName() {
-        return itemKitSelectorBackName;
-    }
-
-    public String getItemKitSelectorForwardsName() {
-        return itemKitSelectorForwardsName;
-    }
-
-    public String[] getItemKitSelectorBackDescription() {
-        return itemKitSelectorBackDescription;
-    }
-
-    public String[] getItemKitSelectorForwardsDescription() {
-        return itemKitSelectorForwardsDescription;
+    public void save() {
+        try {
+            if (!configFile.exists()) {
+                Bukkit.getLogger().info(getLoggerCreatingTranslationConfig());
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+                newFile = true;
+            }
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
