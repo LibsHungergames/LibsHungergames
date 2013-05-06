@@ -54,6 +54,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
@@ -96,6 +97,8 @@ public class PlayerListener implements Listener {
             p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion()));
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         p.setAllowFlight(true);
+        for (PotionEffect effect : p.getActivePotionEffects())
+            p.removePotionEffect(effect.getType());
         if (hg.currentTime >= 0) {
             pm.setSpectator(gamer);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {

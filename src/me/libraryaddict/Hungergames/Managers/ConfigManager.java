@@ -254,7 +254,6 @@ public class ConfigManager {
                 : (Material.getMaterial(args[0].toUpperCase()) == null ? Material.AIR : Material.getMaterial(args[0]
                         .toUpperCase())).getId();
         return new ItemStack(id, 1, Short.parseShort(args[1]));
-
     }
 
     /**

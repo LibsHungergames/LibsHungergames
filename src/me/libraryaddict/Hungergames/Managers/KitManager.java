@@ -174,7 +174,7 @@ public class KitManager {
         }
     }
 
-    private ItemStack[] parseItem(String string) {
+    public ItemStack[] parseItem(String string) {
         if (string == null)
             return new ItemStack[] { null };
         String[] args = string.split(" ");
