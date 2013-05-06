@@ -80,8 +80,7 @@ public abstract class AbilityListener implements Listener {
                             value = ((String) value).replace("\n", "\\n").replace("§", "&");
                         }
                         if (value instanceof String[]) {
-                            List<Object> array = (List<Object>) value;
-                            String[] strings = array.toArray(new String[array.size()]);
+                            String[] strings = (String[]) value;
                             for (int i = 0; i < strings.length; i++)
                                 strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
                             value = strings;

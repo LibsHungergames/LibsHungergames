@@ -1,7 +1,9 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -10,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_5_R3.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -32,6 +35,14 @@ public class Frosty extends AbilityListener {
     public int iceRadius = 3;
     public boolean snowballsScheduler = true;
     private HashMap<Entity, Integer> ids = new HashMap<Entity, Integer>();
+    private ArrayList<BlockFace> faces = new ArrayList<BlockFace>();
+
+    public Frosty() {
+        faces.add(BlockFace.SOUTH);
+        faces.add(BlockFace.NORTH);
+        faces.add(BlockFace.EAST);
+        faces.add(BlockFace.WEST);
+    }
 
     @EventHandler
     public void gameStart(GameStartEvent event) {
@@ -72,10 +83,21 @@ public class Frosty extends AbilityListener {
     }
 
     private void transform(Location loc) {
-        if (net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), loc.getBlockX(),
+        loc.add(loc.getBlockX() + 0.5, 0.1, loc.getBlockZ() + 0.5);
+        if (loc.getBlock().getType() == Material.AIR && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), loc.getBlockX(),
                 loc.getBlockY(), loc.getBlockZ()))
             loc.getBlock().setType(Material.SNOW);
-        loc.add(loc.getBlockX() + 0.5, 0, loc.getBlockZ() + 0.5);
+        else {
+            Collections.shuffle(faces, new Random());
+            for (BlockFace face : faces) {
+                Block b = loc.getBlock().getRelative(face);
+                if (b.getType() == Material.AIR && net.minecraft.server.v1_5_R3.Block.SNOW.canPlace(((CraftWorld) loc.getWorld()).getHandle(), b.getX(),
+                        b.getY(), b.getZ())) {
+                    loc.getBlock().setType(Material.SNOW);
+                    break;
+                }
+            }
+        }
         for (int x = -iceRadius; x <= iceRadius; x++) {
             for (int z = -iceRadius; z <= iceRadius; z++) {
                 Block b = loc.clone().add(x, 0, z).getBlock();
