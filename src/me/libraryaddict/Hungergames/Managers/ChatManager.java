@@ -130,12 +130,14 @@ public class ChatManager {
     private String enchantNameUnlootable = "Unlootable";
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
     private String inventoryWindowSelectKitTitle = ChatColor.DARK_RED + "Select Kit";
-    private String itemKitSelectorDescription = ChatColor.LIGHT_PURPLE + "Right click with this\n" + ChatColor.LIGHT_PURPLE
-            + "to open a kit selection screen!";
+    private String[] itemKitSelectorDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this",
+            ChatColor.LIGHT_PURPLE + "to open a kit selection screen!" };
     private String itemKitSelectorBackName = ChatColor.RED + "Back";
     private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
-    private String itemKitSelectorBackDescription = ChatColor.LIGHT_PURPLE + "Click this to move\nback a page";
-    private String itemKitSelectorForwardsDescription = ChatColor.LIGHT_PURPLE + "Click this to move\nforwards a page";
+    private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "back a page" };
+    private String[] itemKitSelectorForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "forwards a page" };
     private String itemKitSelectorName = ChatColor.WHITE + "Kit Selector";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
@@ -830,7 +832,7 @@ public class ChatManager {
         return inventoryWindowSelectKitTitle;
     }
 
-    public String getItemKitSelectorDescription() {
+    public String[] getItemKitSelectorDescription() {
         return itemKitSelectorDescription;
     }
 
@@ -1226,11 +1228,11 @@ public class ChatManager {
         return itemKitSelectorForwardsName;
     }
 
-    public String getItemKitSelectorBackDescription() {
+    public String[] getItemKitSelectorBackDescription() {
         return itemKitSelectorBackDescription;
     }
 
-    public String getItemKitSelectorForwardsDescription() {
+    public String[] getItemKitSelectorForwardsDescription() {
         return itemKitSelectorForwardsDescription;
     }
 }
