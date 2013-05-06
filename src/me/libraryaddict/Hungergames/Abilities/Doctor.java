@@ -13,9 +13,9 @@ import org.bukkit.potion.PotionEffect;
 
 public class Doctor extends AbilityListener {
     public boolean heal = false;
-    public int toHeal = 5;
-    public String pairOfForcepsItemName = ChatColor.WHITE + "Pair of Forceps";
     public int pairOfForcepsItemId = Material.SHEARS.getId();
+    public String pairOfForcepsItemName = ChatColor.WHITE + "Pair of Forceps";
+    public int toHeal = 5;
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {

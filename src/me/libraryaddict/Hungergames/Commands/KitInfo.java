@@ -11,8 +11,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class KitInfo implements CommandExecutor {
-    private KitManager kits = HungergamesApi.getKitManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length > 0) {

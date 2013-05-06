@@ -15,8 +15,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class EnchantmentManager {
 
-    private static HashMap<Enchantment, String> enchantNames = new HashMap<Enchantment, String>();
+    private static final int[] BVAL = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
     private static List<Integer> customEnchants = new ArrayList<Integer>();
+    private static HashMap<Enchantment, String> enchantNames = new HashMap<Enchantment, String>();
+
+    // Parallel arrays used in the conversion process.
+    private static final String[] RCODE = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+
     public static Enchantment UNLOOTABLE;
 
     static {
@@ -71,31 +76,16 @@ public class EnchantmentManager {
         return 0;
     }
 
-    public static ItemStack updateEnchants(ItemStack item) {
-        ArrayList<String> enchants = new ArrayList<String>();
-        for (Enchantment ench : item.getEnchantments().keySet()) {
-            if (!isNatural(ench)) {
-                if (!ench.getName().contains("%no%"))
-                    enchants.add(ChatColor.GRAY + ench.getName() + " " + toRoman(item.getEnchantments().get(ench)));
-                else
-                    enchants.add(ChatColor.GRAY + ench.getName().replace("%no%", "" + item.getEnchantments().get(ench)));
-            }
-        }
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(enchants);
-        item.setItemMeta(meta);
-        return item;
+    public static String getReadableName(Enchantment enchant) {
+        if (enchantNames.containsKey(enchant))
+            return enchantNames.get(enchant);
+        return enchant.getName();
     }
-
     public static boolean isNatural(Enchantment ench) {
         if (customEnchants.contains(ench.getId()))
             return false;
         return true;
     }
-
-    // Parallel arrays used in the conversion process.
-    private static final String[] RCODE = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-    private static final int[] BVAL = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 
     // =========================================================== binaryToRoman
     private static String toRoman(int binary) {
@@ -112,9 +102,19 @@ public class EnchantmentManager {
         return roman;
     }
 
-    public static String getReadableName(Enchantment enchant) {
-        if (enchantNames.containsKey(enchant))
-            return enchantNames.get(enchant);
-        return enchant.getName();
+    public static ItemStack updateEnchants(ItemStack item) {
+        ArrayList<String> enchants = new ArrayList<String>();
+        for (Enchantment ench : item.getEnchantments().keySet()) {
+            if (!isNatural(ench)) {
+                if (!ench.getName().contains("%no%"))
+                    enchants.add(ChatColor.GRAY + ench.getName() + " " + toRoman(item.getEnchantments().get(ench)));
+                else
+                    enchants.add(ChatColor.GRAY + ench.getName().replace("%no%", "" + item.getEnchantments().get(ench)));
+            }
+        }
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(enchants);
+        item.setItemMeta(meta);
+        return item;
     }
 }

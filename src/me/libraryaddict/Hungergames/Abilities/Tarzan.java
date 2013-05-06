@@ -15,9 +15,9 @@ public class Tarzan extends AbilityListener {
 
     private HashMap<BlockFace, Byte> faces = new HashMap<BlockFace, Byte>();
     private ArrayList<Integer> ignoreBlockTypes = new ArrayList<Integer>();
-    public int scanUpRadius = 5;
     public int scanDownRadius = 5;
     public int scanSidewaysRadius = 5;
+    public int scanUpRadius = 5;
 
     public Tarzan() {
         faces.put(BlockFace.SOUTH, (byte) 1);

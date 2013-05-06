@@ -11,22 +11,28 @@ import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
-    private Connection con = null;
     private ChatManager cm = HungergamesApi.getChatManager();
+    private Connection con = null;
     MySqlManager mysql;
 
     public PlayerJoinThread(MySqlManager mysql) {
         this.mysql = mysql;
     }
 
-    public void mySqlDisconnect() {
-        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
-            return;
+    public void checkTables(String tableName, String query) {
         try {
-            System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
-            this.con.close();
+            DatabaseMetaData dbm = con.getMetaData();
+            // check if "employee" table is there
+            ResultSet tables = dbm.getTables(null, null, tableName, null);
+            tables.beforeFirst();
+            if (!tables.next()) {
+                tables.close();
+                Statement stmt = con.createStatement();
+                stmt.execute(query);
+                stmt.close();
+            }
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getLoggerMySqlClosingError(), getClass().getSimpleName()));
+            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName()));
         }
     }
 
@@ -47,20 +53,14 @@ public class PlayerJoinThread extends Thread {
                 + "Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL)");
     }
 
-    public void checkTables(String tableName, String query) {
+    public void mySqlDisconnect() {
+        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+            return;
         try {
-            DatabaseMetaData dbm = con.getMetaData();
-            // check if "employee" table is there
-            ResultSet tables = dbm.getTables(null, null, tableName, null);
-            tables.beforeFirst();
-            if (!tables.next()) {
-                tables.close();
-                Statement stmt = con.createStatement();
-                stmt.execute(query);
-                stmt.close();
-            }
+            System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
+            this.con.close();
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName()));
+            System.err.println(String.format(cm.getLoggerMySqlClosingError(), getClass().getSimpleName()));
         }
     }
 

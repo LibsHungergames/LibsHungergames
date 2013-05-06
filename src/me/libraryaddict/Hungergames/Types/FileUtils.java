@@ -45,8 +45,20 @@ public final class FileUtils {
    */
   public static final File CURRENT_DIR = new File(".");
 
-  void log(String st) {
-    System.out.println(st);
+  public static void clear(File file) {
+    if (!file.isDirectory()) {
+      System.err.println("Can't clear something that isn't a directory!");
+      return;
+    }
+    File[] files = file.listFiles();
+    for (File f : files) {
+      if (f.isDirectory()) {
+        clear(f);
+        f.delete();
+      } else {
+        f.delete();
+      }
+    }
   }
 
   /**
@@ -159,20 +171,8 @@ public final class FileUtils {
     output.close();
   }
 
-  public static void clear(File file) {
-    if (!file.isDirectory()) {
-      System.err.println("Can't clear something that isn't a directory!");
-      return;
-    }
-    File[] files = file.listFiles();
-    for (File f : files) {
-      if (f.isDirectory()) {
-        clear(f);
-        f.delete();
-      } else {
-        f.delete();
-      }
-    }
+  void log(String st) {
+    System.out.println(st);
   }
 
 }

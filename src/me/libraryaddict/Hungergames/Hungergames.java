@@ -34,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
+    private ChatManager cm;
+    private ConfigManager config;
     /**
      * This plugin is licensed under
      * http://creativecommons.org/licenses/by-nc/3.0/
@@ -58,14 +60,12 @@ public class Hungergames extends JavaPlugin {
      * doSeconds is false when the game has ended
      */
     public boolean doSeconds = true;
+    public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
+    public Location feastLoc;
+    private PlayerListener playerListener;
     private PlayerManager pm;
     protected long time = 0;
     public World world;
-    public Location feastLoc;
-    private ConfigManager config;
-    public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
-    private PlayerListener playerListener;
-    private ChatManager cm;
 
     public void onEnable() {
         try {
@@ -177,17 +177,52 @@ public class Hungergames extends JavaPlugin {
         HungergamesApi.getAbilityManager();
     }
 
-    public int getPrize(int pos) {
-        if (getConfig().contains("Winner" + pos))
-            return getConfig().getInt("Winner" + pos, 0);
-        return 0;
+    public void onDisable() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.kickPlayer(cm.getKickGameShutdownUnexpected());
+            PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
+            playerListener.onQuit(event);
+        }
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
 
-    // He is at 500, Spawn is 0.
-    // Returns 500.
-    // Or -500 if he is -500.
-    // He is at 500. Spawn is 400.
-    // Reutnrs 100.
+    public void cannon() {
+        world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
+    }
+
+    public void checkWinner() {
+        if (doSeconds) {
+            List<Gamer> aliveGamers = pm.getAliveGamers();
+            if (aliveGamers.size() == 1) {
+                doSeconds = false;
+                final Gamer winner = aliveGamers.get(0);
+                Bukkit.getPluginManager().callEvent(new PlayerWinEvent(winner));
+                int reward = getPrize(1);
+                if (reward > 0)
+                    winner.addBalance(reward);
+                winner.getPlayer().setAllowFlight(true);
+                Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+                    public void run() {
+                        Bukkit.broadcastMessage(String.format(cm.getBroadcastWinnerWon(), winner.getName()));
+                    }
+                }, 0, config.getWinnerBroadcastDelay() * 20);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                    public void run() {
+                        String kick = String.format(cm.getKickMessageWon(), winner.getName());
+                        for (Player p : Bukkit.getOnlinePlayers())
+                            p.kickPlayer(kick);
+                        shutdown();
+                    }
+                }, config.getGameShutdownDelay() * 20);
+            } else if (aliveGamers.size() == 0) {
+                doSeconds = false;
+                for (Player p : Bukkit.getOnlinePlayers())
+                    p.kickPlayer(cm.getKickNobodyWonMessage());
+                shutdown();
+            }
+        }
+    }
 
     private void doBorder(Gamer gamer) {
         Player p = gamer.getPlayer();
@@ -230,6 +265,21 @@ public class Hungergames extends JavaPlugin {
             } else
                 gamer.getPlayer().teleport(tpTo);
         }
+    }
+
+    public int getPrize(int pos) {
+        if (getConfig().contains("Winner" + pos))
+            return getConfig().getInt("Winner" + pos, 0);
+        return 0;
+    }
+
+    public boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
     private void onSecond() {
@@ -289,6 +339,42 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
+    public String returnTime(Integer i) {
+        i = Math.abs(i);
+        int remainder = i % 3600, minutes = remainder / 60, seconds = remainder % 60;
+        if (seconds == 0 && minutes == 0)
+            return cm.getTimeFormatNoTime();
+        if (minutes == 0) {
+            if (seconds == 1)
+                return String.format(cm.getTimeFormatSecond(), seconds);
+            return String.format(cm.getTimeFormatSeconds(), seconds);
+        }
+        if (seconds == 0) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatMinute(), minutes);
+            return String.format(cm.getTimeFormatMinutes(), minutes);
+        }
+        if (seconds == 1) {
+            if (minutes == 1)
+                return String.format(cm.getTimeFormatSecondAndMinute(), minutes, seconds);
+            return String.format(cm.getTimeFormatSecondAndMinutes(), minutes, seconds);
+        }
+        if (minutes == 1) {
+            return String.format(cm.getTimeFormatSecondsAndMinute(), minutes, seconds);
+        }
+        return String.format(cm.getTimeFormatSecondsAndMinutes(), minutes, seconds);
+    }
+
+    public void shutdown() {
+        System.out.print(cm.getLoggerShuttingDown());
+        ServerShutdownEvent event = new ServerShutdownEvent();
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled())
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
+        else
+            System.out.print(cm.getLoggerShutdownCancelled());
+    }
+
     public void startGame() {
         currentTime = 0;
         ScoreboardManager.updateStage();
@@ -327,97 +413,5 @@ public class Hungergames extends JavaPlugin {
             l.getWorld().spawnEntity(l, entitys.get(l));
         entitys.clear();
         checkWinner();
-    }
-
-    public void cannon() {
-        world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
-    }
-
-    public String returnTime(Integer i) {
-        i = Math.abs(i);
-        int remainder = i % 3600, minutes = remainder / 60, seconds = remainder % 60;
-        if (seconds == 0 && minutes == 0)
-            return cm.getTimeFormatNoTime();
-        if (minutes == 0) {
-            if (seconds == 1)
-                return String.format(cm.getTimeFormatSecond(), seconds);
-            return String.format(cm.getTimeFormatSeconds(), seconds);
-        }
-        if (seconds == 0) {
-            if (minutes == 1)
-                return String.format(cm.getTimeFormatMinute(), minutes);
-            return String.format(cm.getTimeFormatMinutes(), minutes);
-        }
-        if (seconds == 1) {
-            if (minutes == 1)
-                return String.format(cm.getTimeFormatSecondAndMinute(), minutes, seconds);
-            return String.format(cm.getTimeFormatSecondAndMinutes(), minutes, seconds);
-        }
-        if (minutes == 1) {
-            return String.format(cm.getTimeFormatSecondsAndMinute(), minutes, seconds);
-        }
-        return String.format(cm.getTimeFormatSecondsAndMinutes(), minutes, seconds);
-    }
-
-    public boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-
-    public void checkWinner() {
-        if (doSeconds) {
-            List<Gamer> aliveGamers = pm.getAliveGamers();
-            if (aliveGamers.size() == 1) {
-                doSeconds = false;
-                final Gamer winner = aliveGamers.get(0);
-                Bukkit.getPluginManager().callEvent(new PlayerWinEvent(winner));
-                int reward = getPrize(1);
-                if (reward > 0)
-                    winner.addBalance(reward);
-                winner.getPlayer().setAllowFlight(true);
-                Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-                    public void run() {
-                        Bukkit.broadcastMessage(String.format(cm.getBroadcastWinnerWon(), winner.getName()));
-                    }
-                }, 0, config.getWinnerBroadcastDelay() * 20);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-                    public void run() {
-                        String kick = String.format(cm.getKickMessageWon(), winner.getName());
-                        for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(kick);
-                        shutdown();
-                    }
-                }, config.getGameShutdownDelay() * 20);
-            } else if (aliveGamers.size() == 0) {
-                doSeconds = false;
-                for (Player p : Bukkit.getOnlinePlayers())
-                    p.kickPlayer(cm.getKickNobodyWonMessage());
-                shutdown();
-            }
-        }
-    }
-
-    public void onDisable() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer(cm.getKickGameShutdownUnexpected());
-            PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
-            playerListener.onQuit(event);
-        }
-        HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
-        HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
-    }
-
-    public void shutdown() {
-        System.out.print(cm.getLoggerShuttingDown());
-        ServerShutdownEvent event = new ServerShutdownEvent();
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (!event.isCancelled())
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
-        else
-            System.out.print(cm.getLoggerShutdownCancelled());
     }
 }

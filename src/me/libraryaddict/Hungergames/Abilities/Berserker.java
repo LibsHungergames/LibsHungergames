@@ -13,8 +13,8 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 public class Berserker extends AbilityListener {
     public int berserkerLength = 30;
     public boolean giveConfusion = true;
-    public int killPlayerMultiplier = 1;
     public int killAnimalMultiplier = 0;
+    public int killPlayerMultiplier = 1;
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

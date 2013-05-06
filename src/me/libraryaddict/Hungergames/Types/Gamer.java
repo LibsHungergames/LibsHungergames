@@ -20,8 +20,13 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class Gamer {
 
-    private boolean spectating = false;
+    private static Economy economy = null;
+    private static Hungergames hg = HungergamesApi.getHungergames();
+    private static PlayerManager pm = HungergamesApi.getPlayerManager();
     private boolean build = false;
+    private boolean canRide = false;
+    private long cooldown = 0;
+    private int kills = 0;
     private Player player;
     /**
      * True when the game hasn't started. If he wants to see other players.
@@ -29,12 +34,7 @@ public class Gamer {
      * False when the game has started if he wants to see other players
      */
     private boolean seeInvis = true;
-    private boolean canRide = false;
-    private long cooldown = 0;
-    private static Economy economy = null;
-    private static PlayerManager pm = HungergamesApi.getPlayerManager();
-    private static Hungergames hg = HungergamesApi.getHungergames();
-    private int kills = 0;
+    private boolean spectating = false;
 
     public Gamer(Player player) {
         this.player = player;
@@ -43,22 +43,6 @@ public class Gamer {
             spectating = true;
         }
         setupEconomy();
-    }
-
-    private void setupEconomy() {
-        if (!(economy == null && Bukkit.getPluginManager().getPlugin("Vault") != null))
-            return;
-        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
-                .getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
-    }
-
-    public long getBalance() {
-        if (economy == null)
-            return 0;
-        return (long) economy.getBalance(getName());
     }
 
     public void addBalance(long newBalance) {
@@ -70,11 +54,74 @@ public class Gamer {
         }
     }
 
+    public void addKill() {
+        kills++;
+        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
+    }
+
     /**
-     * @return Player
+     * Can this player interact with the world regardless of being a spectator
      */
-    public Player getPlayer() {
-        return player;
+    public boolean canBuild() {
+        return build;
+    }
+
+    /**
+     * Can this player interact with the world
+     */
+    public boolean canInteract() {
+        if (build || (hg.currentTime >= 0 && !spectating))
+            return true;
+        return false;
+    }
+
+    public boolean canRide() {
+        return canRide;
+    }
+
+    /**
+     * If this player can see that gamer
+     */
+    public boolean canSee(Gamer gamer) {
+        return seeInvis || gamer.isAlive();
+    }
+
+    /**
+     * Clears his inventory and returns it
+     * 
+     * @return
+     */
+    public void clearInventory() {
+        getPlayer().getInventory().setArmorContents(new ItemStack[4]);
+        getPlayer().getInventory().clear();
+        getPlayer().setItemOnCursor(new ItemStack(0));
+    }
+
+    public long getBalance() {
+        if (economy == null)
+            return 0;
+        return (long) economy.getBalance(getName());
+    }
+
+    public long getChunkCooldown() {
+        return this.cooldown;
+    }
+
+    public List<ItemStack> getInventory() {
+        List<ItemStack> items = new ArrayList<ItemStack>();
+        for (ItemStack item : getPlayer().getInventory().getContents())
+            if (item != null && item.getType() != Material.AIR)
+                items.add(item.clone());
+        for (ItemStack item : getPlayer().getInventory().getArmorContents())
+            if (item != null && item.getType() != Material.AIR)
+                items.add(item.clone());
+        if (getPlayer().getItemOnCursor() != null && getPlayer().getItemOnCursor().getType() != Material.AIR)
+            items.add(getPlayer().getItemOnCursor().clone());
+        return items;
+    }
+
+    public int getKills() {
+        return kills;
     }
 
     /**
@@ -85,10 +132,68 @@ public class Gamer {
     }
 
     /**
+     * @return Player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Hides the player to everyone in the game
+     */
+    public void hide() {
+        for (Gamer gamer : pm.getGamers())
+            gamer.hide(getPlayer());
+    }
+
+    /**
+     * Hides the player from this gamer
+     * 
+     * @param hider
+     */
+    public void hide(Player hider) {
+        Packet201PlayerInfo packet = new Packet201PlayerInfo(hider.getPlayerListName(), false, 9999);
+        if (hider != null)
+            if (getPlayer().canSee(hider)) {
+                getPlayer().hidePlayer(hider);
+                ((CraftPlayer) getPlayer()).getHandle().playerConnection.sendPacket(packet);
+            }
+    }
+
+    public boolean isAlive() {
+        return !isSpectator() && hg.currentTime >= 0;
+    }
+
+    /**
      * Is this player op
      */
     public boolean isOp() {
         return getPlayer().isOp();
+    }
+
+    /**
+     * Is this player spectating
+     */
+    public boolean isSpectator() {
+        return spectating;
+    }
+
+    /**
+     * Set them to view invis?
+     */
+    public void seeInvis(boolean seeInvis) {
+        this.seeInvis = seeInvis;
+    }
+
+    /**
+     * Set if he can build regardless of spectating
+     */
+    public void setBuild(boolean buildMode) {
+        this.build = buildMode;
+    }
+
+    public void setChunkCooldown(long newCool) {
+        this.cooldown = newCool;
     }
 
     /**
@@ -109,18 +214,33 @@ public class Gamer {
         p.length = 1.8F;
     }
 
+    public void setRiding(boolean ride) {
+        this.canRide = ride;
+    }
+
     /**
-     * Hides the player from this gamer
-     * 
-     * @param hider
+     * Set them to spectating
      */
-    public void hide(Player hider) {
-        Packet201PlayerInfo packet = new Packet201PlayerInfo(hider.getPlayerListName(), false, 9999);
-        if (hider != null)
-            if (getPlayer().canSee(hider)) {
-                getPlayer().hidePlayer(hider);
-                ((CraftPlayer) getPlayer()).getHandle().playerConnection.sendPacket(packet);
-            }
+    public void setSpectating(boolean spectating) {
+        this.spectating = spectating;
+    }
+
+    private void setupEconomy() {
+        if (!(economy == null && Bukkit.getPluginManager().getPlugin("Vault") != null))
+            return;
+        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
+                .getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+    }
+
+    /**
+     * Shows the player to everyone in the game
+     */
+    public void show() {
+        for (Gamer gamer : pm.getGamers())
+            gamer.show(getPlayer());
     }
 
     /**
@@ -136,102 +256,15 @@ public class Gamer {
     }
 
     /**
-     * Shows the player to everyone in the game
+     * Updates the invis for this player to see everyone else
      */
-    public void show() {
+    public void updateOthersToSelf() {
         for (Gamer gamer : pm.getGamers())
-            gamer.show(getPlayer());
-    }
-
-    /**
-     * Hides the player to everyone in the game
-     */
-    public void hide() {
-        for (Gamer gamer : pm.getGamers())
-            gamer.hide(getPlayer());
-    }
-
-    /**
-     * Can this player interact with the world regardless of being a spectator
-     */
-    public boolean canBuild() {
-        return build;
-    }
-
-    /**
-     * Is this player spectating
-     */
-    public boolean isSpectator() {
-        return spectating;
-    }
-
-    /**
-     * Can this player interact with the world
-     */
-    public boolean canInteract() {
-        if (build || (hg.currentTime >= 0 && !spectating))
-            return true;
-        return false;
-    }
-
-    /**
-     * Can this player see people or not see.
-     */
-    public boolean viewPlayers() {
-        return seeInvis;
-    }
-
-    /**
-     * Set them to view invis?
-     */
-    public void seeInvis(boolean seeInvis) {
-        this.seeInvis = seeInvis;
-    }
-
-    /**
-     * Set them to spectating
-     */
-    public void setSpectating(boolean spectating) {
-        this.spectating = spectating;
-    }
-
-    /**
-     * Set if he can build regardless of spectating
-     */
-    public void setBuild(boolean buildMode) {
-        this.build = buildMode;
-    }
-
-    /**
-     * Clears his inventory and returns it
-     * 
-     * @return
-     */
-    public void clearInventory() {
-        getPlayer().getInventory().setArmorContents(new ItemStack[4]);
-        getPlayer().getInventory().clear();
-        getPlayer().setItemOnCursor(new ItemStack(0));
-    }
-
-    public List<ItemStack> getInventory() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        for (ItemStack item : getPlayer().getInventory().getContents())
-            if (item != null && item.getType() != Material.AIR)
-                items.add(item.clone());
-        for (ItemStack item : getPlayer().getInventory().getArmorContents())
-            if (item != null && item.getType() != Material.AIR)
-                items.add(item.clone());
-        if (getPlayer().getItemOnCursor() != null && getPlayer().getItemOnCursor().getType() != Material.AIR)
-            items.add(getPlayer().getItemOnCursor().clone());
-        return items;
-    }
-
-    public void setRiding(boolean ride) {
-        this.canRide = ride;
-    }
-
-    public boolean canRide() {
-        return canRide;
+            if (gamer != this)
+                if (canSee(gamer))
+                    show(gamer.getPlayer());
+                else
+                    hide(gamer.getPlayer());
     }
 
     /**
@@ -247,42 +280,9 @@ public class Gamer {
     }
 
     /**
-     * If this player can see that gamer
+     * Can this player see people or not see.
      */
-    public boolean canSee(Gamer gamer) {
-        return seeInvis || gamer.isAlive();
-    }
-
-    /**
-     * Updates the invis for this player to see everyone else
-     */
-    public void updateOthersToSelf() {
-        for (Gamer gamer : pm.getGamers())
-            if (gamer != this)
-                if (canSee(gamer))
-                    show(gamer.getPlayer());
-                else
-                    hide(gamer.getPlayer());
-    }
-
-    public boolean isAlive() {
-        return !isSpectator() && hg.currentTime >= 0;
-    }
-
-    public int getKills() {
-        return kills;
-    }
-
-    public void addKill() {
-        kills++;
-        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
-    }
-
-    public long getChunkCooldown() {
-        return this.cooldown;
-    }
-
-    public void setChunkCooldown(long newCool) {
-        this.cooldown = newCool;
+    public boolean viewPlayers() {
+        return seeInvis;
     }
 }

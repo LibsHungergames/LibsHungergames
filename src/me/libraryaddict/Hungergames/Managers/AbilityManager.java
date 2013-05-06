@@ -18,12 +18,34 @@ import java.util.List;
 public class AbilityManager {
 
     private HashMap<String, AbilityListener> abilities = new HashMap<String, AbilityListener>();
-    private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
     private AbilityConfigManager abilityConfigManager = HungergamesApi.getAbilityConfigManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
 
     public AbilityManager() {
         initializeAllAbilitiesInPackage(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Abilities");
+    }
+
+    /**
+     * 
+     * @param Name
+     *            of the ability
+     * @param Ability
+     *            listener
+     */
+    public void addAbility(String name, AbilityListener abilityListener) {
+        abilities.put(name, abilityListener);
+        Bukkit.getLogger().info(String.format(cm.getLoggerAddAbility(), name));
+    }
+
+    public AbilityListener getAbility(String abilityName) {
+        return abilities.get(abilityName);
+    }
+
+    public List<String> getPlayerAbilities(String name) {
+        if (!playerAbilities.containsKey(name))
+            playerAbilities.put(name, new ArrayList<String>());
+        return playerAbilities.get(name);
     }
 
     /**
@@ -62,18 +84,6 @@ public class AbilityManager {
     }
 
     /**
-     * 
-     * @param Name
-     *            of the ability
-     * @param Ability
-     *            listener
-     */
-    public void addAbility(String name, AbilityListener abilityListener) {
-        abilities.put(name, abilityListener);
-        Bukkit.getLogger().info(String.format(cm.getLoggerAddAbility(), name));
-    }
-
-    /**
      * Register the abilitys in the plugin manager because the game started!
      */
     public void registerAbilityListeners() {
@@ -81,14 +91,14 @@ public class AbilityManager {
             Bukkit.getPluginManager().registerEvents(abilityListener, HungergamesApi.getHungergames());
     }
 
-    public AbilityListener getAbility(String abilityName) {
-        return abilities.get(abilityName);
-    }
-
-    public List<String> getPlayerAbilities(String name) {
-        if (!playerAbilities.containsKey(name))
-            playerAbilities.put(name, new ArrayList<String>());
-        return playerAbilities.get(name);
+    public void registerPlayerAbility(Player player, String abilityName) {
+        final AbilityListener abilityListener = getAbility(abilityName);
+        if (abilityListener != null) {
+            abilityListener.registerPlayer(player);
+        } else
+            Bukkit.getLogger().info(
+                    String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
+        getPlayerAbilities(player.getName()).add(abilityName);
     }
 
     public void unregisterPlayer(Player player) {
@@ -104,15 +114,5 @@ public class AbilityManager {
         if (abilityListener != null)
             abilityListener.unregisterPlayer(player);
         getPlayerAbilities(player.getName()).remove(abilityName);
-    }
-
-    public void registerPlayerAbility(Player player, String abilityName) {
-        final AbilityListener abilityListener = getAbility(abilityName);
-        if (abilityListener != null) {
-            abilityListener.registerPlayer(player);
-        } else
-            Bukkit.getLogger().info(
-                    String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
-        getPlayerAbilities(player.getName()).add(abilityName);
     }
 }

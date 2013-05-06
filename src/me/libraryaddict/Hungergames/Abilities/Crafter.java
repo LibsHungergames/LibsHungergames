@@ -22,11 +22,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class Crafter extends AbilityListener {
 
-    private transient Map<ItemStack, FakeFurnace> furnaces = new HashMap<ItemStack, FakeFurnace>();
-    public String craftingStarItemName = ChatColor.WHITE + "Crafting Star";
-    public String furnacePowderItemName = ChatColor.WHITE + "Furnace Powder";
-    public int furnacePowderItemId = Material.BLAZE_POWDER.getId();
     public int craftingStarItemId = Material.NETHER_STAR.getId();
+    public String craftingStarItemName = ChatColor.WHITE + "Crafting Star";
+    public int furnacePowderItemId = Material.BLAZE_POWDER.getId();
+    public String furnacePowderItemName = ChatColor.WHITE + "Furnace Powder";
+    private transient Map<ItemStack, FakeFurnace> furnaces = new HashMap<ItemStack, FakeFurnace>();
 
     public Crafter() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {

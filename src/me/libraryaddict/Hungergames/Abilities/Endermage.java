@@ -24,13 +24,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class Endermage extends AbilityListener {
-    public int invincibleTicks = 100;
     public boolean doInstantKO = true;
-    public int instanceKOExpires = 5;
-    public String endermagePortalName = ChatColor.WHITE + "Endermage Portal";
-    public int endermagePortalId = Material.ENDER_PORTAL.getId();
     public int endermagePortalBlockId = Material.ENDER_PORTAL.getId();
+    public int endermagePortalId = Material.ENDER_PORTAL.getId();
+    public String endermagePortalName = ChatColor.WHITE + "Endermage Portal";
     private transient ArrayList<Block> endermages = new ArrayList<Block>();
+    public int instanceKOExpires = 5;
+    public int invincibleTicks = 100;
+
+    private boolean isEnderable(Location portal, Location player) {
+        return Math.abs(portal.getX() - player.getX()) < 2 && Math.abs(portal.getZ() - player.getZ()) < 2
+                && Math.abs(portal.getY() - player.getY()) >= 3.5;
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (doInstantKO)
+            if (event.getEntity() instanceof Player
+                    && event.getDamager().hasMetadata("InstantKill" + ((Player) event.getEntity()).getName())
+                    && event.getDamager().getMetadata("InstantKill" + ((Player) event.getEntity()).getName()).get(0).asLong() < System
+                            .currentTimeMillis())
+                event.setDamage(9999);
+    }
 
     @EventHandler
     public void onPlace(PlayerInteractEvent event) {
@@ -91,21 +106,6 @@ public class Endermage extends AbilityListener {
                 }, i * 20);
             }
         }
-    }
-
-    private boolean isEnderable(Location portal, Location player) {
-        return Math.abs(portal.getX() - player.getX()) < 2 && Math.abs(portal.getZ() - player.getZ()) < 2
-                && Math.abs(portal.getY() - player.getY()) >= 3.5;
-    }
-
-    @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (doInstantKO)
-            if (event.getEntity() instanceof Player
-                    && event.getDamager().hasMetadata("InstantKill" + ((Player) event.getEntity()).getName())
-                    && event.getDamager().getMetadata("InstantKill" + ((Player) event.getEntity()).getName()).get(0).asLong() < System
-                            .currentTimeMillis())
-                event.setDamage(9999);
     }
 
 }

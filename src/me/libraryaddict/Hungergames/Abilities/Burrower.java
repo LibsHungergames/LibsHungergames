@@ -48,20 +48,6 @@ public class Burrower extends AbilityListener {
     public int wallsBlockId = 20;
 
     @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        Player p = event.getKilled().getPlayer();
-        if (hasAbility(p)) {
-            Iterator<Integer> itel = expires.keySet().iterator();
-            while (itel.hasNext()) {
-                int no = itel.next();
-                if (expires.get(no).remove(p))
-                    if (expires.get(no).size() == 0)
-                        itel.remove();
-            }
-        }
-    }
-
-    @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (event.getAction().name().contains("RIGHT") && hasAbility(event.getPlayer()) && item != null
@@ -110,6 +96,20 @@ public class Burrower extends AbilityListener {
                 expires.put(hg.currentTime + giveBackItemDelay, players);
             } else
                 p.sendMessage(messageNotHighEnough);
+        }
+    }
+
+    @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        Player p = event.getKilled().getPlayer();
+        if (hasAbility(p)) {
+            Iterator<Integer> itel = expires.keySet().iterator();
+            while (itel.hasNext()) {
+                int no = itel.next();
+                if (expires.get(no).remove(p))
+                    if (expires.get(no).size() == 0)
+                        itel.remove();
+            }
         }
     }
 

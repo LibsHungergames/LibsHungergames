@@ -18,10 +18,10 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.util.Vector;
 
 public class Stomper extends AbilityListener {
+    public boolean changeStomperFallDamage = true;
     public boolean reduceStompDamageByDistance = true;
     public String stompedMessage = "%1$2s was stomped by %2$2s";
     public int stomperFallDamage = 4;
-    public boolean changeStomperFallDamage = true;
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {

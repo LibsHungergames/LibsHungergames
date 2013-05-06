@@ -17,9 +17,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Kit implements CommandExecutor {
+    private ChatManager cm = HungergamesApi.getChatManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitManager kits = HungergamesApi.getKitManager();
-    private ChatManager cm = HungergamesApi.getChatManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Player p = Bukkit.getPlayerExact(sender.getName());

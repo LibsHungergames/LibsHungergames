@@ -12,9 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ForceFeast implements CommandExecutor {
+    private ChatManager cm = HungergamesApi.getChatManager();
     private ConfigManager config = HungergamesApi.getConfigManager();
     private Hungergames hg = HungergamesApi.getHungergames();
-    private ChatManager cm = HungergamesApi.getChatManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.forcefeast")) {

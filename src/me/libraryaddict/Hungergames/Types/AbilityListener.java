@@ -20,29 +20,10 @@ public abstract class AbilityListener implements Listener {
 
     private transient Set<String> myPlayers = new HashSet<String>();
 
-    public void registerPlayer(Player player) {
-        myPlayers.add(player.getName());
-    }
-
-    public void unregisterPlayer(Player player) {
-        myPlayers.remove(player.getName());
-    }
-
-    /**
-     * 
-     * Is this items displayname set by the plugin and matches this. Aka. It
-     * checks the displayname has a chatcolor in it. Unsettable by the client.
-     * Then it compares the stripped colors to the string fed.
-     */
-    public boolean isSpecialItem(ItemStack item, String displayName) {
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-            String itemName = item.getItemMeta().getDisplayName();
-            if (!itemName.equals(ChatColor.stripColor(itemName))
-                    && ChatColor.stripColor(itemName).equals(ChatColor.stripColor(displayName))) {
-                return true;
-            }
-        }
-        return false;
+    // Just in case an abilitylistener also implements commandexecutor and has a
+    // command to claim.
+    public String getCommand() {
+        return null;
     }
 
     public List<Player> getMyPlayers() {
@@ -61,6 +42,23 @@ public abstract class AbilityListener implements Listener {
 
     public boolean hasAbility(String name) {
         return myPlayers.contains(name);
+    }
+
+    /**
+     * 
+     * Is this items displayname set by the plugin and matches this. Aka. It
+     * checks the displayname has a chatcolor in it. Unsettable by the client.
+     * Then it compares the stripped colors to the string fed.
+     */
+    public boolean isSpecialItem(ItemStack item, String displayName) {
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+            String itemName = item.getItemMeta().getDisplayName();
+            if (!itemName.equals(ChatColor.stripColor(itemName))
+                    && ChatColor.stripColor(itemName).equals(ChatColor.stripColor(displayName))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean load(ConfigurationSection section) {
@@ -114,9 +112,11 @@ public abstract class AbilityListener implements Listener {
         return modified;
     }
 
-    // Just in case an abilitylistener also implements commandexecutor and has a
-    // command to claim.
-    public String getCommand() {
-        return null;
+    public void registerPlayer(Player player) {
+        myPlayers.add(player.getName());
+    }
+
+    public void unregisterPlayer(Player player) {
+        myPlayers.remove(player.getName());
     }
 }

@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Ride implements CommandExecutor {
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

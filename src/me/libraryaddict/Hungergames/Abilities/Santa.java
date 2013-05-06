@@ -23,12 +23,16 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
 public class Santa extends AbilityListener {
-    private transient int timeSinceLastPresent = 0;
-    private Hungergames hg = HungergamesApi.getHungergames();
-    private KitManager kits = HungergamesApi.getKitManager();
+    public double chanceOutOfAHundredForNaughtyKitToBeViable = 70;
+    public boolean displayMessageOnOpen = true;
     public String[] dontGivePresentFor = new String[] { "Santa", "Barbarian", "Crafter", "Doctor", "Endermage", "Flash", "Monk",
             "Pickpocket", "Pyro", "Reaper", "Seeker" };
-    public double chanceOutOfAHundredForNaughtyKitToBeViable = 70;
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private KitManager kits = HungergamesApi.getKitManager();
+    public String messageOnPresentOpen = ChatColor.DARK_RED + "M" + ChatColor.WHITE + "e" + ChatColor.DARK_RED + "r"
+            + ChatColor.WHITE + "r" + ChatColor.DARK_RED + "y" + ChatColor.WHITE + " C" + ChatColor.DARK_RED + "h"
+            + ChatColor.WHITE + "r" + ChatColor.DARK_RED + "i" + ChatColor.WHITE + "s" + ChatColor.DARK_RED + "t"
+            + ChatColor.WHITE + "m" + ChatColor.DARK_RED + "a" + ChatColor.WHITE + "s" + ChatColor.DARK_RED + "!";
     public String[] naughtyList = new String[] { "Urgal", "Chemist", "Digger", "Grandpa", "Jumper" };
     public int presentEndingDataValue = 15;
     public int presentID = Material.WOOL.getId();
@@ -44,11 +48,21 @@ public class Santa extends AbilityListener {
     public boolean preventPlacing = true;
     public boolean specialPresent = true;
     public int timeBetweenPresents = 60;
-    public boolean displayMessageOnOpen = true;
-    public String messageOnPresentOpen = ChatColor.DARK_RED + "M" + ChatColor.WHITE + "e" + ChatColor.DARK_RED + "r"
-            + ChatColor.WHITE + "r" + ChatColor.DARK_RED + "y" + ChatColor.WHITE + " C" + ChatColor.DARK_RED + "h"
-            + ChatColor.WHITE + "r" + ChatColor.DARK_RED + "i" + ChatColor.WHITE + "s" + ChatColor.DARK_RED + "t"
-            + ChatColor.WHITE + "m" + ChatColor.DARK_RED + "a" + ChatColor.WHITE + "s" + ChatColor.DARK_RED + "!";
+    private transient int timeSinceLastPresent = 0;
+
+    @EventHandler
+    public void blockPlaceEvent(BlockPlaceEvent event) {
+        ItemStack item = event.getItemInHand();
+        if (preventPlacing && item != null && item.getTypeId() == presentID && item.hasItemMeta()
+                && item.getItemMeta().hasDisplayName()) {
+            for (Kit kit : kits.getKits())
+                if (String.format(presentName, kit.getName()).equals(item.getItemMeta().getDisplayName())) {
+                    event.setCancelled(true);
+                    event.getPlayer().updateInventory();
+                    break;
+                }
+        }
+    }
 
     private Kit findViableKit() {
         ArrayList<Kit> randomKits = new ArrayList<Kit>();
@@ -76,20 +90,6 @@ public class Santa extends AbilityListener {
         if (kit.getItems().length == 0)
             return false;
         return true;
-    }
-
-    @EventHandler
-    public void blockPlaceEvent(BlockPlaceEvent event) {
-        ItemStack item = event.getItemInHand();
-        if (preventPlacing && item != null && item.getTypeId() == presentID && item.hasItemMeta()
-                && item.getItemMeta().hasDisplayName()) {
-            for (Kit kit : kits.getKits())
-                if (String.format(presentName, kit.getName()).equals(item.getItemMeta().getDisplayName())) {
-                    event.setCancelled(true);
-                    event.getPlayer().updateInventory();
-                    break;
-                }
-        }
     }
 
     @EventHandler

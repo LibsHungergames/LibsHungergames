@@ -59,17 +59,18 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
-    PlayerManager pm = HungergamesApi.getPlayerManager();
-    ConfigManager config = HungergamesApi.getConfigManager();
-    KitManager kits = HungergamesApi.getKitManager();
-    KitSelectorManager icon = HungergamesApi.getKitSelector();
-    Hungergames hg = HungergamesApi.getHungergames();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private ConfigManager config = HungergamesApi.getConfigManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private KitSelectorManager icon = HungergamesApi.getKitSelector();
+    private KitManager kits = HungergamesApi.getKitManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
-    @EventHandler
-    public void onExpChange(PlayerExpChangeEvent event) {
-        if (!pm.getGamer(event.getPlayer()).isAlive())
-            event.setAmount(0);
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBreak(BlockBreakEvent event) {
+        Gamer gamer = pm.getGamer(event.getPlayer());
+        if (!gamer.canInteract())
+            event.setCancelled(true);
     }
 
     @EventHandler
@@ -86,118 +87,9 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        if (kits.getKitByPlayer(event.getPlayer()) == null)
-            kits.setKit(event.getPlayer(), kits.defaultKitName);
-        event.setJoinMessage(null);
-        final Gamer gamer = pm.registerGamer(event.getPlayer());
-        Player p = gamer.getPlayer();
-        if (cm.getShouldIMessagePlayersWhosePlugin())
-            p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion()));
-        p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
-        p.setAllowFlight(true);
-        for (PotionEffect effect : p.getActivePotionEffects())
-            p.removePotionEffect(effect.getType());
-        if (hg.currentTime >= 0) {
-            pm.setSpectator(gamer);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                public void run() {
-                    gamer.hide(gamer.getPlayer());
-                }
-            }, 0L);
-        } else {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
-                    Bukkit.getOnlinePlayers().length);
-            gamer.clearInventory();
-            if (config.useKitSelector())
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                    public void run() {
-                        gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
-                    }
-                }, 0L);
-        }
-        pm.sendToSpawn(gamer);
-        gamer.updateOthersToSelf();
-        gamer.updateSelfToOthers();
-        pm.loadGamer.add(gamer);
-    }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-        event.getDrops().clear();
-        Player p = event.getEntity();
-        EntityDamageEvent cause = event.getEntity().getLastDamageCause();
-        String deathMessage = ChatColor.stripColor(event.getDeathMessage());
-        if (cause instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
-            if (entityEvent.getDamager() instanceof Player) {
-                String weapon = "fist";
-                Player dmg = (Player) entityEvent.getDamager();
-                ItemStack item = dmg.getInventory().getItemInHand();
-                if (item != null && item.getType() != Material.AIR)
-                    weapon = kits.toReadable(item.getType().name());
-                deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
-                deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
-                        .replace("%Weapon%", weapon);
-            }
-        } else if (cause.getCause() == DamageCause.FALL)
-            deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
-        Gamer gamer = pm.getGamer(p);
-        pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
-        event.setDeathMessage(null);
-    }
-
-    @EventHandler
-    public void onLogin(PlayerLoginEvent event) {
-        if (event.getResult() == Result.KICK_FULL)
-            event.disallow(Result.KICK_FULL, cm.getKickGameFull());
-        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
-            event.disallow(Result.KICK_OTHER, cm.getKickSpectatorsDisabled());
-    }
-
-    @EventHandler
-    public void onKick(PlayerKickEvent event) {
-        event.setLeaveMessage(null);
-    }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        event.setQuitMessage(null);
-        Gamer gamer = pm.getGamer(event.getPlayer());
-        Kit kit = kits.getKitByPlayer(event.getPlayer());
-        if (kit != null)
-            kit.removePlayer(event.getPlayer());
-        if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
-            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
-                    String.format(cm.getKillMessageLeavingGame(), gamer.getName()));
-        }
-        pm.unregisterGamer(gamer);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onBreak(BlockBreakEvent event) {
-        Gamer gamer = pm.getGamer(event.getPlayer());
-        if (!gamer.canInteract())
-            event.setCancelled(true);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlace(BlockPlaceEvent event) {
-        if (!pm.getGamer(event.getPlayer()).canInteract()
-                || event.getBlock().getLocation().getBlockY() > event.getBlock().getWorld().getMaxHeight())
-            event.setCancelled(true);
-    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(BlockDamageEvent event) {
         if (!pm.getGamer(event.getPlayer()).canInteract())
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onHungry(FoodLevelChangeEvent event) {
-        if (!pm.getGamer(event.getEntity()).isAlive())
             event.setCancelled(true);
     }
 
@@ -233,6 +125,48 @@ public class PlayerListener implements Listener {
                             damager));
             }
         }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        event.getDrops().clear();
+        Player p = event.getEntity();
+        EntityDamageEvent cause = event.getEntity().getLastDamageCause();
+        String deathMessage = ChatColor.stripColor(event.getDeathMessage());
+        if (cause instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
+            if (entityEvent.getDamager() instanceof Player) {
+                String weapon = "fist";
+                Player dmg = (Player) entityEvent.getDamager();
+                ItemStack item = dmg.getInventory().getItemInHand();
+                if (item != null && item.getType() != Material.AIR)
+                    weapon = kits.toReadable(item.getType().name());
+                deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
+                deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
+                        .replace("%Weapon%", weapon);
+            }
+        } else if (cause.getCause() == DamageCause.FALL)
+            deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
+        Gamer gamer = pm.getGamer(p);
+        pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
+        event.setDeathMessage(null);
+    }
+
+    @EventHandler
+    public void onEnter(EntityPortalEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onExpChange(PlayerExpChangeEvent event) {
+        if (!pm.getGamer(event.getPlayer()).isAlive())
+            event.setAmount(0);
+    }
+
+    @EventHandler
+    public void onHungry(FoodLevelChangeEvent event) {
+        if (!pm.getGamer(event.getEntity()).isAlive())
+            event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -332,48 +266,6 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPickup(PlayerPickupItemEvent event) {
-        if (!pm.getGamer(event.getPlayer()).isAlive())
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onPickup(PlayerDropItemEvent event) {
-        if (!pm.getGamer(event.getPlayer()).canInteract())
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onVechileEnter(VehicleEnterEvent event) {
-        if (event.getEntered() instanceof Player) {
-            if (!pm.getGamer(event.getEntered()).canInteract()) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onVechileMove(VehicleEntityCollisionEvent event) {
-        if (event.getEntity() instanceof Player)
-            if (!pm.getGamer(event.getEntity()).canInteract())
-                event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onVechileEvent(VehicleDestroyEvent event) {
-        if (event.getAttacker() instanceof Player) {
-            if (!pm.getGamer(event.getAttacker()).canInteract()) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onEnter(EntityPortalEvent event) {
-        event.setCancelled(true);
-    }
-
-    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
             event.setCancelled(true);
@@ -386,5 +278,113 @@ public class PlayerListener implements Listener {
                     ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
                 }
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        if (kits.getKitByPlayer(event.getPlayer()) == null)
+            kits.setKit(event.getPlayer(), kits.defaultKitName);
+        event.setJoinMessage(null);
+        final Gamer gamer = pm.registerGamer(event.getPlayer());
+        Player p = gamer.getPlayer();
+        if (cm.getShouldIMessagePlayersWhosePlugin())
+            p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion()));
+        p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
+        p.setAllowFlight(true);
+        for (PotionEffect effect : p.getActivePotionEffects())
+            p.removePotionEffect(effect.getType());
+        if (hg.currentTime >= 0) {
+            pm.setSpectator(gamer);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+                public void run() {
+                    gamer.hide(gamer.getPlayer());
+                }
+            }, 0L);
+        } else {
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
+                    Bukkit.getOnlinePlayers().length);
+            gamer.clearInventory();
+            if (config.useKitSelector())
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+                    public void run() {
+                        gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
+                    }
+                }, 0L);
+        }
+        pm.sendToSpawn(gamer);
+        gamer.updateOthersToSelf();
+        gamer.updateSelfToOthers();
+        pm.loadGamer.add(gamer);
+    }
+
+    @EventHandler
+    public void onKick(PlayerKickEvent event) {
+        event.setLeaveMessage(null);
+    }
+
+    @EventHandler
+    public void onLogin(PlayerLoginEvent event) {
+        if (event.getResult() == Result.KICK_FULL)
+            event.disallow(Result.KICK_FULL, cm.getKickGameFull());
+        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
+            event.disallow(Result.KICK_OTHER, cm.getKickSpectatorsDisabled());
+    }
+
+    @EventHandler
+    public void onPickup(PlayerDropItemEvent event) {
+        if (!pm.getGamer(event.getPlayer()).canInteract())
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPickup(PlayerPickupItemEvent event) {
+        if (!pm.getGamer(event.getPlayer()).isAlive())
+            event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlace(BlockPlaceEvent event) {
+        if (!pm.getGamer(event.getPlayer()).canInteract()
+                || event.getBlock().getLocation().getBlockY() > event.getBlock().getWorld().getMaxHeight())
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+        Gamer gamer = pm.getGamer(event.getPlayer());
+        Kit kit = kits.getKitByPlayer(event.getPlayer());
+        if (kit != null)
+            kit.removePlayer(event.getPlayer());
+        if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
+            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
+                    String.format(cm.getKillMessageLeavingGame(), gamer.getName()));
+        }
+        pm.unregisterGamer(gamer);
+    }
+
+    @EventHandler
+    public void onVechileEnter(VehicleEnterEvent event) {
+        if (event.getEntered() instanceof Player) {
+            if (!pm.getGamer(event.getEntered()).canInteract()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onVechileEvent(VehicleDestroyEvent event) {
+        if (event.getAttacker() instanceof Player) {
+            if (!pm.getGamer(event.getAttacker()).canInteract()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onVechileMove(VehicleEntityCollisionEvent event) {
+        if (event.getEntity() instanceof Player)
+            if (!pm.getGamer(event.getEntity()).canInteract())
+                event.setCancelled(true);
     }
 }

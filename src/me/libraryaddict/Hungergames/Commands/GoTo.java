@@ -12,9 +12,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class GoTo implements CommandExecutor {
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

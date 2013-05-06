@@ -24,10 +24,43 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Spiderman extends AbilityListener {
 
-    private HashMap<String, ArrayList<Long>> cooldownMap = new HashMap<String, ArrayList<Long>>();
     public int cooldown = 30;
-    public int maxBallsThrown = 3;
+    private HashMap<String, ArrayList<Long>> cooldownMap = new HashMap<String, ArrayList<Long>>();
     public String cooldownMessage = ChatColor.BLUE + "Your web shooters havn't refilled yet! Wait %s seconds!";
+    public int maxBallsThrown = 3;
+
+    private boolean isWeb(Location loc) {
+        if (loc.getBlock().getType() == Material.WEB)
+            return true;
+        return loc.clone().add(0, 1, 0).getBlock().getType() == Material.WEB;
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        if (hasAbility(event.getPlayer())) {
+            if (isWeb(event.getFrom()) || isWeb(event.getTo())) {
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 1), true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (event.getEntity().hasMetadata("Spiderball")) {
+            Location loc = event.getEntity().getLocation();
+            int x = new Random().nextInt(2) - 1;
+            int z = new Random().nextInt(2) - 1;
+            for (int y = 0; y < 2; y++)
+                for (int xx = 0; xx < 2; xx++)
+                    for (int zz = 0; zz < 2; zz++) {
+                        Block b = loc.clone().add(x + xx, y, z + zz).getBlock();
+                        if (b.getType() == Material.AIR)
+                            b.setType(Material.WEB);
+                    }
+
+            event.getEntity().remove();
+        }
+    }
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
@@ -57,39 +90,6 @@ public class Spiderman extends AbilityListener {
                 event.getEntity()
                         .setMetadata("Spiderball", new FixedMetadataValue(HungergamesApi.getHungergames(), "Spiderball"));
                 cooldowns.add(System.currentTimeMillis() + (cooldown * 1000));
-            }
-        }
-    }
-
-    @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntity().hasMetadata("Spiderball")) {
-            Location loc = event.getEntity().getLocation();
-            int x = new Random().nextInt(2) - 1;
-            int z = new Random().nextInt(2) - 1;
-            for (int y = 0; y < 2; y++)
-                for (int xx = 0; xx < 2; xx++)
-                    for (int zz = 0; zz < 2; zz++) {
-                        Block b = loc.clone().add(x + xx, y, z + zz).getBlock();
-                        if (b.getType() == Material.AIR)
-                            b.setType(Material.WEB);
-                    }
-
-            event.getEntity().remove();
-        }
-    }
-
-    private boolean isWeb(Location loc) {
-        if (loc.getBlock().getType() == Material.WEB)
-            return true;
-        return loc.clone().add(0, 1, 0).getBlock().getType() == Material.WEB;
-    }
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        if (hasAbility(event.getPlayer())) {
-            if (isWeb(event.getFrom()) || isWeb(event.getTo())) {
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 1), true);
             }
         }
     }

@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class Scout extends AbilityListener {
-    public int givePotionsEverySoSeconds = 600;
     public boolean cancelFall = true;
+    public int givePotionsEverySoSeconds = 600;
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {

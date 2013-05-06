@@ -25,16 +25,16 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Flash extends AbilityListener {
 
-    private transient HashMap<ItemStack, Integer> cooldown = new HashMap<ItemStack, Integer>();
-    private HashSet<Byte> ignoreBlockTypes = new HashSet<Byte>();
-    public boolean giveWeakness = true;
-    public int maxTeleportDistance = 200;
     public boolean addMoreCooldownForLargeDistances = true;
-    public int normalCooldown = 30;
+    private transient HashMap<ItemStack, Integer> cooldown = new HashMap<ItemStack, Integer>();
     public String cooldownMessage = ChatColor.BLUE + "You can use this again in %s seconds!";
     public String flashItemName = ChatColor.WHITE + "Flash";
-    public int flashOnItemId = Material.REDSTONE_TORCH_ON.getId();
     public int flashOffItemId = Material.REDSTONE_TORCH_OFF.getId();
+    public int flashOnItemId = Material.REDSTONE_TORCH_ON.getId();
+    public boolean giveWeakness = true;
+    private HashSet<Byte> ignoreBlockTypes = new HashSet<Byte>();
+    public int maxTeleportDistance = 200;
+    public int normalCooldown = 30;
 
     public Flash() {
         ignoreBlockTypes.add((byte) 0);
@@ -55,45 +55,6 @@ public class Flash extends AbilityListener {
         ignoreBlockTypes.add((byte) Material.REDSTONE_TORCH_ON.getId());
         ignoreBlockTypes.add((byte) Material.VINE.getId());
         ignoreBlockTypes.add((byte) Material.WATER_LILY.getId());
-    }
-
-    @EventHandler
-    public void onSecond(TimeSecondEvent event) {
-        if (cooldown.containsValue(HungergamesApi.getHungergames().currentTime)) {
-            Iterator<ItemStack> itel = cooldown.keySet().iterator();
-            while (itel.hasNext()) {
-                boolean carryOn = false;
-                ItemStack item = itel.next();
-                if (cooldown.get(item) == HungergamesApi.getHungergames().currentTime) {
-                    for (Gamer gamer : HungergamesApi.getPlayerManager().getAliveGamers()) {
-                        if (gamer.getPlayer().getInventory().contains(item)) {
-                            itel.remove();
-                            for (ItemStack i : gamer.getPlayer().getInventory().getContents()) {
-                                if (i.equals(item)) {
-                                    i.setTypeId(flashOnItemId);
-                                    carryOn = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (gamer.getPlayer().getItemOnCursor() != null && gamer.getPlayer().getItemOnCursor().equals(item)) {
-                            gamer.getPlayer().getItemOnCursor().setTypeId(flashOnItemId);
-                            carryOn = true;
-                            break;
-                        }
-                    }
-                    if (carryOn)
-                        continue;
-                    for (Item itemEntity : HungergamesApi.getHungergames().world.getEntitiesByClass(Item.class)) {
-                        if (itemEntity.getItemStack().equals(item)) {
-                            itel.remove();
-                            itemEntity.getItemStack().setTypeId(flashOnItemId);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @EventHandler
@@ -133,6 +94,45 @@ public class Flash extends AbilityListener {
                                 event.getPlayer().addPotionEffect(
                                         new PotionEffect(PotionEffectType.WEAKNESS, (int) ((dist / 2) * 20), 1), true);
                             pLoc.getWorld().strikeLightningEffect(loc);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onSecond(TimeSecondEvent event) {
+        if (cooldown.containsValue(HungergamesApi.getHungergames().currentTime)) {
+            Iterator<ItemStack> itel = cooldown.keySet().iterator();
+            while (itel.hasNext()) {
+                boolean carryOn = false;
+                ItemStack item = itel.next();
+                if (cooldown.get(item) == HungergamesApi.getHungergames().currentTime) {
+                    for (Gamer gamer : HungergamesApi.getPlayerManager().getAliveGamers()) {
+                        if (gamer.getPlayer().getInventory().contains(item)) {
+                            itel.remove();
+                            for (ItemStack i : gamer.getPlayer().getInventory().getContents()) {
+                                if (i.equals(item)) {
+                                    i.setTypeId(flashOnItemId);
+                                    carryOn = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (gamer.getPlayer().getItemOnCursor() != null && gamer.getPlayer().getItemOnCursor().equals(item)) {
+                            gamer.getPlayer().getItemOnCursor().setTypeId(flashOnItemId);
+                            carryOn = true;
+                            break;
+                        }
+                    }
+                    if (carryOn)
+                        continue;
+                    for (Item itemEntity : HungergamesApi.getHungergames().world.getEntitiesByClass(Item.class)) {
+                        if (itemEntity.getItemStack().equals(item)) {
+                            itel.remove();
+                            itemEntity.getItemStack().setTypeId(flashOnItemId);
+                            break;
                         }
                     }
                 }

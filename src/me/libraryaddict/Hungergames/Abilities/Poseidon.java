@@ -15,14 +15,19 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 
 public class Poseidon extends AbilityListener {
-    ArrayList<Player> waterBreathers = new ArrayList<Player>();
     public int potionMultiplier = 1;
+    ArrayList<Player> waterBreathers = new ArrayList<Player>();
 
     @EventHandler
     public void gameStart(GameStartEvent event) {
         for (Player p : Bukkit.getOnlinePlayers())
             if (hasAbility(p))
                 waterBreathers.add(p);
+    }
+
+    @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        waterBreathers.remove(event.getKilled().getPlayer());
     }
 
     @EventHandler
@@ -38,11 +43,6 @@ public class Poseidon extends AbilityListener {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, potionMultiplier), true);
             }
         }
-    }
-
-    @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        waterBreathers.remove(event.getKilled().getPlayer());
     }
 
 }

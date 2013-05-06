@@ -7,20 +7,20 @@ import org.bukkit.craftbukkit.v1_5_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 
 public class FakeFurnace extends TileEntityFurnace {
-    // To access the chests
-    public int link;
-    private ItemStack[] contents = new ItemStack[3];
     // For custom stuff
     private double burnSpeed;
+    private ItemStack[] contents = new ItemStack[3];
+    // Increases performance (or should at least)
+    @SuppressWarnings("unused")
+    private long lastCheck;
+    // Call me paranoid, but this has to be checked
+    private int lastID;
+    // To access the chests
+    public int link;
     private double meltSpeed;
     // I'm internally using "myCookTime" to not lose any precision, but for
     // displaying the progress I still have to use "cookTime"
     private double myCookTime;
-    // Call me paranoid, but this has to be checked
-    private int lastID;
-    // Increases performance (or should at least)
-    @SuppressWarnings("unused")
-    private long lastCheck;
 
     // New VTE
     public FakeFurnace() {
@@ -37,10 +37,185 @@ public class FakeFurnace extends TileEntityFurnace {
 
     // Read from save
 
+    public boolean a(EntityHuman entityhuman) // Derpnote
+    {
+        return true;
+    }
+
+    public void burn() {
+        // Can't burn? Goodbye
+        if (!canBurn()) {
+            return;
+        }
+        ItemStack itemstack = getBurnResult(contents[0]);
+        // Nothing in there? Then put something there.
+        if (contents[2] == null) {
+            contents[2] = itemstack.cloneItemStack();
+        }
+        // Burn ahead
+        else if (contents[2].doMaterialsMatch(itemstack)) {
+            contents[2].count += itemstack.count;
+        }
+        // And consume the ingredient item
+        // Goddamn, you have container functions, use them! Notch!
+        if (Item.byId[contents[0].id].t()) // Derpnote
+        {
+            contents[0] = new ItemStack(Item.byId[contents[0].id].s()); // Derpnote
+        } else {
+            contents[0].count--;
+            // Let 0 be null
+            if (contents[0].count <= 0) {
+                contents[0] = null;
+            }
+        }
+    }
+
+    private boolean canBurn() {
+        // No ingredient, no recipe
+        if (contents[0] == null) {
+            return false;
+        }
+        ItemStack itemstack = getBurnResult(contents[0]);
+        // No recipe, no burning
+        if (itemstack == null) {
+            return false;
+        }
+        // Free space? Let's burn!
+        else if (contents[2] == null) {
+            return true;
+        }
+        // Materials don't match? Too bad.
+        else if (!contents[2].doMaterialsMatch(itemstack)) {
+            return false;
+        }
+        // As long as there is space, we can burn
+        else if ((contents[2].count + itemstack.count <= getMaxStackSize())
+                && (contents[2].count + itemstack.count <= contents[2].getMaxStackSize())) {
+            return true;
+        }
+        return false;
+    }
+
     // For compatibility
     public void g() // Derpnote
     {
         tick();
+    }
+
+    private ItemStack getBurnResult(ItemStack item) {
+        if (item == null) {
+            return null;
+        }
+        int i = item.id;
+        // CUSTOM RECIPE HERE
+        return RecipesFurnace.getInstance().getResult(i); // Derpnote
+    }
+
+    private double getBurnSpeed(ItemStack item) {
+        if (item == null) {
+            return 0.0D;
+        }
+        // CUSTOM FUEL HERE
+        return 1.0D;
+    }
+
+    /*****
+     * The following methods are only here because they interact with the
+     * contents array, which is private
+     *****/
+
+    public ItemStack[] getContents() {
+        return contents;
+    }
+
+    private int getFuelTime(ItemStack item) {
+        if (item == null) {
+            return 0;
+        }
+        int i = item.id;
+        // CUSTOM FUEL HERE
+        // Lava should melt 128 items, not 100
+        if (i == Item.LAVA_BUCKET.id) {
+            return 25600;
+        } else {
+            return fuelTime(item);
+        }
+    }
+
+    public ItemStack getItem(int i) {
+        return contents[i];
+    }
+
+    private double getMeltSpeed(ItemStack item) {
+        if (item == null) {
+            return 0.0D;
+        }
+        // CUSTOM RECIPE HERE
+        return 1.0D;
+    }
+
+    // Compatibility
+    public InventoryHolder getOwner() {
+        return null;
+    }
+
+    public int getSize() {
+        return contents.length;
+    }
+
+    public List<HumanEntity> getViewers() {
+        return new ArrayList<HumanEntity>();
+    }
+
+    // This needs a little addition
+    public boolean isBurning() {
+        return super.isBurning() && (burnSpeed > 0.0D);
+    }
+
+    public boolean isFine() {
+        return ((myCookTime > 0.0D) || (getFuelTime(contents[1]) > 0)) && canBurn();
+    }
+
+    public void onClose(CraftHumanEntity who) {
+    }
+
+    public void onOpen(CraftHumanEntity who) {
+    }
+
+    public void setItem(int i, ItemStack itemstack) {
+        contents[i] = itemstack;
+        if (itemstack != null && itemstack.count > getMaxStackSize()) {
+            itemstack.count = getMaxStackSize();
+        }
+    }
+
+    public ItemStack splitStack(int i, int j) {
+        if (contents[i] != null) {
+            ItemStack itemstack;
+            if (contents[i].count <= j) {
+                itemstack = contents[i];
+                contents[i] = null;
+                return itemstack;
+            } else {
+                itemstack = contents[i].a(j); // Derpnote
+                if (contents[i].count == 0) {
+                    contents[i] = null;
+                }
+                return itemstack;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public ItemStack splitWithoutUpdate(int i) {
+        if (contents[i] != null) {
+            ItemStack itemstack = contents[i];
+            contents[i] = null;
+            return itemstack;
+        } else {
+            return null;
+        }
     }
 
     public void tick() {
@@ -93,180 +268,5 @@ public class FakeFurnace extends TileEntityFurnace {
         // And for the display (I'm using floor rather than round to not cause
         // the client to do shit when we not really reached 200):
         cookTime = (int) Math.floor(myCookTime);
-    }
-
-    public boolean isFine() {
-        return ((myCookTime > 0.0D) || (getFuelTime(contents[1]) > 0)) && canBurn();
-    }
-
-    // This needs a little addition
-    public boolean isBurning() {
-        return super.isBurning() && (burnSpeed > 0.0D);
-    }
-
-    private ItemStack getBurnResult(ItemStack item) {
-        if (item == null) {
-            return null;
-        }
-        int i = item.id;
-        // CUSTOM RECIPE HERE
-        return RecipesFurnace.getInstance().getResult(i); // Derpnote
-    }
-
-    private double getMeltSpeed(ItemStack item) {
-        if (item == null) {
-            return 0.0D;
-        }
-        // CUSTOM RECIPE HERE
-        return 1.0D;
-    }
-
-    private int getFuelTime(ItemStack item) {
-        if (item == null) {
-            return 0;
-        }
-        int i = item.id;
-        // CUSTOM FUEL HERE
-        // Lava should melt 128 items, not 100
-        if (i == Item.LAVA_BUCKET.id) {
-            return 25600;
-        } else {
-            return fuelTime(item);
-        }
-    }
-
-    private double getBurnSpeed(ItemStack item) {
-        if (item == null) {
-            return 0.0D;
-        }
-        // CUSTOM FUEL HERE
-        return 1.0D;
-    }
-
-    private boolean canBurn() {
-        // No ingredient, no recipe
-        if (contents[0] == null) {
-            return false;
-        }
-        ItemStack itemstack = getBurnResult(contents[0]);
-        // No recipe, no burning
-        if (itemstack == null) {
-            return false;
-        }
-        // Free space? Let's burn!
-        else if (contents[2] == null) {
-            return true;
-        }
-        // Materials don't match? Too bad.
-        else if (!contents[2].doMaterialsMatch(itemstack)) {
-            return false;
-        }
-        // As long as there is space, we can burn
-        else if ((contents[2].count + itemstack.count <= getMaxStackSize())
-                && (contents[2].count + itemstack.count <= contents[2].getMaxStackSize())) {
-            return true;
-        }
-        return false;
-    }
-
-    public void burn() {
-        // Can't burn? Goodbye
-        if (!canBurn()) {
-            return;
-        }
-        ItemStack itemstack = getBurnResult(contents[0]);
-        // Nothing in there? Then put something there.
-        if (contents[2] == null) {
-            contents[2] = itemstack.cloneItemStack();
-        }
-        // Burn ahead
-        else if (contents[2].doMaterialsMatch(itemstack)) {
-            contents[2].count += itemstack.count;
-        }
-        // And consume the ingredient item
-        // Goddamn, you have container functions, use them! Notch!
-        if (Item.byId[contents[0].id].t()) // Derpnote
-        {
-            contents[0] = new ItemStack(Item.byId[contents[0].id].s()); // Derpnote
-        } else {
-            contents[0].count--;
-            // Let 0 be null
-            if (contents[0].count <= 0) {
-                contents[0] = null;
-            }
-        }
-    }
-
-    /*****
-     * The following methods are only here because they interact with the
-     * contents array, which is private
-     *****/
-
-    public ItemStack[] getContents() {
-        return contents;
-    }
-
-    public int getSize() {
-        return contents.length;
-    }
-
-    public ItemStack getItem(int i) {
-        return contents[i];
-    }
-
-    public ItemStack splitStack(int i, int j) {
-        if (contents[i] != null) {
-            ItemStack itemstack;
-            if (contents[i].count <= j) {
-                itemstack = contents[i];
-                contents[i] = null;
-                return itemstack;
-            } else {
-                itemstack = contents[i].a(j); // Derpnote
-                if (contents[i].count == 0) {
-                    contents[i] = null;
-                }
-                return itemstack;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public ItemStack splitWithoutUpdate(int i) {
-        if (contents[i] != null) {
-            ItemStack itemstack = contents[i];
-            contents[i] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
-    }
-
-    public void setItem(int i, ItemStack itemstack) {
-        contents[i] = itemstack;
-        if (itemstack != null && itemstack.count > getMaxStackSize()) {
-            itemstack.count = getMaxStackSize();
-        }
-    }
-
-    // Compatibility
-    public InventoryHolder getOwner() {
-        return null;
-    }
-
-    public boolean a(EntityHuman entityhuman) // Derpnote
-    {
-        return true;
-    }
-
-    public void onOpen(CraftHumanEntity who) {
-    }
-
-    public void onClose(CraftHumanEntity who) {
-    }
-
-    public List<HumanEntity> getViewers() {
-        return new ArrayList<HumanEntity>();
     }
 }

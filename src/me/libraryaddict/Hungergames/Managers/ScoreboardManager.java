@@ -12,10 +12,31 @@ import org.bukkit.scoreboard.Scoreboard;
 public class ScoreboardManager {
     private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
 
+    public static Objective getObjective(Scoreboard board, DisplaySlot slot) {
+        if (board.getObjective(slot.name()) == null)
+            board.registerNewObjective(slot.name(), slot.name());
+        board.getObjective(slot.name()).setDisplaySlot(slot);
+        return board.getObjective(slot.name());
+    }
+
     public static Scoreboard getScoreboard(String scoreboardName) {
         if (!boards.containsKey(scoreboardName))
             resetScoreboard(scoreboardName);
         return boards.get(scoreboardName);
+    }
+
+    public static void hideScore(String scoreboardName, DisplaySlot slot, String name) {
+        if (name.length() > 16)
+            name = name.substring(0, 16);
+        if (HungergamesApi.getConfigManager().displayScoreboards())
+            getScoreboard(scoreboardName).resetScores(Bukkit.getOfflinePlayer(name));
+    }
+
+    public static void makeScore(String scoreboardName, DisplaySlot slot, String name, int score) {
+        if (name.length() > 16)
+            name = name.substring(0, 16);
+        if (HungergamesApi.getConfigManager().displayScoreboards())
+            getObjective(getScoreboard(scoreboardName), slot).getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
     }
 
     public static void resetScoreboard(String scoreboardName) {
@@ -26,30 +47,9 @@ public class ScoreboardManager {
         }
     }
 
-    public static Objective getObjective(Scoreboard board, DisplaySlot slot) {
-        if (board.getObjective(slot.name()) == null)
-            board.registerNewObjective(slot.name(), slot.name());
-        board.getObjective(slot.name()).setDisplaySlot(slot);
-        return board.getObjective(slot.name());
-    }
-
     public static void setDisplayName(String scoreboardName, DisplaySlot slot, String string) {
         if (HungergamesApi.getConfigManager().displayScoreboards())
             getObjective(getScoreboard(scoreboardName), slot).setDisplayName(string);
-    }
-
-    public static void makeScore(String scoreboardName, DisplaySlot slot, String name, int score) {
-        if (name.length() > 16)
-            name = name.substring(0, 16);
-        if (HungergamesApi.getConfigManager().displayScoreboards())
-            getObjective(getScoreboard(scoreboardName), slot).getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
-    }
-
-    public static void hideScore(String scoreboardName, DisplaySlot slot, String name) {
-        if (name.length() > 16)
-            name = name.substring(0, 16);
-        if (HungergamesApi.getConfigManager().displayScoreboards())
-            getScoreboard(scoreboardName).resetScores(Bukkit.getOfflinePlayer(name));
     }
 
     public static void updateStage() {

@@ -28,13 +28,13 @@ public class KitInventory implements Listener {
     private int currentPage = 0;
     private boolean dynamicInventorySize = HungergamesApi.getConfigManager().isKitSelectorDynamicSize();
     private ItemStack forwardsAPage = null;
+    private Hungergames hg;
     private Inventory inv;
     private boolean listenForClose = true;
     private int maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
     private HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
     private String title;
     private Player user;
-    private Hungergames hg;
 
     public KitInventory(Player player) {
         hg = HungergamesApi.getHungergames();

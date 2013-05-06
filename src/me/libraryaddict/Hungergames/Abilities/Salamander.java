@@ -38,6 +38,11 @@ public class Salamander extends AbilityListener {
     }
 
     @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        salamanders.remove(event.getKilled().getPlayer());
+    }
+
+    @EventHandler
     public void onSecond(TimeSecondEvent event) {
         if (HungergamesApi.getHungergames().doSeconds && HungergamesApi.getHungergames().currentTime >= 120)
             for (Player p : salamanders) {
@@ -46,11 +51,6 @@ public class Salamander extends AbilityListener {
                     p.damage(1);
                 }
             }
-    }
-
-    @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        salamanders.remove(event.getKilled().getPlayer());
     }
 
 }

@@ -15,8 +15,8 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Werewolf extends AbilityListener {
     public boolean giveWeakness = true;
-    public int strengthMultiplier = 0;
     public int speedMultiplier = 0;
+    public int strengthMultiplier = 0;
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {

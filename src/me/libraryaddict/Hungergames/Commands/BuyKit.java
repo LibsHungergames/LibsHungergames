@@ -13,9 +13,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class BuyKit implements CommandExecutor {
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
-    private KitManager kits = HungergamesApi.getKitManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private KitManager kits = HungergamesApi.getKitManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

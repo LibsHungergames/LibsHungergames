@@ -34,12 +34,16 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class PlayerManager {
 
-    private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
-    public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
-    public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
-    Hungergames hg = HungergamesApi.getHungergames();
+    public static int returnChance(int start, int end) {
+        return start + (int) (Math.random() * ((end - start) + 1));
+    }
     ChatManager cm = HungergamesApi.getChatManager();
+    private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
+    Hungergames hg = HungergamesApi.getHungergames();
     KitManager kits = HungergamesApi.getKitManager();
+    public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
+    public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
+
     private ArrayList<Integer> nonSolid = new ArrayList<Integer>();
 
     public PlayerManager() {
@@ -62,6 +66,21 @@ public class PlayerManager {
         nonSolid.add(Material.VINE.getId());
     }
 
+    private String formatDeathMessage(String deathMessage, Player p) {
+        String kitName = cm.getKillMessageNoKit();
+        if (kits.getKitByPlayer(p) != null)
+            kitName = kits.getKitByPlayer(p).getName();
+        return deathMessage.replaceAll(p.getName(), String.format(cm.getKillMessageFormatPlayerKit(), p.getName(), kitName));
+    }
+
+    public List<Gamer> getAliveGamers() {
+        List<Gamer> aliveGamers = new ArrayList<Gamer>();
+        for (Gamer gamer : gamers)
+            if (gamer.isAlive())
+                aliveGamers.add(gamer);
+        return aliveGamers;
+    }
+
     public synchronized Gamer getGamer(Entity entity) {
         for (Gamer g : gamers)
             if (g.getPlayer() == entity)
@@ -76,80 +95,11 @@ public class PlayerManager {
         return null;
     }
 
-    public Gamer registerGamer(Player p) {
-        Gamer gamer = new Gamer(p);
-        gamers.add(gamer);
-        gamer.clearInventory();
-        return gamer;
-    }
-
-    public void unregisterGamer(Gamer gamer) {
-        gamers.remove(gamer);
-    }
-
-    public Gamer unregisterGamer(Entity entity) {
-        Iterator<Gamer> itel = gamers.iterator();
-        while (itel.hasNext()) {
-            Gamer g = itel.next();
-            if (g.getPlayer() == entity) {
-                itel.remove();
-                return g;
-            }
-        }
-        return null;
-    }
-
     public List<Gamer> getGamers() {
         List<Gamer> game = new ArrayList<Gamer>();
         for (Gamer g : gamers)
             game.add(g);
         return game;
-    }
-
-    public static int returnChance(int start, int end) {
-        return start + (int) (Math.random() * ((end - start) + 1));
-    }
-
-    public void sendToSpawn(Gamer gamer) {
-        final Player p = gamer.getPlayer();
-        Location spawn = p.getWorld().getSpawnLocation().clone();
-        int chances = 0;
-        if (p.isInsideVehicle())
-            p.leaveVehicle();
-        p.eject();
-        int spawnRadius = 8;
-        int spawnHeight = 5;
-        while (chances < 100) {
-            chances++;
-            Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
-                    + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
-            if (nonSolid.contains(newLoc.getBlock().getTypeId())
-                    && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
-                while (newLoc.getBlockY() >= 1 && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
-                    newLoc = newLoc.add(0, -1, 0);
-                }
-                if (newLoc.getBlockY() <= 1)
-                    continue;
-                spawn = newLoc;
-                break;
-            }
-        }
-        if (spawn.equals(p.getWorld().getSpawnLocation())) {
-            spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
-                    + returnChance(-spawnRadius, spawnRadius));
-            spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
-            if (gamer.isAlive() && spawn.getY() <= 1) {
-                spawn.getBlock().setType(Material.GLASS);
-                spawn.setY(spawn.getY() + 1);
-            }
-        }
-        final Location destination = spawn.add(0.5, 0.1, 0.5);
-        p.teleport(destination);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                p.teleport(destination);
-            }
-        });
     }
 
     public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
@@ -163,13 +113,6 @@ public class PlayerManager {
         PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, backup, deathMsg, dropLoc, drops);
         Bukkit.getPluginManager().callEvent(event);
         manageDeath(event);
-    }
-
-    private String formatDeathMessage(String deathMessage, Player p) {
-        String kitName = cm.getKillMessageNoKit();
-        if (kits.getKitByPlayer(p) != null)
-            kitName = kits.getKitByPlayer(p).getName();
-        return deathMessage.replaceAll(p.getName(), String.format(cm.getKillMessageFormatPlayerKit(), p.getName(), kitName));
     }
 
     public void manageDeath(PlayerKilledEvent event) {
@@ -242,6 +185,55 @@ public class PlayerManager {
         HungergamesApi.getAbilityManager().unregisterPlayer(p);
     }
 
+    public Gamer registerGamer(Player p) {
+        Gamer gamer = new Gamer(p);
+        gamers.add(gamer);
+        gamer.clearInventory();
+        return gamer;
+    }
+
+    public void sendToSpawn(Gamer gamer) {
+        final Player p = gamer.getPlayer();
+        Location spawn = p.getWorld().getSpawnLocation().clone();
+        int chances = 0;
+        if (p.isInsideVehicle())
+            p.leaveVehicle();
+        p.eject();
+        int spawnRadius = 8;
+        int spawnHeight = 5;
+        while (chances < 100) {
+            chances++;
+            Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
+                    + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
+            if (nonSolid.contains(newLoc.getBlock().getTypeId())
+                    && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
+                while (newLoc.getBlockY() >= 1 && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
+                    newLoc = newLoc.add(0, -1, 0);
+                }
+                if (newLoc.getBlockY() <= 1)
+                    continue;
+                spawn = newLoc;
+                break;
+            }
+        }
+        if (spawn.equals(p.getWorld().getSpawnLocation())) {
+            spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
+                    + returnChance(-spawnRadius, spawnRadius));
+            spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
+            if (gamer.isAlive() && spawn.getY() <= 1) {
+                spawn.getBlock().setType(Material.GLASS);
+                spawn.setY(spawn.getY() + 1);
+            }
+        }
+        final Location destination = spawn.add(0.5, 0.1, 0.5);
+        p.teleport(destination);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                p.teleport(destination);
+            }
+        });
+    }
+
     public void setSpectator(Gamer gamer) {
         gamer.setGhost();
         gamer.hide();
@@ -262,12 +254,20 @@ public class PlayerManager {
             p.setDisplayName(ChatColor.DARK_GRAY + p.getName() + ChatColor.RESET);
     }
 
-    public List<Gamer> getAliveGamers() {
-        List<Gamer> aliveGamers = new ArrayList<Gamer>();
-        for (Gamer gamer : gamers)
-            if (gamer.isAlive())
-                aliveGamers.add(gamer);
-        return aliveGamers;
+    public Gamer unregisterGamer(Entity entity) {
+        Iterator<Gamer> itel = gamers.iterator();
+        while (itel.hasNext()) {
+            Gamer g = itel.next();
+            if (g.getPlayer() == entity) {
+                itel.remove();
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public void unregisterGamer(Gamer gamer) {
+        gamers.remove(gamer);
     }
 
 }

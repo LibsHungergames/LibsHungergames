@@ -32,6 +32,14 @@ public class ClassGetter {
         return classes;
     }
 
+    private static Class<?> loadClass(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unexpected ClassNotFoundException loading class '" + className + "'");
+        }
+    }
+
     private static void processJarfile(URL resource, String pkgname, ArrayList<Class<?>> classes) {
         String relPath = pkgname.replace('.', '/');
         String resPath = resource.getPath().replace("%20", " ");
@@ -54,14 +62,6 @@ public class ClassGetter {
             if (className != null) {
                 classes.add(loadClass(className));
             }
-        }
-    }
-
-    private static Class<?> loadClass(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unexpected ClassNotFoundException loading class '" + className + "'");
         }
     }
 }

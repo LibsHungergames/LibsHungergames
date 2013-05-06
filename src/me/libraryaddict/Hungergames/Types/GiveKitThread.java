@@ -15,14 +15,6 @@ public class GiveKitThread extends Thread {
         playerName = player;
     }
 
-    public void mySqlDisconnect() {
-        try {
-            this.con.close();
-        } catch (SQLException ex) {
-        } catch (NullPointerException ex) {
-        }
-    }
-
     public void mySqlConnect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -32,6 +24,14 @@ public class GiveKitThread extends Thread {
                     HungergamesApi.getMySqlManager().SQL_PASS);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void mySqlDisconnect() {
+        try {
+            this.con.close();
+        } catch (SQLException ex) {
+        } catch (NullPointerException ex) {
         }
     }
 

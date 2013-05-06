@@ -15,14 +15,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class Demoman extends AbilityListener {
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.STONE_PLATE && hasAbility(event.getPlayer())) {
-            event.getBlock().removeMetadata("Placer", HungergamesApi.getHungergames());
-            event.getBlock().setMetadata("Placer", new FixedMetadataValue(HungergamesApi.getHungergames(), event.getPlayer().getName()));
-        }
-    }
-
-    @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.isCancelled())
             return;
@@ -32,6 +24,14 @@ public class Demoman extends AbilityListener {
             b.removeMetadata("Placer", HungergamesApi.getHungergames());
             b.setType(Material.AIR);
             b.getWorld().createExplosion(b.getLocation().clone().add(0.5, 0.5, 0.5), 4F);
+        }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        if (event.getBlock().getType() == Material.STONE_PLATE && hasAbility(event.getPlayer())) {
+            event.getBlock().removeMetadata("Placer", HungergamesApi.getHungergames());
+            event.getBlock().setMetadata("Placer", new FixedMetadataValue(HungergamesApi.getHungergames(), event.getPlayer().getName()));
         }
     }
 }

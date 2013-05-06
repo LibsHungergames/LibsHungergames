@@ -9,10 +9,14 @@ import org.bukkit.event.HandlerList;
 
 public class PlayerTrackEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private Gamer tracker;
-    private Player victim;
-    private String message;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
     private boolean cancelled = false;
+    private String message;
+    private Gamer tracker;
+
+    private Player victim;
 
     public PlayerTrackEvent(Gamer tracker, Player victim, String trackMessage) {
         this.tracker = tracker;
@@ -20,20 +24,20 @@ public class PlayerTrackEvent extends Event implements Cancellable {
         setMessage(trackMessage);
     }
 
-    public Player getVictim() {
-        return victim;
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public Gamer getTracker() {
         return tracker;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public Player getVictim() {
+        return victim;
     }
 
     public boolean isCancelled() {
@@ -43,10 +47,6 @@ public class PlayerTrackEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         cancelled = isCancelled;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void setMessage(String message) {

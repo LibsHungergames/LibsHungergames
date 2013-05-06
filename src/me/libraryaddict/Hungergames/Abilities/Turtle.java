@@ -10,6 +10,16 @@ public class Turtle extends AbilityListener {
     public boolean needToBlock = true;
 
     @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && hasAbility((Player) event.getDamager())) {
+            Player p = (Player) event.getDamager();
+            if (p.isSneaking() && (!needToBlock || p.isBlocking())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player && hasAbility((Player) event.getEntity())) {
             Player p = (Player) event.getEntity();
@@ -17,16 +27,6 @@ public class Turtle extends AbilityListener {
                 event.setCancelled(true);
                 p.damage(0);
                 p.setHealth(p.getHealth() - 1);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && hasAbility((Player) event.getDamager())) {
-            Player p = (Player) event.getDamager();
-            if (p.isSneaking() && (!needToBlock || p.isBlocking())) {
-                event.setCancelled(true);
             }
         }
     }

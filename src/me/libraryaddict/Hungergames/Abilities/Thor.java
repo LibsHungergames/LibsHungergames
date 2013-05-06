@@ -17,12 +17,20 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class Thor extends AbilityListener {
-    private transient HashMap<String, Long> lastThored = new HashMap<String, Long>();
     public int cooldown = 5;
-    public boolean doNetherackAndFire = true;
-    public boolean protectThorer = true;
     public String cooldownMessage = ChatColor.RED + "You may not do that at this time";
+    public boolean doNetherackAndFire = true;
+    private transient HashMap<String, Long> lastThored = new HashMap<String, Long>();
+    public boolean protectThorer = true;
     public int thorItemId = Material.WOOD_AXE.getId();
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof LightningStrike && event.getEntity() instanceof Player
+                && event.getDamager().hasMetadata("DontHurt")
+                && ((Player) event.getEntity()).getName().equals(event.getDamager().getMetadata("DontHurt").get(0).value()))
+            event.setCancelled(true);
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -45,13 +53,5 @@ public class Thor extends AbilityListener {
                     p.sendMessage(cooldownMessage);
             }
         }
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof LightningStrike && event.getEntity() instanceof Player
-                && event.getDamager().hasMetadata("DontHurt")
-                && ((Player) event.getEntity()).getName().equals(event.getDamager().getMetadata("DontHurt").get(0).value()))
-            event.setCancelled(true);
     }
 }

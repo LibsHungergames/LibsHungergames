@@ -107,6 +107,8 @@ public class ChatManager {
     private String commandSuicideNotAlive = ChatColor.RED + "Dead men can't die";
     private String commandTimeStatusStarted = ChatColor.DARK_GRAY + "The game has been going for %s.";
     private String commandTimeStatusStarting = ChatColor.DARK_GRAY + "The game is starting in %s.";
+    private transient YamlConfiguration config;
+    private transient File configFile;
     private String enchantNameAquaAffinity = "Aqua Affinity";
     private String enchantNameArrowDamage = "Power";
     private String enchantNameArrowFire = "Flame";
@@ -219,6 +221,7 @@ public class ChatManager {
             + "Minecraft will crash if you attempt to put this in";
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
+    private transient boolean newFile = false;
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
     private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in";
     private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in";
@@ -247,9 +250,6 @@ public class ChatManager {
     private String timeFormatSeconds = "%s seconds";
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
-    private transient YamlConfiguration config;
-    private transient File configFile;
-    private transient boolean newFile = false;
 
     public ChatManager() {
         configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "translation.yml");

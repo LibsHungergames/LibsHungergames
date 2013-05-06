@@ -22,26 +22,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Backpacker extends AbilityListener {
 
     private transient HashMap<Player, Inventory> backpack = new HashMap<Player, Inventory>();
-    private transient HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
-    public int backpackItem = Material.ENDER_CHEST.getId();
     public int backpackInventoryRows = 6;
+    public int backpackItem = Material.ENDER_CHEST.getId();
     public String backPackItemDescription = ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC
             + "Double click this chest to open your backpack!";
     public String backPackItemName = ChatColor.LIGHT_PURPLE + "Backpack";
-
-    @Override
-    public void registerPlayer(Player p) {
-        super.registerPlayer(p);
-        ItemStack item = new ItemStack(backpackItem);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(backPackItemName);
-        List<String> lore = new ArrayList<String>();
-        lore.add(backPackItemDescription);
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, backPackItemName));
-        p.getInventory().setItem(9, item);
-    }
+    private transient HashMap<Player, Long> chestClick = new HashMap<Player, Long>();
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -87,5 +73,19 @@ public class Backpacker extends AbilityListener {
                     p.getWorld().dropItemNaturally(event.getDropsLocation(), item);
             }
         }
+    }
+
+    @Override
+    public void registerPlayer(Player p) {
+        super.registerPlayer(p);
+        ItemStack item = new ItemStack(backpackItem);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(backPackItemName);
+        List<String> lore = new ArrayList<String>();
+        lore.add(backPackItemDescription);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, backPackItemName));
+        p.getInventory().setItem(9, item);
     }
 }

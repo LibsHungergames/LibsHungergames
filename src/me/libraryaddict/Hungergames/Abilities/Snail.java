@@ -13,8 +13,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Snail extends AbilityListener {
     public int chance = 3;
-    public int multiplier = 1;
     public int length = 5;
+    public int multiplier = 1;
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {

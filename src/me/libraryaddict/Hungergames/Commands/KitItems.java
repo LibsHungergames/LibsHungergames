@@ -19,8 +19,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitItems implements CommandExecutor {
 
-    private KitManager kits = HungergamesApi.getKitManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private KitManager kits = HungergamesApi.getKitManager();
 
     private String itemToName(ItemStack item) {
         // TODO Add chat translation

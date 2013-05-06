@@ -9,8 +9,8 @@ import org.bukkit.event.EventHandler;
 public class Creeper extends AbilityListener {
 
     public float baseExplosionStrength = 0.4F;
-    public boolean randomizeExplosion = true;
     public int randomizedStrength = 3;
+    public boolean randomizeExplosion = true;
 
     @EventHandler
     public void onExplode(PlayerKilledEvent event) {

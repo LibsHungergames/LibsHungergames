@@ -12,10 +12,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Cannibal extends AbilityListener {
-    public int chance = 3;
     public int addHunger = 2;
-    public int potionLength = 5;
+    public int chance = 3;
     public int multiplier = 0;
+    public int potionLength = 5;
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {

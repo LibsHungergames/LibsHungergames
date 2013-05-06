@@ -16,8 +16,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Jumper extends AbilityListener {
-    private transient HashMap<Block, Integer> platformTaskIds = new HashMap<Block, Integer>();
     public boolean generatePlatform = true;
+    private transient HashMap<Block, Integer> platformTaskIds = new HashMap<Block, Integer>();
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (platformTaskIds.containsKey(event.getBlock()))
+            Bukkit.getScheduler().cancelTask(platformTaskIds.remove(event.getBlock()));
+    }
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -45,11 +51,5 @@ public class Jumper extends AbilityListener {
                     }
                 }
         }
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (platformTaskIds.containsKey(event.getBlock()))
-            Bukkit.getScheduler().cancelTask(platformTaskIds.remove(event.getBlock()));
     }
 }

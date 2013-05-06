@@ -15,14 +15,14 @@ import net.minecraft.server.v1_5_R3.PathPoint;
 import net.minecraft.server.v1_5_R3.PathfinderGoalTarget;
 
 public class OwnerAttacks extends PathfinderGoalTarget {
-    EntityLiving d;
-    EntityLiving idk;
-    EntityLiving owner;
-    protected float e;
-    protected boolean f;
     private boolean a;
     private int b;
     private int c;
+    EntityLiving d;
+    protected float e;
+    protected boolean f;
+    EntityLiving idk;
+    EntityLiving owner;
 
     public OwnerAttacks(EntityLiving paramEntityTameableAnimal, EntityLiving owner) {
         super(paramEntityTameableAnimal, 32.0F, false);
@@ -38,9 +38,22 @@ public class OwnerAttacks extends PathfinderGoalTarget {
         return a(this.idk, false);
     }
 
-    public void c() {
-        this.d.setGoalTarget(this.idk);
-        super.c();
+    private boolean a(EntityLiving entityliving) {
+        this.c = (10 + this.d.aE().nextInt(5));
+        PathEntity pathentity = this.d.getNavigation().a(entityliving);
+
+        if (pathentity == null) {
+            return false;
+        }
+        PathPoint pathpoint = pathentity.c();
+
+        if (pathpoint == null) {
+            return false;
+        }
+        int i = pathpoint.a - MathHelper.floor(entityliving.locX);
+        int j = pathpoint.c - MathHelper.floor(entityliving.locZ);
+
+        return i * i + j * j <= 2.25D;
     }
 
     protected boolean a(EntityLiving entityliving, boolean flag) {
@@ -106,21 +119,8 @@ public class OwnerAttacks extends PathfinderGoalTarget {
         return true;
     }
 
-    private boolean a(EntityLiving entityliving) {
-        this.c = (10 + this.d.aE().nextInt(5));
-        PathEntity pathentity = this.d.getNavigation().a(entityliving);
-
-        if (pathentity == null) {
-            return false;
-        }
-        PathPoint pathpoint = pathentity.c();
-
-        if (pathpoint == null) {
-            return false;
-        }
-        int i = pathpoint.a - MathHelper.floor(entityliving.locX);
-        int j = pathpoint.c - MathHelper.floor(entityliving.locZ);
-
-        return i * i + j * j <= 2.25D;
+    public void c() {
+        this.d.setGoalTarget(this.idk);
+        super.c();
     }
 }

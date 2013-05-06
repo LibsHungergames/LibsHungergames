@@ -15,17 +15,17 @@ import org.bukkit.inventory.ItemStack;
 
 public class Seeker extends AbilityListener {
     private transient HashMap<ItemStack, Long> canUseAgain = new HashMap<ItemStack, Long>();
+    public int cooldown = 120;
+    private String cooldownMessage = ChatColor.BLUE + "The ghost eye will be usable in %s seconds!";
+    public boolean doCircle = true;
+    public int seekerItemId = Material.EYE_OF_ENDER.getId();
+    public String seekerItemName = ChatColor.WHITE + "Ghost Eye";
     private List<Material> transparent = Arrays.asList(new Material[] { Material.STONE, Material.LEAVES, Material.GRASS,
             Material.DIRT, Material.LOG, Material.SAND, Material.SANDSTONE, Material.ICE, Material.QUARTZ_BLOCK, Material.GRAVEL,
             Material.COBBLESTONE, Material.OBSIDIAN, Material.BEDROCK });
-    public int xrayRadius = 10;
-    public boolean doCircle = true;
-    public int cooldown = 120;
-    public String seekerItemName = ChatColor.WHITE + "Ghost Eye";
     private String usedSeekerEye = ChatColor.BLUE
             + "You body slam the ghost eye into your socket. Not gonna recover from that for a few minutes..";
-    private String cooldownMessage = ChatColor.BLUE + "The ghost eye will be usable in %s seconds!";
-    public int seekerItemId = Material.EYE_OF_ENDER.getId();
+    public int xrayRadius = 10;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

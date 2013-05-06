@@ -14,6 +14,15 @@ import org.bukkit.inventory.ItemStack;
 public class Fletcher extends AbilityListener {
 
     @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (hasAbility(event.getPlayer()) && event.getBlock().getType() == Material.GRAVEL) {
+            event.getBlock().setType(Material.AIR);
+            event.getBlock().getWorld()
+                    .dropItemNaturally(event.getBlock().getLocation().add(0.5, 0, 0.5), new ItemStack(Material.FLINT));
+        }
+    }
+
+    @EventHandler
     public void onDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Chicken && event.getEntity().getKiller() != null
                 && hasAbility(event.getEntity().getKiller())) {
@@ -25,15 +34,6 @@ public class Fletcher extends AbilityListener {
                 itel.remove();
             }
             event.getDrops().add(new ItemStack(Material.FEATHER, 2));
-        }
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (hasAbility(event.getPlayer()) && event.getBlock().getType() == Material.GRAVEL) {
-            event.getBlock().setType(Material.AIR);
-            event.getBlock().getWorld()
-                    .dropItemNaturally(event.getBlock().getLocation().add(0.5, 0, 0.5), new ItemStack(Material.FLINT));
         }
     }
 }

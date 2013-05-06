@@ -25,17 +25,35 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class GeneralListener implements Listener {
 
-    private Hungergames hg = HungergamesApi.getHungergames();
-    private ConfigManager config = HungergamesApi.getConfigManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private ConfigManager config = HungergamesApi.getConfigManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     @EventHandler
-    public void onTarget(EntityTargetEvent event) {
-        if (hg.currentTime < 0)
+    public void ignite(final BlockIgniteEvent event) {
+        if (hg.currentTime < 0 && config.isFireSpreadDisabled()) {
             event.setCancelled(true);
-        else if (event.getTarget() instanceof Player && !pm.getGamer((Player) event.getTarget()).isAlive())
+            return;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive())
+                event.setCancelled(true);
+        } else if (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed()
+                && hg.currentTime <= config.getInvincibilityTime())
             event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onServerPing(ServerListPingEvent event) {
+        if (hg.currentTime >= 0)
+            event.setMotd(cm.getGameStartedMotd());
+        else
+            event.setMotd(returnTime(hg.currentTime));
     }
 
     @EventHandler
@@ -52,22 +70,12 @@ public class GeneralListener implements Listener {
             event.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive())
-                event.setCancelled(true);
-        } else if (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed()
-                && hg.currentTime <= config.getInvincibilityTime())
-            event.setCancelled(true);
-    }
-
     @EventHandler
-    public void ignite(final BlockIgniteEvent event) {
-        if (hg.currentTime < 0 && config.isFireSpreadDisabled()) {
+    public void onTarget(EntityTargetEvent event) {
+        if (hg.currentTime < 0)
             event.setCancelled(true);
-            return;
-        }
+        else if (event.getTarget() instanceof Player && !pm.getGamer((Player) event.getTarget()).isAlive())
+            event.setCancelled(true);
     }
 
     @EventHandler
@@ -99,14 +107,6 @@ public class GeneralListener implements Listener {
             return String.format(cm.getTimeFormatMotdSecondsAndMinute(), minutes, seconds);
         }
         return String.format(cm.getTimeFormatMotdSecondsAndMinutes(), minutes, seconds);
-    }
-
-    @EventHandler
-    public void onServerPing(ServerListPingEvent event) {
-        if (hg.currentTime >= 0)
-            event.setMotd(cm.getGameStartedMotd());
-        else
-            event.setMotd(returnTime(hg.currentTime));
     }
 
 }

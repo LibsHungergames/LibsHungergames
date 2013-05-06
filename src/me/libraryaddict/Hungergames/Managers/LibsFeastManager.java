@@ -37,115 +37,59 @@ public class LibsFeastManager implements FeastManager {
         jungleFaces.add(BlockFace.DOWN);
     }
 
-    private void removeLeaves(Block b) {
-        for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS) ? jungleFaces : faces)) {
-            Block newB = b.getRelative(face);
-            if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {
-                setBlockFast(newB, 0, (byte) 0);
-                removeLeaves(newB);
-                if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT)
-                    setBlockFast(newB.getRelative(BlockFace.DOWN), Material.GRASS.getId(), (byte) 0);
-            } else if (newB.getType() == Material.SNOW && face == BlockFace.UP)
-                setBlockFast(newB, 0, (byte) 0);
-        }
-    }
-
-    public int getHeight(ArrayList<Integer> heights, int radius) {
-        List<List<Integer>> commons = new ArrayList<List<Integer>>();
-        for (int i = 0; i < heights.size(); i++) {
-            List<Integer> numbers = new ArrayList<Integer>();
-            numbers.add(heights.get(i));
-            for (int a = i; a < heights.size(); a++) {
-                if (heights.get(i) - heights.get(a) >= -radius)
-                    numbers.add(heights.get(a));
-                else
-                    break;
-            }
-            commons.add(numbers);
-        }
-        int highest = 0;
-        List<Integer> found = new ArrayList<Integer>();
-        for (List l : commons) {
-            if (l.size() > highest) {
-                highest = l.size();
-                found = l;
-            }
-        }
-        if (found.size() == 0)
-            return -1;
-        return found.get((int) Math.round(found.size() / 3));
-    }
-
-    private boolean setBlockFast(Block b, int typeId, short s) {
-        try {
-            if (b.getTypeId() != typeId || b.getData() != s)
-                return b.setTypeIdAndData(typeId, (byte) s, false);
-            // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
-            // b.getY(), b.getZ() & 15, typeId, data);
-        } catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
-
-    private Block getHighest(Block b) {
-        while (b.getY() > 1 && !isSolid(b))
-            b = b.getRelative(BlockFace.DOWN);
-        return b;
-    }
-
-    private boolean isBlockValid(Block b) {
-        if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
-            return false;
-        return true;
-    }
-
-    private boolean isSolid(Block b) {
-        return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
-                || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
-                || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
-                .getType().name().contains("MUSHROOM")));
-    }
-
     /**
-     * Gets the best Y level to spawn the feast at
+     * Generates the chests.
      * 
-     * This also modifies the Location fed to it for use by feast generation
+     * Height is the amount of chests. There will be a enchanting table on top
+     * of this putting the total at 4 blocks high.
      * 
      * @param loc
-     * @param radius
-     * @return Best Y Level
+     * @param height
+     *            of chests
      */
-    public int getSpawnHeight(Location loc, int radius) {
-        ArrayList<Integer> heightLevels = new ArrayList<Integer>();
-        for (double degree = 0; degree <= 360; degree += 1) {
-            double angle = degree * Math.PI / 180;
-            int x = (int) (loc.getX() + .5 + radius * Math.cos(angle));
-            int z = (int) (loc.getZ() + radius * Math.sin(angle));
-            Block b = getHighest(loc.getWorld().getHighestBlockAt(x, z));
-            if (!b.getChunk().isLoaded())
-                b.getChunk().load(true);
-            if (isBlockValid(b))
-                heightLevels.add(b.getY());
-            /*
-             * // Do it again but at 2/3 the radius angle = degree * Math.PI /
-             * 180; x = (int) (loc.getX() + .5 + ((radius / 3) * 2) *
-             * Math.cos(angle)); z = (int) (loc.getZ() + ((radius / 3) * 2) *
-             * Math.sin(angle)); b =
-             * getHighest(loc.getWorld().getHighestBlockAt(x, z)); if
-             * (!b.getChunk().isLoaded()) b.getChunk().load(true); if
-             * (isBlockValid(b)) heightLevels.add(b.getY());
-             */
+    public void generateChests(Location loc, int height) {
+        ChestManager cm = HungergamesApi.getChestManager();
+        ConfigManager config = HungergamesApi.getConfigManager();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Location l = p.getLocation().clone();
+            l.setY(loc.getY());
+            if (l.distance(loc) < height && p.getLocation().getY() >= l.getY() && p.getLocation().getY() - l.getY() <= height) {
+                l.setY(l.getY() + height + 1);
+                p.teleport(l);
+            }
         }
-        Block b = getHighest(loc.getBlock());
-        if (isBlockValid(b))
-            heightLevels.add(b.getY());
-        Collections.sort(heightLevels);
-        int y = getHeight(heightLevels, 5);
-        if (y == -1)
-            y = b.getY();
-        loc = new Location(loc.getWorld(), loc.getBlockX(), y + 1, loc.getBlockZ());
-        return y;
+        ItemStack feast = config.getFeast();
+        ItemStack feastInsides = config.getFeastInsides();
+        for (int x = -height; x < height + 1; x++) {
+            for (int z = -height; z < height + 1; z++) {
+                int y = Math.abs(x);
+                if (Math.abs(z) > y)
+                    y = Math.abs(z);
+                y = -y + height;
+                Block block = loc.clone().add(x, y, z).getBlock();
+                Block b = block;
+                int repeated = y;
+                while (repeated > 0) {
+                    b = b.getRelative(BlockFace.DOWN);
+                    if (y - 1 >= repeated)
+                        setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
+                    else
+                        setBlockFast(b, feast.getTypeId(), feast.getDurability());
+                    repeated--;
+                }
+                if (x == 0 && z == 0) {
+                    setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
+                    setBlockFast(block.getRelative(BlockFace.DOWN), feastInsides.getType().getId(), (config.isFeastTntIgnite()
+                            && feastInsides.getType() == Material.TNT ? (byte) 1 : feastInsides.getDurability()));
+                } else if (Math.abs(x + z) % 2 == 0) {
+                    setBlockFast(block, Material.CHEST.getId(), (byte) 0);
+                    Chest chest = (Chest) block.getState();
+                    cm.fillChest(chest.getInventory());
+                    chest.update();
+                } else
+                    setBlockFast(block, feast.getTypeId(), feast.getDurability());
+            }
+        }
     }
 
     /**
@@ -201,13 +145,90 @@ public class LibsFeastManager implements FeastManager {
         // naturalizeSpawn(loc, radius);
     }
 
-    private void setNature(Block b) {
-        int num = new Random().nextInt(((b.getBiome() == Biome.ICE_MOUNTAINS || b.getBiome() == Biome.ICE_PLAINS) ? 20 : 7));
-        if (num > 10) {
-            setBlockFast(b, Material.SNOW.getId(), (byte) 0);
-        } else if (num == 1) {
-            setBlockFast(b, Material.LONG_GRASS.getId(), (byte) 1);
+    public int getHeight(ArrayList<Integer> heights, int radius) {
+        List<List<Integer>> commons = new ArrayList<List<Integer>>();
+        for (int i = 0; i < heights.size(); i++) {
+            List<Integer> numbers = new ArrayList<Integer>();
+            numbers.add(heights.get(i));
+            for (int a = i; a < heights.size(); a++) {
+                if (heights.get(i) - heights.get(a) >= -radius)
+                    numbers.add(heights.get(a));
+                else
+                    break;
+            }
+            commons.add(numbers);
         }
+        int highest = 0;
+        List<Integer> found = new ArrayList<Integer>();
+        for (List l : commons) {
+            if (l.size() > highest) {
+                highest = l.size();
+                found = l;
+            }
+        }
+        if (found.size() == 0)
+            return -1;
+        return found.get((int) Math.round(found.size() / 3));
+    }
+
+    private Block getHighest(Block b) {
+        while (b.getY() > 1 && !isSolid(b))
+            b = b.getRelative(BlockFace.DOWN);
+        return b;
+    }
+
+    /**
+     * Gets the best Y level to spawn the feast at
+     * 
+     * This also modifies the Location fed to it for use by feast generation
+     * 
+     * @param loc
+     * @param radius
+     * @return Best Y Level
+     */
+    public int getSpawnHeight(Location loc, int radius) {
+        ArrayList<Integer> heightLevels = new ArrayList<Integer>();
+        for (double degree = 0; degree <= 360; degree += 1) {
+            double angle = degree * Math.PI / 180;
+            int x = (int) (loc.getX() + .5 + radius * Math.cos(angle));
+            int z = (int) (loc.getZ() + radius * Math.sin(angle));
+            Block b = getHighest(loc.getWorld().getHighestBlockAt(x, z));
+            if (!b.getChunk().isLoaded())
+                b.getChunk().load(true);
+            if (isBlockValid(b))
+                heightLevels.add(b.getY());
+            /*
+             * // Do it again but at 2/3 the radius angle = degree * Math.PI /
+             * 180; x = (int) (loc.getX() + .5 + ((radius / 3) * 2) *
+             * Math.cos(angle)); z = (int) (loc.getZ() + ((radius / 3) * 2) *
+             * Math.sin(angle)); b =
+             * getHighest(loc.getWorld().getHighestBlockAt(x, z)); if
+             * (!b.getChunk().isLoaded()) b.getChunk().load(true); if
+             * (isBlockValid(b)) heightLevels.add(b.getY());
+             */
+        }
+        Block b = getHighest(loc.getBlock());
+        if (isBlockValid(b))
+            heightLevels.add(b.getY());
+        Collections.sort(heightLevels);
+        int y = getHeight(heightLevels, 5);
+        if (y == -1)
+            y = b.getY();
+        loc = new Location(loc.getWorld(), loc.getBlockX(), y + 1, loc.getBlockZ());
+        return y;
+    }
+
+    private boolean isBlockValid(Block b) {
+        if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
+            return false;
+        return true;
+    }
+
+    private boolean isSolid(Block b) {
+        return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
+                || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
+                || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
+                .getType().name().contains("MUSHROOM")));
     }
 
     /**
@@ -226,58 +247,37 @@ public class LibsFeastManager implements FeastManager {
         }
     }
 
-    /**
-     * Generates the chests.
-     * 
-     * Height is the amount of chests. There will be a enchanting table on top
-     * of this putting the total at 4 blocks high.
-     * 
-     * @param loc
-     * @param height
-     *            of chests
-     */
-    public void generateChests(Location loc, int height) {
-        ChestManager cm = HungergamesApi.getChestManager();
-        ConfigManager config = HungergamesApi.getConfigManager();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Location l = p.getLocation().clone();
-            l.setY(loc.getY());
-            if (l.distance(loc) < height && p.getLocation().getY() >= l.getY() && p.getLocation().getY() - l.getY() <= height) {
-                l.setY(l.getY() + height + 1);
-                p.teleport(l);
-            }
+    private void removeLeaves(Block b) {
+        for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS) ? jungleFaces : faces)) {
+            Block newB = b.getRelative(face);
+            if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {
+                setBlockFast(newB, 0, (byte) 0);
+                removeLeaves(newB);
+                if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT)
+                    setBlockFast(newB.getRelative(BlockFace.DOWN), Material.GRASS.getId(), (byte) 0);
+            } else if (newB.getType() == Material.SNOW && face == BlockFace.UP)
+                setBlockFast(newB, 0, (byte) 0);
         }
-        ItemStack feast = config.getFeast();
-        ItemStack feastInsides = config.getFeastInsides();
-        for (int x = -height; x < height + 1; x++) {
-            for (int z = -height; z < height + 1; z++) {
-                int y = Math.abs(x);
-                if (Math.abs(z) > y)
-                    y = Math.abs(z);
-                y = -y + height;
-                Block block = loc.clone().add(x, y, z).getBlock();
-                Block b = block;
-                int repeated = y;
-                while (repeated > 0) {
-                    b = b.getRelative(BlockFace.DOWN);
-                    if (y - 1 >= repeated)
-                        setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
-                    else
-                        setBlockFast(b, feast.getTypeId(), feast.getDurability());
-                    repeated--;
-                }
-                if (x == 0 && z == 0) {
-                    setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
-                    setBlockFast(block.getRelative(BlockFace.DOWN), feastInsides.getType().getId(), (config.isFeastTntIgnite()
-                            && feastInsides.getType() == Material.TNT ? (byte) 1 : feastInsides.getDurability()));
-                } else if (Math.abs(x + z) % 2 == 0) {
-                    setBlockFast(block, Material.CHEST.getId(), (byte) 0);
-                    Chest chest = (Chest) block.getState();
-                    cm.fillChest(chest.getInventory());
-                    chest.update();
-                } else
-                    setBlockFast(block, feast.getTypeId(), feast.getDurability());
-            }
+    }
+
+    private boolean setBlockFast(Block b, int typeId, short s) {
+        try {
+            if (b.getTypeId() != typeId || b.getData() != s)
+                return b.setTypeIdAndData(typeId, (byte) s, false);
+            // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
+            // b.getY(), b.getZ() & 15, typeId, data);
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    private void setNature(Block b) {
+        int num = new Random().nextInt(((b.getBiome() == Biome.ICE_MOUNTAINS || b.getBiome() == Biome.ICE_PLAINS) ? 20 : 7));
+        if (num > 10) {
+            setBlockFast(b, Material.SNOW.getId(), (byte) 0);
+        } else if (num == 1) {
+            setBlockFast(b, Material.LONG_GRASS.getId(), (byte) 1);
         }
     }
 }

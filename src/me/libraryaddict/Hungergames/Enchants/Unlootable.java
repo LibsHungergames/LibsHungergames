@@ -29,7 +29,7 @@ public class Unlootable extends Enchantment {
 
     @Override
     public int getMaxLevel() {
-        return 2;
+        return 1;
     }
 
     @Override

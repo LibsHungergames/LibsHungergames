@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Boxer extends AbilityListener {
-    public boolean reduceDamage = true;
     public int boxerDamage = 4;
+    public boolean reduceDamage = true;
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {

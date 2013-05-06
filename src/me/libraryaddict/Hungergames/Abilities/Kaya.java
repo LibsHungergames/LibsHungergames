@@ -26,15 +26,21 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Kaya extends AbilityListener {
 
-    private transient HashMap<Block, Player> kayaBlocks = new HashMap<Block, Player>();
     public int distanceFromBlocks = 3;
     public int heightFromBlocks = 2;
+    private transient HashMap<Block, Player> kayaBlocks = new HashMap<Block, Player>();
 
     public Kaya() {
         ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.GRASS));
         recipe.addIngredient(Material.DIRT);
         recipe.addIngredient(Material.SEEDS);
         Bukkit.addRecipe(recipe);
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        if (!event.isCancelled())
+            kayaBlocks.remove(event.getBlock());
     }
 
     @EventHandler
@@ -45,24 +51,6 @@ public class Kaya extends AbilityListener {
                     return;
             event.getInventory().setItem(0, new ItemStack(0, 0));
         }
-    }
-
-    @EventHandler
-    public void onBreak(BlockBreakEvent event) {
-        if (!event.isCancelled())
-            kayaBlocks.remove(event.getBlock());
-    }
-
-    @EventHandler
-    public void onExplode(EntityExplodeEvent event) {
-        for (Block b : event.blockList())
-            kayaBlocks.remove(b);
-    }
-
-    @EventHandler
-    public void onPiston(BlockPistonExtendEvent event) {
-        for (Block b : event.getBlocks())
-            kayaBlocks.remove(b);
     }
 
     @EventHandler
@@ -78,11 +66,9 @@ public class Kaya extends AbilityListener {
     }
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled())
-            if (event.getBlock().getType() == Material.GRASS && hasAbility(event.getPlayer())) {
-                kayaBlocks.put(event.getBlock(), event.getPlayer());
-            }
+    public void onExplode(EntityExplodeEvent event) {
+        for (Block b : event.blockList())
+            kayaBlocks.remove(b);
     }
 
     @EventHandler
@@ -104,5 +90,19 @@ public class Kaya extends AbilityListener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPiston(BlockPistonExtendEvent event) {
+        for (Block b : event.getBlocks())
+            kayaBlocks.remove(b);
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        if (!event.isCancelled())
+            if (event.getBlock().getType() == Material.GRASS && hasAbility(event.getPlayer())) {
+                kayaBlocks.put(event.getBlock(), event.getPlayer());
+            }
     }
 }

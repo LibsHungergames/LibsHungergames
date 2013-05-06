@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Kill implements CommandExecutor {
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     private ChatManager cm = HungergamesApi.getChatManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {

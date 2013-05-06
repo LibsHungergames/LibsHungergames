@@ -1,8 +1,8 @@
 package me.libraryaddict.Hungergames.Types;
 
 public class Damage {
-    private long time;
     private Gamer damager;
+    private long time;
 
     public Damage(long time, Gamer damager) {
         this.damager = damager;

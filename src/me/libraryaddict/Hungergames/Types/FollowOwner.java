@@ -7,14 +7,14 @@ import net.minecraft.server.v1_5_R3.PathfinderGoal;
 import net.minecraft.server.v1_5_R3.World;
 
 public class FollowOwner extends PathfinderGoal {
+    World a;
+    float b;
+    float c;
     private EntityLiving d;
     private EntityLiving e;
-    World a;
     private float f;
     private Navigation g;
     private int h;
-    float b;
-    float c;
 
     public FollowOwner(EntityLiving paramEntityTameableAnimal, float paramFloat1, float paramFloat2, float paramFloat3,
             EntityLiving owner) {

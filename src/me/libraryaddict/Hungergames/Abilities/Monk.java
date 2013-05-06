@@ -14,12 +14,12 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Monk extends AbilityListener {
 
-    private transient HashMap<ItemStack, Long> monkStaff = new HashMap<ItemStack, Long>();
     public int cooldown = 15;
-    public String monkItemName = ChatColor.WHITE + "Monk Staff";
     public String monkCooldownMessage = ChatColor.BLUE + "You may monk them again in %s seconds!";
     public String monkedMessage = ChatColor.BLUE + "Monked!";
     public int monkItemId = Material.BLAZE_ROD.getId();
+    public String monkItemName = ChatColor.WHITE + "Monk Staff";
+    private transient HashMap<ItemStack, Long> monkStaff = new HashMap<ItemStack, Long>();
     public boolean sendThroughInventory = true;
 
     @EventHandler

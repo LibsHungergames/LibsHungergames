@@ -56,17 +56,17 @@ public class RandomItem {
 
     /**
      * 
-     * @return Is the chance of being selected true?
-     */
-    public boolean hasChance() {
-        return (new Random().nextInt(10000) < chance * 100);
-    }
-
-    /**
-     * 
      * @return Randomized itemstack
      */
     public ItemStack getItemStack() {
         return new ItemStack(id, (new Random().nextInt((max - min) + 1) + min), data);
+    }
+
+    /**
+     * 
+     * @return Is the chance of being selected true?
+     */
+    public boolean hasChance() {
+        return (new Random().nextInt(10000) < chance * 100);
     }
 }

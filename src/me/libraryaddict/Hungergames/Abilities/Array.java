@@ -26,15 +26,38 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Array extends AbilityListener {
 
-    private transient HashMap<HealArray, Player> beacons = new HashMap<HealArray, Player>();
-    private transient PlayerManager pm = HungergamesApi.getPlayerManager();
-    public int arrayExpireTime = 30;
-    public String arrayItemName = ChatColor.WHITE + "Array";
-    public int arrayBeaconId = Material.BEACON.getId();
-
     class HealArray {
         Block[] blocks;
         long expires;
+    }
+    public int arrayBeaconId = Material.BEACON.getId();
+    public int arrayExpireTime = 30;
+    public String arrayItemName = ChatColor.WHITE + "Array";
+    private transient HashMap<HealArray, Player> beacons = new HashMap<HealArray, Player>();
+
+    private transient PlayerManager pm = HungergamesApi.getPlayerManager();
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        for (HealArray heal : beacons.keySet()) {
+            for (Block b : heal.blocks)
+                if (b.equals(event.getBlock())) {
+                    event.setCancelled(true);
+                    return;
+                }
+        }
+    }
+
+    @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        if (beacons.containsValue(event.getKilled().getPlayer())) {
+            for (HealArray array : beacons.keySet()) {
+                if (beacons.get(array).equals(event.getKilled().getPlayer())) {
+                    for (Block b : array.blocks)
+                        b.setType(Material.AIR);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -54,17 +77,6 @@ public class Array extends AbilityListener {
                 b = b.getRelative(BlockFace.UP);
             }
             beacons.put(heal, event.getPlayer());
-        }
-    }
-
-    @EventHandler
-    public void onBreak(BlockBreakEvent event) {
-        for (HealArray heal : beacons.keySet()) {
-            for (Block b : heal.blocks)
-                if (b.equals(event.getBlock())) {
-                    event.setCancelled(true);
-                    return;
-                }
         }
     }
 
@@ -91,18 +103,6 @@ public class Array extends AbilityListener {
                 Player p = gamer.getPlayer();
                 if (p.getLocation().distance(heal.blocks[0].getLocation()) < 6)
                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1), true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        if (beacons.containsValue(event.getKilled().getPlayer())) {
-            for (HealArray array : beacons.keySet()) {
-                if (beacons.get(array).equals(event.getKilled().getPlayer())) {
-                    for (Block b : array.blocks)
-                        b.setType(Material.AIR);
-                }
             }
         }
     }

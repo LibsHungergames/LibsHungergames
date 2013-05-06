@@ -15,19 +15,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
 
-    private String kitName;
-    private ItemStack icon;
-    private ItemStack[] armor;
-    private ItemStack[] items;
-    private List<Player> players = new ArrayList<Player>();
-    private String permission;
-    private String description = HungergamesApi.getChatManager().getKitDescriptionDefault();
-    private String[] abilities;
-    private boolean isFree = false;
-    private int price = -1;
-    private int id;
-    private static int identifier = 0;
     private static int cId = 0;
+    private static int identifier = 0;
+    private String[] abilities;
+    private ItemStack[] armor;
+    private String description = HungergamesApi.getChatManager().getKitDescriptionDefault();
+    private ItemStack icon;
+    private int id;
+    private boolean isFree = false;
+    private ItemStack[] items;
+    private String kitName;
+    private String permission;
+    private List<Player> players = new ArrayList<Player>();
+    private int price = -1;
 
     public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
         id = cId;
@@ -42,6 +42,23 @@ public class Kit {
         abilities = abilitys;
     }
 
+    public void addPlayer(Player player) {
+        if (!players.contains(player)) {
+            for (String abilityName : abilities) {
+                HungergamesApi.getAbilityManager().registerPlayerAbility(player, abilityName);
+            }
+            players.add(player);
+        }
+    }
+
+    public ItemStack[] getArmor() {
+        return armor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public ItemStack getIcon() {
         return icon;
     }
@@ -50,12 +67,20 @@ public class Kit {
         return id;
     }
 
-    public void setId(int newId) {
-        id = newId;
+    public ItemStack[] getItems() {
+        return items;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return kitName;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public int getPlayerSize() {
@@ -66,64 +91,8 @@ public class Kit {
         return price;
     }
 
-    public void setPrice(int p) {
-        price = p;
-    }
-
-    public boolean hasAbility(String string) {
-        for (String ability : abilities)
-            if (string.equalsIgnoreCase(ability))
-                return true;
-        return false;
-    }
-
-    public void setFree(boolean free) {
-        isFree = free;
-    }
-
-    public boolean isFree() {
-        return isFree;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void addPlayer(Player player) {
-        if (!players.contains(player)) {
-            for (String abilityName : abilities) {
-                HungergamesApi.getAbilityManager().registerPlayerAbility(player, abilityName);
-            }
-            players.add(player);
-        }
-    }
-
-    public void removePlayer(Player p) {
-        players.remove(p);
-        for (String abilityName : abilities) {
-            HungergamesApi.getAbilityManager().unregisterPlayerAbility(p, abilityName);
-        }
-
-    }
-
-    public String getName() {
-        return kitName;
-    }
-
     public String getSafeName() {
         return ChatColor.stripColor(kitName);
-    }
-
-    public ItemStack[] getArmor() {
-        return armor;
-    }
-
-    public ItemStack[] getItems() {
-        return items;
     }
 
     public void giveKit() {
@@ -137,6 +106,32 @@ public class Kit {
                 }
             }, Math.round(Math.floor(time)));
         }
+    }
+
+    public void giveKit(Player p) {
+        PlayerInventory inv = p.getInventory();
+        ItemStack[] arm = inv.getArmorContents();
+        for (int n = 0; n < 4; n++) {
+            if (armor[n] == null || armor[n].getType() == Material.AIR)
+                continue;
+            if (arm[n] == null || arm[n].getType() == Material.AIR)
+                arm[n] = armor[n].clone();
+        }
+        inv.setArmorContents(arm);
+        for (ItemStack item : items) {
+            inv.addItem(prepareToGive(item));
+        }
+    }
+
+    public boolean hasAbility(String string) {
+        for (String ability : abilities)
+            if (string.equalsIgnoreCase(ability))
+                return true;
+        return false;
+    }
+
+    public boolean isFree() {
+        return isFree;
     }
 
     public ItemStack prepareToGive(ItemStack item) {
@@ -153,18 +148,23 @@ public class Kit {
             return item.clone();
     }
 
-    public void giveKit(Player p) {
-        PlayerInventory inv = p.getInventory();
-        ItemStack[] arm = inv.getArmorContents();
-        for (int n = 0; n < 4; n++) {
-            if (armor[n] == null || armor[n].getType() == Material.AIR)
-                continue;
-            if (arm[n] == null || arm[n].getType() == Material.AIR)
-                arm[n] = armor[n].clone();
+    public void removePlayer(Player p) {
+        players.remove(p);
+        for (String abilityName : abilities) {
+            HungergamesApi.getAbilityManager().unregisterPlayerAbility(p, abilityName);
         }
-        inv.setArmorContents(arm);
-        for (ItemStack item : items) {
-            inv.addItem(prepareToGive(item));
-        }
+
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
+    }
+
+    public void setId(int newId) {
+        id = newId;
+    }
+
+    public void setPrice(int p) {
+        price = p;
     }
 }

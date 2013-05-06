@@ -18,20 +18,6 @@ public class Vampire extends AbilityListener {
     public int surplusHealthRequiredForPotion = 5;
 
     @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
-            int hp = event.getKillerPlayer().getPlayer().getHealth();
-            hp += healsFromPlayers;
-            if (hp - 20 >= surplusHealthRequiredForPotion)
-                event.getDrops().add(new ItemStack(Material.POTION, 1, (short) 16421));
-            if (hp > 20) {
-                hp = 20;
-            }
-            event.getKillerPlayer().getPlayer().setHealth(20);
-        }
-    }
-
-    @EventHandler
     public void onDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null && hasAbility(event.getEntity().getKiller())) {
             Player p = event.getEntity().getKiller();
@@ -43,6 +29,20 @@ public class Vampire extends AbilityListener {
                 }
                 p.setHealth(hp);
             }
+        }
+    }
+
+    @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        if (event.getKillerPlayer() != null && hasAbility(event.getKillerPlayer().getPlayer())) {
+            int hp = event.getKillerPlayer().getPlayer().getHealth();
+            hp += healsFromPlayers;
+            if (hp - 20 >= surplusHealthRequiredForPotion)
+                event.getDrops().add(new ItemStack(Material.POTION, 1, (short) 16421));
+            if (hp > 20) {
+                hp = 20;
+            }
+            event.getKillerPlayer().getPlayer().setHealth(20);
         }
     }
 

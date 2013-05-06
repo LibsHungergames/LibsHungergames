@@ -16,18 +16,6 @@ public class KitSelectorManager {
 
     private ItemStack kitSelector = null;
 
-    public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
-        return generateItem(type.getId(), dataValue, name, lore);
-    }
-
-    public ItemStack generateItem(int type, int dataValue, String name, String[] lore) {
-        return generateItem(type, dataValue, name, Arrays.asList(lore));
-    }
-
-    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
-        return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
-    }
-
     public ItemStack generateItem(int id, int dataValue, String name, List<String> lore) {
         ItemStack item = new ItemStack(id, 1, (short) dataValue);
         ItemMeta meta = item.getItemMeta();
@@ -41,6 +29,24 @@ public class KitSelectorManager {
         return item;
     }
 
+    public ItemStack generateItem(int type, int dataValue, String name, String[] lore) {
+        return generateItem(type, dataValue, name, Arrays.asList(lore));
+    }
+
+    public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
+        return generateItem(type.getId(), dataValue, name, lore);
+    }
+
+    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
+        return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
+    }
+
+    public KitInventory getInventory(Player p) {
+        if (p.hasMetadata("KitInventory"))
+            return (KitInventory) p.getMetadata("KitInventory").get(0).value();
+        return null;
+    }
+
     public ItemStack getKitSelector() {
         if (kitSelector == null) {
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
@@ -52,12 +58,6 @@ public class KitSelectorManager {
 
     public String getKitSelectorName() {
         return HungergamesApi.getChatManager().getItemKitSelectorName();
-    }
-
-    public KitInventory getInventory(Player p) {
-        if (p.hasMetadata("KitInventory"))
-            return (KitInventory) p.getMetadata("KitInventory").get(0).value();
-        return null;
     }
 
     public void openInventory(Player p) {

@@ -23,15 +23,19 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class Pickpocket extends AbilityListener {
 
-    private transient HashMap<ItemStack, Pick> pickpockets = new HashMap<ItemStack, Pick>();
-    public int cooldown = 30;
-    public int maxItems = 4;
-    public boolean stealHotbar = false;
-    public String thievingStickItemName = ChatColor.WHITE + "Thieving Stick";
-    public String cooldownThieving = ChatColor.BLUE + "You may not pickpocket again for %s seconds!";
-    public String attemptedToStealHotbar = ChatColor.BLUE + "Thats their hotbar!";
-    public String pickpocketedMax = ChatColor.BLUE + "You have pickpocketed your max!";
+    class Pick {
+        int itemsStolen = 0;
+        long lastUsed = 0;
+        Player pickpocket = null;
+    }
     public String attemptedToPickpocketWhilePickpocketing = ChatColor.BLUE + "Cannot touch that!";
+    public String attemptedToStealHotbar = ChatColor.BLUE + "Thats their hotbar!";
+    public int cooldown = 30;
+    public String cooldownThieving = ChatColor.BLUE + "You may not pickpocket again for %s seconds!";
+    public int maxItems = 4;
+    public String pickpocketedMax = ChatColor.BLUE + "You have pickpocketed your max!";
+    private transient HashMap<ItemStack, Pick> pickpockets = new HashMap<ItemStack, Pick>();
+    public boolean stealHotbar = false;
     public int thievingStickItemId = Material.BLAZE_ROD.getId();
 
     // Pickpocket. Multiple people can pickpocket at the time.
@@ -39,10 +43,40 @@ public class Pickpocket extends AbilityListener {
     // click.
     // Lets see. On click, cooldown is now 30secs. And the taken items is now 4.
 
-    class Pick {
-        Player pickpocket = null;
-        int itemsStolen = 0;
-        long lastUsed = 0;
+    public String thievingStickItemName = ChatColor.WHITE + "Thieving Stick";
+
+    private void closedInv(Inventory inv, Player player) {
+        List<Player> peverts = this.getPerverts(inv);
+        if (peverts.contains(player)) {
+            peverts.remove(player);
+            // This guy is a pickpocket and he is done for some reason.. Who
+            // cares.
+            // Lets wipe his pick.
+            if (peverts.size() == 0)
+                ((Player) inv.getHolder()).removeMetadata("Picking", HungergamesApi.getHungergames());
+            for (Pick pick : pickpockets.values()) {
+                if (pick.pickpocket == player) {
+                    pick.pickpocket = null;
+                    pick.itemsStolen = 0;
+                }
+            }
+        }
+    }
+
+    // If he is being pickpocketed. Then the thief is added to metadata on him.
+    // The
+
+    private List<Player> getPerverts(Inventory inv) {
+        if (inv.getHolder() instanceof Player && ((Player) inv.getHolder()).hasMetadata("Picking"))
+            return (List<Player>) ((Player) inv.getHolder()).getMetadata("Picking").get(0).value();
+        return new ArrayList<Player>();
+    }
+
+    private Pick getPick(Player thief) {
+        for (Pick pick : pickpockets.values())
+            if (pick.pickpocket == thief)
+                return pick;
+        return null;
     }
 
     // He can pick when taken is there.
@@ -69,28 +103,6 @@ public class Pickpocket extends AbilityListener {
                 event.getPlayer().openInventory(((Player) event.getRightClicked()).getInventory());
             }
         }
-    }
-
-    // If he is being pickpocketed. Then the thief is added to metadata on him.
-    // The
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        if (event.getPlayer().hasMetadata("Picking")) {
-            List<Player> pickers = (List<Player>) event.getPlayer().getMetadata("Picking").get(0).value();
-            List<Player> cloned = new ArrayList<Player>();
-            for (Player p : pickers)
-                cloned.add(p);
-            for (Player picker : cloned)
-                if (event.getTo().distance(picker.getLocation()) > 6) {
-                    picker.closeInventory();
-                }
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        closedInv(event.getInventory(), (Player) event.getPlayer());
     }
 
     @EventHandler
@@ -123,35 +135,9 @@ public class Pickpocket extends AbilityListener {
         }
     }
 
-    private void closedInv(Inventory inv, Player player) {
-        List<Player> peverts = this.getPerverts(inv);
-        if (peverts.contains(player)) {
-            peverts.remove(player);
-            // This guy is a pickpocket and he is done for some reason.. Who
-            // cares.
-            // Lets wipe his pick.
-            if (peverts.size() == 0)
-                ((Player) inv.getHolder()).removeMetadata("Picking", HungergamesApi.getHungergames());
-            for (Pick pick : pickpockets.values()) {
-                if (pick.pickpocket == player) {
-                    pick.pickpocket = null;
-                    pick.itemsStolen = 0;
-                }
-            }
-        }
-    }
-
-    private Pick getPick(Player thief) {
-        for (Pick pick : pickpockets.values())
-            if (pick.pickpocket == thief)
-                return pick;
-        return null;
-    }
-
-    private List<Player> getPerverts(Inventory inv) {
-        if (inv.getHolder() instanceof Player && ((Player) inv.getHolder()).hasMetadata("Picking"))
-            return (List<Player>) ((Player) inv.getHolder()).getMetadata("Picking").get(0).value();
-        return new ArrayList<Player>();
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        closedInv(event.getInventory(), (Player) event.getPlayer());
     }
 
     @EventHandler
@@ -159,5 +145,19 @@ public class Pickpocket extends AbilityListener {
         for (HumanEntity entity : event.getKilled().getPlayer().getInventory().getViewers())
             closedInv(event.getKilled().getPlayer().getInventory(), (Player) entity);
         closedInv(event.getKilled().getPlayer().getInventory(), event.getKilled().getPlayer());
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        if (event.getPlayer().hasMetadata("Picking")) {
+            List<Player> pickers = (List<Player>) event.getPlayer().getMetadata("Picking").get(0).value();
+            List<Player> cloned = new ArrayList<Player>();
+            for (Player p : pickers)
+                cloned.add(p);
+            for (Player picker : cloned)
+                if (event.getTo().distance(picker.getLocation()) > 6) {
+                    picker.closeInventory();
+                }
+        }
     }
 }

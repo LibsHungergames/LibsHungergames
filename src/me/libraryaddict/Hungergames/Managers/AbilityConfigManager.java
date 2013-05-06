@@ -12,15 +12,27 @@ import java.io.IOException;
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class AbilityConfigManager {
-    private File configFile;
-    private YamlConfiguration config;
     private ChatManager cm = HungergamesApi.getChatManager();
+    private YamlConfiguration config;
+    private File configFile;
     private boolean newFile = false;
 
     public AbilityConfigManager() {
         configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "abilities.yml");
         config = new YamlConfiguration();
         load();
+    }
+
+    public ConfigurationSection getConfigSection(String abilityName) {
+        ConfigurationSection section = config.getConfigurationSection(abilityName);
+        if (section == null) {
+            section = config.createSection(abilityName);
+        }
+        return section;
+    }
+
+    public boolean isNewFile() {
+        return newFile;
     }
 
     public void load() {
@@ -47,17 +59,5 @@ public class AbilityConfigManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public ConfigurationSection getConfigSection(String abilityName) {
-        ConfigurationSection section = config.getConfigurationSection(abilityName);
-        if (section == null) {
-            section = config.createSection(abilityName);
-        }
-        return section;
-    }
-
-    public boolean isNewFile() {
-        return newFile;
     }
 }

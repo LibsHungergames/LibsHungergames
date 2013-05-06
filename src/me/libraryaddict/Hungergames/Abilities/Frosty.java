@@ -29,12 +29,12 @@ import org.bukkit.potion.PotionEffectType;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
 
 public class Frosty extends AbilityListener {
-    public int potionMultiplier = 1;
-    public int iceRadius = 3;
-    public int iceHeight = 1;
-    public boolean snowballsScheduler = true;
-    private HashMap<Entity, Integer> ids = new HashMap<Entity, Integer>();
     private ArrayList<BlockFace> faces = new ArrayList<BlockFace>();
+    public int iceHeight = 1;
+    public int iceRadius = 3;
+    private HashMap<Entity, Integer> ids = new HashMap<Entity, Integer>();
+    public int potionMultiplier = 1;
+    public boolean snowballsScheduler = true;
 
     public Frosty() {
         faces.add(BlockFace.SOUTH);
@@ -50,6 +50,18 @@ public class Frosty extends AbilityListener {
     }
 
     @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        if (event.getBlock().getType() == Material.SNOW
+                && hasAbility(event.getPlayer())
+                && (event.getPlayer().getItemInHand() == null || !event.getPlayer().getItemInHand().getType().name()
+                        .contains("SPADE"))) {
+            event.getBlock()
+                    .getWorld()
+                    .dropItemNaturally(event.getBlock().getLocation().clone().add(0.5, 0, 0.5), new ItemStack(Material.SNOW_BALL));
+        }
+    }
+
+    @EventHandler
     public void onHit(ProjectileHitEvent event) {
         if ((snowballsScheduler && ids.containsKey(event.getEntity()))
                 || (event.getEntity().getType() == EntityType.SNOWBALL && event.getEntity().getShooter() != null
@@ -58,6 +70,13 @@ public class Frosty extends AbilityListener {
             if (ids.containsKey(event.getEntity()))
                 Bukkit.getScheduler().cancelTask(ids.get(event.getEntity()));
         }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        if (hasAbility(event.getPlayer()))
+            if (event.getPlayer().getLocation().getBlock().getType() == Material.SNOW)
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, potionMultiplier), true);
     }
 
     @EventHandler
@@ -110,25 +129,6 @@ public class Frosty extends AbilityListener {
                 }
             }
         }
-    }
-
-    @EventHandler
-    public void onBreak(BlockBreakEvent event) {
-        if (event.getBlock().getType() == Material.SNOW
-                && hasAbility(event.getPlayer())
-                && (event.getPlayer().getItemInHand() == null || !event.getPlayer().getItemInHand().getType().name()
-                        .contains("SPADE"))) {
-            event.getBlock()
-                    .getWorld()
-                    .dropItemNaturally(event.getBlock().getLocation().clone().add(0.5, 0, 0.5), new ItemStack(Material.SNOW_BALL));
-        }
-    }
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        if (hasAbility(event.getPlayer()))
-            if (event.getPlayer().getLocation().getBlock().getType() == Material.SNOW)
-                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, potionMultiplier), true);
     }
 
 }

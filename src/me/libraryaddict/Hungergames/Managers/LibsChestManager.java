@@ -56,12 +56,27 @@ public class LibsChestManager implements ChestManager {
         randomItems.add(new RandomItem(1, Material.POTION, 16462, 1, 1)); // Invis
     }
 
+    public void addRandomItem(RandomItem item) {
+        randomItems.add(item);
+    }
+
+    public void clearRandomItems() {
+        randomItems.clear();
+    }
+
     private int countItems(Inventory inv) {
         int i = 0;
         for (ItemStack item : inv.getContents())
             if (item != null && item.getType() != Material.AIR)
                 i++;
         return i;
+    }
+
+    public void fillChest(Inventory inv) {
+        if (inv.getHolder() instanceof DoubleChest)
+            fillChest(inv, true);
+        else
+            fillChest(inv, false);
     }
 
     private void fillChest(Inventory inv, boolean doubleChest) {
@@ -75,21 +90,6 @@ public class LibsChestManager implements ChestManager {
                     }
                 }
             }
-    }
-
-    public void fillChest(Inventory inv) {
-        if (inv.getHolder() instanceof DoubleChest)
-            fillChest(inv, true);
-        else
-            fillChest(inv, false);
-    }
-
-    public void clearRandomItems() {
-        randomItems.clear();
-    }
-
-    public void addRandomItem(RandomItem item) {
-        randomItems.add(item);
     }
 
     public ArrayList<RandomItem> getRandomItems() {

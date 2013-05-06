@@ -17,14 +17,18 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerKilledEvent extends Event implements Cancellable {
-    private boolean cancelled = false;
     private static final HandlerList handlers = new HandlerList();
-    private Gamer killed;
-    private Entity killer;
-    private Gamer killerGamer;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+    private boolean cancelled = false;
     private String deathMessage;
     private Location dropItems;
     private List<ItemStack> items;
+    private Gamer killed;
+    private Entity killer;
+
+    private Gamer killerGamer;
 
     public PlayerKilledEvent(Gamer killed, Entity killer, Gamer backupKiller, String deathMessage, Location itemsDrop,
             List<ItemStack> itemsToDrop) {
@@ -59,16 +63,12 @@ public class PlayerKilledEvent extends Event implements Cancellable {
         return items;
     }
 
-    public void setDropsLocation(Location newLocation) {
-        dropItems = newLocation;
-    }
-
     public Location getDropsLocation() {
         return dropItems;
     }
 
-    public void setDeathMessage(String newDeathMessage) {
-        deathMessage = newDeathMessage;
+    public HandlerList getHandlers() {
+        return handlers;
     }
 
     public Gamer getKilled() {
@@ -89,15 +89,14 @@ public class PlayerKilledEvent extends Event implements Cancellable {
 
     public void setCancelled(boolean isCancelled) {
         cancelled = isCancelled;
-        killed.setSpectating(!isCancelled);
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
+    public void setDeathMessage(String newDeathMessage) {
+        deathMessage = newDeathMessage;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public void setDropsLocation(Location newLocation) {
+        dropItems = newLocation;
     }
 
 }

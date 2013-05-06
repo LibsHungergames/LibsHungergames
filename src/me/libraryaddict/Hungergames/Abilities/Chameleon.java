@@ -19,17 +19,44 @@ import de.robingrether.idisguise.api.MobDisguise;
 
 public class Chameleon extends AbilityListener {
 
-    public boolean breakDisguiseOnAttackPlayer = true;
     public boolean breakDisguiseOnAttacked = true;
+    public boolean breakDisguiseOnAttackPlayer = true;
+    public String chameleonBreakDisguise = ChatColor.GREEN + "You broke out of your disguise!";
+    public String chameleonDisguiseBroken = ChatColor.GREEN + "Your disguise was broken!";
+    public String chameleonNowDisguised = ChatColor.GREEN + "Now disguised as a %s!";
     public boolean disguiseAsAnimal = true;
     public boolean disguiseAsMonster = true;
-    public String chameleonDisguiseBroken = ChatColor.GREEN + "Your disguise was broken!";
-    public String chameleonBreakDisguise = ChatColor.GREEN + "You broke out of your disguise!";
-    public String chameleonNowDisguised = ChatColor.GREEN + "Now disguised as a %s!";
 
     public Chameleon() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
             throw new Exception(String.format(HungergamesApi.getChatManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
+    }
+
+    private void disguise(Entity entity, Player p) {
+        if ((entity instanceof Animals && disguiseAsAnimal) || (entity instanceof Monster && disguiseAsMonster)) {
+            if (hasAbility(p)) {
+                if (!DisguiseAPI.isDisguised(p))
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
+                else {
+                    Disguise disguise = DisguiseAPI.getDisguise(p);
+                    if (disguise.getType() == entity.getType())
+                        return;
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
+                }
+                p.sendMessage(String.format(chameleonNowDisguised,
+                        HungergamesApi.getKitManager().toReadable(entity.getType().getName())));
+            }
+        }
+    }
+
+    private boolean isChameleon(Entity entity) {
+        return (entity instanceof Player && hasAbility((Player) entity));
+    }
+
+    @EventHandler
+    public void onDeath(PlayerKilledEvent event) {
+        if (DisguiseAPI.isDisguised(event.getKilled().getPlayer()))
+            DisguiseAPI.undisguiseToAll(event.getKilled().getPlayer());
     }
 
     @EventHandler
@@ -56,33 +83,6 @@ public class Chameleon extends AbilityListener {
             } else
                 disguise(event.getEntity(), p);
         }
-    }
-
-    @EventHandler
-    public void onDeath(PlayerKilledEvent event) {
-        if (DisguiseAPI.isDisguised(event.getKilled().getPlayer()))
-            DisguiseAPI.undisguiseToAll(event.getKilled().getPlayer());
-    }
-
-    private void disguise(Entity entity, Player p) {
-        if ((entity instanceof Animals && disguiseAsAnimal) || (entity instanceof Monster && disguiseAsMonster)) {
-            if (hasAbility(p)) {
-                if (!DisguiseAPI.isDisguised(p))
-                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
-                else {
-                    Disguise disguise = DisguiseAPI.getDisguise(p);
-                    if (disguise.getType() == entity.getType())
-                        return;
-                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
-                }
-                p.sendMessage(String.format(chameleonNowDisguised,
-                        HungergamesApi.getKitManager().toReadable(entity.getType().getName())));
-            }
-        }
-    }
-
-    private boolean isChameleon(Entity entity) {
-        return (entity instanceof Player && hasAbility((Player) entity));
     }
 
 }
