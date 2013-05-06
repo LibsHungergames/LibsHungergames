@@ -91,7 +91,7 @@ KitSelectorIcon: FEATHER 0
 
 # Does the size if the kit selector inventory change according to the space required?
 # This still takes max inventory size as set below into consideration
-KitSelectorDymanicSize: false
+KitSelectorDynamicSize: false
 
 # If false. Then whats the max size of the inventory?
 # Try keep it in a multiple of 9. I'll fix it if it isn't however.

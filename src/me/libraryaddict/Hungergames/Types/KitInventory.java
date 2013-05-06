@@ -26,7 +26,7 @@ public class KitInventory implements Listener {
 
     private ItemStack backAPage = null;
     private int currentPage = 0;
-    private boolean dymanicInventorySize = HungergamesApi.getConfigManager().isKitSelectorDymanicSize();
+    private boolean dynamicInventorySize = HungergamesApi.getConfigManager().isKitSelectorDynamicSize();
     private ItemStack forwardsAPage = null;
     private Inventory inv;
     private boolean listenForClose = true;
@@ -152,12 +152,12 @@ public class KitInventory implements Listener {
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
             if (items == null) {
                 int size = maxInvSize;
-                if (dymanicInventorySize) {
+                if (dynamicInventorySize) {
                     size = allKits.size() - currentKit;
                     if (usePages)
                         size += 9;
                 }
-                if (!dymanicInventorySize)
+                if (!dynamicInventorySize)
                     size = maxInvSize;
                 items = generatePage(size);
             }

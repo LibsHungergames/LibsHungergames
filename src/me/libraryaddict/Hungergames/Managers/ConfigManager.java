@@ -53,7 +53,7 @@ public class ConfigManager {
     private ItemStack kitSelectorIcon;
     private ItemStack kitSelectorForward;
     private ItemStack kitSelectorBack;
-    private boolean kitSelectorDymanicSize;
+    private boolean kitSelectorDynamicSize;
     private int kitSelectorInventorySize;
 
     public ConfigManager() {
@@ -169,7 +169,7 @@ public class ConfigManager {
         kitSelectorForward = parseItem(hg.getConfig().getString("KitSelectorBack"));
         if (kitSelectorForward == null)
             kitSelectorForward = new ItemStack(Material.SUGAR_CANE_BLOCK);
-        kitSelectorDymanicSize = hg.getConfig().getBoolean("KitSelectorDymanicSize");
+        kitSelectorDynamicSize = hg.getConfig().getBoolean("KitSelectorDynamicSize");
         kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
 
         // Create the times where it broadcasts and advertises the feast
@@ -515,8 +515,8 @@ public class ConfigManager {
         return fireSpread;
     }
 
-    public boolean isKitSelectorDymanicSize() {
-        return kitSelectorDymanicSize;
+    public boolean isKitSelectorDynamicSize() {
+        return kitSelectorDynamicSize;
     }
 
     public int getKitSelectorInventorySize() {
