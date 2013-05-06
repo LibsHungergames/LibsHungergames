@@ -41,6 +41,7 @@ public class Tarzan extends AbilityListener {
         ignoreBlockTypes.add(Material.REDSTONE_TORCH_OFF.getId());
         ignoreBlockTypes.add(Material.REDSTONE_TORCH_ON.getId());
         ignoreBlockTypes.add(Material.VINE.getId());
+        ignoreBlockTypes.add(Material.WATER_LILY.getId());
     }
 
     @EventHandler

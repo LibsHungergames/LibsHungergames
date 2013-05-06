@@ -54,6 +54,7 @@ public class Flash extends AbilityListener {
         ignoreBlockTypes.add((byte) Material.REDSTONE_TORCH_OFF.getId());
         ignoreBlockTypes.add((byte) Material.REDSTONE_TORCH_ON.getId());
         ignoreBlockTypes.add((byte) Material.VINE.getId());
+        ignoreBlockTypes.add((byte) Material.WATER_LILY.getId());
     }
 
     @EventHandler

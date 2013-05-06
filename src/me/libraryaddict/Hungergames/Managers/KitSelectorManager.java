@@ -54,6 +54,12 @@ public class KitSelectorManager {
         return HungergamesApi.getChatManager().getItemKitSelectorName();
     }
 
+    public KitInventory getInventory(Player p) {
+        if (p.hasMetadata("KitInventory"))
+            return (KitInventory) p.getMetadata("KitInventory").get(0).value();
+        return null;
+    }
+
     public void openInventory(Player p) {
         KitInventory inv = new KitInventory(p);
         inv.setKits();

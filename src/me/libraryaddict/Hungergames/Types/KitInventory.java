@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 
@@ -19,6 +20,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class KitInventory implements Listener {
 
@@ -32,11 +34,14 @@ public class KitInventory implements Listener {
     private HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
     private String title;
     private Player user;
+    private Hungergames hg;
 
     public KitInventory(Player player) {
+        hg = HungergamesApi.getHungergames();
         user = player;
         title = HungergamesApi.getChatManager().getInventoryWindowSelectKitTitle();
-        Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
+        user.setMetadata("KitInventory", new FixedMetadataValue(hg, this));
+        Bukkit.getPluginManager().registerEvents(this, hg);
     }
 
     public ItemStack[] generatePage(int itemsSize) {
@@ -90,8 +95,11 @@ public class KitInventory implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (listenForClose && event.getPlayer() == user)
+        if (listenForClose && event.getPlayer() == user) {
             HandlerList.unregisterAll(this);
+            if (user.hasMetadata("KitInventory") && user.getMetadata("KitInventory").get(0).value() == this)
+                user.removeMetadata("KitInventory", hg);
+        }
     }
 
     @EventHandler
@@ -133,7 +141,7 @@ public class KitInventory implements Listener {
     public void setForwardsPage(ItemStack newForwards) {
         forwardsAPage = newForwards;
     }
-    
+
     public void setKits() {
         pages.clear();
         KitManager kits = HungergamesApi.getKitManager();
@@ -187,7 +195,7 @@ public class KitInventory implements Listener {
                 inv = Bukkit.createInventory(null, pageItems.length, title);
                 inv.setContents(pageItems);
                 user.closeInventory();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                     public void run() {
                         user.openInventory(inv);
                         listenForClose = true;
