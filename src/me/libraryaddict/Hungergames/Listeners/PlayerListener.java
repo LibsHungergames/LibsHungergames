@@ -20,7 +20,6 @@ import me.libraryaddict.Hungergames.Types.Kit;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -279,7 +278,7 @@ public class PlayerListener implements Listener {
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
                     icon.openInventory(p);
-                    //p.openInventory(icon.getInventory());
+                    // p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
@@ -382,7 +381,6 @@ public class PlayerListener implements Listener {
                 if (!EnchantmentManager.isNatural(enchant)) {
                     event.setCancelled(true);
                     ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
-                    return;
                 }
         }
     }

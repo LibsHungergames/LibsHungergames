@@ -51,6 +51,10 @@ public class ConfigManager {
     private int x;
     private int z;
     private ItemStack kitSelectorIcon;
+    private ItemStack kitSelectorForward;
+    private ItemStack kitSelectorBack;
+    private boolean kitSelectorDymanicSize;
+    private int kitSelectorInventorySize;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -159,6 +163,14 @@ public class ConfigManager {
         kitSelectorIcon = parseItem(hg.getConfig().getString("KitSelectorIcon"));
         if (kitSelectorIcon == null)
             kitSelectorIcon = new ItemStack(Material.FEATHER);
+        kitSelectorBack = parseItem(hg.getConfig().getString("KitSelectorForward"));
+        if (kitSelectorBack == null)
+            kitSelectorBack = new ItemStack(Material.SUGAR_CANE_BLOCK);
+        kitSelectorForward = parseItem(hg.getConfig().getString("KitSelectorBack"));
+        if (kitSelectorForward == null)
+            kitSelectorForward = new ItemStack(Material.SUGAR_CANE_BLOCK);
+        kitSelectorDymanicSize = hg.getConfig().getBoolean("KitSelectorDymanicSize");
+        kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -192,12 +204,26 @@ public class ConfigManager {
     public boolean forceCords() {
         return forceCords;
     }
-    
+
     /**
      * @return Get the item which will be displayed as the kit selector
      */
     public ItemStack getKitSelectorIcon() {
         return kitSelectorIcon;
+    }
+
+    /**
+     * @return Get the item which will is the kit selectors 'forward'
+     */
+    public ItemStack getKitSelectorBack() {
+        return kitSelectorBack;
+    }
+
+    /**
+     * @return Get the item which will is the kit selectors 'back'
+     */
+    public ItemStack getKitSelectorForward() {
+        return kitSelectorForward;
     }
 
     /**
@@ -488,5 +514,13 @@ public class ConfigManager {
      */
     public boolean isFireSpreadDisabled() {
         return fireSpread;
+    }
+
+    public boolean isKitSelectorDymanicSize() {
+        return kitSelectorDymanicSize;
+    }
+
+    public int getKitSelectorInventorySize() {
+        return kitSelectorInventorySize;
     }
 }

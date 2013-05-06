@@ -2,14 +2,13 @@ package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,6 +29,9 @@ public class KitInventory implements Listener {
     private HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
     private ItemStack backAPage = null;
     private ItemStack forwardsAPage = null;
+    private int maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
+    private boolean listenForClose = true;
+    private boolean dymanicInventorySize = HungergamesApi.getConfigManager().isKitSelectorDymanicSize();
 
     public KitInventory(Player player) {
         user = player;
@@ -38,56 +40,68 @@ public class KitInventory implements Listener {
     }
 
     public ItemStack getBackPage() {
-        if (backAPage == null)
-            backAPage = HungergamesApi.getKitSelector().generateItem(Material.SUGAR_CANE_BLOCK, 0, ChatColor.RED + "Back", null);
+        if (backAPage == null) {
+            ChatManager chat = HungergamesApi.getChatManager();
+            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
+            backAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
+                    chat.getItemKitSelectorBackName(), chat.getItemKitSelectorBackDescription());
+            backAPage.setAmount(0);
+        }
         return backAPage;
     }
 
     public ItemStack getForwardsPage() {
-        if (forwardsAPage == null)
-            forwardsAPage = HungergamesApi.getKitSelector().generateItem(Material.SUGAR_CANE_BLOCK, 0,
-                    ChatColor.RED + "Forwards", null);
+        if (forwardsAPage == null) {
+            ChatManager chat = HungergamesApi.getChatManager();
+            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorForward();
+            forwardsAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
+                    chat.getItemKitSelectorForwardsName(), chat.getItemKitSelectorForwardsDescription());
+            forwardsAPage.setAmount(0);
+        }
         return forwardsAPage;
     }
 
+    public void setForwardsPage(ItemStack newForwards) {
+        forwardsAPage = newForwards;
+    }
+
+    public void setBackPage(ItemStack newBack) {
+        backAPage = newBack;
+    }
+
     public void openInventory() {
-        if (inv == null) {
-            int size = 54;
-            if (pages.size() != 1)
-                size = 54;
-            else {
-                size = pages.values().iterator().next().length;
-            }
-            inv = Bukkit.createInventory(null, size, title);
-            setPage(currentPage);
-        }
         user.openInventory(inv);
     }
 
-    public void addKits() {
+    public void setKits() {
+        pages.clear();
         KitManager kits = HungergamesApi.getKitManager();
-        // TODO Turn this into a config option
-        boolean usePages = kits.getKits().size() > 54;
-        boolean dymanicInventorySize = true;
-        // Max chest size is 54. So we need to make the pages thingy use the
-        // bottom row. So 54-9
-        // Then account for the 1 being a zero. Its 54-10
+        boolean usePages = kits.getKits().size() > maxInvSize;
+        // Max chest size is maxInvSize. So we need to make the pages thingy use
+        // the
+        // bottom row. So maxInvSize-9
+        // Then account for the 1 being a zero. Its maxInvSize-10
         ItemStack[] items = null;
         int currentSlot = 0;
         ArrayList<Kit> allKits = kits.getKits();
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
             if (items == null) {
                 // Get the inventory size.
-                // If there are pages. Then its 54. Else its according to the
+                // If there are pages. Then its maxInvSize. Else its according
+                // to the
                 // kits
                 // Alternately
-                int size = 54;
+                int size = maxInvSize;
                 // If the inv size is according to how much needs to fit in
-                if (dymanicInventorySize)
+                if (dymanicInventorySize) {
                     size = allKits.size() - currentKit;
-                // If its over 54. Then we set it to 54.
-                if (usePages || size > 54)
-                    size = 54;
+                    size += (usePages ? 9 : 0);
+                    // Size is now how many kits are left
+                }
+
+                // If its over maxInvSize. Then we set it to maxInvSize.
+                if (usePages && !dymanicInventorySize)
+                    size = maxInvSize;
                 items = generatePage(size);
             }
             // Set the current slot
@@ -101,24 +115,21 @@ public class KitInventory implements Listener {
                 item.setAmount(0);
             items[currentSlot++] = item;
             // If its the last page, Or no more kits can fit in current page
-            if ((currentSlot > 54 - 9 && usePages) || currentKit + 1 == allKits.size()) {
+            if ((currentSlot > items.length - (1 + (usePages ? 9 : 0)) && usePages) || currentKit + 1 == allKits.size()) {
                 // Now create the next page and back a page.
                 // Check if I make a 'back a page'
-                if (currentPage != 0)
-                    items[53 - 8] = getBackPage();
-                // Check if I can make forwards page
-                if (currentKit + 1 < allKits.size())
-                    items[53] = getForwardsPage();
+                if (usePages) {
+                    if (currentPage != 0)
+                        items[items.length - 9] = getBackPage();
+                    // Check if I can make forwards page
+                    if (currentKit + 1 < allKits.size())
+                        items[items.length - 1] = getForwardsPage();
+                }
                 pages.put(currentPage, items);
                 currentPage++;
                 currentSlot = 0;
                 items = null;
             }
-        }
-        Iterator<Integer> itel = pages.keySet().iterator();
-        while (itel.hasNext()) {
-            int no = itel.next();
-            System.out.print(no + "   " + pages.get(no).length);
         }
         currentPage = 0;
     }
@@ -144,24 +155,34 @@ public class KitInventory implements Listener {
     public void setPage(int newPage) {
         if (pages.containsKey(newPage)) {
             currentPage = newPage;
-            inv.setContents(pages.get(currentPage));
-            // TODO Add check if he wants the title changed
-            // But it requires me to close inventory and reopen. So guess not
-        } else
-            System.out.print("Page no foundee");
+            ItemStack[] pageItems = pages.get(currentPage);
+            if (pageItems.length != inv.getSize()) {
+                listenForClose = false;
+                inv = Bukkit.createInventory(null, pageItems.length, title);
+                inv.setContents(pageItems);
+                user.closeInventory();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    public void run() {
+                        user.openInventory(inv);
+                        listenForClose = true;
+                    }
+                });
+            } else
+                inv.setContents(pageItems);
+            // TODO Potentially display title for page
+        }
     }
 
     public ItemStack[] generatePage(int itemsSize) {
         int size = (int) (Math.ceil((double) itemsSize / 9)) * 9;
-        if (size > 54)
-            size = 54;
+        if (size > maxInvSize)
+            size = maxInvSize;
         return new ItemStack[size];
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        // TODO Handle the click
-        if (event.getView().getTitle() != null && event.getView().getTitle().equals(title)) {
+        if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
             event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
@@ -181,7 +202,7 @@ public class KitInventory implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (event.getPlayer() == user)
+        if (listenForClose && event.getPlayer() == user)
             HandlerList.unregisterAll(this);
     }
 

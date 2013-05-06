@@ -20,7 +20,6 @@ import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +30,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -87,19 +85,7 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
         mysql.SQL_USER = getConfig().getString("MySqlUser");
         mysql.startJoinThread();
-        KitManager kits = HungergamesApi.getKitManager();
-        ArrayList<ItemStack> kitList = new ArrayList<ItemStack>();
-        for (me.libraryaddict.Hungergames.Types.Kit kit : kits.getKits()) {
-            ItemStack item = kit.getIcon();
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.WHITE + kit.getName());
-            item.setItemMeta(meta);
-            if (item.getAmount() == 1)
-                item.setAmount(0);
-            kitList.add(item);
-        }
         String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
-        HungergamesApi.getKitSelector().createInventory(cm.getInventoryWindowSelectKitTitle(), kitList);
         if (getConfig().getBoolean("DeleteWorld", true))
             FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
                     + worldName));

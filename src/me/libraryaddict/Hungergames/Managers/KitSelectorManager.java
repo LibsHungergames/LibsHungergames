@@ -31,6 +31,14 @@ public class KitSelectorManager {
         return generateItem(type.getId(), dataValue, name, lore);
     }
 
+    public ItemStack generateItem(int type, int dataValue, String name, String[] lore) {
+        return generateItem(type, dataValue, name, Arrays.asList(lore));
+    }
+
+    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
+        return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
+    }
+
     public ItemStack generateItem(int id, int dataValue, String name, List<String> lore) {
         ItemStack item = new ItemStack(id, 1, (short) dataValue);
         ItemMeta meta = item.getItemMeta();
@@ -47,8 +55,8 @@ public class KitSelectorManager {
     public ItemStack getKitSelector() {
         if (kitSelector == null) {
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
-            kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(),
-                    Arrays.asList(getKitSelectorDescription().split("\n")));
+            kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(), HungergamesApi
+                    .getChatManager().getItemKitSelectorDescription());
         }
         return kitSelector;
     }
@@ -57,13 +65,9 @@ public class KitSelectorManager {
         return HungergamesApi.getChatManager().getItemKitSelectorName();
     }
 
-    public String getKitSelectorDescription() {
-        return HungergamesApi.getChatManager().getItemKitSelectorDescription();
-    }
-    
     public void openInventory(Player p) {
         KitInventory inv = new KitInventory(p);
-        inv.addKits();
+        inv.setKits();
         inv.openInventory();
     }
 

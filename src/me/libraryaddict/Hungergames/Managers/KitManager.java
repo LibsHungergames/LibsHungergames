@@ -18,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -219,6 +218,17 @@ public class KitManager {
                         if (previous == null)
                             previous = "";
                         meta.setDisplayName(previous + "UniqueIdentifier");
+                        item.setItemMeta(meta);
+                    }
+                    if (argString.contains("Lore=")) {
+                        String name = ChatColor.translateAlternateColorCodes('&', argString.substring(5)).replaceAll("_", " ");
+                        ItemMeta meta = item.getItemMeta();
+                        List<String> lore = meta.getLore();
+                        if (lore == null)
+                            lore = new ArrayList<String>();
+                        for (String a : name.split("\\n"))
+                            lore.add(a);
+                        meta.setLore(lore);
                         item.setItemMeta(meta);
                     }
                 }
