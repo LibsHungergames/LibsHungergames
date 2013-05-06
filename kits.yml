@@ -57,7 +57,6 @@ BadKits:
   #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
   - Explorer
-  - Frosty
   - Hermit
   - Jackhammer
   - Milkman
@@ -275,7 +274,7 @@ Kits:
     Ability:
       - Forger
   Frosty:
-    Description: 'The frosty kit will give the player a huge advantage over others when in a snow biome. The player can also bring the advantage outside of the snow biome with snowballs. This kit gives an all game advantage that also counters poseidons.'
+    Description: 'The frosty kit will give the player a huge advantage over others when in a snow biome. The player can also bring the advantage outside of the snow biome with snowballs by throwing them at the ground. This kit gives an all game advantage that also counters poseidons.'
     Free: true
     Price: 0
     Icon: SNOW 0 1
