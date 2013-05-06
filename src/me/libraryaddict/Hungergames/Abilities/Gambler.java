@@ -22,7 +22,7 @@ public class Gambler extends AbilityListener {
     public String foodName = "&2Full hunger";
     public String healthName = "&2Full health";
     private transient KitManager kits = HungergamesApi.getKitManager();
-    public String[] potionEffects = new String[] { "1000 &cInstant_Death HARM 0 1000", "100 &cSlowness_Effect SLOW 1200 1",
+    public String[] potionEffects = new String[] { "1000 &cInstant_Death HARM 2 1000", "100 &cSlowness_Effect SLOW 1200 1",
             "100 &2Speed_Effect SPEED 1200 1", "100 &cPoison_Effect POISON 200 0", "100 &cHunger_Effect HUNGER 1200 1",
             "100 &2Strength_Boost INCREASE_DAMAGE 1200 1", "100 &cWeakness_Effect WEAKNESS 1200 1",
             "100 &2Regeneration_Effect REGENERATION 1200 0" };
