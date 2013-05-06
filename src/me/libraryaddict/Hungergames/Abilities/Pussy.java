@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import de.robingrether.idisguise.api.DisguiseAPI;
+import de.robingrether.idisguise.api.DisguiseType;
 import de.robingrether.idisguise.api.MobDisguise;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
@@ -43,7 +44,7 @@ public class Pussy extends AbilityListener {
                 int id = Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
                         p.sendMessage(transformedIntoCat);
-                        DisguiseAPI.disguiseToAll(p, new MobDisguise(EntityType.OCELOT, true));
+                        DisguiseAPI.disguiseToAll(p, new MobDisguise(DisguiseType.valueOf(EntityType.OCELOT.name()), true));
                     }
                 }, timeToTransform * 20);
                 pussys.put(p, id);

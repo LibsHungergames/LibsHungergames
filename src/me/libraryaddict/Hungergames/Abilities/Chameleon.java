@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import de.robingrether.idisguise.api.Disguise;
 import de.robingrether.idisguise.api.DisguiseAPI;
+import de.robingrether.idisguise.api.DisguiseType;
 import de.robingrether.idisguise.api.MobDisguise;
 
 public class Chameleon extends AbilityListener {
@@ -36,12 +37,12 @@ public class Chameleon extends AbilityListener {
         if ((entity instanceof Animals && disguiseAsAnimal) || (entity instanceof Monster && disguiseAsMonster)) {
             if (hasAbility(p)) {
                 if (!DisguiseAPI.isDisguised(p))
-                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(DisguiseType.valueOf(entity.getType().name()), true));
                 else {
                     Disguise disguise = DisguiseAPI.getDisguise(p);
-                    if (disguise.getType() == entity.getType())
+                    if (disguise.getType() == DisguiseType.valueOf(entity.getType().name()))
                         return;
-                    DisguiseAPI.disguiseToAll(p, new MobDisguise(entity.getType(), true));
+                    DisguiseAPI.disguiseToAll(p, new MobDisguise(DisguiseType.valueOf(entity.getType().name()), true));
                 }
                 p.sendMessage(String.format(chameleonNowDisguised,
                         HungergamesApi.getKitManager().toReadable(entity.getType().getName())));

@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>idisguise</groupId>
 			<artifactId>idisguise</artifactId>
-			<version>v1.6.6</version>
+			<version>v2.0pre</version>
 		</dependency>
 		<dependency>
 			<groupId>libscommands</groupId>
