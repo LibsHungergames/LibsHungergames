@@ -36,7 +36,7 @@
 		</resources>
 	</build>
 
-	<version>v2.0</version>
+	<version>v2.0.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
