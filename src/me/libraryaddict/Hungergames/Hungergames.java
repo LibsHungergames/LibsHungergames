@@ -69,11 +69,10 @@ public class Hungergames extends JavaPlugin {
 
     public void onEnable() {
         try {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-            if (metrics.isOptOut())
+            if (!new Metrics(this).start())
                 System.out.print(cm.getLoggerMetricsMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         HungergamesApi.init(this);
         cm = HungergamesApi.getChatManager();
