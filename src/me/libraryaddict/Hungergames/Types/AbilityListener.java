@@ -79,7 +79,7 @@ public abstract class AbilityListener implements Listener {
                         if (value instanceof String) {
                             value = ((String) value).replace("\n", "\\n").replace("§", "&");
                         }
-                        if (field.getType().isArray() && value.getClass() == ArrayList.class) {
+                        if (value instanceof String[]) {
                             List<Object> array = (List<Object>) value;
                             String[] strings = array.toArray(new String[array.size()]);
                             for (int i = 0; i < strings.length; i++)
