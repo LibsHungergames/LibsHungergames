@@ -1,31 +1,20 @@
 package me.libraryaddict.Hungergames.Managers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.KitInventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitSelectorManager {
 
-    Inventory icon;
-    ItemStack kitSelector = null;
-
-    public void createInventory(String invName, ArrayList<ItemStack> items) {
-        int size = (int) (Math.ceil((double) items.size() / 9)) * 9;
-        icon = Bukkit.createInventory(null, size, invName);
-        for (int i = 0; i < items.size(); i++)
-            icon.setItem(i, items.get(i));
-    }
+    private ItemStack kitSelector = null;
 
     public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
         return generateItem(type.getId(), dataValue, name, lore);
@@ -69,9 +58,5 @@ public class KitSelectorManager {
         KitInventory inv = new KitInventory(p);
         inv.setKits();
         inv.openInventory();
-    }
-
-    public Inventory getInventory() {
-        return icon;
     }
 }

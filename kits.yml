@@ -1,3 +1,52 @@
+#                           ENCHANTMENTS
+#
+# Add this to a item with the enchantment level after it
+#
+# ARROW_DAMAGE - Provides extra damage when shooting arrows from bows
+# ARROW_FIRE - Sets entities on fire when hit by arrows shot from a bow
+# ARROW_INFINITE - Provides infinite arrows when shooting a bow
+# ARROW_KNOCKBACK - Provides a knockback when an entity is hit by an arrow from a bow
+# DAMAGE_ALL - Increases damage against all targets
+# DAMAGE_ARTHROPODS - Increases damage against arthropod targets
+# DAMAGE_UNDEAD - Increases damage against undead targets
+# DIG_SPEED - Increases the rate at which you mine/dig
+# DURABILITY - Decreases the rate at which a tool looses durability
+# FIRE_ASPECT - When attacking a target, has a chance to set them on fire
+# KNOCKBACK - All damage to other targets will knock them back when hit
+# LOOT_BONUS_BLOCKS - Provides a chance of gaining extra loot when destroying blocks
+# LOOT_BONUS_MOBS - Provides a chance of gaining extra loot when killing monsters
+# OXYGEN-Decreases the rate of air loss whilst underwater
+# PROTECTION_ENVIRONMENTAL - Provides protection against environmental damage
+# PROTECTION_EXPLOSIONS - Provides protection against explosive damage
+# PROTECTION_FALL - Provides protection against fall damage
+# PROTECTION_FIRE - Provides protection againsst fire damage
+# PROTECTION_PROJECTILE - Provides protection against projectile damage
+# SILK_TOUCH - Allows blocks to drop themselves instead of fragments (for example, stone instead of cobblestone)
+# WATER_WORKER - Increases the speed at which a player may mine underwater
+# THORNS - Damages the attacker
+# Unlootable - Marks a item to not drop when player is killed
+#
+#                   CUSTOM METADATA
+#
+#  This is stuff you add on to a item to do other stuff
+# 
+# Name=A_Sword - Use 'Name=' then your name afterwards. Replace all spaces with _ so its one word.
+# UniqueItem - Used for coding purposes only. Don't remove any of these tags
+# Lore=A_big_strong_sword\nwhich_is_legit - Same thing as Name= except it does the item lore. Use \n to create a new line
+# Color=ID:ID:ID - Use for leather armor. Its a RGB color, Colors in the armor
+#
+#
+#                  OTHER STUFF YOU CAN USE IN KITS
+#
+# Add this below the kit identifier. Its like 'Free' and 'Icon'
+# 
+# Name: '&cBig sword' - This renames a kit, including color.
+# Helmet: DIAMOND_HELMET 0 1 - Set their helmet
+# Chestplate: DIAMOND_CHESTPLATE 0 1 - Set their chestplate
+# Leggings: DIAMOND_LEGGINGS 0 1 0 - Set their leggings
+# Boots: DIAMOND_BOOTS 0 1 - Set their boots
+#
+# 
 # Kits - Any kits you add can be done normally here.
 # Default kit is Surprise which is a random kit
 DefaultKit: Surprise
@@ -5,6 +54,7 @@ DefaultKit: Surprise
 BadKits:
   - Barbarian
   - Burrower
+  - DiamondWarrior
   #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
   - Endermage
   - Explorer
@@ -139,6 +189,16 @@ Kits:
     Items:
       - GRAVEL 0 2
       - STONE_PLATE 0 2
+    Ability:
+      - Demoman
+  DiamondWarrior:
+    Description: 'The Demoman kit is brilliant for defense. Your victims and enemies wont suspect that a stone pressure plate on gravel will kill them! The explosion is a bit more than a TNT setting off. Careful however! You can set off your own landmines!'
+    Free: true
+    Name: '&3Diamond Warrior'
+    Price: 0
+    Icon: DIAMOND_SWORD 0 1
+    Items:
+      - DIAMOND_SWORD 0 1 DAMAGE_ALL 10 KNOCKBACK 10 FIRE_ASPECT 10
     Ability:
       - Demoman
   Digger:
