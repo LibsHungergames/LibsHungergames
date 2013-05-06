@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Digger extends AbilityListener {
-    public int delayInTicks = 30; 
+    public int delayInTicks = 30;
     public int diggerBlock = Material.DRAGON_EGG.getId();
     public int goDownY = 5;
     public int goSideways = 5;
@@ -28,10 +28,10 @@ public class Digger extends AbilityListener {
             event.getPlayer().sendMessage(messageAfterPlaced);
             Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                 public void run() {
-                    int dist = (int) Math.ceil((double) goSideways / 2);
+                    int dist = (int) Math.ceil((double) (goSideways - 1) / 2);
                     for (int y = -1; y >= -goDownY; y--) {
-                        for (int x = -dist; x < dist; x++) {
-                            for (int z = -dist; z < dist; z++) {
+                        for (int x = -dist; x <= dist; x++) {
+                            for (int z = -dist; z <= dist; z++) {
                                 if (b.getY() + y <= 0)
                                     continue;
                                 Block block = b.getWorld().getBlockAt(b.getX() + x, b.getY() + y, b.getZ() + z);
