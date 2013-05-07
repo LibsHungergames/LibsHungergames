@@ -45,7 +45,7 @@ public class GeneralListener implements Listener {
         if (entity instanceof Player) {
             if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(entity).isAlive()) {
                 event.setCancelled(true);
-                if (entity.getFireTicks() > 0)
+                if (entity.getFireTicks() > 0 && !pm.getGamer(entity).isAlive())
                     entity.setFireTicks(0);
             }
         } else if (entity instanceof Tameable && ((Tameable) entity).isTamed() && hg.currentTime <= config.getInvincibilityTime())
