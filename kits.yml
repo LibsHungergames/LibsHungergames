@@ -585,6 +585,13 @@ Kits:
     Icon: Potion 8196 1
     Ability:
       - Viper
+  Warder:
+    Description: 'The warder kit gives you the ability to place an 8 long wall of portals. Walking through this wall will give you Speed 1 for 5 seconds and Protection 1 for 30 seconds, This effect gets added to anybody walking through the field. The field has a warmup time of roughly half a second, then stays for 5 seconds. Placing a field has a cooldown time of 1 minute.'
+    Free: true
+    Price: 0
+    Icon: BOOK 0 1
+    Items:
+      - BOOK 0 1 Unlootable 1 Name=Tome_of_Protection UniqueItem
   Werewolf:
     Description: 'The Werewolf kit is perfect for night-time battles. During the night you have constant Strength I and Speed I effect, however during the day you have Weakness I. Wolves will never attack you, either. Spawn with a clock to check the time of day!'
     Free: true
