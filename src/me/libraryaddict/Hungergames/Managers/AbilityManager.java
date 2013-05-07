@@ -61,7 +61,8 @@ public class AbilityManager {
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {
-                    System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(), abilityClass.getSimpleName()));
+                    // System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(),
+                    // abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
                     final boolean modified = abilityListener
                             .load(abilityConfigManager.getConfigSection(abilityClass.getSimpleName()),

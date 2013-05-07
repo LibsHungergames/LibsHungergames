@@ -39,7 +39,7 @@ public class NameManager {
                 Bukkit.getLogger().info(tm.getLoggerCreatingAbilitysConfig());
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
-                config.set("Material-ID-or-Name-In-UpperCase", "ItemName as you want it to display");
+                config.set("Material-ID-or-Name-In-UpperCase", "Name as you want it to display");
                 config.set("AIR", "fist");
                 config.set(Enchantment.DAMAGE_ALL.getName(), "Sharpness");
                 config.set(Enchantment.ARROW_FIRE.getName(), "Flame");

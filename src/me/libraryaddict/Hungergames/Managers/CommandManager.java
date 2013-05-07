@@ -82,7 +82,8 @@ public class CommandManager {
                 commandName = (String) field.invoke(exc);
         } catch (Exception ex) {
         }
-        System.out.print(String.format(cm.getLoggerFoundCommandInPackage(), commandName));
+        // System.out.print(String.format(cm.getLoggerFoundCommandInPackage(),
+        // commandName));
         ConfigurationSection section = getConfigSection(commandName);
         boolean modified = loadConfig(section, exc, commandName);
         if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
