@@ -9,6 +9,7 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -40,11 +41,14 @@ public class GeneralListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive())
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(entity).isAlive()) {
                 event.setCancelled(true);
-        } else if (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed()
-                && hg.currentTime <= config.getInvincibilityTime())
+                if (entity.getFireTicks() > 0)
+                    entity.setFireTicks(0);
+            }
+        } else if (entity instanceof Tameable && ((Tameable) entity).isTamed() && hg.currentTime <= config.getInvincibilityTime())
             event.setCancelled(true);
     }
 
