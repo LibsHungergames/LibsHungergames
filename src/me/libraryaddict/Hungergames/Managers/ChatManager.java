@@ -161,6 +161,7 @@ public class ChatManager {
             "%Killer% gave %Killed% a helping hand into death's sweet embrace with his trusty %Weapon%",
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
+    private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands file";
     private String kitDescriptionDefault = "No description was provided for this kit";
     private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s' missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
@@ -173,12 +174,15 @@ public class ChatManager {
     private String loggerDisabledNether = "[Hungergames] Disabled the nether";
     private String loggerErrorWhileLoadingAbility = "[Hungergames] Error while loading ability: %s - %s";
     private String loggerErrorWhileLoadingTranslation = "[Hungergames] Error while loading the translation: %s";
+    private String loggerErrorWhileLoadingCommands = "[Hungergames] Error while loading the commands: %s - %s";
     private String loggerErrorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
     private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungerames] Tried to register %s for the %s ability but it does not exist";
     private String loggerFailedToChangIDisguiseConfig = "[Hungergames] Failed to change iDisguise config";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
-    private String loggerLoadAbilitysInPackage = "[HungerGames] Initializing all classes found in %s in the %s package";
+    private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
+    private String loggerLoadAbilitysInPackage = "[HungerGames] Initializing all abilitys found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
+    private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerMetricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
     private String loggerMySqlClosing = "[%s] Disconnecting from MySQL database...";
     private String loggerMySqlClosingError = "[%s] Error while closing the connection...";
@@ -190,6 +194,7 @@ public class ChatManager {
     private String loggerShuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
     private String loggerSucessfullyLoadedMap = "[Hungergames] Sucessfully loaded map %s";
     private String loggerTranslationMissingValue = "[Hungergames] Restored translation missing config '%s'";
+    private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
@@ -1233,5 +1238,25 @@ public class ChatManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getLoggerCreatingCommandsConfig() {
+        return loggerCreatingCommandsConfig;
+    }
+
+    public String getLoggerErrorWhileLoadingCommands() {
+        return loggerErrorWhileLoadingCommands;
+    }
+
+    public String getLoggerCommandsMissingValue() {
+        return loggerCommandsMissingValue;
+    }
+
+    public String getLoggerLoadCommandsInPackage() {
+        return loggerLoadCommandsInPackage;
+    }
+
+    public String getLoggerFoundCommandInPackage() {
+        return loggerFoundCommandInPackage;
     }
 }

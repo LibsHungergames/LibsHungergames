@@ -35,7 +35,7 @@ public class AbilityManager {
      */
     public void addAbility(String name, AbilityListener abilityListener) {
         abilities.put(name, abilityListener);
-        Bukkit.getLogger().info(String.format(cm.getLoggerAddAbility(), name));
+        System.out.print(String.format(cm.getLoggerAddAbility(), name));
     }
 
     public AbilityListener getAbility(String abilityName) {
@@ -57,11 +57,11 @@ public class AbilityManager {
      */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
-        Bukkit.getLogger().info(String.format(cm.getLoggerLoadAbilitysInPackage(), plugin.getName(), packageName));
+        System.out.print(String.format(cm.getLoggerLoadAbilitysInPackage(), plugin.getName(), packageName));
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {
-                    Bukkit.getLogger().info(String.format(cm.getLoggerFoundAbilityInPackage(), abilityClass.getSimpleName()));
+                    System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(), abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
                     final boolean modified = abilityListener
                             .load(abilityConfigManager.getConfigSection(abilityClass.getSimpleName()),
@@ -69,8 +69,7 @@ public class AbilityManager {
                     if (modified)
                         saveConfig = true;
                     if (abilityListener instanceof CommandExecutor && abilityListener.getCommand() != null) {
-                        HungergamesApi.getHungergames().getCommand(abilityListener.getCommand())
-                                .setExecutor((CommandExecutor) abilityListener);
+                        HungergamesApi.getCommandManager().loadCommand((CommandExecutor) abilityListener, true);
                     }
                     abilities.put(abilityClass.getSimpleName(), abilityListener);
                 } catch (Exception e) {
@@ -96,8 +95,7 @@ public class AbilityManager {
         if (abilityListener != null) {
             abilityListener.registerPlayer(player);
         } else
-            Bukkit.getLogger().info(
-                    String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
+            System.out.print(String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
         getPlayerAbilities(player.getName()).add(abilityName);
     }
 

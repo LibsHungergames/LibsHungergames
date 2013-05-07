@@ -20,6 +20,7 @@ public class Kit implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitManager kits = HungergamesApi.getKitManager();
+    public String[] aliases = new String[] { "kits" };
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Player p = Bukkit.getPlayerExact(sender.getName());

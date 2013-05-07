@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -75,17 +76,20 @@ public class Backpacker extends AbilityListener {
         }
     }
 
-    @Override
-    public void registerPlayer(Player p) {
-        super.registerPlayer(p);
-        ItemStack item = new ItemStack(backpackItem);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(backPackItemName);
-        List<String> lore = new ArrayList<String>();
-        lore.add(backPackItemDescription);
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, backPackItemName));
-        p.getInventory().setItem(9, item);
+    @EventHandler
+    public void onGameStart(GameStartEvent event) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!hasAbility(p))
+                continue;
+            ItemStack item = new ItemStack(backpackItem);
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(backPackItemName);
+            List<String> lore = new ArrayList<String>();
+            lore.add(backPackItemDescription);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            backpack.put(p, Bukkit.createInventory(null, backpackInventoryRows * 9, backPackItemName));
+            p.getInventory().setItem(9, item);
+        }
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class Creator implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
+    public String[] aliases = new String[] { "download" };
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         sender.sendMessage(String.format(cm.getCommandCreator(), "libraryaddict", "http://ow.ly/kCnwE"));

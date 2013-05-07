@@ -151,7 +151,7 @@ public class Hungergames extends JavaPlugin {
                 }
             }
         }, 2L, 1L);
-        getCommand("players").setExecutor(new Players());
+       /* getCommand("players").setExecutor(new Players());
         getCommand("time").setExecutor(new Time());
         getCommand("forcestart").setExecutor(new ForceStart());
         getCommand("build").setExecutor(new Build());
@@ -168,7 +168,8 @@ public class Hungergames extends JavaPlugin {
         getCommand("creator").setExecutor(new Creator());
         getCommand("buykit").setExecutor(new BuyKit());
         getCommand("forcetime").setExecutor(new ForceTime());
-        getCommand("forcefeast").setExecutor(new ForceFeast());
+        getCommand("forcefeast").setExecutor(new ForceFeast());*/
+        HungergamesApi.getCommandManager();
         playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);

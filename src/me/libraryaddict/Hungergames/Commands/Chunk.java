@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 public class Chunk implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String[] aliases = new String[] { "stuck" };
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());
