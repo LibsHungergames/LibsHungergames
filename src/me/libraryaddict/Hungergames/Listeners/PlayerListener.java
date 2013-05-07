@@ -175,13 +175,6 @@ public class PlayerListener implements Listener {
         Gamer gamer = pm.getGamer(p);
         if (!gamer.canInteract()) {
             event.setCancelled(true);
-            /*
-             * if (event.getAction() == Action.RIGHT_CLICK_BLOCK &&
-             * event.getClickedBlock().getState() != null &&
-             * event.getClickedBlock().getState() instanceof InventoryHolder) {
-             * p.openInventory(((InventoryHolder)
-             * event.getClickedBlock().getState()).getInventory()); }
-             */
         }
         ItemStack item = event.getItem();
         if (item != null && item.getType() == Material.COMPASS && event.getAction() != Action.PHYSICAL) {
@@ -215,7 +208,6 @@ public class PlayerListener implements Listener {
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
                     icon.openInventory(p);
-                    // p.openInventory(icon.getInventory());
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {

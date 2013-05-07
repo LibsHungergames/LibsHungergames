@@ -58,7 +58,6 @@ BadKits:
   - Endermage
   - Explorer
   - Hermit
-  - Jackhammer
   - Milkman
   - Miner
   - Reaper
@@ -328,15 +327,6 @@ Kits:
     Icon: PORK 0 1
     Ability:
       - Hunter
-  Jackhammer:
-    Description: 'The Jackhammer kit gives you the ability to break every single block above a single block once you break it with your Stone Axe (Hammer), as soon as you break it every block above it will gradually start to disappear, the sky is the limit. After 5 uses, cooldown will kick in.'
-    Free: true
-    Price: 0
-    Icon: STONE_AXE 0 1
-    Items:
-      - STONE_AXE 0 1 Name=Hammer Unlootable 1
-    Ability:
-      - Jackhammer
   Jumper:
     Description: 'The Jumper kit is excellent for getting to places quicker than everyone else, or escaping tough scenarios. This kit is useful, in all aspects of the game! When you throw an enderpearl, you will take no damage from the teleport, and a 4x4 platform will appear under you, lasting for 5 seconds and securing your landing wherever you go.'
     Free: true
