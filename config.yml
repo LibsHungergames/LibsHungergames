@@ -133,3 +133,12 @@ ForceZ: 0
 # You know when you press tab, it displays the kills next to the name?
 # Some people have names which are too long. The plugin shortens them.
 ShortenNames: true
+
+# Turns players invisible until the game starts
+# Don't blame me if your invisibility plugins no like
+InvisiblePreGame: false
+
+# Chance out of ? of animals spawning
+# Used for limiting mob spawns to raise the difficulty
+# Set to 1 to make it 100%
+MobSpawnChance: 5

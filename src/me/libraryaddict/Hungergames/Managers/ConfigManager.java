@@ -37,6 +37,7 @@ public class ConfigManager {
     private Hungergames hg;
     private int invincibility;
     private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
+    private boolean invisiblePreGame;
     private boolean kitSelector;
     private ItemStack kitSelectorBack;
     private boolean kitSelectorDynamicSize;
@@ -44,6 +45,7 @@ public class ConfigManager {
     private ItemStack kitSelectorIcon;
     private int kitSelectorInventorySize;
     private int minPlayers;
+    public int mobSpawnChance;
     private boolean mushroomStew;
     private int mushroomStewRestores;
     private boolean mysqlEnabled;
@@ -264,6 +266,13 @@ public class ConfigManager {
     }
 
     /**
+     * What chance does a animal have of spawning
+     */
+    public int getMobSpawnChance() {
+        return mobSpawnChance;
+    }
+
+    /**
      * 
      * @return Whats the material used for the pillars corners
      */
@@ -336,6 +345,13 @@ public class ConfigManager {
         return fireSpread;
     }
 
+    /**
+     * Are players invisible before the game starts
+     */
+    public boolean isInvisiblePreGame() {
+        return invisiblePreGame;
+    }
+
     public boolean isKitSelectorDynamicSize() {
         return kitSelectorDynamicSize;
     }
@@ -354,6 +370,13 @@ public class ConfigManager {
      */
     public boolean isMySqlEnabled() {
         return mysqlEnabled;
+    }
+
+    /**
+     * Is everyones name shortened to view their killstreak in tab
+     */
+    public boolean isShortenedNames() {
+        return shortenNames;
     }
 
     /**
@@ -460,6 +483,8 @@ public class ConfigManager {
             kitSelectorForward = new ItemStack(Material.SUGAR_CANE_BLOCK);
         kitSelectorDynamicSize = hg.getConfig().getBoolean("KitSelectorDynamicSize");
         kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
+        invisiblePreGame = hg.getConfig().getBoolean("InvisiblePreGame");
+        mobSpawnChance = hg.getConfig().getInt("MobSpawnChance");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -484,13 +509,6 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
-    }
-
-    /**
-     * Is everyones name shortened to view their killstreak in tab
-     */
-    public boolean isShortenedNames() {
-        return shortenNames;
     }
 
     /**

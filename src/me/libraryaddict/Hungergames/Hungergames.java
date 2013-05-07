@@ -369,17 +369,19 @@ public class Hungergames extends JavaPlugin {
         for (Gamer gamer : pm.getGamers()) {
             gamer.setRiding(false);
             gamer.clearInventory();
+            gamer.seeInvis(false);
+            gamer.setSpectating(false);
             Player p = gamer.getPlayer();
+            p.setAllowFlight(false);
+            p.setFireTicks(0);
+            p.setFallDistance(0);
+            pm.sendToSpawn(gamer);
             if (config.isShortenedNames() && p.getPlayerListName().length() > 13) {
                 p.setPlayerListName(p.getPlayerListName().substring(0, 13));
             }
-            p.setAllowFlight(false);
-            p.setFireTicks(0);
-            gamer.seeInvis(false);
-            p.setFallDistance(0);
-            gamer.setSpectating(false);
-            pm.sendToSpawn(gamer);
         }
+        for (Gamer gamer : pm.getGamers())
+            gamer.updateSelfToOthers();
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
