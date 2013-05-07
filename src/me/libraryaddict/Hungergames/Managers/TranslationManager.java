@@ -163,8 +163,9 @@ public class TranslationManager {
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
     private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
     private String loggerCreatingAbilitysConfig = "[Hungergames] Creating ability config file";
-    private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands file";
-    private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation file";
+    private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands config file";
+    private String loggerCreatingNamesConfig = "[Hungergames] Creating names config file";
+    private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation config file";
     private String loggerDependencyNotFound = "Dependency %s not found";
     private String loggerDisabledEnd = "[Hungergames] Disabled the end";
     private String loggerDisabledNether = "[Hungergames] Disabled the nether";
@@ -1227,6 +1228,10 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getLoggerCreatingNamesConfig() {
+        return loggerCreatingNamesConfig;
     }
 
 }

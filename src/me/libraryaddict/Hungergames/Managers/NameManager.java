@@ -36,7 +36,7 @@ public class NameManager {
     public void save() {
         try {
             if (!configFile.exists()) {
-                Bukkit.getLogger().info(tm.getLoggerCreatingAbilitysConfig());
+                Bukkit.getLogger().info(tm.getLoggerCreatingNamesConfig());
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 config.set("Material-ID-or-Name-In-UpperCase", "Name as you want it to display");
