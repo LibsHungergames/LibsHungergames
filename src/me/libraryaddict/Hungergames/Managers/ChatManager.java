@@ -39,7 +39,7 @@ public class ChatManager {
     private String commandChunkCooldown = ChatColor.RED + "You may not do this again yet!";
     private String commandChunkLoggerReloadingChunks = "[Hungergames] Reloading %s's chunks";
     private String commandChunkReloadedChunks = ChatColor.RED + "Chunks reloaded!";
-    private String commandCreator = ChatColor.RED + "%s has created this plugin for non-profit use\nDownload it at %s";
+    private String commandCreator = ChatColor.RED + "%s created this plugin!\nDownload it at %s";
     private String commandFeastHappened = ChatColor.YELLOW + "Compass now pointing to the feast!";
     private String commandFeastNotHappened = ChatColor.RED + "The feast has not happened yet!";
     private String commandForceFeastGenerated = ChatColor.RED + "A feast has been spawned at (%s, %s, %s)";

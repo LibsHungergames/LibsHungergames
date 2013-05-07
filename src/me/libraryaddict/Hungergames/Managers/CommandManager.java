@@ -39,7 +39,7 @@ public class CommandManager {
         load();
     }
 
-    public void registerCommand(String name, CommandExecutor exc) throws Exception {
+    private void registerCommand(String name, CommandExecutor exc) throws Exception {
         PluginCommand command = Bukkit.getServer().getPluginCommand(name.toLowerCase());
         if (command == null) {
             Constructor<?> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
@@ -65,7 +65,7 @@ public class CommandManager {
         try {
             Field field = exc.getClass().getDeclaredField("description");
             if (field != null && field.get(exc) instanceof String)
-                command.setDescription((String) field.get(exc));
+                command.setDescription(ChatColor.translateAlternateColorCodes('&', (String) field.get(exc)));
         } catch (Exception ex) {
         }
         Field field = CraftServer.class.getDeclaredField("commandMap");
@@ -85,11 +85,13 @@ public class CommandManager {
         System.out.print(String.format(cm.getLoggerFoundCommandInPackage(), commandName));
         ConfigurationSection section = getConfigSection(commandName);
         boolean modified = loadConfig(section, exc, commandName);
-        try {
-            registerCommand(section.getString("CommandName"), exc);
-        } catch (Exception ex) {
-            System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), exc.getClass().getSimpleName(),
-                    ex.getMessage()));
+        if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
+            try {
+                registerCommand(section.getString("CommandName"), exc);
+            } catch (Exception ex) {
+                System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), exc.getClass().getSimpleName(),
+                        ex.getMessage()));
+            }
         }
         if (save && modified)
             save();
@@ -122,6 +124,10 @@ public class CommandManager {
             if (!section.contains("CommandName")) {
                 modified = true;
                 section.set("CommandName", commandName);
+            }
+            if (!section.contains("EnableCommand")) {
+                modified = true;
+                section.set("EnableCommand", true);
             }
             for (Field field : exc.getClass().getDeclaredFields()) {
                 if ((field.getName().equals("aliases") || field.getName().equals("description"))
