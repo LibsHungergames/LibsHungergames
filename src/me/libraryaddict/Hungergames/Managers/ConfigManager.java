@@ -49,6 +49,7 @@ public class ConfigManager {
     private boolean mysqlEnabled;
     private ItemStack pillarCorner;
     private ItemStack pillarInsides;
+    private boolean shortenNames;
     private boolean spectatorChat;
     private boolean spectators;
     private int timeTillFeast;
@@ -433,6 +434,7 @@ public class ConfigManager {
         borderCloseIn = hg.getConfig().getBoolean("BorderCloseIn", true);
         borderClosesIn = hg.getConfig().getDouble("BorderClosesIn", 0.2);
         spectatorChat = hg.getConfig().getBoolean("SpectatorChat", true);
+        shortenNames = hg.getConfig().getBoolean("ShortenNames");
         spectators = hg.getConfig().getBoolean("Spectators", true);
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
         mushroomStewRestores = hg.getConfig().getInt("MushroomStewRestores", 5);
@@ -482,6 +484,13 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
+    }
+
+    /**
+     * Is everyones name shortened to view their killstreak in tab
+     */
+    public boolean isShortenedNames() {
+        return shortenNames;
     }
 
     /**

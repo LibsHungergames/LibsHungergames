@@ -370,6 +370,9 @@ public class Hungergames extends JavaPlugin {
             gamer.setRiding(false);
             gamer.clearInventory();
             Player p = gamer.getPlayer();
+            if (config.isShortenedNames() && p.getPlayerListName().length() > 13) {
+                p.setPlayerListName(p.getPlayerListName().substring(0, 13));
+            }
             p.setAllowFlight(false);
             p.setFireTicks(0);
             gamer.seeInvis(false);

@@ -129,3 +129,7 @@ ChangeDisguiseConfig: true
 ForceCords: true
 ForceX: 0
 ForceZ: 0
+
+# You know when you press tab, it displays the kills next to the name?
+# Some people have names which are too long. The plugin shortens them.
+ShortenNames: true
