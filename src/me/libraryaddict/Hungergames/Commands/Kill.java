@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 public class Kill implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "Use /suicide instead to suicide";
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {

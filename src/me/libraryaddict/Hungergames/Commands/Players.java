@@ -20,6 +20,7 @@ public class Players implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "See the gamers and spectators online";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         List<Gamer> gamers = pm.getAliveGamers();

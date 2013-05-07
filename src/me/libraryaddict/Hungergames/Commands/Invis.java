@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 public class Invis implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "Used for toggling invisibility";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.invis")) {

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 public class Spawn implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "If spectating you can teleport back to spawn";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 public class Suicide implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "Commit suicide to this cruel cruel world";
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

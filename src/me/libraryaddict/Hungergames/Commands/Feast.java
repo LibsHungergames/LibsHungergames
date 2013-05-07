@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 public class Feast implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private Hungergames hg = HungergamesApi.getHungergames();
+    public String description = "Point your compass towards the feast";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (hg.feastLoc.getY() > 0) {

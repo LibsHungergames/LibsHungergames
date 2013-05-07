@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 public class Time implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private Hungergames hg = HungergamesApi.getHungergames();
+    public String description = "View the current game time";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (hg.currentTime >= 0)

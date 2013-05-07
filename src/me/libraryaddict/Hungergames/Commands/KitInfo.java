@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 public class KitInfo implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private KitManager kits = HungergamesApi.getKitManager();
+    public String description = "View the information on a kit";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length > 0) {

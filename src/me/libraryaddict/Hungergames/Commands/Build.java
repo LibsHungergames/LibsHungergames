@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 public class Build implements CommandExecutor {
     private ChatManager cm = HungergamesApi.getChatManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    public String description = "A command to toggle if the player should be able to build when he normally shouldn't";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.build")) {

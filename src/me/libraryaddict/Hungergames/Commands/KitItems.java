@@ -21,6 +21,7 @@ public class KitItems implements CommandExecutor {
 
     private ChatManager cm = HungergamesApi.getChatManager();
     private KitManager kits = HungergamesApi.getKitManager();
+    public String description = "View the items given with a kit";
 
     private String itemToName(ItemStack item) {
         // TODO Add chat translation

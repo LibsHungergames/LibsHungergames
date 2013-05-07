@@ -16,6 +16,7 @@ public class ForceFeast implements CommandExecutor {
     private ConfigManager config = HungergamesApi.getConfigManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     public String[] aliases = new String[] { "ffeast" };
+    public String description = "Force a feast to generate at your feet";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.forcefeast")) {
