@@ -25,7 +25,7 @@ public class Pussy extends AbilityListener {
 
     public Pussy() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
-            throw new Exception(String.format(HungergamesApi.getChatManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
     }
 
     @EventHandler

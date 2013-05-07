@@ -25,7 +25,7 @@ public class EnchantmentManager {
     public static Enchantment UNLOOTABLE;
 
     static {
-        ChatManager cm = HungergamesApi.getChatManager();
+        TranslationManager cm = HungergamesApi.getTranslationManager();
         enchantNames.put(Enchantment.DAMAGE_ALL, cm.getEnchantNameSharpness());
         enchantNames.put(Enchantment.ARROW_FIRE, cm.getEnchantNameArrowFire());
         enchantNames.put(Enchantment.ARROW_INFINITE, cm.getEnchantNameArrowInfinite());

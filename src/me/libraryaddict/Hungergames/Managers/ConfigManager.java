@@ -377,7 +377,7 @@ public class ConfigManager {
      */
     public void loadConfig() {
         hg.saveDefaultConfig();
-        final ChatManager cm = HungergamesApi.getChatManager();
+        final TranslationManager cm = HungergamesApi.getTranslationManager();
         if (Bukkit.getServer().getAllowEnd() && hg.getConfig().getBoolean("DisableEnd", true)) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
             config.set("settings.allow-end", false);

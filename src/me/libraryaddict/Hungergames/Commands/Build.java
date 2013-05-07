@@ -1,6 +1,6 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Build implements CommandExecutor {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
     public String description = "A command to toggle if the player should be able to build when he normally shouldn't";
 

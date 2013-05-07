@@ -19,7 +19,7 @@ public class Kit {
     private static int identifier = 0;
     private String[] abilities;
     private ItemStack[] armor;
-    private String description = HungergamesApi.getChatManager().getKitDescriptionDefault();
+    private String description = HungergamesApi.getTranslationManager().getKitDescriptionDefault();
     private ItemStack icon;
     private int id;
     private boolean isFree = false;

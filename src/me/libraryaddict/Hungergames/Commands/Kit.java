@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Kit implements CommandExecutor {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitManager kits = HungergamesApi.getKitManager();
     public String[] aliases = new String[] { "kits" };

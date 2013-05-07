@@ -1,7 +1,7 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ForceFeast implements CommandExecutor {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConfigManager config = HungergamesApi.getConfigManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     public String[] aliases = new String[] { "ffeast" };

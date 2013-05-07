@@ -5,13 +5,13 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private Connection con = null;
     MySqlManager mysql;
 

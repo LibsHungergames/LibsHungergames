@@ -55,7 +55,7 @@ public class ScoreboardManager {
     public static void updateStage() {
         Hungergames hg = HungergamesApi.getHungergames();
         ConfigManager config = HungergamesApi.getConfigManager();
-        ChatManager cm = HungergamesApi.getChatManager();
+        TranslationManager cm = HungergamesApi.getTranslationManager();
         if (hg.currentTime < 0)
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
         else if (hg.currentTime < config.getInvincibilityTime())

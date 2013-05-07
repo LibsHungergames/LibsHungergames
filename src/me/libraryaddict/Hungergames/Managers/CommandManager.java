@@ -28,7 +28,7 @@ import java.util.List;
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class CommandManager {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private YamlConfiguration config;
     private File configFile;
     private boolean newFile = false;

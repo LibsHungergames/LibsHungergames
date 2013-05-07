@@ -37,7 +37,7 @@ public class PlayerManager {
     public static int returnChance(int start, int end) {
         return start + (int) (Math.random() * ((end - start) + 1));
     }
-    ChatManager cm = HungergamesApi.getChatManager();
+    TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
     Hungergames hg = HungergamesApi.getHungergames();
     KitManager kits = HungergamesApi.getKitManager();

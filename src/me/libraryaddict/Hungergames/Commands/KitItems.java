@@ -3,7 +3,7 @@ package me.libraryaddict.Hungergames.Commands;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitItems implements CommandExecutor {
 
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private KitManager kits = HungergamesApi.getKitManager();
     public String description = "View the items given with a kit";
 

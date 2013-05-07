@@ -7,7 +7,7 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -22,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class Tracker extends AbilityListener implements CommandExecutor {
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String howToUseMessage = ChatColor.RED + "Use /lock <Target Player>";
     private transient List<String> locked = new ArrayList<String>();
     public String lostTargetMessage = ChatColor.GOLD + "Lost target, Retargetting";

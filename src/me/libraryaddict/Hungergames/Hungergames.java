@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import me.libraryaddict.Hungergames.Commands.*;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.GeneralListener;
-import me.libraryaddict.Hungergames.Listeners.LibsCommandsListener;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -34,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
-    private ChatManager cm;
+    private TranslationManager cm;
     private ConfigManager config;
     /**
      * This plugin is licensed under
@@ -75,7 +73,7 @@ public class Hungergames extends JavaPlugin {
             e.printStackTrace();
         }
         HungergamesApi.init(this);
-        cm = HungergamesApi.getChatManager();
+        cm = HungergamesApi.getTranslationManager();
         pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
@@ -151,30 +149,30 @@ public class Hungergames extends JavaPlugin {
                 }
             }
         }, 2L, 1L);
-       /* getCommand("players").setExecutor(new Players());
-        getCommand("time").setExecutor(new Time());
-        getCommand("forcestart").setExecutor(new ForceStart());
-        getCommand("build").setExecutor(new Build());
-        getCommand("goto").setExecutor(new GoTo());
-        getCommand("kit").setExecutor(new Kit());
-        getCommand("kitinfo").setExecutor(new KitInfo());
-        getCommand("kititems").setExecutor(new KitItems());
-        getCommand("feast").setExecutor(new Feast());
-        getCommand("chunk").setExecutor(new Chunk());
-        getCommand("kill").setExecutor(new Kill());
-        getCommand("suicide").setExecutor(new Suicide());
-        getCommand("invis").setExecutor(new Invis());
-        getCommand("ride").setExecutor(new Ride());
-        getCommand("creator").setExecutor(new Creator());
-        getCommand("buykit").setExecutor(new BuyKit());
-        getCommand("forcetime").setExecutor(new ForceTime());
-        getCommand("forcefeast").setExecutor(new ForceFeast());*/
+        /*
+         * getCommand("players").setExecutor(new Players());
+         * getCommand("time").setExecutor(new Time());
+         * getCommand("forcestart").setExecutor(new ForceStart());
+         * getCommand("build").setExecutor(new Build());
+         * getCommand("goto").setExecutor(new GoTo());
+         * getCommand("kit").setExecutor(new Kit());
+         * getCommand("kitinfo").setExecutor(new KitInfo());
+         * getCommand("kititems").setExecutor(new KitItems());
+         * getCommand("feast").setExecutor(new Feast());
+         * getCommand("chunk").setExecutor(new Chunk());
+         * getCommand("kill").setExecutor(new Kill());
+         * getCommand("suicide").setExecutor(new Suicide());
+         * getCommand("invis").setExecutor(new Invis());
+         * getCommand("ride").setExecutor(new Ride());
+         * getCommand("creator").setExecutor(new Creator());
+         * getCommand("buykit").setExecutor(new BuyKit());
+         * getCommand("forcetime").setExecutor(new ForceTime());
+         * getCommand("forcefeast").setExecutor(new ForceFeast());
+         */
         HungergamesApi.getCommandManager();
         playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
-        if (Bukkit.getPluginManager().getPlugin("LibsCommands") != null)
-            Bukkit.getPluginManager().registerEvents(new LibsCommandsListener(), this);
         HungergamesApi.getAbilityManager();
     }
 

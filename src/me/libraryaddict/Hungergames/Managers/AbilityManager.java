@@ -19,7 +19,7 @@ public class AbilityManager {
 
     private HashMap<String, AbilityListener> abilities = new HashMap<String, AbilityListener>();
     private AbilityConfigManager abilityConfigManager = HungergamesApi.getAbilityConfigManager();
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
 
     public AbilityManager() {

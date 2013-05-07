@@ -51,13 +51,13 @@ public class KitSelectorManager {
         if (kitSelector == null) {
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
             kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(), HungergamesApi
-                    .getChatManager().getItemKitSelectorDescription());
+                    .getTranslationManager().getItemKitSelectorDescription());
         }
         return kitSelector;
     }
 
     public String getKitSelectorName() {
-        return HungergamesApi.getChatManager().getItemKitSelectorName();
+        return HungergamesApi.getTranslationManager().getItemKitSelectorName();
     }
 
     public void openInventory(Player p) {

@@ -3,7 +3,7 @@ package me.libraryaddict.Hungergames.Listeners;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -25,7 +25,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class GeneralListener implements Listener {
 
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConfigManager config = HungergamesApi.getConfigManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();

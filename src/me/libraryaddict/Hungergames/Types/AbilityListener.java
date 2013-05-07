@@ -1,6 +1,6 @@
 package me.libraryaddict.Hungergames.Types;
 
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,7 +66,7 @@ public abstract class AbilityListener implements Listener {
     }
 
     public boolean load(ConfigurationSection section, boolean isNewFile) {
-        ChatManager cm = HungergamesApi.getChatManager();
+        TranslationManager cm = HungergamesApi.getTranslationManager();
         boolean modified = false;
         for (Field field : getClass().getDeclaredFields()) {
             if (!Modifier.isTransient(field.getModifiers()) && Modifier.isPublic(field.getModifiers()))

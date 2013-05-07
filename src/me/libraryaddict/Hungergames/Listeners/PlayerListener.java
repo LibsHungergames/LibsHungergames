@@ -6,6 +6,7 @@ import java.util.Random;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
@@ -59,12 +60,13 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
-    private ChatManager cm = HungergamesApi.getChatManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConfigManager config = HungergamesApi.getConfigManager();
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitSelectorManager icon = HungergamesApi.getKitSelector();
     private KitManager kits = HungergamesApi.getKitManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private ChatManager chat = HungergamesApi.getChatManager();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
@@ -351,6 +353,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        chat.removeChatter(event.getPlayer().getName());
         event.setQuitMessage(null);
         Gamer gamer = pm.getGamer(event.getPlayer());
         Kit kit = kits.getKitByPlayer(event.getPlayer());

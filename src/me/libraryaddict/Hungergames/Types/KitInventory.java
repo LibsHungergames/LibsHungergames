@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 
 import org.bukkit.Bukkit;
@@ -39,7 +39,7 @@ public class KitInventory implements Listener {
     public KitInventory(Player player) {
         hg = HungergamesApi.getHungergames();
         user = player;
-        title = HungergamesApi.getChatManager().getInventoryWindowSelectKitTitle();
+        title = HungergamesApi.getTranslationManager().getInventoryWindowSelectKitTitle();
         user.setMetadata("KitInventory", new FixedMetadataValue(hg, this));
         Bukkit.getPluginManager().registerEvents(this, hg);
     }
@@ -53,7 +53,7 @@ public class KitInventory implements Listener {
 
     public ItemStack getBackPage() {
         if (backAPage == null) {
-            ChatManager chat = HungergamesApi.getChatManager();
+            TranslationManager chat = HungergamesApi.getTranslationManager();
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
             backAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
                     chat.getItemKitSelectorBackName(), chat.getItemKitSelectorBackDescription());
@@ -68,7 +68,7 @@ public class KitInventory implements Listener {
 
     public ItemStack getForwardsPage() {
         if (forwardsAPage == null) {
-            ChatManager chat = HungergamesApi.getChatManager();
+            TranslationManager chat = HungergamesApi.getTranslationManager();
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorForward();
             forwardsAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
                     chat.getItemKitSelectorForwardsName(), chat.getItemKitSelectorForwardsDescription());

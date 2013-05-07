@@ -8,7 +8,7 @@ import me.libraryaddict.Hungergames.Managers.*;
 public class HungergamesApi {
     private static AbilityConfigManager abilityConfigManager;
     private static AbilityManager abilityManager;
-    private static ChatManager chatManager;
+    private static TranslationManager chatManager;
     private static ChestManager cm;
     private static ConfigManager config;
     private static FeastManager fm;
@@ -18,6 +18,7 @@ public class HungergamesApi {
     private static MySqlManager mysql;
     private static PlayerManager pm;
     private static CommandManager commands;
+    private static ChatManager chat;
 
     /**
      * @return AbilityConfigManager which is used to load the configs of
@@ -48,12 +49,20 @@ public class HungergamesApi {
     }
 
     /**
-     * @return ChatManager which is used for translations
+     * @return TranslationManager which is used for translations
+     */
+    public static TranslationManager getTranslationManager() {
+        if (chatManager == null)
+            chatManager = new TranslationManager();
+        return chatManager;
+    }
+    /**
+     * @Return ChatManager which currently controls their messaging
      */
     public static ChatManager getChatManager() {
-        if (chatManager == null)
-            chatManager = new ChatManager();
-        return chatManager;
+        if (chat == null)
+            chat = new ChatManager();
+        return chat;
     }
 
     /**

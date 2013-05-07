@@ -30,7 +30,7 @@ public class Chameleon extends AbilityListener {
 
     public Chameleon() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
-            throw new Exception(String.format(HungergamesApi.getChatManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
     }
 
     private void disguise(Entity entity, Player p) {

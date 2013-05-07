@@ -74,10 +74,5 @@
 			<artifactId>idisguise</artifactId>
 			<version>v2.0pre</version>
 		</dependency>
-		<dependency>
-			<groupId>libscommands</groupId>
-			<artifactId>libscommands</artifactId>
-			<version>v1.0</version>
-		</dependency>
 	</dependencies>
 </project>
