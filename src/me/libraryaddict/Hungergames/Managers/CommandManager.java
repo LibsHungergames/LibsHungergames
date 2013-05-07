@@ -57,6 +57,9 @@ public class CommandManager {
                     list.add("coder");
                     list.add("download");
                     list.add("hungergames");
+                    list.add("download");
+                    if (!name.equalsIgnoreCase("creator"))
+                        list.add("creator");
                 }
                 command.setAliases(list);
             }
@@ -138,12 +141,12 @@ public class CommandManager {
                         if (value == null) {
                             value = field.get(exc);
                             if (value instanceof String) {
-                                value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                                value = ((String) value).replace("\n", "\\n").replace("ï¿½", "&");
                             }
                             if (value instanceof String[]) {
                                 String[] strings = (String[]) value;
                                 for (int i = 0; i < strings.length; i++)
-                                    strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                    strings[i] = strings[i].replace("\n", "\\n").replace("ï¿½", "&");
                                 value = strings;
                             }
                             section.set(field.getName(), value);
