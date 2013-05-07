@@ -6,6 +6,7 @@ import java.util.Random;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
+import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
@@ -60,13 +61,14 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private ConfigManager config = HungergamesApi.getConfigManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
-    private KitSelectorManager icon = HungergamesApi.getKitSelector();
-    private KitManager kits = HungergamesApi.getKitManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
-    private ChatManager chat = HungergamesApi.getChatManager();
+    private final TranslationManager cm = HungergamesApi.getTranslationManager();
+    private final ConfigManager config = HungergamesApi.getConfigManager();
+    private final Hungergames hg = HungergamesApi.getHungergames();
+    private final KitSelectorManager icon = HungergamesApi.getKitSelector();
+    private final KitManager kits = HungergamesApi.getKitManager();
+    private final PlayerManager pm = HungergamesApi.getPlayerManager();
+    private final ChatManager chat = HungergamesApi.getChatManager();
+    private final NameManager name = HungergamesApi.getNameManager();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
@@ -138,14 +140,10 @@ public class PlayerListener implements Listener {
         if (cause instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
             if (entityEvent.getDamager() instanceof Player) {
-                String weapon = "fist";
                 Player dmg = (Player) entityEvent.getDamager();
-                ItemStack item = dmg.getInventory().getItemInHand();
-                if (item != null && item.getType() != Material.AIR)
-                    weapon = kits.toReadable(item.getType().name());
                 deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
                 deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
-                        .replace("%Weapon%", weapon);
+                        .replace("%Weapon%", name.getItemName(dmg.getItemInHand()));
             }
         } else if (cause.getCause() == DamageCause.FALL)
             deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());

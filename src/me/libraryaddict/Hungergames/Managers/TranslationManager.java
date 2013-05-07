@@ -125,27 +125,6 @@ public class TranslationManager {
     private String commandTimeStatusStarting = ChatColor.DARK_GRAY + "The game is starting in %s.";
     private transient YamlConfiguration config;
     private transient File configFile;
-    private String enchantNameAquaAffinity = "Aqua Affinity";
-    private String enchantNameArrowDamage = "Power";
-    private String enchantNameArrowFire = "Flame";
-    private String enchantNameArrowInfinite = "Infinite Arrows";
-    private String enchantNameArrowKnockback = "Punch";
-    private String enchantNameDamageSpiders = "Bane of Arthropods";
-    private String enchantNameDamageUndead = "Smite";
-    private String enchantNameDigSpeed = "Efficency";
-    private String enchantNameDurability = "Unbreaking";
-    private String enchantNameLootBlocks = "Fortune";
-    private String enchantNameLootMobs = "Looting";
-    private String enchantNameProtection = "Protection";
-    private String enchantNameProtectionBlast = "Blast Protection";
-    private String enchantNameProtectionFall = "Feather Falling";
-    private String enchantNameProtectionFire = "Fire Protection";
-    private String enchantNameProtectionProjectiles = "Projectile Protection";
-    private String enchantNameRespiration = "Respiration";
-    private String enchantNameSharpness = "Sharpness";
-    private String enchantNameSilkTouch = "Silk Touch";
-    private String enchantNameThorns = "Thorns";
-    private String enchantNameUnlootable = "Unlootable";
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
     private String inventoryWindowSelectKitTitle = ChatColor.DARK_RED + "Select Kit";
     private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
@@ -633,90 +612,6 @@ public class TranslationManager {
 
     public String getCommandTimeStatusStarting() {
         return commandTimeStatusStarting;
-    }
-
-    public String getEnchantNameAquaAffinity() {
-        return enchantNameAquaAffinity;
-    }
-
-    public String getEnchantNameArrowDamage() {
-        return enchantNameArrowDamage;
-    }
-
-    public String getEnchantNameArrowFire() {
-        return enchantNameArrowFire;
-    }
-
-    public String getEnchantNameArrowInfinite() {
-        return enchantNameArrowInfinite;
-    }
-
-    public String getEnchantNameArrowKnockback() {
-        return enchantNameArrowKnockback;
-    }
-
-    public String getEnchantNameDamageSpiders() {
-        return enchantNameDamageSpiders;
-    }
-
-    public String getEnchantNameDamageUndead() {
-        return enchantNameDamageUndead;
-    }
-
-    public String getEnchantNameDigSpeed() {
-        return enchantNameDigSpeed;
-    }
-
-    public String getEnchantNameDurability() {
-        return enchantNameDurability;
-    }
-
-    public String getEnchantNameLootBlocks() {
-        return enchantNameLootBlocks;
-    }
-
-    public String getEnchantNameLootMobs() {
-        return enchantNameLootMobs;
-    }
-
-    public String getEnchantNameProtection() {
-        return enchantNameProtection;
-    }
-
-    public String getEnchantNameProtectionBlast() {
-        return enchantNameProtectionBlast;
-    }
-
-    public String getEnchantNameProtectionFall() {
-        return enchantNameProtectionFall;
-    }
-
-    public String getEnchantNameProtectionFire() {
-        return enchantNameProtectionFire;
-    }
-
-    public String getEnchantNameProtectionProjectiles() {
-        return enchantNameProtectionProjectiles;
-    }
-
-    public String getEnchantNameRespiration() {
-        return enchantNameRespiration;
-    }
-
-    public String getEnchantNameSharpness() {
-        return enchantNameSharpness;
-    }
-
-    public String getEnchantNameSilkTouch() {
-        return enchantNameSilkTouch;
-    }
-
-    public String getEnchantNameThorns() {
-        return enchantNameThorns;
-    }
-
-    public String getEnchantNameUnlootable() {
-        return enchantNameUnlootable;
     }
 
     public String getGameStartedMotd() {

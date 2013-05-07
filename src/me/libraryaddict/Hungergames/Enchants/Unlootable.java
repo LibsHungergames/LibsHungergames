@@ -34,7 +34,7 @@ public class Unlootable extends Enchantment {
 
     @Override
     public String getName() {
-        return HungergamesApi.getTranslationManager().getEnchantNameUnlootable();
+        return "Unlootable";
     }
 
     @Override

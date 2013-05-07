@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Commands;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
@@ -19,49 +20,57 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitItems implements CommandExecutor {
 
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationManager tm = HungergamesApi.getTranslationManager();
+    private final NameManager name = HungergamesApi.getNameManager();
     private KitManager kits = HungergamesApi.getKitManager();
     public String description = "View the items given with a kit";
+
+    private String toReadable(String string) {
+        String[] names = string.split("_");
+        for (int i = 0; i < names.length; i++) {
+            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
+        }
+        return StringUtils.join(names, " ");
+    }
 
     private String itemToName(ItemStack item) {
         // TODO Add chat translation
         if (item == null)
             return "null";
-        String name = (item.getAmount() > 1 ? item.getAmount() + " " : "")
+        String itemName = (item.getAmount() > 1 ? item.getAmount() + " " : "")
                 + (item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? ChatColor.stripColor(item.getItemMeta()
-                        .getDisplayName()) : kits.toReadable(item.getType().name())) + (item.getAmount() > 1 ? "s" : "");
+                        .getDisplayName()) : name.getItemName(item)) + (item.getAmount() > 1 ? "s" : "");
         ArrayList<String> enchants = new ArrayList<String>();
         for (Enchantment enchant : item.getEnchantments().keySet()) {
-            String eName = EnchantmentManager.getReadableName(enchant);
-            enchants.add(kits.toReadable((eName.contains("%no%") ? eName.replace("%no%", "" + item.getEnchantmentLevel(enchant))
-                    : eName + " " + item.getEnchantmentLevel(enchant))));
+            String eName = name.getEnchantName(enchant);
+            enchants.add(toReadable(eName + " " + item.getEnchantmentLevel(enchant)));
         }
         Collections.sort(enchants);
         if (enchants.size() > 0)
-            name += " with enchant" + (enchants.size() > 1 ? "s" : "") + ": " + StringUtils.join(enchants, ", ");
-        return name;
+            itemName += " with enchant" + (enchants.size() > 1 ? "s" : "") + ": " + StringUtils.join(enchants, ", ");
+        return itemName;
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length > 0) {
             Kit kit = kits.getKitByName(StringUtils.join(args, " "));
             if (kit == null) {
-                sender.sendMessage(cm.getMessagePlayerSendKitItemsDoesntExist());
+                sender.sendMessage(tm.getMessagePlayerSendKitItemsDoesntExist());
                 return true;
             }
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitName(), kit.getName()));
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitHelmet(), itemToName(kit.getArmor()[3])));
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitChestplate(), itemToName(kit.getArmor()[2])));
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitLeggings(), itemToName(kit.getArmor()[1])));
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsKitBoots(), itemToName(kit.getArmor()[0])));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsKitName(), kit.getName()));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsKitHelmet(), itemToName(kit.getArmor()[3])));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsKitChestplate(), itemToName(kit.getArmor()[2])));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsKitLeggings(), itemToName(kit.getArmor()[1])));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsKitBoots(), itemToName(kit.getArmor()[0])));
             ArrayList<String> items = new ArrayList<String>();
             for (ItemStack item : kit.getItems())
                 items.add(itemToName(item));
             Collections.sort(items);
-            sender.sendMessage(String.format(cm.getMessagePlayerSendKitItemsOtherItems(),
-                    (items.size() > 0 ? StringUtils.join(items, ", ") + "." : cm.getMessagePlayerSendKitItemsNoItems())));
+            sender.sendMessage(String.format(tm.getMessagePlayerSendKitItemsOtherItems(),
+                    (items.size() > 0 ? StringUtils.join(items, ", ") + "." : tm.getMessagePlayerSendKitItemsNoItems())));
         } else
-            sender.sendMessage(cm.getCommandKitItemsDefineKitName());
+            sender.sendMessage(tm.getCommandKitItemsDefineKitName());
         return true;
     }
 

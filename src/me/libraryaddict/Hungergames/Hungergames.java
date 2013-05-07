@@ -149,26 +149,6 @@ public class Hungergames extends JavaPlugin {
                 }
             }
         }, 2L, 1L);
-        /*
-         * getCommand("players").setExecutor(new Players());
-         * getCommand("time").setExecutor(new Time());
-         * getCommand("forcestart").setExecutor(new ForceStart());
-         * getCommand("build").setExecutor(new Build());
-         * getCommand("goto").setExecutor(new GoTo());
-         * getCommand("kit").setExecutor(new Kit());
-         * getCommand("kitinfo").setExecutor(new KitInfo());
-         * getCommand("kititems").setExecutor(new KitItems());
-         * getCommand("feast").setExecutor(new Feast());
-         * getCommand("chunk").setExecutor(new Chunk());
-         * getCommand("kill").setExecutor(new Kill());
-         * getCommand("suicide").setExecutor(new Suicide());
-         * getCommand("invis").setExecutor(new Invis());
-         * getCommand("ride").setExecutor(new Ride());
-         * getCommand("creator").setExecutor(new Creator());
-         * getCommand("buykit").setExecutor(new BuyKit());
-         * getCommand("forcetime").setExecutor(new ForceTime());
-         * getCommand("forcefeast").setExecutor(new ForceFeast());
-         */
         HungergamesApi.getCommandManager();
         playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);

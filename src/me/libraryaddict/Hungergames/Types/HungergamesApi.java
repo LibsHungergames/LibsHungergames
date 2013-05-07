@@ -19,6 +19,7 @@ public class HungergamesApi {
     private static PlayerManager pm;
     private static CommandManager commands;
     private static ChatManager chat;
+    private static NameManager name;
 
     /**
      * @return AbilityConfigManager which is used to load the configs of
@@ -40,6 +41,15 @@ public class HungergamesApi {
     }
 
     /**
+     * @return NameManager - Manages the names of itemstacks
+     */
+    public static NameManager getNameManager() {
+        if (name == null)
+            name = new NameManager();
+        return name;
+    }
+
+    /**
      * @return AbilityManager which is used to load abilitys and handle them
      */
     public static AbilityManager getAbilityManager() {
@@ -56,6 +66,7 @@ public class HungergamesApi {
             chatManager = new TranslationManager();
         return chatManager;
     }
+
     /**
      * @Return ChatManager which currently controls their messaging
      */

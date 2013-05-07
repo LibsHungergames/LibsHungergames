@@ -298,12 +298,4 @@ public class KitManager {
         kit.addPlayer(p);
         return true;
     }
-
-    public String toReadable(String string) {
-        String[] names = string.split("_");
-        for (int i = 0; i < names.length; i++) {
-            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
-        }
-        return StringUtils.join(names, " ");
-    }
 }

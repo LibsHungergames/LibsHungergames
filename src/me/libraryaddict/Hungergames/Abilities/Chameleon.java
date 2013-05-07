@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -27,10 +28,12 @@ public class Chameleon extends AbilityListener {
     public String chameleonNowDisguised = ChatColor.GREEN + "Now disguised as a %s!";
     public boolean disguiseAsAnimal = true;
     public boolean disguiseAsMonster = true;
+    private NameManager names = HungergamesApi.getNameManager();
 
     public Chameleon() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
-            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+                    "Plugin iDiguise"));
     }
 
     private void disguise(Entity entity, Player p) {
@@ -44,8 +47,7 @@ public class Chameleon extends AbilityListener {
                         return;
                     DisguiseAPI.disguiseToAll(p, new MobDisguise(DisguiseType.valueOf(entity.getType().name()), true));
                 }
-                p.sendMessage(String.format(chameleonNowDisguised,
-                        HungergamesApi.getKitManager().toReadable(entity.getType().getName())));
+                p.sendMessage(String.format(chameleonNowDisguised, names.getName(entity.getType().name())));
             }
         }
     }
