@@ -2,11 +2,9 @@ package me.libraryaddict.Hungergames.Managers;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Enchants.Unlootable;
-import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
@@ -24,8 +22,6 @@ public class EnchantmentManager {
     public static Enchantment UNLOOTABLE;
 
     static {
-        TranslationManager cm = HungergamesApi.getTranslationManager();
-        NameManager names = HungergamesApi.getNameManager();
         UNLOOTABLE = new Unlootable(getId());
         try {
             Field field = Enchantment.class.getDeclaredField("acceptingNew");

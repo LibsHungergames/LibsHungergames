@@ -32,22 +32,6 @@ public class TranslationManager {
     private String commandBuyKitCantAfford = ChatColor.AQUA + "You can't afford this kit!";
     private String commandBuyKitCantBuyKit = ChatColor.AQUA + "You can't buy this kit!";
     private String commandBuyKitKitsNotLoaded = ChatColor.AQUA + "Your kits have not loaded yet!";
-    private String commandMessagePlayerNoArgs = ChatColor.GREEN + "Did you forget to type a message?";
-    private String commandReplyNoArgs = ChatColor.GREEN + "Did you forget to type a message?";
-    private String commandMessageNoArgs = ChatColor.GREEN + "Please fill in a player name and message!";
-    private String commandReplyNoReceiver = ChatColor.GREEN + "You were not talking to anyone. Feeling alone?";
-    private String commandReplyReceiverLeft = ChatColor.GREEN + "Cannot find %s!";
-    private String commandMessageNoReceiver = ChatColor.GREEN + "Player does not exist";
-    private String commandMessageReceiveMessage = ChatColor.GRAY + "[%s" + ChatColor.RESET + ChatColor.GRAY + " -> me] "
-            + ChatColor.RESET + "%s";
-    private String commandMessageSendMessage = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
-            + ChatColor.RESET + "%s";
-    private String commandReplyReceiveReply = ChatColor.GRAY + "[%s" + ChatColor.RESET + ChatColor.GRAY + " -> me] "
-            + ChatColor.RESET + "%s";
-    private String messagePlayerSendReply = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
-            + ChatColor.RESET + "%s";
-    private String commandReplyEventCancelled = ChatColor.GREEN + "You are forbidden to talk to %s!";
-    private String commandMessageEventCancelled = ChatColor.GREEN + "You are forbidden to talk to %s!";
     private String commandBuyKitMysqlNotEnabled = ChatColor.GREEN
             + "Magical forces render you powerless and- Just kidding. The server owner did not setup mysql.";
     private String commandBuyKitNoArgs = ChatColor.AQUA + "You must define a kit id or name";
@@ -103,15 +87,31 @@ public class TranslationManager {
     private String commandKitGameAlreadyStarted = ChatColor.RED + "The game has already started!";
     private String commandKitInfoDefineKitName = ChatColor.AQUA + "You need to define a kit name or id!";
     private String commandKitItemsDefineKitName = ChatColor.AQUA + "You need to define a kit name!";
+    private String commandKitItemsItemWithEnchant = "%s with enchant: %s";
+    private String commandKitItemsItemWithEnchants = "%s with enchants: %s";
     private String commandKitKitDoesntExist = ChatColor.AQUA
             + "This kit does not exist!\nType /kit for all the kits you can use!";
     private String commandKitNoPermission = ChatColor.RED + "You do not have access to this kit!";
     private String commandKitNowUsingKit = ChatColor.AQUA + "Now using kit %s!";
+    private String commandMessageEventCancelled = ChatColor.GREEN + "You are forbidden to talk to %s!";
+    private String commandMessageNoArgs = ChatColor.GREEN + "Please fill in a player name and message!";
+    private String commandMessageNoReceiver = ChatColor.GREEN + "Player does not exist";
+    private String commandMessagePlayerNoArgs = ChatColor.GREEN + "Did you forget to type a message?";
+    private String commandMessageReceiveMessage = ChatColor.GRAY + "[%s" + ChatColor.RESET + ChatColor.GRAY + " -> me] "
+            + ChatColor.RESET + "%s";
+    private String commandMessageSendMessage = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
+            + ChatColor.RESET + "%s";
     private String commandPlayers = ChatColor.DARK_GRAY + "There are " + ChatColor.GRAY + "%1$2s " + ChatColor.DARK_GRAY
             + "gamers and " + ChatColor.GRAY + "%2$2s" + ChatColor.DARK_GRAY + " spectators\n" + ChatColor.DARK_GRAY + "Gamers: "
             + ChatColor.GRAY + "%3$2s";
     private String commandPlayersTimeStatusStarted = ChatColor.DARK_GRAY + "The game has been going for %s.";
     private String commandPlayersTimeStatusStarting = ChatColor.DARK_GRAY + "The game is starting in %s.";
+    private String commandReplyEventCancelled = ChatColor.GREEN + "You are forbidden to talk to %s!";
+    private String commandReplyNoArgs = ChatColor.GREEN + "Did you forget to type a message?";
+    private String commandReplyNoReceiver = ChatColor.GREEN + "You were not talking to anyone. Feeling alone?";
+    private String commandReplyReceiveReply = ChatColor.GRAY + "[%s" + ChatColor.RESET + ChatColor.GRAY + " -> me] "
+            + ChatColor.RESET + "%s";
+    private String commandReplyReceiverLeft = ChatColor.GREEN + "Cannot find %s!";
     private String commandRideNameOfRideall = "rideall";
     private String commandRideRideAll = ChatColor.GREEN + "Giddy up horsie!";
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
@@ -156,28 +156,29 @@ public class TranslationManager {
             "%Killer% gave %Killed% a helping hand into death's sweet embrace with his trusty %Weapon%",
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
-    private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands file";
     private String kitDescriptionDefault = "No description was provided for this kit";
     private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s' missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
+    private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
     private String loggerCreatingAbilitysConfig = "[Hungergames] Creating ability config file";
+    private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands file";
     private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation file";
     private String loggerDependencyNotFound = "Dependency %s not found";
     private String loggerDisabledEnd = "[Hungergames] Disabled the end";
     private String loggerDisabledNether = "[Hungergames] Disabled the nether";
     private String loggerErrorWhileLoadingAbility = "[Hungergames] Error while loading ability: %s - %s";
-    private String loggerErrorWhileLoadingTranslation = "[Hungergames] Error while loading the translation: %s";
     private String loggerErrorWhileLoadingCommands = "[Hungergames] Error while loading the commands: %s - %s";
+    private String loggerErrorWhileLoadingTranslation = "[Hungergames] Error while loading the translation: %s";
     private String loggerErrorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
     private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungerames] Tried to register %s for the %s ability but it does not exist";
     private String loggerFailedToChangIDisguiseConfig = "[Hungergames] Failed to change iDisguise config";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
     private String loggerLoadAbilitysInPackage = "[HungerGames] Initializing all abilitys found in %s in the %s package";
-    private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
+    private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerMetricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
     private String loggerMySqlClosing = "[%s] Disconnecting from MySQL database...";
     private String loggerMySqlClosingError = "[%s] Error while closing the connection...";
@@ -189,7 +190,6 @@ public class TranslationManager {
     private String loggerShuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
     private String loggerSucessfullyLoadedMap = "[Hungergames] Sucessfully loaded map %s";
     private String loggerTranslationMissingValue = "[Hungergames] Restored translation missing config '%s'";
-    private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
@@ -209,6 +209,8 @@ public class TranslationManager {
     private String messagePlayerSendKitItemsKitName = ChatColor.DARK_AQUA + "Kit Name:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsNoItems = "No other items to display";
     private String messagePlayerSendKitItemsOtherItems = ChatColor.DARK_AQUA + "Other items:" + ChatColor.AQUA + " %s";
+    private String messagePlayerSendReply = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
+            + ChatColor.RESET + "%s";
     private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_GREEN + "Your current kit:" + ChatColor.RESET + " %s";
     private String messagePlayerShowKitsHisKits = ChatColor.DARK_GREEN + "Your kits:" + ChatColor.RESET + " %s";
     private String messagePlayerShowKitsNoKit = "None";
@@ -546,6 +548,14 @@ public class TranslationManager {
         return commandKitItemsDefineKitName;
     }
 
+    public String getCommandKitItemsItemWithEnchant() {
+        return commandKitItemsItemWithEnchant;
+    }
+
+    public String getCommandKitItemsItemWithEnchants() {
+        return commandKitItemsItemWithEnchants;
+    }
+
     public String getCommandKitKitDoesntExist() {
         return commandKitKitDoesntExist;
     }
@@ -558,6 +568,30 @@ public class TranslationManager {
         return commandKitNowUsingKit;
     }
 
+    public String getCommandMessageEventCancelled() {
+        return commandMessageEventCancelled;
+    }
+
+    public String getCommandMessageNoArgs() {
+        return commandMessageNoArgs;
+    }
+
+    public String getCommandMessageNoReceiver() {
+        return commandMessageNoReceiver;
+    }
+
+    public String getCommandMessagePlayerNoArgs() {
+        return commandMessagePlayerNoArgs;
+    }
+
+    public String getCommandMessageReceiveMessage() {
+        return commandMessageReceiveMessage;
+    }
+
+    public String getCommandMessageSendMessage() {
+        return commandMessageSendMessage;
+    }
+
     public String getCommandPlayers() {
         return commandPlayers;
     }
@@ -568,6 +602,30 @@ public class TranslationManager {
 
     public String getCommandPlayersTimeStatusStarting() {
         return commandPlayersTimeStatusStarting;
+    }
+
+    public String getCommandReplyEventCancelled() {
+        return commandReplyEventCancelled;
+    }
+
+    public String getCommandReplyNoArgs() {
+        return commandReplyNoArgs;
+    }
+
+    public String getCommandReplyNoReceiver() {
+        return commandReplyNoReceiver;
+    }
+
+    public String getCommandReplyReceiveReply() {
+        return commandReplyReceiveReply;
+    }
+
+    public String getCommandReplyReceiverLeft() {
+        return commandReplyReceiverLeft;
+    }
+
+    public String getCommandReplySendReply() {
+        return messagePlayerSendReply;
     }
 
     public String getCommandRideNameOfRideall() {
@@ -710,8 +768,16 @@ public class TranslationManager {
         return loggerChangedSpawnRadius;
     }
 
+    public String getLoggerCommandsMissingValue() {
+        return loggerCommandsMissingValue;
+    }
+
     public String getLoggerCreatingAbilitysConfig() {
         return loggerCreatingAbilitysConfig;
+    }
+
+    public String getLoggerCreatingCommandsConfig() {
+        return loggerCreatingCommandsConfig;
     }
 
     private String getLoggerCreatingTranslationConfig() {
@@ -734,6 +800,10 @@ public class TranslationManager {
         return loggerErrorWhileLoadingAbility;
     }
 
+    public String getLoggerErrorWhileLoadingCommands() {
+        return loggerErrorWhileLoadingCommands;
+    }
+
     private String getLoggerErrorWhileLoadingTranslation() {
         return loggerErrorWhileLoadingTranslation;
     }
@@ -754,8 +824,16 @@ public class TranslationManager {
         return loggerFoundAbilityInPackage;
     }
 
+    public String getLoggerFoundCommandInPackage() {
+        return loggerFoundCommandInPackage;
+    }
+
     public String getLoggerLoadAbilitysInPackage() {
         return loggerLoadAbilitysInPackage;
+    }
+
+    public String getLoggerLoadCommandsInPackage() {
+        return loggerLoadCommandsInPackage;
     }
 
     private String getLoggerLoadTranslationConfig() {
@@ -1149,74 +1227,6 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getLoggerCreatingCommandsConfig() {
-        return loggerCreatingCommandsConfig;
-    }
-
-    public String getLoggerErrorWhileLoadingCommands() {
-        return loggerErrorWhileLoadingCommands;
-    }
-
-    public String getLoggerCommandsMissingValue() {
-        return loggerCommandsMissingValue;
-    }
-
-    public String getLoggerLoadCommandsInPackage() {
-        return loggerLoadCommandsInPackage;
-    }
-
-    public String getLoggerFoundCommandInPackage() {
-        return loggerFoundCommandInPackage;
-    }
-
-    public String getCommandMessagePlayerNoArgs() {
-        return commandMessagePlayerNoArgs;
-    }
-
-    public String getCommandReplyNoArgs() {
-        return commandReplyNoArgs;
-    }
-
-    public String getCommandMessageNoArgs() {
-        return commandMessageNoArgs;
-    }
-
-    public String getCommandReplyNoReceiver() {
-        return commandReplyNoReceiver;
-    }
-
-    public String getCommandReplyReceiverLeft() {
-        return commandReplyReceiverLeft;
-    }
-
-    public String getCommandMessageNoReceiver() {
-        return commandMessageNoReceiver;
-    }
-
-    public String getCommandMessageReceiveMessage() {
-        return commandMessageReceiveMessage;
-    }
-
-    public String getCommandMessageSendMessage() {
-        return commandMessageSendMessage;
-    }
-
-    public String getCommandReplyReceiveReply() {
-        return commandReplyReceiveReply;
-    }
-
-    public String getCommandReplySendReply() {
-        return messagePlayerSendReply;
-    }
-
-    public String getCommandReplyEventCancelled() {
-        return commandReplyEventCancelled;
-    }
-
-    public String getCommandMessageEventCancelled() {
-        return commandMessageEventCancelled;
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
-import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
@@ -20,9 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitItems implements CommandExecutor {
 
-    private TranslationManager tm = HungergamesApi.getTranslationManager();
+    private final TranslationManager tm = HungergamesApi.getTranslationManager();
     private final NameManager name = HungergamesApi.getNameManager();
-    private KitManager kits = HungergamesApi.getKitManager();
+    private final KitManager kits = HungergamesApi.getKitManager();
     public String description = "View the items given with a kit";
 
     private String toReadable(String string) {
@@ -34,7 +33,6 @@ public class KitItems implements CommandExecutor {
     }
 
     private String itemToName(ItemStack item) {
-        // TODO Add chat translation
         if (item == null)
             return "null";
         String itemName = (item.getAmount() > 1 ? item.getAmount() + " " : "")
@@ -46,8 +44,12 @@ public class KitItems implements CommandExecutor {
             enchants.add(toReadable(eName + " " + item.getEnchantmentLevel(enchant)));
         }
         Collections.sort(enchants);
-        if (enchants.size() > 0)
-            itemName += " with enchant" + (enchants.size() > 1 ? "s" : "") + ": " + StringUtils.join(enchants, ", ");
+        if (enchants.size() > 0) {
+            if (enchants.size() == 1)
+                itemName = String.format(tm.getCommandKitItemsItemWithEnchant(), itemName, StringUtils.join(enchants, ", "));
+            else
+                itemName = String.format(tm.getCommandKitItemsItemWithEnchant(), itemName, StringUtils.join(enchants, ", "));
+        }
         return itemName;
     }
 

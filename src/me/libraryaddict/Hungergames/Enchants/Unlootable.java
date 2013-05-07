@@ -1,7 +1,5 @@
 package me.libraryaddict.Hungergames.Enchants;
 
-import me.libraryaddict.Hungergames.Types.HungergamesApi;
-
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
