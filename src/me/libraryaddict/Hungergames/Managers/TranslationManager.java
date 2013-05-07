@@ -1141,16 +1141,18 @@ public class TranslationManager {
                             Object value = config.get(field.getName());
                             if (value == null) {
                                 value = field.get(this);
-                                if (value instanceof String) {
-                                    value = ((String) value).replace("\n", "\\n").replace("§", "&");
-                                }
                                 if (value instanceof String[]) {
                                     String[] strings = (String[]) value;
-                                    for (int i = 0; i < strings.length; i++)
-                                        strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
-                                    value = strings;
+                                    String[] newStrings = new String[strings.length];
+                                    for (int i = 0; i < strings.length; i++) {
+                                        newStrings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                    }
+                                    config.set(field.getName(), newStrings);
+                                } else {
+                                    if (value instanceof String)
+                                        value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                                    config.set(field.getName(), value);
                                 }
-                                config.set(field.getName(), value);
                                 modified = true;
                                 if (!newFile)
                                     System.out.print(String.format(getLoggerTranslationMissingValue(), field.getName()));

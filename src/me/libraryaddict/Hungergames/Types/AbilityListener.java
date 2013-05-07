@@ -54,8 +54,8 @@ public abstract class AbilityListener implements Listener {
     public boolean isSpecialItem(ItemStack item, String displayName) {
         if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
             String itemName = item.getItemMeta().getDisplayName();
-            if (!itemName.equals(ChatColor.stripColor(itemName))
-                    && ChatColor.stripColor(itemName).equals(ChatColor.stripColor(displayName))) {
+            String stripped = ChatColor.stripColor(itemName);
+            if (!itemName.equals(stripped) && stripped.equals(ChatColor.stripColor(displayName))) {
                 return true;
             }
         }
@@ -75,16 +75,18 @@ public abstract class AbilityListener implements Listener {
                     Object value = section.get(field.getName());
                     if (value == null) {
                         value = field.get(this);
-                        if (value instanceof String) {
-                            value = ((String) value).replace("\n", "\\n").replace("§", "&");
-                        }
                         if (value instanceof String[]) {
                             String[] strings = (String[]) value;
-                            for (int i = 0; i < strings.length; i++)
-                                strings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
-                            value = strings;
+                            String[] newStrings = new String[strings.length];
+                            for (int i = 0; i < strings.length; i++) {
+                                newStrings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                            }
+                            section.set(field.getName(), newStrings);
+                        } else {
+                            if (value instanceof String)
+                                value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                            section.set(field.getName(), value);
                         }
-                        section.set(field.getName(), value);
                         modified = true;
                         if (!isNewFile)
                             System.out.print(String.format(cm.getLoggerAbilityMissingValue(), getClass().getSimpleName(),
