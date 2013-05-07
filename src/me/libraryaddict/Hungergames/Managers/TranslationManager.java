@@ -1141,12 +1141,12 @@ public class TranslationManager {
                             if (value == null) {
                                 value = field.get(this);
                                 if (value instanceof String) {
-                                    value = ((String) value).replace("\n", "\\n").replace("ง", "&");
+                                    value = ((String) value).replace("\n", "\\n").replace("ยง", "&");
                                 }
                                 if (value instanceof String[]) {
                                     String[] strings = (String[]) value;
                                     for (int i = 0; i < strings.length; i++)
-                                        strings[i] = strings[i].replace("\n", "\\n").replace("ง", "&");
+                                        strings[i] = strings[i].replace("\n", "\\n").replace("ยง", "&");
                                     value = strings;
                                 }
                                 config.set(field.getName(), value);
