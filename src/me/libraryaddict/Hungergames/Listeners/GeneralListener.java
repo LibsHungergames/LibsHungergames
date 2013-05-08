@@ -11,6 +11,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
@@ -65,13 +66,14 @@ public class GeneralListener implements Listener {
         if (event.getEntityType() == EntityType.SLIME)
             event.setCancelled(true);
         if (hg.currentTime < 0) {
-            if (event.getEntity() instanceof Animals && event.getSpawnReason() == SpawnReason.CHUNK_GEN) {
+            if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
+                    && event.getSpawnReason() == SpawnReason.CHUNK_GEN) {
                 event.setCancelled(true);
                 if (new Random().nextInt(config.getMobSpawnChance()) == 0)
                     hg.entitys.put(event.getLocation().clone(), event.getEntityType());
             }
-        } else if (event.getEntity() instanceof Animals && event.getSpawnReason() == SpawnReason.CHUNK_GEN
-                && new Random().nextInt(config.getMobSpawnChance()) != 0)
+        } else if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
+                && event.getSpawnReason() == SpawnReason.CHUNK_GEN && new Random().nextInt(config.getMobSpawnChance()) != 0)
             event.setCancelled(true);
     }
 

@@ -58,7 +58,6 @@ BadKits:
   - Endermage
   - Explorer
   - Hermit
-  - Milkman
   - Miner
   - Reaper
   - Rider
@@ -355,12 +354,12 @@ Kits:
     Ability:
       - Lumberjack
   Milkman:
-    Description: 'The Milkman kit gives you a "Milkman''s Bucket" filled with milk, once you drink the milk, you will get 45 seconds of Regeneration I, Fire Resistance I and Speed I, but you will make a tribute to the milkman by saying "I am the milkman, my milk is delicious" on use, you can use the bucket for 5 times, after that, the Milkman''s effect on the bucket will wear off.'
+    Description: 'The Milkman kit gives you a "Milkman''s Bucket" filled with milk. Once you drink the milk, you will get 45 seconds of Regeneration I, Fire Resistance I and Speed I. but you will make a tribute to the milkman by saying "I am the milkman, my milk is delicious" on use. You can use the bucket for 5 times, after that, the Milkman''s effect on the bucket will wear off.'
     Free: true
     Price: 0
     Icon: MILK_BUCKET 0 1
     Items:
-      - MILK_BUCKET 0 1
+      - MILK_BUCKET 0 1 Name=Milkman's_Bucket UniqueItem
     Ability:
       - Milkman
   Miner:
