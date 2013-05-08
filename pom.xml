@@ -36,7 +36,7 @@
 		</resources>
 	</build>
 
-	<version>v2.1</version>
+	<version>v2.2</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

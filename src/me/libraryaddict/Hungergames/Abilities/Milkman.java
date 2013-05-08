@@ -18,14 +18,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Milkman extends AbilityListener {
-    public String milkmanMessage = "I am the milkman, my milk is delicious";
-    public String[] potionEffects = new String[] { "REGENERATION 900 0", "FIRE_RESISTANCE 900 0", "SPEED 900 0" };
     private transient HashMap<ItemStack, Integer> cooldown = new HashMap<ItemStack, Integer>();
     private transient KitManager kits = HungergamesApi.getKitManager();
+    public int maxUses = 5;
     public String milkbucketName = "Milkman's Bucket";
     public String milkBucketRanOut = ChatColor.BLUE + "Your milk bucket has run out of uses!";
+    public String milkmanMessage = "I am the milkman, my milk is delicious";
+    public String[] potionEffects = new String[] { "REGENERATION 900 0", "FIRE_RESISTANCE 900 0", "SPEED 900 0" };
     public String usedMilk = ChatColor.GREEN + "You have %s uses left!";
-    public int maxUses = 5;
+
+    private ItemStack clone(ItemStack item, Material newMaterial) {
+        ItemStack newItem = new ItemStack(newMaterial.getId(), item.getAmount(), item.getDurability());
+        newItem.setItemMeta(item.getItemMeta());
+        return newItem;
+    }
 
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
@@ -53,12 +59,6 @@ public class Milkman extends AbilityListener {
                 p.setItemInHand(clone(item, Material.BUCKET));
             }
         }
-    }
-
-    private ItemStack clone(ItemStack item, Material newMaterial) {
-        ItemStack newItem = new ItemStack(newMaterial.getId(), item.getAmount(), item.getDurability());
-        newItem.setItemMeta(item.getItemMeta());
-        return newItem;
     }
 
     @EventHandler
