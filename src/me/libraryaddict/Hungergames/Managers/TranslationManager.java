@@ -175,6 +175,7 @@ public class TranslationManager {
     private String loggerErrorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
     private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungerames] Tried to register %s for the %s ability but it does not exist";
     private String loggerFailedToChangIDisguiseConfig = "[Hungergames] Failed to change iDisguise config";
+    private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
     private String loggerLoadAbilitysInPackage = "[HungerGames] Initializing all abilitys found in %s in the %s package";
@@ -220,6 +221,9 @@ public class TranslationManager {
     private String messagePlayerShowKitsUseKitInfo = "To view the information on a kit, Use /kitinfo <Kit Name>";
     private String messagePlayerTrack = "Compass pointing at %s";
     private String messagePlayerTrackNoVictim = "No players found, Pointing at spawn";
+    private String messagePlayerUpdateAvailable = ChatColor.RED + "[Hungergames]" + ChatColor.DARK_RED
+            + " There is a update available, The new version is " + ChatColor.RED + "%s" + ChatColor.DARK_RED
+            + " while your current version is " + ChatColor.RED + "%s";
     private String messagePlayerWarningForgeUnstableEnchants = ChatColor.RED
             + "Minecraft will crash if you attempt to put this in";
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
@@ -252,6 +256,7 @@ public class TranslationManager {
     private String timeFormatSecondAndMinutes = "%s minutes, %s second";
     private String timeFormatSeconds = "%s seconds";
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
+
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
 
     public TranslationManager() {
@@ -781,6 +786,10 @@ public class TranslationManager {
         return loggerCreatingCommandsConfig;
     }
 
+    public String getLoggerCreatingNamesConfig() {
+        return loggerCreatingNamesConfig;
+    }
+
     private String getLoggerCreatingTranslationConfig() {
         return loggerCreatingTranslationConfig;
     }
@@ -819,6 +828,10 @@ public class TranslationManager {
 
     public String getLoggerFailedToChangIDisguiseConfig() {
         return loggerFailedToChangIDisguiseConfig;
+    }
+
+    public String getLoggerFailedToCheckUpdate() {
+        return loggerFailedToCheckUpdate;
     }
 
     public String getLoggerFoundAbilityInPackage() {
@@ -991,6 +1004,10 @@ public class TranslationManager {
 
     public String getMessagePlayerTrackNoVictim() {
         return messagePlayerTrackNoVictim;
+    }
+
+    public String getMessagePlayerUpdateAvailable() {
+        return messagePlayerUpdateAvailable;
     }
 
     public String getMessagePlayerWarningForgeUnstableEnchants() {
@@ -1230,10 +1247,6 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getLoggerCreatingNamesConfig() {
-        return loggerCreatingNamesConfig;
     }
 
 }

@@ -307,6 +307,9 @@ public class PlayerListener implements Listener {
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
         pm.loadGamer.add(gamer);
+        if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)
+            p.sendMessage(String.format(cm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(), hg.getDescription()
+                    .getVersion()));
     }
 
     @EventHandler

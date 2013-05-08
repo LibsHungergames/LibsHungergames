@@ -33,7 +33,7 @@ public class Gamer {
      * 
      * False when the game has started if he wants to see other players
      */
-    private boolean seeInvis = HungergamesApi.getConfigManager().isInvisiblePreGame();
+    private boolean seeInvis = true;
     private boolean spectating = false;
 
     public Gamer(Player player) {

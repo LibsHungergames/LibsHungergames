@@ -16,7 +16,6 @@ import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;

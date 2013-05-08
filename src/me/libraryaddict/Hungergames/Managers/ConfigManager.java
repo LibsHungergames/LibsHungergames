@@ -5,14 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R3.CraftServer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import de.robingrether.idisguise.iDisguise;
 
 public class ConfigManager {
@@ -37,7 +38,6 @@ public class ConfigManager {
     private Hungergames hg;
     private int invincibility;
     private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
-    private boolean invisiblePreGame;
     private boolean kitSelector;
     private ItemStack kitSelectorBack;
     private boolean kitSelectorDynamicSize;
@@ -58,11 +58,24 @@ public class ConfigManager {
     private int wonBroadcastsDelay;
     private int x;
     private int z;
+    private String latestVersion = null;
+    private UpdateChecker updateChecker;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
         loadConfig();
     }
+
+    /**
+     * Get the latest version released
+     */
+    public String getLatestVersion() {
+        return latestVersion;
+    }
+
+    /**
+     * Check for a update
+     */
 
     /**
      * 
@@ -345,13 +358,6 @@ public class ConfigManager {
         return fireSpread;
     }
 
-    /**
-     * Are players invisible before the game starts
-     */
-    public boolean isInvisiblePreGame() {
-        return invisiblePreGame;
-    }
-
     public boolean isKitSelectorDynamicSize() {
         return kitSelectorDynamicSize;
     }
@@ -441,6 +447,17 @@ public class ConfigManager {
                 }
             }
         });
+        if (hg.getConfig().getBoolean("CheckUpdates"))
+            Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
+                public void run() {
+                    try {
+                        checkUpdate();
+                    } catch (Exception ex) {
+                        System.out.print(String.format(cm.getLoggerFailedToCheckUpdate(), ex.getMessage()));
+                    }
+                }
+            });
+
         hg.currentTime = -Math.abs(hg.getConfig().getInt("Countdown", 270));
         mysqlEnabled = hg.getConfig().getBoolean("UseMySql", false);
         displayScoreboards = hg.getConfig().getBoolean("Scoreboards", false);
@@ -483,7 +500,6 @@ public class ConfigManager {
             kitSelectorForward = new ItemStack(Material.SUGAR_CANE_BLOCK);
         kitSelectorDynamicSize = hg.getConfig().getBoolean("KitSelectorDynamicSize");
         kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
-        invisiblePreGame = hg.getConfig().getBoolean("InvisiblePreGame");
         mobSpawnChance = hg.getConfig().getInt("MobSpawnChance");
 
         // Create the times where it broadcasts and advertises the feast
@@ -509,6 +525,21 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
+    }
+
+    /**
+     * Makes the update checker check for a update
+     */
+    public void checkUpdate() throws Exception {
+        updateChecker = new UpdateChecker();
+        updateChecker.checkUpdate(hg.getDescription().getVersion());
+        latestVersion = updateChecker.getLatestVersion();
+        if (latestVersion != null) {
+            for (Player p : Bukkit.getOnlinePlayers())
+                if (p.hasPermission("hungergames.update"))
+                    p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(), hg
+                            .getDescription().getVersion(), getLatestVersion()));
+        }
     }
 
     /**
