@@ -1,12 +1,11 @@
 package me.libraryaddict.Hungergames.Utilities;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.regex.Pattern;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Element;
 
 public class UpdateChecker {
     private String latestVersion;
@@ -16,35 +15,11 @@ public class UpdateChecker {
     }
 
     public void checkUpdate(String currentVersion) throws Exception {
-        URL url = new URL("http://dev.bukkit.org/server-mods/hunger-games/files.rss");
-        String title = "";
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        InputStream inputStream = url.openStream();
-        if (inputStream != null) {
-            XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStream);
-            while (eventReader.hasNext()) {
-                XMLEvent event = eventReader.nextEvent();
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equals("title")) {
-                        event = eventReader.nextEvent();
-                        title = event.asCharacters().getData();
-                        continue;
-                    }
-                    if (event.asStartElement().getName().getLocalPart().equals("link")) {
-                        event = eventReader.nextEvent();
-                        event.asCharacters().getData();
-                        continue;
-                    }
-                } else if (event.isEndElement()) {
-                    if (event.asEndElement().getName().getLocalPart().equals("item")) {
-                        title = title.replace("Librarys Hungergames ", "").replace("Lib's Hungergames ", "");
-                        if (checkHigher(currentVersion, title))
-                            latestVersion = title;
-                        break;
-                    }
-                }
-            }
-        }
+        String version = ((CharacterData) ((Element) DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(new URL("http://dev.bukkit.org/server-mods/hunger-games/files.rss").openStream())
+                .getElementsByTagName("item").item(0)).getElementsByTagName("title").item(0).getFirstChild()).getData();
+        if (checkHigher(currentVersion, version))
+            latestVersion = version.replace("Lib's Hungergames ", "");
     }
 
     private boolean checkHigher(String currentVersion, String newVersion) {
@@ -54,7 +29,7 @@ public class UpdateChecker {
     }
 
     public String toReadable(String version) {
-        String[] split = Pattern.compile(".", Pattern.LITERAL).split(version);
+        String[] split = Pattern.compile(".", Pattern.LITERAL).split(version.replace("Lib's Hungergames ", "").replace("v", ""));
         version = "";
         for (String s : split)
             version += String.format("%4s", s);
