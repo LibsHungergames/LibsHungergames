@@ -125,11 +125,7 @@ public class Tracker extends AbilityListener implements CommandExecutor {
         Bukkit.getPluginManager().callEvent(trackEvent);
         if (!trackEvent.isCancelled()) {
             p.sendMessage(trackEvent.getMessage());
-            if (victim != null) {
-                p.setCompassTarget(victim.getLocation());
-            } else {
-                p.setCompassTarget(p.getWorld().getSpawnLocation());
-            }
+            p.setCompassTarget(p.getWorld().getSpawnLocation());
         }
     }
 }

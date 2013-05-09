@@ -162,13 +162,6 @@ Kits:
     Items:
       - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1 Lore=Right_click_with_this\nto_open_a_crafting_table
       - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem Lore=Right_click_with_this\nto_open_a_furnace
-  Creeper:
-    Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
-    Free: true
-    Price: 0
-    Icon: SULPHUR 0 1
-    Ability:
-      - Creeper
   Cultivator:
     Description: 'The Cultivator kit allows you to immediately grow wheat and trees by placing seeds on hoed dirt, and placing saplings on dirt/grass. This is an excellent team and solo kit perfect for every game.'
     Free: true
@@ -371,14 +364,6 @@ Kits:
       - STONE_PICKAXE 0 1
     Ability:
       - Miner
-  Miser:
-    Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
-    Free: true
-    Price: 0
-    Icon: CHEST 0 1
-    Items:
-    Ability:
-      - Miser
   Monk:
     Description: 'Right click someone with your blaze rod and their currently held item will switch with a random item in their inventory!'
     Free: true
@@ -416,13 +401,6 @@ Kits:
     Icon: WATER 0 1
     Ability:
       - Poseidon
-  Pussy:
-    Description: 'Ever get accused of being a pussy? Now you can rub it in! Turn into a kitty cat after 10 seconds of sprinting! Wonderful if you want to become hard to see while you are doing your trademark pussying!'
-    Free: true
-    Price: 0
-    Icon: POTION 16418 1
-    Ability:
-      - Pussy
   Pyro:
     Description: 'The Pyro kit is useful for the start and late game. The flint and steel has many uses and can be quite effective when supporting a team, or attacking others! The fire charges can be right click, and when they hit something, everything nearby sets on fire!'
     Free: true

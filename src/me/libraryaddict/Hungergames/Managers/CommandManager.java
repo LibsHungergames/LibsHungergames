@@ -49,7 +49,7 @@ public class CommandManager {
         command.setExecutor(exc);
         try {
             Field field = exc.getClass().getDeclaredField("aliases");
-            if (field != null && field.get(exc) instanceof String[]) {
+            if (field.get(exc) instanceof String[]) {
                 List<String> list = Arrays.asList((String[]) field.get(exc));
                 if (exc.getClass().getSimpleName().equals("Creator")) {
                     list.add("author");
@@ -64,6 +64,7 @@ public class CommandManager {
                 command.setAliases(list);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         try {
             Field field = exc.getClass().getDeclaredField("description");

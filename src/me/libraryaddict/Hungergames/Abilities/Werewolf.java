@@ -15,24 +15,28 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Werewolf extends AbilityListener implements Disableable {
-    public boolean giveWeakness = true;
-    public int speedMultiplier = 0;
-    public int strengthMultiplier = 0;
+    public String[] potionEffectsDay = new String[] { "WEAKNESS 12000 0" };
+    public String[] potionEffectsNight = new String[] { "SPEED 12000 0", "INCREASE_DAMAGE 12000 0" };
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
-                for (Gamer gamer : HungergamesApi.getPlayerManager().getAliveGamers()) {
-                    Player p = gamer.getPlayer();
-                    if (hasAbility(p)) {
-                        if (HungergamesApi.getHungergames().world.getTime() > 0
-                                && HungergamesApi.getHungergames().world.getTime() <= 12000) {
-                            if (giveWeakness)
-                                p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0), true);
-                        } else {
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 12000, strengthMultiplier), true);
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 12000, speedMultiplier), true);
+                for (Player p : getMyPlayers()) {
+                    if (HungergamesApi.getHungergames().world.getTime() > 0
+                            && HungergamesApi.getHungergames().world.getTime() <= 12000) {
+                        for (String string : potionEffectsDay) {
+                            String[] effect = string.split(" ");
+                            PotionEffect potionEffect = new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()),
+                                    Integer.parseInt(effect[1]), Integer.parseInt(effect[2]));
+                            p.addPotionEffect(potionEffect, true);
+                        }
+                    } else {
+                        for (String string : potionEffectsNight) {
+                            String[] effect = string.split(" ");
+                            PotionEffect potionEffect = new PotionEffect(PotionEffectType.getByName(effect[0].toUpperCase()),
+                                    Integer.parseInt(effect[1]), Integer.parseInt(effect[2]));
+                            p.addPotionEffect(potionEffect, true);
                         }
                     }
                 }
