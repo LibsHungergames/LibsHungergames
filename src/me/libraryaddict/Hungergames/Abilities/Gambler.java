@@ -12,11 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Gambler extends AbilityListener {
+public class Gambler extends AbilityListener implements Disableable {
     public int chanceHeal = 100;
     public int chanceHunger = 100;
     public String foodName = "&2Full hunger";

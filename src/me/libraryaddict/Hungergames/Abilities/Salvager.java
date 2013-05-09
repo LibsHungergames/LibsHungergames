@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Salvager extends AbilityListener {
+public class Salvager extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

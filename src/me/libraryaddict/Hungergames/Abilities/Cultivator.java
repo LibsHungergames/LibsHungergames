@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
 import org.bukkit.Material;
@@ -8,7 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-public class Cultivator extends AbilityListener {
+public class Cultivator extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {

@@ -24,8 +24,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 
-public class Hades extends AbilityListener {
+public class Hades extends AbilityListener implements Disableable {
     private int itemToUse = Material.ROTTEN_FLESH.getId();
     private transient HashMap<Zombie, Player> tamed = new HashMap<Zombie, Player>();
 

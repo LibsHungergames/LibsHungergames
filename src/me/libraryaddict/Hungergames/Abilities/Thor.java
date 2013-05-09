@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.HashMap;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -16,7 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class Thor extends AbilityListener {
+public class Thor extends AbilityListener implements Disableable {
     public int cooldown = 5;
     public String cooldownMessage = ChatColor.RED + "You may not do that at this time";
     public boolean doNetherackAndFire = true;

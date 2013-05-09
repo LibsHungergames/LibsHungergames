@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
 import org.bukkit.Material;
@@ -11,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Summoner extends AbilityListener {
+public class Summoner extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {

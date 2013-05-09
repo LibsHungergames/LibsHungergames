@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.Iterator;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Gravedigger extends AbilityListener {
+public class Gravedigger extends AbilityListener implements Disableable {
     private transient BlockFace[] faces = new BlockFace[] { BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };
 
     @EventHandler

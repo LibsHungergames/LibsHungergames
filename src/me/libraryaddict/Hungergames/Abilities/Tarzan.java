@@ -9,9 +9,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
-public class Tarzan extends AbilityListener {
+public class Tarzan extends AbilityListener implements Disableable {
 
     private HashMap<BlockFace, Byte> faces = new HashMap<BlockFace, Byte>();
     private ArrayList<Integer> ignoreBlockTypes = new ArrayList<Integer>();

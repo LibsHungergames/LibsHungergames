@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Abilities;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -17,7 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.util.Vector;
 
-public class Stomper extends AbilityListener {
+public class Stomper extends AbilityListener implements Disableable {
     public boolean changeStomperFallDamage = true;
     public boolean reduceStompDamageByDistance = true;
     public String stompedMessage = "%1$2s was stomped by %2$2s";

@@ -1,11 +1,13 @@
 package me.libraryaddict.Hungergames.Types;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -115,10 +117,14 @@ public abstract class AbilityListener implements Listener {
     }
 
     public void registerPlayer(Player player) {
+        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0)
+            Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
         myPlayers.add(player.getName());
     }
 
     public void unregisterPlayer(Player player) {
         myPlayers.remove(player.getName());
+        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0)
+            HandlerList.unregisterAll(this);
     }
 }

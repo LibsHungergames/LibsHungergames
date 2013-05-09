@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.ClassGetter;
@@ -87,8 +88,10 @@ public class AbilityManager {
      * Register the abilitys in the plugin manager because the game started!
      */
     public void registerAbilityListeners() {
-        for (AbilityListener abilityListener : abilities.values())
-            Bukkit.getPluginManager().registerEvents(abilityListener, HungergamesApi.getHungergames());
+        for (AbilityListener abilityListener : abilities.values()) {
+            if (abilityListener instanceof Disableable && abilityListener.getMyPlayers().size() > 0)
+                Bukkit.getPluginManager().registerEvents(abilityListener, HungergamesApi.getHungergames());
+        }
     }
 
     public void registerPlayerAbility(Player player, String abilityName) {

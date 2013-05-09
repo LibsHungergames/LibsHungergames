@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
 import org.bukkit.entity.LivingEntity;
@@ -11,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Snail extends AbilityListener {
+public class Snail extends AbilityListener implements Disableable {
     public int chance = 3;
     public int length = 5;
     public int multiplier = 1;

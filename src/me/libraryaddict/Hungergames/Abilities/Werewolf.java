@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -13,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
-public class Werewolf extends AbilityListener {
+public class Werewolf extends AbilityListener implements Disableable {
     public boolean giveWeakness = true;
     public int speedMultiplier = 0;
     public int strengthMultiplier = 0;

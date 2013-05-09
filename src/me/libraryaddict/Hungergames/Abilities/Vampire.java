@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 
 import org.bukkit.Material;
@@ -11,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Vampire extends AbilityListener {
+public class Vampire extends AbilityListener implements Disableable {
     public int healsFromAnimals = 3;
     public int healsFromMonsters = 5;
     public int healsFromPlayers = 6;

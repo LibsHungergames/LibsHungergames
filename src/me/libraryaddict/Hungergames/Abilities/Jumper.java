@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.HashMap;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Jumper extends AbilityListener {
+public class Jumper extends AbilityListener implements Disableable {
     public boolean generatePlatform = true;
     private transient HashMap<Block, Integer> platformTaskIds = new HashMap<Block, Integer>();
 

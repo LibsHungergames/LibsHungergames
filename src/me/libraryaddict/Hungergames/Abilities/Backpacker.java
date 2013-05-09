@@ -7,6 +7,7 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -20,7 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Backpacker extends AbilityListener {
+public class Backpacker extends AbilityListener implements Disableable {
 
     private transient HashMap<Player, Inventory> backpack = new HashMap<Player, Inventory>();
     public int backpackInventoryRows = 6;
@@ -78,9 +79,7 @@ public class Backpacker extends AbilityListener {
 
     @EventHandler
     public void onGameStart(GameStartEvent event) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (!hasAbility(p))
-                continue;
+        for (Player p : getMyPlayers()) {
             ItemStack item = new ItemStack(backpackItem);
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(backPackItemName);

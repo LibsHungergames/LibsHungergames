@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -118,21 +117,19 @@ public class Santa extends AbilityListener {
             timeSinceLastPresent++;
         if (timeSinceLastPresent == timeBetweenPresents) {
             timeSinceLastPresent = 0;
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (hasAbility(p)) {
-                    Kit kit = findViableKit();
-                    if (kit != null) {
-                        ItemStack item = new ItemStack(
-                                this.presentID,
-                                1,
-                                (short) (new Random().nextInt((presentEndingDataValue - presentStartingDataValue) + 1) + presentStartingDataValue));
-                        ItemMeta meta = item.getItemMeta();
-                        meta.setDisplayName(String.format(presentName, kit.getName()));
-                        if (presentLore.length > 0 && (presentLore.length > 1 || presentLore[0].length() > 0))
-                            meta.setLore(Arrays.asList(presentLore));
-                        item.setItemMeta(meta);
-                        kits.addItem(p, item);
-                    }
+            for (Player p : getMyPlayers()) {
+                Kit kit = findViableKit();
+                if (kit != null) {
+                    ItemStack item = new ItemStack(
+                            this.presentID,
+                            1,
+                            (short) (new Random().nextInt((presentEndingDataValue - presentStartingDataValue) + 1) + presentStartingDataValue));
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(String.format(presentName, kit.getName()));
+                    if (presentLore.length > 0 && (presentLore.length > 1 || presentLore[0].length() > 0))
+                        meta.setLore(Arrays.asList(presentLore));
+                    item.setItemMeta(meta);
+                    kits.addItem(p, item);
                 }
             }
         }

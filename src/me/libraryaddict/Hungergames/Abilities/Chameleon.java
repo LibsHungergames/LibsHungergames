@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -19,7 +20,7 @@ import de.robingrether.idisguise.api.DisguiseAPI;
 import de.robingrether.idisguise.api.DisguiseType;
 import de.robingrether.idisguise.api.MobDisguise;
 
-public class Chameleon extends AbilityListener {
+public class Chameleon extends AbilityListener implements Disableable {
 
     public boolean breakDisguiseOnAttacked = true;
     public boolean breakDisguiseOnAttackPlayer = true;

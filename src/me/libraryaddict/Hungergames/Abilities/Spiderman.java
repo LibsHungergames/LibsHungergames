@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -22,7 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Spiderman extends AbilityListener {
+public class Spiderman extends AbilityListener implements Disableable {
 
     public int cooldown = 30;
     private HashMap<String, ArrayList<Long>> cooldownMap = new HashMap<String, ArrayList<Long>>();

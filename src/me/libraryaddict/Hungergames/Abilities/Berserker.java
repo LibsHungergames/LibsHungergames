@@ -9,8 +9,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 
-public class Berserker extends AbilityListener {
+public class Berserker extends AbilityListener implements Disableable {
     public int berserkerLength = 30;
     public boolean giveConfusion = true;
     public int killAnimalMultiplier = 0;

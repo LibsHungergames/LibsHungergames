@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Abilities;
 
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -13,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
-public class Scout extends AbilityListener {
+public class Scout extends AbilityListener implements Disableable {
     public boolean cancelFall = true;
     public int givePotionsEverySoSeconds = 600;
 
@@ -21,9 +22,8 @@ public class Scout extends AbilityListener {
     public void gameStartEvent(GameStartEvent event) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
-                for (Player p : Bukkit.getOnlinePlayers())
-                    if (hasAbility(p.getName()))
-                        HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.POTION, 2, (short) 16418));
+                for (Player p : getMyPlayers())
+                    HungergamesApi.getKitManager().addItem(p, new ItemStack(Material.POTION, 2, (short) 16418));
             }
         }, givePotionsEverySoSeconds * 20, givePotionsEverySoSeconds * 20);
     }

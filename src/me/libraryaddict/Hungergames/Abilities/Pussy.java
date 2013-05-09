@@ -15,9 +15,10 @@ import de.robingrether.idisguise.api.DisguiseType;
 import de.robingrether.idisguise.api.MobDisguise;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Pussy extends AbilityListener {
+public class Pussy extends AbilityListener implements Disableable {
     private transient HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
     public int timeToTransform = 10;
     public String transformedFromCat = ChatColor.BLUE + "HISS!";
@@ -25,7 +26,8 @@ public class Pussy extends AbilityListener {
 
     public Pussy() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("iDisguise") == null)
-            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(), "Plugin iDiguise"));
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+                    "Plugin iDiguise"));
     }
 
     @EventHandler

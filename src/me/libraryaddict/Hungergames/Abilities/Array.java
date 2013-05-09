@@ -30,6 +30,7 @@ public class Array extends AbilityListener {
         Block[] blocks;
         long expires;
     }
+
     public int arrayBeaconId = Material.BEACON.getId();
     public int arrayExpireTime = 30;
     public String arrayItemName = ChatColor.WHITE + "Array";
