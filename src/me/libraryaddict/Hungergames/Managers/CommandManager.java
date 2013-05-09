@@ -51,20 +51,16 @@ public class CommandManager {
             Field field = exc.getClass().getDeclaredField("aliases");
             if (field.get(exc) instanceof String[]) {
                 List<String> list = Arrays.asList((String[]) field.get(exc));
-                if (exc.getClass().getSimpleName().equals("Creator")) {
-                    list.add("author");
-                    list.add("maker");
-                    list.add("coder");
-                    list.add("download");
-                    list.add("hungergames");
-                    list.add("download");
-                    if (!name.equalsIgnoreCase("creator"))
-                        list.add("creator");
-                }
+                if (exc.getClass().getSimpleName().equals("Creator"))
+                    addCreatorAliases(list, name);
                 command.setAliases(list);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (exc.getClass().getSimpleName().equals("Creator")) {
+                List<String> list = new ArrayList<String>();
+                addCreatorAliases(list, name);
+                command.setAliases(list);
+            }
         }
         try {
             Field field = exc.getClass().getDeclaredField("description");
@@ -76,6 +72,12 @@ public class CommandManager {
         field.setAccessible(true);
         SimpleCommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
         map.register(name, command);
+    }
+
+    private void addCreatorAliases(List<String> list, String commandName) {
+        for (String string : new String[] { "author", "maker", "coder", "download", "hungergames", "creator" })
+            if (!commandName.equalsIgnoreCase(string) && !list.contains(string))
+                list.add(string);
     }
 
     public boolean loadCommand(CommandExecutor exc, boolean save) {
@@ -145,7 +147,7 @@ public class CommandManager {
                                 String[] strings = (String[]) value;
                                 String[] newStrings = new String[strings.length];
                                 for (int i = 0; i < strings.length; i++) {
-                                    newStrings[i] = strings[i].replace("\n", "\\n").replace("§", "&");
+                                    newStrings[i] = strings[i].replace("\n", "\\n").replace("§", "&").toLowerCase();
                                 }
                                 section.set(field.getName(), newStrings);
                             } else {

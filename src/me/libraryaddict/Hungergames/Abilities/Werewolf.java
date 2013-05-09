@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
-import me.libraryaddict.Hungergames.Types.Gamer;
 
 public class Werewolf extends AbilityListener implements Disableable {
     public String[] potionEffectsDay = new String[] { "WEAKNESS 12000 0" };
