@@ -294,9 +294,8 @@ public class Hungergames extends JavaPlugin {
                     ScoreboardManager.updateStage();
                 }
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),
-                        feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn())));
-                if (config.feastStartsIn() > 10)
-                    Bukkit.broadcastMessage(cm.getBroadcastFeastStartingCompassMessage());
+                        feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn()))
+                        + (config.feastStartsIn() > 10 ? cm.getBroadcastFeastStartingCompassMessage() : ""));
             }
         } else if (config.doesBorderCloseIn() && currentTime > config.getTimeFeastStarts()) {
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
