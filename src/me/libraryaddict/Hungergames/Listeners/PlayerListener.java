@@ -95,11 +95,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMessage(PrivateMessageEvent event) {
         Gamer gamer = pm.getGamer(event.getSender().getName());
-        if (gamer != null && config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
-                && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
-            Gamer g = pm.getGamer(event.getReceiver().getName());
-            if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
-                event.setCancelled(true);
+        Gamer receiver = pm.getGamer(event.getReceiver().getName());
+        if (gamer != null && receiver != null && config.isSpectatorChatHidden() && gamer.isAlive() != receiver.isAlive()
+                && hg.doSeconds && !event.getReceiver().hasPermission("hungergames.spectatorchat")
+                && !event.getSender().hasPermission("hungergames.spectatorchat")) {
+            event.setCancelled(true);
         }
     }
 
