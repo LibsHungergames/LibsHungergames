@@ -141,3 +141,10 @@ MobSpawnChance: 5
 
 # Check for a update and notifys anyone with the permission hungergames.update
 CheckUpdates: true
+
+# Uncomment this to use it.
+
+#CommandsToRunBeforeShutdown:
+#  - 'kick libraryaddict You smell'
+#  - 'kick minecraftchick You suck'
+#  - 'say Attention all: libraryaddict loves you'

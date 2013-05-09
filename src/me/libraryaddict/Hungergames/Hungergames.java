@@ -347,9 +347,11 @@ public class Hungergames extends JavaPlugin {
         System.out.print(cm.getLoggerShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (!event.isCancelled())
+        if (!event.isCancelled()) {
+            for (String command : config.getCommandsToRunBeforeShutdown())
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
-        else
+        } else
             System.out.print(cm.getLoggerShutdownCancelled());
     }
 

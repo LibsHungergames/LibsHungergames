@@ -3,6 +3,8 @@ package me.libraryaddict.Hungergames.Managers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
@@ -60,6 +62,7 @@ public class ConfigManager {
     private int z;
     private String latestVersion = null;
     private UpdateChecker updateChecker;
+    private List<String> commandsToRunBeforeShutdown;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -501,6 +504,10 @@ public class ConfigManager {
         kitSelectorDynamicSize = hg.getConfig().getBoolean("KitSelectorDynamicSize");
         kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
         mobSpawnChance = hg.getConfig().getInt("MobSpawnChance");
+        if (hg.getConfig().contains("CommandsToRunBeforeShutdown"))
+            commandsToRunBeforeShutdown = hg.getConfig().getStringList("CommandsToRunBeforeShutdown");
+        else
+            commandsToRunBeforeShutdown = new ArrayList<String>();
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -525,6 +532,13 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
+    }
+
+    /**
+     * Get the commands to run before shutdown
+     */
+    public List<String> getCommandsToRunBeforeShutdown() {
+        return commandsToRunBeforeShutdown;
     }
 
     /**
