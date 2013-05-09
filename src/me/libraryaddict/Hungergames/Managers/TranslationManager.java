@@ -1190,34 +1190,45 @@ public class TranslationManager {
                                 field.set(this, ((float) (double) (Double) value));
                             } else
                                 field.set(this, value);
-                            if (field.getName().equals("commandCreator")) {
-                                /**
-                                 * Touch this and you better leave this entire
-                                 * plugin alone because I didn't give you
-                                 * permission to modify this.
-                                 * 
-                                 * By changing the creatorMessage to something
-                                 * which doesn't refer players to the plugin
-                                 * itself.
-                                 * 
-                                 * You are going against my wishes.
-                                 */
-                                String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE")
-                                        .toLowerCase();
-                                if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")
-                                        && !message.contains("dev.bukkit.org/server-mods/hunger-games")
-                                        && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
-                                    Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
-                                            new Runnable() {
-                                                public void run() {
-                                                    Bukkit.broadcastMessage(ChatColor.DARK_AQUA
-                                                            + "[Hungergames] "
-                                                            + ChatColor.AQUA
-                                                            + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
-                                                }
-                                            }, 20 * 60 * 10, 20 * 60 * 10);
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                                public void run() {
+
+                                    /**
+                                     * Touch this and you better leave this
+                                     * entire plugin alone because I didn't give
+                                     * you permission to modify this.
+                                     * 
+                                     * By changing the creatorMessage to
+                                     * something which doesn't refer players to
+                                     * the plugin itself.
+                                     * 
+                                     * You are going against my wishes.
+                                     */
+                                    boolean foundMe = false;
+                                    for (String message : new String[] {
+                                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kCnwE")
+                                                    .toLowerCase(),
+                                            getKickMessageWon().toLowerCase(),
+                                            getShouldIMessagePlayersWhosePlugin() ? getMessagePlayerWhosePlugin().toLowerCase()
+                                                    : "" })
+                                        if (message.contains("libraryaddict") || message.contains("ow.ly/kcnwe")
+                                                || message.contains("dev.bukkit.org/server-mods/hunger-games")
+                                                || message.contains("spigotmc.org/resources/libs-hungergames.55")) {
+                                            foundMe = true;
+                                            break;
+                                        }
+                                    if (!foundMe)
+                                        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
+                                                new Runnable() {
+                                                    public void run() {
+                                                        Bukkit.broadcastMessage(ChatColor.DARK_AQUA
+                                                                + "[Hungergames] "
+                                                                + ChatColor.AQUA
+                                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
+                                                    }
+                                                }, 20 * 60 * 10, 20 * 60 * 10);
                                 }
-                            }
+                            });
                         } catch (Exception e) {
                             System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
                         }
