@@ -5,6 +5,7 @@ import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
+import me.libraryaddict.Hungergames.Events.PrivateMessageEvent;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.NameManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
@@ -80,7 +81,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
-        if (!config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
+        if (config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
                 && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
             Iterator<Player> players = event.getRecipients().iterator();
             while (players.hasNext()) {
@@ -88,6 +89,17 @@ public class PlayerListener implements Listener {
                 if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
                     players.remove();
             }
+        }
+    }
+
+    @EventHandler
+    public void onMessage(PrivateMessageEvent event) {
+        Gamer gamer = pm.getGamer(event.getSender().getName());
+        if (gamer != null && config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
+                && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
+            Gamer g = pm.getGamer(event.getReceiver().getName());
+            if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
+                event.setCancelled(true);
         }
     }
 

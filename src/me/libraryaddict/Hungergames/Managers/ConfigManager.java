@@ -476,7 +476,7 @@ public class ConfigManager {
         timeTillFeast = hg.getConfig().getInt("TimeTillFeast", 500);
         borderCloseIn = hg.getConfig().getBoolean("BorderCloseIn", true);
         borderClosesIn = hg.getConfig().getDouble("BorderClosesIn", 0.2);
-        spectatorChat = hg.getConfig().getBoolean("SpectatorChat", true);
+        spectatorChat = !hg.getConfig().getBoolean("SpectatorChat", true);
         shortenNames = hg.getConfig().getBoolean("ShortenNames");
         spectators = hg.getConfig().getBoolean("Spectators", true);
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
