@@ -201,7 +201,7 @@ Kits:
     Items:
       - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole Lore=Place_this_and_run
   Doctor:
-    Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove their all their potion effects.'
+    Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove all their potion effects.'
     Free: true
     Price: 0
     Icon: Shears 0 1

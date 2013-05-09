@@ -240,8 +240,10 @@ public class PlayerListener implements Listener {
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
                 Player p = event.getPlayer();
-                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), victim.getHealth(),
-                        victim.getName(), victim.getFoodLevel()));
+                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), victim.getHealth(), victim
+                        .getName(), victim.getFoodLevel(),
+                        (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(victim)
+                                .getName())));
             }
             if (gamer.canRide()) {
                 if (event.getPlayer().isInsideVehicle() == false && event.getRightClicked().getVehicle() != event.getPlayer())

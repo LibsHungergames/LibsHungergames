@@ -195,7 +195,7 @@ public class TranslationManager {
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
-    private String messagePlayerHasHealthAndHunger = ChatColor.RED + "%1$2s has %2$2s/20 health\n%3$2s has %4$2s/20 hunger";
+    private String messagePlayerHasHealthAndHunger = ChatColor.RED + "%1$2s has %2$2s/20 health\n%3$2s has %4$2s/20 hunger\n%3$2s's kit is: %s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
