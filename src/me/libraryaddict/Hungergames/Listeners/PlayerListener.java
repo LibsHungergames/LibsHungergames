@@ -193,7 +193,7 @@ public class PlayerListener implements Listener {
             Bukkit.getPluginManager().callEvent(trackEvent);
             if (!trackEvent.isCancelled()) {
                 p.sendMessage(trackEvent.getMessage());
-                p.setCompassTarget(p.getWorld().getSpawnLocation());
+                p.setCompassTarget(trackEvent.getLocation());
             }
         }
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {

@@ -14,6 +14,7 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,10 +42,10 @@ public class Tracker extends AbilityListener implements CommandExecutor {
     public void handleTrack(PlayerTrackEvent event) {
         Player p = event.getTracker().getPlayer();
         Player victim = event.getVictim();
+        Location loc = event.getLocation();
         if (hasAbility(p)) {
-            event.setMessage(String.format(trackerTrackingMessage, victim.getName(),
-                    ((int) p.getLocation().distance(victim.getLocation())), victim.getLocation().getBlockX(), victim
-                            .getLocation().getBlockY(), victim.getLocation().getBlockZ()));
+            event.setMessage(String.format(trackerTrackingMessage, victim.getName(), ((int) p.getLocation().distance(loc)),
+                    loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             tracking.put(p, victim);
         }
     }
@@ -58,12 +59,17 @@ public class Tracker extends AbilityListener implements CommandExecutor {
                 if (victimGamer.isAlive()) {
                     Player victim = victimGamer.getPlayer();
                     locked.remove(sender.getName());
-                    gamer.getPlayer().setCompassTarget(victimGamer.getPlayer().getPlayer().getLocation());
                     tracking.put(gamer.getPlayer(), victimGamer.getPlayer());
                     locked.add(sender.getName());
-                    sender.sendMessage(String.format(trackerTrackingMessage, victim.getName(), ((int) victim.getLocation()
-                            .distance(gamer.getPlayer().getLocation())), victim.getLocation().getBlockX(), victim.getLocation()
-                            .getBlockY(), victim.getLocation().getBlockZ()));
+                    PlayerTrackEvent trackEvent = new PlayerTrackEvent(gamer, victim,
+                            (victim == null ? cm.getMessagePlayerTrackNoVictim() : String.format(cm.getMessagePlayerTrack(),
+                                    victim.getName())));
+                    Bukkit.getPluginManager().callEvent(trackEvent);
+                    if (!trackEvent.isCancelled()) {
+                        sender.sendMessage(trackEvent.getMessage());
+                        gamer.getPlayer().setCompassTarget(trackEvent.getLocation());
+                    }
+                    handleTrack(trackEvent);
                 }
             } else {
                 if (locked.contains(sender.getName())) {
@@ -125,7 +131,7 @@ public class Tracker extends AbilityListener implements CommandExecutor {
         Bukkit.getPluginManager().callEvent(trackEvent);
         if (!trackEvent.isCancelled()) {
             p.sendMessage(trackEvent.getMessage());
-            p.setCompassTarget(p.getWorld().getSpawnLocation());
+            p.setCompassTarget(trackEvent.getLocation());
         }
     }
 }
