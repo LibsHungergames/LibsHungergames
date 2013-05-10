@@ -56,6 +56,7 @@ public class Stomper extends AbilityListener implements Disableable {
                             falling.setDropItem(false);
                         }
                     }
+                double velocity = (double) dmg * 0.01;
                 for (Entity entity : p.getNearbyEntities(area * 2, area, area * 2))
                     if (entity instanceof LivingEntity) {
                         int hisDmg = dmg;
@@ -72,7 +73,7 @@ public class Stomper extends AbilityListener implements Disableable {
                         }
                         Vector unitVector = entity.getLocation().toVector().subtract(center.toVector()).normalize();
                         if (stomperBlocksFall)
-                            entity.setVelocity(unitVector.multiply(0.4).add(new Vector(0, 0.4, 0)));
+                            entity.setVelocity(unitVector.multiply(0.4).add(new Vector(0, 0.4 + velocity, 0)));
                         if (hisDmg >= ((LivingEntity) entity).getHealth() && entity instanceof Player) {
                             Gamer gamer = HungergamesApi.getPlayerManager().getGamer(entity);
                             if (gamer.isAlive())
@@ -82,7 +83,7 @@ public class Stomper extends AbilityListener implements Disableable {
                             ((LivingEntity) entity).damage(hisDmg);
                     }
                 if (stomperBlocksFall)
-                    p.setVelocity(p.getVelocity().add(new Vector(0, 0.4, 0)));
+                    p.setVelocity(p.getVelocity().add(new Vector(0, 0.4 + velocity, 0)));
             }
         }
     }
