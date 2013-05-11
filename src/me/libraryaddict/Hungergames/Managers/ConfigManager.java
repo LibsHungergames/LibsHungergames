@@ -88,7 +88,7 @@ public class ConfigManager {
      */
     public boolean advertiseFeast(int time) {
         time = timeTillFeast - time;
-        if (time % 60 == 0)
+        if (time % (60 * 5) == 0)
             return true;
         if (time <= 180) {
             if (time % 60 == 0)
