@@ -89,8 +89,9 @@ public class AbilityManager {
      */
     public void registerAbilityListeners() {
         for (AbilityListener abilityListener : abilities.values()) {
-            if (!(abilityListener instanceof Disableable) || abilityListener.getMyPlayers().size() > 0)
+            if (!(abilityListener instanceof Disableable) || abilityListener.getMyPlayers().size() > 0) {
                 Bukkit.getPluginManager().registerEvents(abilityListener, HungergamesApi.getHungergames());
+            }
         }
     }
 

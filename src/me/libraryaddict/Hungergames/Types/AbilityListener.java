@@ -117,14 +117,16 @@ public abstract class AbilityListener implements Listener {
     }
 
     public void registerPlayer(Player player) {
-        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0)
+        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0) {
             Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
+        }
         myPlayers.add(player.getName());
     }
 
     public void unregisterPlayer(Player player) {
         myPlayers.remove(player.getName());
-        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0)
+        if (HungergamesApi.getHungergames().currentTime >= 0 && this instanceof Disableable && myPlayers.size() == 0) {
             HandlerList.unregisterAll(this);
+        }
     }
 }

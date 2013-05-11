@@ -24,6 +24,7 @@ public class Poseidon extends AbilityListener implements Disableable {
         for (Player p : getMyPlayers()) {
             if (p.getLocation().getBlock().isLiquid()) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40, potionMultiplier), true);
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, potionMultiplier), true);
             }
         }
     }

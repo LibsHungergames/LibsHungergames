@@ -5,3 +5,7 @@ version: ${project.version}
 website: http://dev.bukkit.org/server-mods/hunger-games/
 load: startup
 softdepend: [LibsCommands, iDisguise, Vault]
+permissions:
+  ThisIsUsedForMessaging:
+    description: Used for messages in LibsHungergames
+    default: true
