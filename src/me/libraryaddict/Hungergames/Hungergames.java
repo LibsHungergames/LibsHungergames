@@ -65,17 +65,17 @@ public class Hungergames extends JavaPlugin {
     public World world;
 
     public void onEnable() {
+        HungergamesApi.init(this);
+        cm = HungergamesApi.getTranslationManager();
+        pm = HungergamesApi.getPlayerManager();
+        config = HungergamesApi.getConfigManager();
+        MySqlManager mysql = HungergamesApi.getMySqlManager();
         try {
             if (!new Metrics(this).start())
                 System.out.print(cm.getLoggerMetricsMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        HungergamesApi.init(this);
-        cm = HungergamesApi.getTranslationManager();
-        pm = HungergamesApi.getPlayerManager();
-        config = HungergamesApi.getConfigManager();
-        MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
         mysql.SQL_PASS = getConfig().getString("MySqlPass");

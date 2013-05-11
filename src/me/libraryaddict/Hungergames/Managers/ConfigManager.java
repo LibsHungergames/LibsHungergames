@@ -438,13 +438,9 @@ public class ConfigManager {
                         if (config.getBoolean("save-disguises") || config.getBoolean("undisguise-on-hit")) {
                             config.set("save-disguises", false);
                             config.set("undisguise-on-hit", false);
-                            try {
-                                config.save(new File("plugins/iDisguise/Config.yml"));
-                                disguise.config.loadConfig();
-                                System.out.print(cm.getLoggerChangedIDisguiseConfig());
-                            } catch (IOException e) {
-                                System.out.print(cm.getLoggerFailedToChangIDisguiseConfig());
-                            }
+                            disguise.saveConfig();
+                            disguise.config.loadConfig();
+                            System.out.print(cm.getLoggerChangedIDisguiseConfig());
                         }
                     }
                 }
