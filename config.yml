@@ -124,6 +124,9 @@ PillarInsides: GLASS 0
 # Change disguise config to a better version for HG?
 ChangeDisguiseConfig: true
 
+# Change the build height limit to 128?
+ChangeHeightLimit: true
+
 # Force cords? Means the map center is always here. Nice for people when they use F3
 # This changes the worlds spawn
 ForceCords: true

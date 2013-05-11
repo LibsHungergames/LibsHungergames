@@ -431,6 +431,10 @@ public class ConfigManager {
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
+                if (hg.world.getMaxHeight() > 128 && hg.getConfig().getBoolean("ChangeHeightLimit", true)) {
+                    ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
+                    System.out.println(cm.getLoggerChangedHeightLimit());
+                }
                 if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
                     if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
                         iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");

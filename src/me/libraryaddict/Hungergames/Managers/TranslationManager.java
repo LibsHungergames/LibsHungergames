@@ -159,6 +159,7 @@ public class TranslationManager {
     private String kitDescriptionDefault = "No description was provided for this kit";
     private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s' missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
+    private String loggerChangedHeightLimit = "[Hungergames] Changed build height limit";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
     private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
@@ -195,7 +196,8 @@ public class TranslationManager {
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
-    private String messagePlayerHasHealthAndHunger = ChatColor.RED + "%1$2s has %2$2s/20 health\n%1$2s has %3$2s/20 hunger\n%1$2sis using kit: %4$2s";
+    private String messagePlayerHasHealthAndHunger = ChatColor.RED
+            + "%1$2s has %2$2s/20 health\n%1$2s has %3$2s/20 hunger\n%1$2sis using kit: %4$2s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
@@ -255,6 +257,7 @@ public class TranslationManager {
     private String timeFormatSecondAndMinute = "%s minute, %s second";
     private String timeFormatSecondAndMinutes = "%s minutes, %s second";
     private String timeFormatSeconds = "%s seconds";
+
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
 
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
@@ -764,6 +767,10 @@ public class TranslationManager {
 
     public String getLoggerAddAbility() {
         return loggerAddAbility;
+    }
+
+    public String getLoggerChangedHeightLimit() {
+        return loggerChangedHeightLimit;
     }
 
     public String getLoggerChangedIDisguiseConfig() {
