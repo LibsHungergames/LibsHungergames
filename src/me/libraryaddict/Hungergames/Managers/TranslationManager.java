@@ -218,8 +218,8 @@ public class TranslationManager {
     private String messagePlayerShowKitsNoKit = "None";
     private String messagePlayerShowKitsNoKits = "No kits available..";
     private String messagePlayerShowKitsOtherKits = ChatColor.DARK_GREEN + "Other kits:" + ChatColor.RESET + " %s";
-    private String messagePlayerShowKitsUseKitInfo = "To view the information on a kit, Use /kitinfo <Kit Name>";
-    private String messagePlayerTrack = "Compass pointing at %s";
+    private String messagePlayerShowKitsUseKitInfo = ChatColor.AQUA + "To view the information on a kit, Use /kitinfo <Kit Name>";
+    private String messagePlayerTrack = ChatColor.YELLOW + "Compass pointing at %s";
     private String messagePlayerTrackNoVictim = "No players found, Pointing at spawn";
     private String messagePlayerUpdateAvailable = ChatColor.RED + "[Hungergames]" + ChatColor.DARK_RED
             + " There is a update available, The new version is " + ChatColor.RED + "%s" + ChatColor.DARK_RED
