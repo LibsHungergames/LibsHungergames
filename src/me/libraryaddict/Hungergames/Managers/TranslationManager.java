@@ -79,10 +79,10 @@ public class TranslationManager {
     private String commandInvisShowPlayerNoArgs = ChatColor.BLUE + "You must give a playername";
     private String commandInvisShowPlayerSuccess = ChatColor.BLUE + "Revealed %s";
     private String commandKillMurderMessage = "%1$2s was killed by a command.";
-    private String commandKillNotAlive = "He is not alive";
-    private String commandKillPlayerNotFound = "He doesn't exist";
-    private String commandKillSomeoneNoPermission = "You may not kill someone..";
-    private String commandKillUseSuicide = "Please use /suicide";
+    private String commandKillNotAlive = ChatColor.RED + "He is not alive";
+    private String commandKillPlayerNotFound = ChatColor.RED + "He doesn't exist";
+    private String commandKillSomeoneNoPermission = ChatColor.RED + "You may not kill someone..";
+    private String commandKillUseSuicide = ChatColor.RED + "Please use /suicide";
     private String commandKitAlreadyUsing = ChatColor.RED + "Already using kit %s!";
     private String commandKitGameAlreadyStarted = ChatColor.RED + "The game has already started!";
     private String commandKitInfoDefineKitName = ChatColor.AQUA + "You need to define a kit name or id!";
@@ -202,10 +202,11 @@ public class TranslationManager {
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
     private String messagePlayerKitDesciptionId = ChatColor.DARK_AQUA + "Kit ID:" + ChatColor.AQUA + " %s";
-    private String messagePlayerKitDescriptionDoesntExist = "This kit does not exist!";
+    private String messagePlayerKitDescriptionDoesntExist = ChatColor.AQUA + "This kit does not exist!";
     private String messagePlayerKitDescriptionName = ChatColor.DARK_AQUA + "Name:" + ChatColor.AQUA + " %s";
-    private String messagePlayerKitDescritionMoreInfo = "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
-    private String messagePlayerSendKitItemsDoesntExist = "This kit does not exist!";
+    private String messagePlayerKitDescritionMoreInfo = ChatColor.AQUA
+            + "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
+    private String messagePlayerSendKitItemsDoesntExist = ChatColor.AQUA + "This kit does not exist!";
     private String messagePlayerSendKitItemsKitBoots = ChatColor.DARK_AQUA + "Kit Boots:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitChestplate = ChatColor.DARK_AQUA + "Kit Chestplate:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitHelmet = ChatColor.DARK_AQUA + "Kit Helmet:" + ChatColor.AQUA + " %s";
@@ -257,9 +258,7 @@ public class TranslationManager {
     private String timeFormatSecondAndMinute = "%s minute, %s second";
     private String timeFormatSecondAndMinutes = "%s minutes, %s second";
     private String timeFormatSeconds = "%s seconds";
-
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
-
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
 
     public TranslationManager() {
