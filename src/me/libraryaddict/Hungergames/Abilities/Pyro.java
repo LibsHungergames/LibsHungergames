@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Pyro extends AbilityListener implements Disableable {
-    public float fireballExplosiveMultiplier = 2;
+    public float fireballExplosiveMultiplier = 1.5F;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
