@@ -1212,13 +1212,12 @@ public class TranslationManager {
                                      */
                                     boolean foundMe = false;
                                     for (String message : new String[] {
-                                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kCnwE")
+                                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO")
                                                     .toLowerCase(),
                                             getKickMessageWon().toLowerCase(),
                                             getShouldIMessagePlayersWhosePlugin() ? getMessagePlayerWhosePlugin().toLowerCase()
                                                     : "" })
-                                        if (message.contains("libraryaddict") || message.contains("ow.ly/kcnwe")
-                                                || message.contains("dev.bukkit.org/server-mods/hunger-games")
+                                        if (message.contains("libraryaddict") || message.contains("ow.ly/kwbpo")
                                                 || message.contains("spigotmc.org/resources/libs-hungergames.55")) {
                                             foundMe = true;
                                             break;
@@ -1230,7 +1229,7 @@ public class TranslationManager {
                                                         Bukkit.broadcastMessage(ChatColor.DARK_AQUA
                                                                 + "[Hungergames] "
                                                                 + ChatColor.AQUA
-                                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
+                                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
                                                     }
                                                 }, 20 * 60 * 10, 20 * 60 * 10);
                                 }

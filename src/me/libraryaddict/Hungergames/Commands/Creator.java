@@ -13,7 +13,7 @@ public class Creator implements CommandExecutor {
     public String[] aliases = new String[] { "download" };
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        sender.sendMessage(String.format(cm.getCommandCreator(), "libraryaddict", "http://ow.ly/kCnwE"));
+        sender.sendMessage(String.format(cm.getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO"));
         return true;
     }
 }
