@@ -151,6 +151,3 @@ CheckUpdates: true
 #  - 'kick libraryaddict You smell'
 #  - 'kick minecraftchick You suck'
 #  - 'say Attention all: libraryaddict loves you'
-
-# Some plugins have a problem with the motd changing.
-DisableMotd: false

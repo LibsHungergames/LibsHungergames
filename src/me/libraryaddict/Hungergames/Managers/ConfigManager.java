@@ -62,7 +62,6 @@ public class ConfigManager {
     private int z;
     private String latestVersion = null;
     private UpdateChecker updateChecker;
-    private boolean disableMotd;
     private List<String> commandsToRunBeforeShutdown;
 
     public ConfigManager() {
@@ -126,13 +125,6 @@ public class ConfigManager {
         } else if (time % 180 == 0 || time % (5 * 60) == 0)
             return true;
         return invincibilityBroadcastTimes.contains(time);
-    }
-    
-    /**
-     * Should the motd be disabled so I dont change it
-     */
-    public boolean isMotdDisabled() {
-        return disableMotd;
     }
 
     /**
@@ -516,7 +508,6 @@ public class ConfigManager {
             commandsToRunBeforeShutdown = hg.getConfig().getStringList("CommandsToRunBeforeShutdown");
         else
             commandsToRunBeforeShutdown = new ArrayList<String>();
-        disableMotd = hg.getConfig().getBoolean("DisableMotd");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
