@@ -36,12 +36,12 @@
 		</resources>
 	</build>
 
-	<version>v2.4</version>
+	<version>v2.5</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<url>http://dev.bukkit.org/server-mods/hunger-games/</url>
+	<url>http://www.spigotmc.org/resources/libs-hungergames.55/</url>
 	<repositories>
 		<repository>
 			<id>project.local</id>
