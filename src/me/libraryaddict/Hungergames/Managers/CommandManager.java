@@ -186,14 +186,13 @@ public class CommandManager {
                              * 
                              * You are going against my wishes.
                              */
-                            String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kCnwE").toLowerCase();
-                            if (!message.contains("libraryaddict") && !message.contains("ow.ly/kCnwE")
-                                    && !message.contains("dev.bukkit.org/server-mods/hunger-games")
+                            String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kWBpO").toLowerCase();
+                            if (!message.contains("libraryaddict") && !message.contains("http://ow.ly/kwbpo")
                                     && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
                                 Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
                                     public void run() {
                                         Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
-                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kCnwE");
+                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
                                     }
                                 }, 20 * 60 * 10, 20 * 60 * 10);
                             }

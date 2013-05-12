@@ -423,16 +423,19 @@ public class ConfigManager {
         }
         if (hg.getServer().getAllowNether() && hg.getConfig().getBoolean("DisableNether", true)) {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("allow-nether", false);
+            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
             System.out.println(cm.getLoggerDisabledNether());
         }
         if (hg.getServer().getSpawnRadius() > 0 && hg.getConfig().getBoolean("ChangeSpawnLimit", true)) {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
+            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
             System.out.println(cm.getLoggerChangedSpawnRadius());
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
                 if (hg.world.getMaxHeight() > 128 && hg.getConfig().getBoolean("ChangeHeightLimit", true)) {
                     ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
+                    ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
                     System.out.println(cm.getLoggerChangedHeightLimit());
                 }
                 if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
