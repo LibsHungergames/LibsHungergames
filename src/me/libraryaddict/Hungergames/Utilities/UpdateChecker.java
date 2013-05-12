@@ -30,7 +30,7 @@ public class UpdateChecker {
 
     public void checkUpdate(String currentVersion) throws Exception {
         String version = getVersion("98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4", 55);
-        if (checkHigher(currentVersion.replace("v", ""), version))
+        if (checkHigher(currentVersion, version))
             latestVersion = version;
     }
 
@@ -41,7 +41,7 @@ public class UpdateChecker {
     }
 
     public String toReadable(String version) {
-        String[] split = Pattern.compile(".", Pattern.LITERAL).split(version.replace("Lib's Hungergames ", "").replace("v", ""));
+        String[] split = Pattern.compile(".", Pattern.LITERAL).split(version.replace("v", ""));
         version = "";
         for (String s : split)
             version += String.format("%4s", s);
