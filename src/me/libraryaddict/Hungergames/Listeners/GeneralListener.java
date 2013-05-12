@@ -55,6 +55,10 @@ public class GeneralListener implements Listener {
 
     @EventHandler
     public void onServerPing(ServerListPingEvent event) {
+        if (config.isMotdDisabled()) {
+            ServerListPingEvent.getHandlerList().unregister(this);
+            return;
+        }
         if (hg.currentTime >= 0)
             event.setMotd(cm.getGameStartedMotd());
         else
