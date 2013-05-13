@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R3.CraftServer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import de.robingrether.idisguise.iDisguise;
 
@@ -439,6 +440,8 @@ public class ConfigManager {
                     System.out.println(cm.getLoggerChangedHeightLimit());
                 }
                 if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
+                    PlayerDeathEvent.getHandlerList().unregister(
+                            ((iDisguise) (Bukkit.getPluginManager().getPlugin("iDisguise"))).playerListener);
                     if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
                         iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
                         FileConfiguration config = disguise.getConfig();

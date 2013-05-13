@@ -264,8 +264,39 @@ public class TranslationManager {
     public TranslationManager() {
         configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "translation.yml");
         config = new YamlConfiguration();
-        load();
-        loadConfig();
+        try {
+            load();
+            loadConfig();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                public void run() {
+
+                    /**
+                     * Touch this and you better leave this entire plugin alone because I didn't give you permission to modify
+                     * this. By changing the creatorMessage to something which doesn't refer players to the plugin itself. You are
+                     * going against my wishes.
+                     */
+                    boolean foundMe = false;
+                    for (String message : new String[] {
+                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO").toLowerCase(),
+                            getKickMessageWon().toLowerCase(),
+                            getShouldIMessagePlayersWhosePlugin() ? getMessagePlayerWhosePlugin().toLowerCase() : "" })
+                        if (message.contains("libraryaddict") || message.contains("ow.ly/kwbpo")
+                                || message.contains("spigotmc.org/resources/libs-hungergames.55")) {
+                            foundMe = true;
+                            break;
+                        }
+                    if (!foundMe)
+                        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
+                            public void run() {
+                                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
+                                        + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
+                            }
+                        }, 20 * 60 * 10, 20 * 60 * 10);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public String getBroadcastFeastBegun() {
@@ -1140,7 +1171,7 @@ public class TranslationManager {
         return newFile;
     }
 
-    public void load() {
+    public void load() throws Exception {
         try {
             if (!configFile.exists())
                 save();
@@ -1149,6 +1180,10 @@ public class TranslationManager {
             config.load(configFile);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new Exception(
+                    "You have setup your translation configuration wrong. Please make sure you are properly setting up every single line"
+                            + "\nProblems can be because of single quotes in the middle of the string, Not surrounding the string with single quotes."
+                            + "\nFor more information, Please look up yaml configurations and how to properly do them");
         }
     }
 
@@ -1196,44 +1231,6 @@ public class TranslationManager {
                                 field.set(this, ((float) (double) (Double) value));
                             } else
                                 field.set(this, value);
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-                                public void run() {
-
-                                    /**
-                                     * Touch this and you better leave this
-                                     * entire plugin alone because I didn't give
-                                     * you permission to modify this.
-                                     * 
-                                     * By changing the creatorMessage to
-                                     * something which doesn't refer players to
-                                     * the plugin itself.
-                                     * 
-                                     * You are going against my wishes.
-                                     */
-                                    boolean foundMe = false;
-                                    for (String message : new String[] {
-                                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO")
-                                                    .toLowerCase(),
-                                            getKickMessageWon().toLowerCase(),
-                                            getShouldIMessagePlayersWhosePlugin() ? getMessagePlayerWhosePlugin().toLowerCase()
-                                                    : "" })
-                                        if (message.contains("libraryaddict") || message.contains("ow.ly/kwbpo")
-                                                || message.contains("spigotmc.org/resources/libs-hungergames.55")) {
-                                            foundMe = true;
-                                            break;
-                                        }
-                                    if (!foundMe)
-                                        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(),
-                                                new Runnable() {
-                                                    public void run() {
-                                                        Bukkit.broadcastMessage(ChatColor.DARK_AQUA
-                                                                + "[Hungergames] "
-                                                                + ChatColor.AQUA
-                                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
-                                                    }
-                                                }, 20 * 60 * 10, 20 * 60 * 10);
-                                }
-                            });
                         } catch (Exception e) {
                             System.out.print(String.format(getLoggerErrorWhileLoadingTranslation(), e.getMessage()));
                         }
