@@ -44,6 +44,11 @@ public class AbilityConfigManager {
             config.load(configFile);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out
+                    .print("You have setup your ability configuration wrong. Please make sure you are properly setting up every single line"
+                            + "\nProblems can be because of single quotes in the middle of the string, Not surrounding the string with single quotes."
+                            + "\nFor more information, Please look up yaml configurations and how to properly do them");
+
         }
     }
 
