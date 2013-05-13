@@ -38,10 +38,8 @@ public class LibsFeastManager implements FeastManager {
     }
 
     /**
-     * Generates the chests.
-     * 
-     * Height is the amount of chests. There will be a enchanting table on top
-     * of this putting the total at 4 blocks high.
+     * Generates the chests. Height is the amount of chests. There will be a enchanting table on top of this putting the total at
+     * 4 blocks high.
      * 
      * @param loc
      * @param height
@@ -68,14 +66,13 @@ public class LibsFeastManager implements FeastManager {
                 y = -y + height;
                 Block block = loc.clone().add(x, y, z).getBlock();
                 Block b = block;
-                int repeated = y;
-                while (repeated > 0) {
+                // while repeated > 0
+                for (int yLevel = y; yLevel > 0; yLevel--) {
                     b = b.getRelative(BlockFace.DOWN);
-                    if (y - 1 >= repeated)
+                    if (y - 1 >= yLevel)
                         setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
                     else
                         setBlockFast(b, feast.getTypeId(), feast.getDurability());
-                    repeated--;
                 }
                 if (x == 0 && z == 0) {
                     setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
@@ -178,9 +175,7 @@ public class LibsFeastManager implements FeastManager {
     }
 
     /**
-     * Gets the best Y level to spawn the feast at
-     * 
-     * This also modifies the Location fed to it for use by feast generation
+     * Gets the best Y level to spawn the feast at This also modifies the Location fed to it for use by feast generation
      * 
      * @param loc
      * @param radius
