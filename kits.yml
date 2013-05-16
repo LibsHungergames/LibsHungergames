@@ -51,455 +51,65 @@
 # Default kit is Surprise which is a random kit
 DefaultKit: Surprise
 # Bad kits is kits which will not be usable.
-BadKits:
-  - Barbarian
-  - DiamondWarrior
-  #Remove endermage from this list to enable it. It does work. But its not balanced and isnt enabled by default.
-  - Endermage
-  - Explorer
-  - Hermit
-  - Miner
-  - Reaper
-  - Rider
 Kits:
-  Archer:
-    Description: 'The archer kit allows you to shoot others. Hmm. Thats pretty much it. You also get a bow and 10 arrows'
-    Free: true
-    Price: 0
-    Icon: BOW 0 1
-    Items:
-      - BOW 0 1
-      - ARROW 0 10
-  Array:
-    Description: 'The array kit supplies you with 3 beacons, place them to create a array. This gives all players in a radius of 6 blocks regeneration II making this a great team kit.'
-    Free: true
-    Price: 0
-    Icon: BEACON 0 1
-    Items:
-      - BEACON 0 3 Name=Array Unlootable 1
-    Ability:
-      - Array
-  Backpacker:
-    Description: 'This kit grants you an addictional inventory to use! Its in your top left corner of your inventory, double click it to open a new inventory with the storage space of a double chest!'
-    Free: true
-    Price: 0
-    Icon: ENDER_CHEST 0 1
-    Ability:
-      - Backpacker
-  Barbarian:
-    Description: 'This sword was forged in blood at the dawn of man. Time passed and it weakened. But now it has been found again! To raise its combat power you must kill enemies! Every 3rd enemy it kills. The sword upgrades!'
-    Free: true
-    Price: 0
-    Icon: WOOD_SWORD 0 1
-    Items:
-      - WOOD_SWORD 0 1 Name=Bloody_Bane Unlootable 1
-    Ability:
-      - Barbarian
-  Beastmaster:
-    Description: 'The Beastmaster kit allows you to instantly tame the 3 wolves you spawn. As well as 4 bones. The wolves can be very useful when in 1 vs 1 combat, and often gives you that winning edge over your enemy in fights! You also have a 100% chance to tame any wolf, so no bone shall be wasted!'
-    Free: true
-    Price: 0
-    Icon: MONSTER_EGG 93 1
-    Items:
-      - MONSTER_EGG 95 3
-      - BONE 0 4
-    Ability:
-      - Beastmaster
-  Berserker:
-    Description: 'The berserker gain strength by defeating enemies, but lose a piece of their mind with each kill! When you kill a player, you get Nausea II and Strength II for 30 seconds. Killing a mob gives you Nausea I and Strength I.'
-    Free: true
-    Price: 0
-    Icon: POTION 16425 1
-    Ability:
-      - Berserker
-  Boxer:
-    Description: 'You trained atop a mountain, you endured great tests of endurance and strength. Years pass as you battle bears and wild cats. Your fists deal almost as much damage as a stone sword and your skin is tough enough to reduce incoming damage slightly!'
-    Free: true
-    Price: 0
-    Icon: STONE_SWORD 0 1
-    Ability:
-      - Boxer
-  Burrower:
-    Description: 'There is a enemy after you? Don''t want to fight? Its time to right click on that slimeball to teleport under the ground to your personalized escape room! Your slimeball will regenerate after 5 minutes'
-    Free: true
-    Price: 0
-    Icon: SLIME_BALL 0 1
-    Items:
-      - SLIME_BALL 0 1
-    Ability:
-      - Burrower
-  Cannibal:
-    Description: 'You are stuck in a hole with your friend. You are feeling peckish. You look at your friend.. ARGH NO! WHAT ARE YOU DOING! You gain a fish, ocelot egg and you gain hunger when you hit someone! They get a hunger effect'
-    Free: true
-    Price: 0
-    Icon: MONSTER_EGG 98 1
-    Items:
-      - MONSTER_EGG 98 1
-      - RAW_FISH 0 1
-    Ability:
-      - Cannibal
-  Chameleon:
-    Description: 'The Chameleon kit is a very sneaky one! If you like to lurk around, then this kit is for you! You are disguised when you hit a mob, you are undisguised when you are attacked or attack a player! Be careful not to act weirdly when around your target! Remember, just because they think you are a pig. It doesn''t mean their compass is fooled!'
-    Free: true
-    Price: 0
-    Icon: MONSTER_EGG 0 1
-    Ability:
-      - Chameleon
-  Chemist:
-    Description: 'The chemist kit lets you pick the perfect time to release a barrage of 3 splash potions! Weakness II for 3 minutes, instant damage II and Poison II for 16 seconds! Who can possibly fight against that! Better start bragging about that sure win!'
-    Free: true
-    Price: 0
-    Icon: POTION 16428 1
-    Items:
-      - POTION 16428 1 Unlootable 1
-      - POTION 16420 1 Unlootable 1
-      - POTION 16424 1 Unlootable 1
-  Crafter:
-    Description: 'This kit lets you craft and smelt while on the move, you have a crafting star and a furnace powder. Right click with either to open the workbench or furnace!'
-    Free: true
-    Price: 0
-    Icon: BLAZE_POWDER 0 1
-    Items:
-      - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1 Lore=Right_click_with_this\nto_open_a_crafting_table
-      - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem Lore=Right_click_with_this\nto_open_a_furnace
-  Cultivator:
-    Description: 'God gave you a green thumb. You know how to use this.. By hogging all the food you grow ofc! Instantly grow wheat by planting it, and instantly grow trees just by placing a sapling!'
-    Free: true
-    Price: 0
-    Icon: SEEDS 0 1
-    Ability:
-      - Cultivator
-  Demoman:
-    Description: 'Its time to destroy that thief for breaking into your home! Place a stone pressure plate on gravel to create a landmine! Step on it to blow it up! The explosion is a little bigger then TNT. Careful however! You can set off your own landmines!'
+  Bombtastic:
+    Description: 'Don''t you just hate creepers? The way they creep up, hiss and explode! Well its time to take your revenge! Rip their guts out on death! Bombtastic gives you 1/3 chance of the creeper dropping tnt. Its time, to take revenge!'
     Free: true
     Price: 0
     Icon: TNT 0 1
+    Ability:
+      - Bombtastic
+  Bourne:
+    Description: 'This kit scrambles enemy players compasses when they get within 25 blocks of Jason Bourne'
+    Free: true
+    Price: 0
+    Icon: COMPASS 0 1
+    Ability:
+      - Bourne
+  Creeper:
+    Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
+    Free: true
+    Price: 0
+    Icon: SULPHUR 0 1
+    Ability:
+      - Creeper
+  Ghost:
+    Description: 'When the game starts you are invisible until invincibility runs out!'
+    Free: true
+    Price: 0
+    Icon: POTION 16398 1
+    Ability:
+      - PotionLover
+  Herobrine:
+    Description: 'Use your nether star to make a quick escape! Play a scary noise and sprint away, but there is a weakness effect for the distance you ran.. This only works against players with better armor then you however!'
+    Free: true
+    Price: 0
+    Icon: NETHER_STAR 0 1
     Items:
-      - GRAVEL 0 2
-      - STONE_PLATE 0 2
+      - NETHER_STAR 0 1 Unlootable 1 Name=Herobrines_Escape
     Ability:
-      - Demoman
-  DiamondWarrior:
-    Description: 'The diamond warrior kit is a great way to slaughter everyone! Only a foolish admin would delete the entire bad kits entry. And your admin is one! Use this kit and WIN WIN WIN'
+      - Herobrine
+  Miser:
+    Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
     Free: true
-    Name: '&3Diamond Warrior'
     Price: 0
-    Icon: DIAMOND_SWORD 0 1
-    Helmet: DIAMOND_HELMET 0 1
-    Chestplate: DIAMOND_CHESTPLATE 0 1
-    Leggings: DIAMOND_LEGGINGS 0 1
-    Boots: DIAMOND_BOOTS 0 1
-    Items:
-      - DIAMOND_SWORD 0 1 DAMAGE_ALL 10 KNOCKBACK 10 FIRE_ASPECT 10
+    Icon: CHEST 0 1
     Ability:
-      - Demoman
-  Digger:
-    Description: 'This kit lets you destroy the land with the mere placement of a egg. Place a dragon egg down and you have a second to get out of the way before a 5x5 hole appears under where you placed it! Perfect for capturing a pet creeper!'
+      - Miser
+  Ninja:
+    Description: 'Players with this kit have a Speed II buff during the day and a Jump II buff at night.'
     Free: true
     Price: 0
-    Icon: DRAGON_EGG 0 1
-    Items:
-      - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole Lore=Place_this_and_run
-  Doctor:
-    Description: 'Doctor wasn''t looking when you stole his forceps. Now you are running around on a battle field removing all the players potion effects!'
-    Free: true
-    Price: 0
-    Icon: Shears 0 1
-    Items:
-      - Shears 0 1 Name=Pair_Of_Forceps Unlootable 1
-  Endermage:
-    Description: 'Warp em up. Warp em down. Warp em all around! The endermage places a enderportal and warps all players directly above and below him with a distance more then 3 to the enderportal. They are then invincible for 5 seconds and are able to instantly KO you. Surely you didn''t think there would be no drawbacks?!'
-    Free: true
-    Price: 0
-    Icon: ENDER_PORTAL 0 1
-    Items:
-      - ENDER_PORTAL 0 1 Name=Endermage_Portal Unlootable 1
-  Explorer:
-    Description: 'So far this kit seems retarded to code. Not sure it will be in'
-    Free: true
-    Price: 0
-    Icon: Map 0 1
-    Items:
-      - MAP 0 1
+    Icon: REDSTONE_WIRE 0 1
     Ability:
-      - Explorer
-  Fireman:
-    Description: 'As a precaution you were carrying your water bucket just before the aliens grabbed you and stuck you in this battleground. Time to find lava and do what everyone told you off for!'
+      - Ninja
+  Pussy:
+    Description: 'Ever get accused of being a pussy? Now you can rub it in! Turn into a kitty cat after 10 seconds of sprinting! Wonderful if you want to become hard to see while you are doing your trademark pussying!'
     Free: true
     Price: 0
-    Icon: WATER_BUCKET 0 1
-    Items:
-      - WATER_BUCKET 0 1
+    Icon: POTION 16418 1
     Ability:
-      - Fireman
-  Fisherman:
-    Description: 'The Fisherman kit starts with a fishing rod, use the fishing rod to catch fish. Lots and lots of fish. With a minute between catches. This is one of the most *cough* unbalanced kits in the game.'
-    Free: true
-    Price: 0
-    Icon: FISHING_ROD 0 1
-    Items:
-      - FISHING_ROD 0 1
-  Flash:
-    Description: 'With a mere swing of your redstone torch you teleport to where you were looking, and receive have the distance in weakness II. One you teleport, players will see lightning visually strike you. The redstone torch turns off when its out of charge and turns back on when it''s charge has recovered'
-    Free: true
-    Price: 0
-    Icon: REDSTONE_TORCH_ON 0 1
-    Items:
-      - REDSTONE_TORCH_ON 0 1 Name=Flash UniqueItem Unlootable 1
-    Ability:
-      - Flash
-  Fletcher:
-    Description: 'Kill a chicken and drop addictional feathers, destroy gravel for the assured chance of a piece of flint. Its time to team up with that archer!'
-    Free: true
-    Price: 0
-    Icon: ARROW 0 1
-    Ability:
-      - Fletcher
-  Forger:
-    Description: 'The forger kit lets you instantly smelt ores if you have enough coal. By clicking the coal or a ore in your inventory it will be smelted at a ratio of one ore per coal.'
-    Free: true
-    Price: 0
-    Icon: COAL 0 1
-    Items:
-      - COAL 0 3
-    Ability:
-      - Forger
-  Frosty:
-    Description: 'When you were a mere baby you drank some koolaid. It seems it did strange things to your body! Throw snowballs in water to turn it to ice, throw it at the ground to generate snow and walk on snow to gain a speed boost!'
-    Free: true
-    Price: 0
-    Icon: SNOW 0 1
-    Items:
-      - SNOW_BALL 0 5
-    Ability:
-      - Frosty
-  Gambler:
-    Description: 'Oh damn you love to gamble. Its time to gamble your life away on things such as slowness, poison, hunger, weakness, strength, regeneration, hunger, health, speed! There''s also a rare chance for diamond armor and a rarer chance yet for instant death!'
-    Free: true
-    Price: 0
-    Icon: STONE_BUTTON 0 1
-    Items:
-      - STONE_BUTTON 0 1
-    Ability:
-      - Gambler
-  Grandpa:
-    Description: 'While walking to the battle ground you saw a cane lying on the ground, no one seemed to be using it so you quickly snatched it. But a grandpa''s cane isn''t just any old stick. Its perfect for whacking young whippersnappers with a knockback II!'
-    Free: true
-    Price: 0
-    Icon: STICK 0 1 KNOCKBACK 2
-    Items:
-      - Stick 0 1 Name=Grandpa's_Cane KNOCKBACK 2 Unlootable 1
-  Gravedigger:
-    Description: 'You got sick of picking up all their loot, so just before you kill them off you say ''Hey. Take off dat armor for me and items and stick it into a chest''. Perfect for those who hate to pick their food up from the ground!'
-    Free: true
-    Price: 0
-    Icon: DIAMOND_SPADE 0 1
-    Ability:
-      - Gravedigger
-  Hades:
-    Description: 'The Hades kit will allow you to turn zombies into your minions! Once you right click a Zombie with a rotten flesh, they will turn into your minion and follow you around! They will attack whatever you attack, and attack whatever attacks you! Just like wolves they will teleport towards you once they get out of a 10 blocks radius from you. All minions have a diamond helmet!'
-    Free: true
-    Price: 0
-    Icon: ROTTEN_FLESH 0 1
-    Items:
-      - ROTTEN_FLESH 0 4
-    Ability:
-      - Hades
-  Hermit:
-    Description: 'You ran away from home looking for a better life, Someone invited you to a battle of skill. You accepted but minutes before the game starts you decided to go on a jog. As a result you are now hundreds of blocks from spawn when the game starts! Oh dear!'
-    Free: true
-    Price: 0
-    Icon: Map 0 1
-    Ability:
-      - Hermit
-  Hunter:
-    Description: 'The Hunter kit is pretty neat when surrounded by edible animals. This kit saves you time, since you wont have to cook the raw and bloody meat that they normally drop!'
-    Free: true
-    Price: 0
-    Icon: PORK 0 1
-    Ability:
-      - Hunter
-  Jumper:
-    Description: 'You took up enderpearling as a hobby and you have always had at least 5 enderpearls in your inventory! Seconds before you were teleported to the battle arena you grabbed your Instant Platform 2000 - Perfect for always having a place to land and you find it impossible to be hurt by your enderpearls!'
-    Free: true
-    Price: 0
-    Icon: ENDER_PEARL 0 1
-    Items:
-      - ENDER_PEARL 0 5
-    Ability:
-      - Jumper
-  Kaya:
-    Description: 'The Kaya kit is awesome for planting traps and annoying unsuspecting victims! Kaya can use their grass blocks to make a platform, but when they try to walk on it. It disappears!'
-    Free: true
-    Price: 0
-    Icon: GRASS 0 1
-    Items:
-      - GRASS 0 16
-    Ability:
-      - Kaya
-  Lumberjack:
-    Description: 'You whack your mighty axe once, twice, thrice against the trunk of this great tree. With a loud groan the entire tree topples. Every piece of wood above that wood was broken!'
-    Free: true
-    Price: 0
-    Icon: LOG 0 1
-    Items:
-      - WOOD_AXE 0 1
-    Ability:
-      - Lumberjack
-  Milkman:
-    Description: 'The milkman kit gives you a special 5 use bucket of milk, the milk in this bucket is granted mystic powers to those who drink it. After thanking the milk god by saying "I am the milkman, my milk is delicious" you gain 45 seconds of Regeneration I, Fire Resistance I and Speed I!'
-    Free: true
-    Price: 0
-    Icon: MILK_BUCKET 0 1
-    Items:
-      - MILK_BUCKET 0 1 Name=Milkman's_Bucket UniqueItem
-    Ability:
-      - Milkman
-  Miner:
-    Description: 'You decided to try out this new thing called mining and you think you like it! You even took a stone pickaxe with you to the battle ground! Eating a apple sure does perk you up while mining!'
-    Free: true
-    Price: 0
-    Icon: STONE_PICKAXE 0 1
-    Items:
-      - STONE_PICKAXE 0 1
-    Ability:
-      - Miner
-  Monk:
-    Description: 'Right click someone with your blaze rod and their currently held item will switch with a random item in their inventory!'
-    Free: true
-    Price: 0
-    Icon: BLAZE_ROD 0 1
-    Items:
-      - BLAZE_ROD 0 1 Name=Monk_Staff Unlootable 1 UniqueItem
-  Monster:
-    Description: 'At night you used to sleep afraid of the monsters. Until you started rubbing rotten flesh into your skin. Surprise surprise! The monsters seem to think you are one of them!'
-    Free: true
-    Price: 0
-    Icon: SKULL_ITEM 2 1
-    Ability:
-      - Monster
-  Necro:
-    Description: 'The Necro kit is great for those who hates the zombies and skeletons! Instantly KO them as they approach you!'
-    Free: true
-    Price: 0
-    Icon: SKULL_ITEM 0 1
-    Ability:
-      - Necro
-  Pickpocket:
-    Description: 'Your blaze rod seems to have a nasty habit of allowing you open other players inventorys merely by right clicking them. Unsure of how far you should go, you gave yourself a limit of 4 items and swore not to interfere with their hotbar (Top row). If they run out of range the inventory closes'
-    Free: true
-    Price: 0
-    Icon: BLAZE_ROD 0 1
-    Items:
-      - BLAZE_ROD 0 1 Unlootable 1 Name=Thieving_Stick UniqueItem
-    Ability:
-      - Pickpocket
-  Poseidon:
-    Description: 'Knowing you will have to fight one day you regularly rubbed strength I and speed II potions into your skin. Its activated while in water! Theres also a water breathing potion which activates everytime you move in the water!'
-    Free: true
-    Price: 0
-    Icon: WATER 0 1
-    Ability:
-      - Poseidon
-  Pyro:
-    Description: 'The pyro kit is hilariously explosive! You have a flint and steel to light the forest up, and 5 explosive fire charges which launch like a ghast fireball!'
-    Free: true
-    Price: 0
-    Icon: FIRE 0 1
-    Items:
-      - FLINT_AND_STEEL 0 1
-      - FIREBALL 0 5
-    Ability:
-      - Pyro
-  Reaper:
-    Description: 'With a mere swipe of your hoe you curse players to pain. They are given a wither effect which damages them over time'
-    Free: true
-    Price: 0
-    Icon: WOOD_HOE 0 1
-    Items:
-      - WOOD_HOE -1000 1 Name=Death_Scythe Unlootable 1
-    Ability:
-      - Reaper
-  Rider:
-    Description: 'cba'
-    Free: true
-    Price: 0
-    Icon: CARROT_STICK 0 1
-    Items:
-      - STICK 0 1 Name=Riding_Whip Unlootable 1
-    Ability:
-      - Rider
-  Salamander:
-    Description: 'The salamander kit is a very nice kit for those who just cannot stop burning! You no longer must fear fire! Swim in lava! Bath in flames! However you seem to be allergic to water..'
-    Free: true
-    Price: 0
-    Icon: LAVA 0 1
-    Ability:
-      - Salamander
-  Salvager:
-    Description: 'The Tinkerer kit will give you an anvil which allows you to turn items back into their original crafting elements. Great for converting your mining instruments into weapons of war'
-    Free: true
-    Price: 0
-    Icon: WORKBENCH 0 1
-    Items:
-      - ANVIL 0 1
-    Ability:
-      - Salvager
-  Santa:
-    Description: 'The santa kit is great for those that love to team! Every minute you are given a random present with a kit in it. Give the present to someone who owns said kit and they will get their starting items back! Give it to a urgal and he gets his strength potions back! Some kits are on the naughty list however and have a lower chance of appearing however..'
-    Free: true
-    Price: 0
-    Icon: WRITTEN_BOOK 0 1
-    Ability:
-      - Santa
-  Scout:
-    Description: 'You spawn with 2 speed II potions and you gain 2 speed II potions every 10 minutes. While the speed is in effect. You take no fall damage!'
-    Free: true
-    Price: 0
-    Icon: FEATHER 0 1
-    Items:
-      - POTION 16418 2
-    Ability:
-      - Scout
-  Seeker:
-    Description: 'You don''t like having to look for that iron ore did you. So you kidnapped a ghost and grabbed their eye. Using this you can turn a area to glass visually, allowing you to look for that iron ore, caves and hidden player bases'
-    Free: true
-    Price: 0
-    Icon: EYE_OF_ENDER 0 1
-    Items:
-      - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1 UniqueItem
-  Snail:
-    Description: 'Everytime you hit someone you have a 1/3 chance of granting them the gift of slowness II'
-    Free: true
-    Price: 0
-    Icon: WEB 0 1
-    Ability:
-      - Snail
-  Spiderman:
-    Description: 'You start with 6 snowballs (You can replenish them) which create a 2x2 spider web where they land. You can only throw 3 snowballs until your web shooters demand a cooldown of 30 seconds. While in cobwebs you gain a speed II boost'
-    Free: true
-    Price: 0
-    Icon: SNOW_BALL 0 1
-    Items:
-      - SNOW_BALL 0 6
-    Ability:
-      - Spiderman
-  Stomper:
-    Description: 'The GroundPound kit is for those who have fond memories of doing cannon balls at the local public pool. You take a stable 2 hearts of fall damage and if you land on someone else, they are given the fall damage you would normally have taken. The damage they take is based on how close they are to you'
-    Free: true
-    Price: 0
-    Icon: ANVIL 0 1
-    Ability:
-      - Stomper
-  Summoner:
-    Description: 'The Summoner kit gives you the ability to capture any mob your thrown egg hits. When hit the mob will disappear and a monster egg will spawn in its place. Pick it up and choose where the monster appears next!'
-    Free: true
-    Price: 0
-    Icon: MOB_SPAWNER 0 1
-    Items:
-      - EGG 0 3
-    Ability:
-      - Summoner
+      - Pussy
   Surprise:
     Description: 'The surprise kit is a randomizer, you are given a random kit when the game starts. Even if you do not own that kit. A great way to try out these kits and get a little variation!'
     Free: true
@@ -507,74 +117,3 @@ Kits:
     Icon: CAKE_BLOCK 0 1
     Ability:
       - Surprise
-  Tarzan:
-    Description: '"YOLO! I have SWAG!" you screamed as you jumped off the cliff. Hearing the gasps of wonder from above, you smile to yourself. How could they possibly know you are tarzan? You whip out your vine and instantly all areas around you are now covered in vines! You climb back up to be carried on the shoulders of your imaginary fans'
-    Free: true
-    Price: 0
-    Icon: VINE 0 1
-    Items:
-      - VINE 0 1
-    Ability:
-      - Tarzan
-  Thor:
-    Description: 'Right click with a wooden axe on a block to call down a lightning strike! Great for aggressive strategies. The block you click turns into netherrack and the block above turns into fire! Great for lighting up a cave system!'
-    Free: true
-    Price: 0
-    Icon: WOOD_AXE 0 1
-    Items:
-      - WOOD_AXE 0 1
-    Ability:
-      - Thor
-  Tracker:
-    Description: 'You know the ways of your fellow allies and foes. And so you have a very special set of skills, Skills you have acquired over a very long career, Skills that make you a nightmare for people like them. You are able to tell precisely how far away someone is! What their location is and automatically update your compass if they move! By using /track <Player> you can even track a certain person!'
-    Free: true
-    Price: 0
-    Icon: COMPASS 0 1
-    Ability:
-      - Tracker
-  Turtle:
-    Description: 'You found your ultimate defense, Just by crouching and blocking with a sword. You only take half a heart of damage! However you find this position awkward to attack with when you are crouching.'
-    Free: true
-    Price: 0
-    Icon: IRON_DOOR_BLOCK 0 1
-    Ability:
-      - Turtle
-  Urgal:
-    Description: 'The Hulk kit starts with three Strength I potions. The difficulty comes in deciding when to use your potions... early to wipe out a few unsuspecting victims, or late game when that little bit of extra damage could turn the fight!'
-    Free: true
-    Price: 0
-    Icon: POTION 8201 3
-    Items:
-      - POTION 8201 3 Unlootable 1
-    Ability:
-      - Urgal
-  Vampire:
-    Description: 'The Dracula kit is a fantastic solo kit. You gain a large health boost when you kill players, a medium health boost when slaying monsters, or a small health boost when killing animals. If you already have full health when slaying another player, you gain a health pot!'
-    Free: true
-    Price: 0
-    Icon: Potion 16421 1
-    Ability:
-      - Vampire
-  Viper:
-    Description: 'You coated your sword in your saliva, strangely people seem to randomly have adverse reactions to it. You have a 1/3 chance of poisoning your foe!'
-    Free: true
-    Price: 0
-    Icon: Potion 8196 1
-    Ability:
-      - Viper
-  Warder:
-    Description: 'You are given a tome of protection, use this to place a 8 long wall of potions. Walking through the ward will give you speed I and protection I for 30 seconds. This effect is added to everyone walking through it. There is a warmup period of 1/2 second and it stays for 5 seconds. The book is usable again after a minute'
-    Free: true
-    Price: 0
-    Icon: BOOK 0 1
-    Items:
-      - BOOK 0 1 Unlootable 1 Name=Tome_of_Protection UniqueItem
-  Werewolf:
-    Description: 'he Nightwalker kit is given constant Strength I and Speed I effect at night, however during the day is given Weakness I. Wolves will also avoid attacking you. Spawn with a clock to check if it is night or day.'
-    Free: true
-    Price: 0
-    Icon: WATCH 0 1
-    Items:
-      - WATCH 0 1 Unlootable 1
-    Ability:
-      - Werewolf

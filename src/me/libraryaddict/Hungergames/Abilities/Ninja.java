@@ -4,18 +4,16 @@ import me.libraryaddict.Hungergames.Events.GameStartEvent;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Werewolf extends AbilityListener implements Disableable {
-    public String[] potionEffectsDay = new String[] { "WEAKNESS 12000 0" };
-    public String[] potionEffectsNight = new String[] { "SPEED 12000 0", "INCREASE_DAMAGE 12000 0" };
+public class Ninja extends AbilityListener implements Disableable {
+    public String[] potionEffectsDay = new String[] { "SPEED 12000 1" };
+    public String[] potionEffectsNight = new String[] { "JUMP 12000 1" };
 
     @EventHandler
     public void gameStartEvent(GameStartEvent event) {
@@ -41,13 +39,6 @@ public class Werewolf extends AbilityListener implements Disableable {
                 }
             }
         }, 0, 12000);
-    }
-
-    @EventHandler
-    public void onTarget(EntityTargetEvent event) {
-        if (event.getTarget() instanceof Player && hasAbility((Player) event.getTarget())
-                && event.getEntityType() == EntityType.WOLF)
-            event.setCancelled(true);
     }
 
 }
