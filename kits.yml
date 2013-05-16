@@ -80,19 +80,19 @@ Kits:
     Ability:
       - Array
   Backpacker:
-    Description: 'The backpacker kit starts you with a backpack, it''s located on the left top corner of your inventory. When you double click on the backpack, you will open the backpack, and enough storage to equal a double chest is available for you!'
+    Description: 'This kit grants you an addictional inventory to use! Its in your top left corner of your inventory, double click it to open a new inventory with the storage space of a double chest!'
     Free: true
     Price: 0
     Icon: ENDER_CHEST 0 1
     Ability:
       - Backpacker
   Barbarian:
-    Description: 'The Barbarian kit is excellent for getting the upper hand at the start of the game, but also later in game, you start with the sword "Tyrfing", a magic sword that levels up along with you, as you kill players and get experience, the sword becomes more powerful, eventually growing out from wood to diamond (Even with enchantments!). (Note: Due to a limitation of minecraft, the sword sometimes appears to break, but it is in fact not gone, just keep hitting and you''ll do the same damage you did with the sword.)'
+    Description: 'This sword was forged in blood at the dawn of man. Time passed and it weakened. But now it has been found again! To raise its combat power you must kill enemies! Every 3rd enemy it kills. The sword upgrades!'
     Free: true
     Price: 0
     Icon: WOOD_SWORD 0 1
     Items:
-      - WOOD_SWORD 0 1 Name=Tyfing Unlootable 1
+      - WOOD_SWORD 0 1 Name=Bloody_Bane Unlootable 1
     Ability:
       - Barbarian
   Beastmaster:
@@ -106,21 +106,21 @@ Kits:
     Ability:
       - Beastmaster
   Berserker:
-    Description: 'The Berserker kit is not for the weak! When you kill a player, you get Nausea II effect and Strength II effect for around 30 seconds, killing a mob gives you Nausea I and Strength I. This kit is brilliant for taking out teams!'
+    Description: 'The berserker gain strength by defeating enemies, but lose a piece of their mind with each kill! When you kill a player, you get Nausea II and Strength II for 30 seconds. Killing a mob gives you Nausea I and Strength I.'
     Free: true
     Price: 0
     Icon: POTION 16425 1
     Ability:
       - Berserker
   Boxer:
-    Description: 'The Boxer kit is an excellent all-rounder. It''s excellent at the start, giving you the element of surprise to victims, and is brilliant late-game since the damage reduction can often save your life! Your fist does almost eqivelent to a stone sword and you take half a heart less damage!'
+    Description: 'You trained atop a mountain, you endured great tests of endurance and strength. Years pass as you battle bears and wild cats. Your fists deal almost as much damage as a stone sword and your skin is tough enough to reduce incoming damage slightly!'
     Free: true
     Price: 0
     Icon: STONE_SWORD 0 1
     Ability:
       - Boxer
   Burrower:
-    Description: 'The Burrower kit is an excellent defensive kit for yourself, when on your last few hearts with no soups left, you can create your panic room and refill or sneak to make your enemy move onto a different target. Your slime balls will regenerate 5 minutes after use.'
+    Description: 'There is a enemy after you? Don''t want to fight? Its time to right click on that slimeball to teleport under the ground to your personalized escape room! Your slimeball will regenerate after 5 minutes'
     Free: true
     Price: 0
     Icon: SLIME_BALL 0 1
@@ -129,7 +129,7 @@ Kits:
     Ability:
       - Burrower
   Cannibal:
-    Description: 'The Cannibal kit is vital for you hungry PVP''ers! With Cannibal, every time you inflict damage on someone you receive a hunger-bar boost. When you inflict damage on them, they receive a hunger effect (same as eating zombie flesh) You start with a raw fish and ocelot egg, use the fish as food or use the fish to tame your ocelot to scare away creepers.'
+    Description: 'You are stuck in a hole with your friend. You are feeling peckish. You look at your friend.. ARGH NO! WHAT ARE YOU DOING! You gain a fish, ocelot egg and you gain hunger when you hit someone! They get a hunger effect'
     Free: true
     Price: 0
     Icon: MONSTER_EGG 98 1
@@ -146,7 +146,7 @@ Kits:
     Ability:
       - Chameleon
   Chemist:
-    Description: 'The Chemist kit is a good attacking and supportive kit. It starts with three splash potions, poison II (0:16), instant damage II and weakness (3:00). Use these potions on your enemies to gain an advantage over them; early or late game - it doesn''t matter!'
+    Description: 'The chemist kit lets you pick the perfect time to release a barrage of 3 splash potions! Weakness II for 3 minutes, instant damage II and Poison II for 16 seconds! Who can possibly fight against that! Better start bragging about that sure win!'
     Free: true
     Price: 0
     Icon: POTION 16428 1
@@ -155,7 +155,7 @@ Kits:
       - POTION 16420 1 Unlootable 1
       - POTION 16424 1 Unlootable 1
   Crafter:
-    Description: 'The crafter kit will allow you to craft and smelt everywhere. You start out with a crafting star and furnace powder, you''ll be able to right click the crafting star to open up a crafting window, and the furnace powder to open up a furnace. The furnace stays smelting whats inside, even while being closed!'
+    Description: 'This kit lets you craft and smelt while on the move, you have a crafting star and a furnace powder. Right click with either to open the workbench or furnace!'
     Free: true
     Price: 0
     Icon: BLAZE_POWDER 0 1
@@ -163,14 +163,14 @@ Kits:
       - NETHER_STAR 0 1 Name=Crafting_Star Unlootable 1 Lore=Right_click_with_this\nto_open_a_crafting_table
       - BLAZE_POWDER 0 1 Name=Furnace_Powder Unlootable 1 UniqueItem Lore=Right_click_with_this\nto_open_a_furnace
   Cultivator:
-    Description: 'The Cultivator kit allows you to immediately grow wheat and trees by placing seeds on hoed dirt, and placing saplings on dirt/grass. This is an excellent team and solo kit perfect for every game.'
+    Description: 'God gave you a green thumb. You know how to use this.. By hogging all the food you grow ofc! Instantly grow wheat by planting it, and instantly grow trees just by placing a sapling!'
     Free: true
     Price: 0
     Icon: SEEDS 0 1
     Ability:
       - Cultivator
   Demoman:
-    Description: 'The Demoman kit is brilliant for defense. Your victims and enemies wont suspect that a stone pressure plate on gravel will kill them! The explosion is a bit more than a TNT setting off. Careful however! You can set off your own landmines!'
+    Description: 'Its time to destroy that thief for breaking into your home! Place a stone pressure plate on gravel to create a landmine! Step on it to blow it up! The explosion is a little bigger then TNT. Careful however! You can set off your own landmines!'
     Free: true
     Price: 0
     Icon: TNT 0 1
@@ -194,14 +194,14 @@ Kits:
     Ability:
       - Demoman
   Digger:
-    Description: 'The digger kit will give you 6 dragon eggs, once you place the egg down, you have a bit more then a second (Trust me, it''s enough!) to get out of the way before a 5x5 hole appears straight under where you placed it. The perfect kit to trap your enemies!'
+    Description: 'This kit lets you destroy the land with the mere placement of a egg. Place a dragon egg down and you have a second to get out of the way before a 5x5 hole appears under where you placed it! Perfect for capturing a pet creeper!'
     Free: true
     Price: 0
     Icon: DRAGON_EGG 0 1
     Items:
       - DRAGON_EGG 0 6 Unlootable 1 Name=Mining_Mole Lore=Place_this_and_run
   Doctor:
-    Description: 'The Doctor kit will give you a pair of forceps (Shears) that you can right click on players to remove all their potion effects.'
+    Description: 'Doctor wasn''t looking when you stole his forceps. Now you are running around on a battle field removing all the players potion effects!'
     Free: true
     Price: 0
     Icon: Shears 0 1
@@ -215,7 +215,7 @@ Kits:
     Items:
       - ENDER_PORTAL 0 1 Name=Endermage_Portal Unlootable 1
   Explorer:
-    Description: 'The Explorer kit will give you a map, that automatically updates the whole map, so you will be able to see everything on the map, mini feasts and the feast will also be visibly marked on the map.'
+    Description: 'So far this kit seems retarded to code. Not sure it will be in'
     Free: true
     Price: 0
     Icon: Map 0 1
@@ -224,7 +224,7 @@ Kits:
     Ability:
       - Explorer
   Fireman:
-    Description: 'The fireman kit gives you a water bucket when you spawn! Use the water to move around and hinder others. Or find lava and get a lava bucket instead!'
+    Description: 'As a precaution you were carrying your water bucket just before the aliens grabbed you and stuck you in this battleground. Time to find lava and do what everyone told you off for!'
     Free: true
     Price: 0
     Icon: WATER_BUCKET 0 1
@@ -233,14 +233,14 @@ Kits:
     Ability:
       - Fireman
   Fisherman:
-    Description: 'The Fisherman kit starts with a fishing rod, use the fishing rod in a clever way and this kit can be quite useful! This is one of the most *cough* unbalanced kits in the game.'
+    Description: 'The Fisherman kit starts with a fishing rod, use the fishing rod to catch fish. Lots and lots of fish. With a minute between catches. This is one of the most *cough* unbalanced kits in the game.'
     Free: true
     Price: 0
     Icon: FISHING_ROD 0 1
     Items:
       - FISHING_ROD 0 1
   Flash:
-    Description: 'The Flash kit will allow you to instantly teleport to the location you''re aiming at with a swing of your redstone torch. Once you get teleported, you will receive half of the distance you teleported in Weakness II. Once you teleport, lightning will strike at the position you flashed to, and a teleportation effect (Like that of Enderman) will lead towards the position you flashed to. Your redstone torch will turn off on use, and when the cooldown is over, it will turn on again.'
+    Description: 'With a mere swing of your redstone torch you teleport to where you were looking, and receive have the distance in weakness II. One you teleport, players will see lightning visually strike you. The redstone torch turns off when its out of charge and turns back on when it''s charge has recovered'
     Free: true
     Price: 0
     Icon: REDSTONE_TORCH_ON 0 1
@@ -249,14 +249,14 @@ Kits:
     Ability:
       - Flash
   Fletcher:
-    Description: 'The Fletcher kit is the perfect match for someone with the Archer kit. The fletcher can make more arrows, while the Archer can fend off foes with their bow!'
+    Description: 'Kill a chicken and drop addictional feathers, destroy gravel for the assured chance of a piece of flint. Its time to team up with that archer!'
     Free: true
     Price: 0
     Icon: ARROW 0 1
     Ability:
       - Fletcher
   Forger:
-    Description: 'The Forger kit gives you the ability to instantly smelt ores if you have enough coal to smelt it. By clicking the coal on an ore in your inventory it will immediately be smelted to an ingot at a 1 coal : 1 ingot ratio, so using 15 coal on a stack of 35 iron ore, will result in 15 iron ingots and 20 iron ore.'
+    Description: 'The forger kit lets you instantly smelt ores if you have enough coal. By clicking the coal or a ore in your inventory it will be smelted at a ratio of one ore per coal.'
     Free: true
     Price: 0
     Icon: COAL 0 1
@@ -265,7 +265,7 @@ Kits:
     Ability:
       - Forger
   Frosty:
-    Description: 'The frosty kit will give the player a huge advantage over others when in a snow biome. The player can also bring the advantage outside of the snow biome with snowballs by throwing them at the ground. This kit gives an all game advantage that also counters poseidons.'
+    Description: 'When you were a mere baby you drank some koolaid. It seems it did strange things to your body! Throw snowballs in water to turn it to ice, throw it at the ground to generate snow and walk on snow to gain a speed boost!'
     Free: true
     Price: 0
     Icon: SNOW 0 1
@@ -274,7 +274,7 @@ Kits:
     Ability:
       - Frosty
   Gambler:
-    Description: 'The Gambler kit is perfect for people who like to chance things! . Effects include slowness, poison, instant-death (1/1000 chance), hunger, weakness, strength, full diamond-armor, (1/1000 chance) regeneration, full-hunger and speed.'
+    Description: 'Oh damn you love to gamble. Its time to gamble your life away on things such as slowness, poison, hunger, weakness, strength, regeneration, hunger, health, speed! There''s also a rare chance for diamond armor and a rarer chance yet for instant death!'
     Free: true
     Price: 0
     Icon: STONE_BUTTON 0 1
@@ -283,14 +283,14 @@ Kits:
     Ability:
       - Gambler
   Grandpa:
-    Description: 'The Grandpa kit is really useful when on hilly situations, or when you want someone to leave you alone! The stick has Knockback II, sending your enemies miles (6 or so blocks) away when they come within range!'
+    Description: 'While walking to the battle ground you saw a cane lying on the ground, no one seemed to be using it so you quickly snatched it. But a grandpa''s cane isn''t just any old stick. Its perfect for whacking young whippersnappers with a knockback II!'
     Free: true
     Price: 0
     Icon: STICK 0 1 KNOCKBACK 2
     Items:
       - Stick 0 1 Name=Grandpa's_Cane KNOCKBACK 2 Unlootable 1
   Gravedigger:
-    Description: 'The Gravedigger kit allows you to effectively manage your inventory. The chest that spawns when you kill a player makes it convenient for you to be able to choose and select what items you want to take. Very handy when people drop lots and lots of items!'
+    Description: 'You got sick of picking up all their loot, so just before you kill them off you say ''Hey. Take off dat armor for me and items and stick it into a chest''. Perfect for those who hate to pick their food up from the ground!'
     Free: true
     Price: 0
     Icon: DIAMOND_SPADE 0 1
@@ -306,7 +306,7 @@ Kits:
     Ability:
       - Hades
   Hermit:
-    Description: 'The Hermit kit is useful for people who prefer to start at points with soup. The hermit kit will try to place you to any biome with soup as far away as possible. In this order: Swamp -> Rainforest -> Desert. If none of these biomes are available it will spawn you at least 300 blocks out.'
+    Description: 'You ran away from home looking for a better life, Someone invited you to a battle of skill. You accepted but minutes before the game starts you decided to go on a jog. As a result you are now hundreds of blocks from spawn when the game starts! Oh dear!'
     Free: true
     Price: 0
     Icon: Map 0 1
@@ -320,7 +320,7 @@ Kits:
     Ability:
       - Hunter
   Jumper:
-    Description: 'The Jumper kit is excellent for getting to places quicker than everyone else, or escaping tough scenarios. This kit is useful, in all aspects of the game! When you throw an enderpearl, you will take no damage from the teleport, and a 4x4 platform will appear under you, lasting for 5 seconds and securing your landing wherever you go.'
+    Description: 'You took up enderpearling as a hobby and you have always had at least 5 enderpearls in your inventory! Seconds before you were teleported to the battle arena you grabbed your Instant Platform 2000 - Perfect for always having a place to land and you find it impossible to be hurt by your enderpearls!'
     Free: true
     Price: 0
     Icon: ENDER_PEARL 0 1
@@ -338,7 +338,7 @@ Kits:
     Ability:
       - Kaya
   Lumberjack:
-    Description: 'The Lumberjack kit is effective at the start of the game, or in jungles. Your axe can be used to make every wood block above the one you chopped, break and fall!'
+    Description: 'You whack your mighty axe once, twice, thrice against the trunk of this great tree. With a loud groan the entire tree topples. Every piece of wood above that wood was broken!'
     Free: true
     Price: 0
     Icon: LOG 0 1
@@ -347,7 +347,7 @@ Kits:
     Ability:
       - Lumberjack
   Milkman:
-    Description: 'The Milkman kit gives you a "Milkman''s Bucket" filled with milk. Once you drink the milk, you will get 45 seconds of Regeneration I, Fire Resistance I and Speed I. but you will make a tribute to the milkman by saying "I am the milkman, my milk is delicious" on use. You can use the bucket for 5 times, after that, the Milkman''s effect on the bucket will wear off.'
+    Description: 'The milkman kit gives you a special 5 use bucket of milk, the milk in this bucket is granted mystic powers to those who drink it. After thanking the milk god by saying "I am the milkman, my milk is delicious" you gain 45 seconds of Regeneration I, Fire Resistance I and Speed I!'
     Free: true
     Price: 0
     Icon: MILK_BUCKET 0 1
@@ -356,7 +356,7 @@ Kits:
     Ability:
       - Milkman
   Miner:
-    Description: 'The Miner kit is for people who want to get iron instantly. The speed boost is really useful when mining, too! Eat an apple with full health, full hunger and mine.'
+    Description: 'You decided to try out this new thing called mining and you think you like it! You even took a stone pickaxe with you to the battle ground! Eating a apple sure does perk you up while mining!'
     Free: true
     Price: 0
     Icon: STONE_PICKAXE 0 1
@@ -372,7 +372,7 @@ Kits:
     Items:
       - BLAZE_ROD 0 1 Name=Monk_Staff Unlootable 1 UniqueItem
   Monster:
-    Description: 'The Monster kit is the perfect kit for mining safely, or attacking during the night without being disturbed! Alternately if you are just sick of creepers!'
+    Description: 'At night you used to sleep afraid of the monsters. Until you started rubbing rotten flesh into your skin. Surprise surprise! The monsters seem to think you are one of them!'
     Free: true
     Price: 0
     Icon: SKULL_ITEM 2 1
@@ -386,7 +386,7 @@ Kits:
     Ability:
       - Necro
   Pickpocket:
-    Description: 'The pickpocket kit allows you to right click players with your blaze rod to open up their inventory, where you can steal up to 4 items outside of their hotbar (The top row) before receiving a 10 second cooldown, if the player runs out of range, the inventory closes.'
+    Description: 'Your blaze rod seems to have a nasty habit of allowing you open other players inventorys merely by right clicking them. Unsure of how far you should go, you gave yourself a limit of 4 items and swore not to interfere with their hotbar (Top row). If they run out of range the inventory closes'
     Free: true
     Price: 0
     Icon: BLAZE_ROD 0 1
@@ -395,14 +395,14 @@ Kits:
     Ability:
       - Pickpocket
   Poseidon:
-    Description: 'The Poseidon kit is brilliant when maneuvering in water. Strength I, Speed II and the ability to not drown when moving in water can really help, and give that pvp-boost when in fights!'
+    Description: 'Knowing you will have to fight one day you regularly rubbed strength I and speed II potions into your skin. Its activated while in water! Theres also a water breathing potion which activates everytime you move in the water!'
     Free: true
     Price: 0
     Icon: WATER 0 1
     Ability:
       - Poseidon
   Pyro:
-    Description: 'The Pyro kit is useful for the start and late game. The flint and steel has many uses and can be quite effective when supporting a team, or attacking others! The fire charges can be right click, and when they hit something, everything nearby sets on fire!'
+    Description: 'The pyro kit is hilariously explosive! You have a flint and steel to light the forest up, and 5 explosive fire charges which launch like a ghast fireball!'
     Free: true
     Price: 0
     Icon: FIRE 0 1
@@ -412,7 +412,7 @@ Kits:
     Ability:
       - Pyro
   Reaper:
-    Description: 'The Reaper kit will allow you to curse players by hitting them with your wooden hoe, the players will get the wither effect and get damage over time.'
+    Description: 'With a mere swipe of your hoe you curse players to pain. They are given a wither effect which damages them over time'
     Free: true
     Price: 0
     Icon: WOOD_HOE 0 1
@@ -421,7 +421,7 @@ Kits:
     Ability:
       - Reaper
   Rider:
-    Description: 'The Rider kit allows you to ride almost any passive mob by right clicking them without your riding whip (A stick), once you are riding them, you can use your stick to steer the mob, increase and decrease speed by left clicking and right clicking the mob you''re riding, stop/start with a right click, and jump with a left click. (This information can be found by hovering over the stick in your inventory as well)'
+    Description: 'cba'
     Free: true
     Price: 0
     Icon: CARROT_STICK 0 1
@@ -437,7 +437,7 @@ Kits:
     Ability:
       - Salamander
   Salvager:
-    Description: 'The Salvager kit will give you an anvil, when you place that anvil down, you can right click a item on the anvil, and you will receive the building materials back, ie. a iron helmet will give you back 5 iron ingots.'
+    Description: 'The Tinkerer kit will give you an anvil which allows you to turn items back into their original crafting elements. Great for converting your mining instruments into weapons of war'
     Free: true
     Price: 0
     Icon: WORKBENCH 0 1
@@ -446,14 +446,14 @@ Kits:
     Ability:
       - Salvager
   Santa:
-    Description: 'The Santa kit is an excellent teaming kit, every minute you''ll be given a random present with a kit on it, Gift the present to someone who has the kit, and they''ll get their starting items back! So for example, gift a Chemist the Chemist present and they''ll get their potions back, The present has a insult from the author, and present colors are randomized! However some kits are on the naughty list, This means these kits have a lower chance of being gifted as a present, such as Urgal...'
+    Description: 'The santa kit is great for those that love to team! Every minute you are given a random present with a kit in it. Give the present to someone who owns said kit and they will get their starting items back! Give it to a urgal and he gets his strength potions back! Some kits are on the naughty list however and have a lower chance of appearing however..'
     Free: true
     Price: 0
     Icon: WRITTEN_BOOK 0 1
     Ability:
       - Santa
   Scout:
-    Description: 'The Scout kit can be used at the start, or towards the end of the game. With 2 speed potions, you can use the potions as you please depending on your strategy! When speed is in effect, you take no fall damage! Every 10 minutes you get 2 new potions as well!'
+    Description: 'You spawn with 2 speed II potions and you gain 2 speed II potions every 10 minutes. While the speed is in effect. You take no fall damage!'
     Free: true
     Price: 0
     Icon: FEATHER 0 1
@@ -462,21 +462,21 @@ Kits:
     Ability:
       - Scout
   Seeker:
-    Description: 'The Seeker kit allows you to see the unseeable by using your eyes of ender. When you use them, up to 65 blocks ahead of where you look, all ground blocks are turned to glass, except for ores, lava, water, etc. This allows you to easily find ores and see undergound.'
+    Description: 'You don''t like having to look for that iron ore did you. So you kidnapped a ghost and grabbed their eye. Using this you can turn a area to glass visually, allowing you to look for that iron ore, caves and hidden player bases'
     Free: true
     Price: 0
     Icon: EYE_OF_ENDER 0 1
     Items:
       - EYE_OF_ENDER 0 1 Name=Ghost_Eye Unlootable 1 UniqueItem
   Snail:
-    Description: 'The Snail kit gives you the ability that as you do damage to players, you have a 33% chance to slow them with slowness II.'
+    Description: 'Everytime you hit someone you have a 1/3 chance of granting them the gift of slowness II'
     Free: true
     Price: 0
     Icon: WEB 0 1
     Ability:
       - Snail
   Spiderman:
-    Description: 'The Spiderman kit will give you 6 snowballs (which you will be able to replenish of course), which will create a 2x2 spider web at the location they spawn at, and right in front of any mob if they are hit head on. You can only throw 3 snowballs after each other, before getting a 30 second cooldown. You also get Speed II while in the cobwebs.'
+    Description: 'You start with 6 snowballs (You can replenish them) which create a 2x2 spider web where they land. You can only throw 3 snowballs until your web shooters demand a cooldown of 30 seconds. While in cobwebs you gain a speed II boost'
     Free: true
     Price: 0
     Icon: SNOW_BALL 0 1
@@ -485,14 +485,14 @@ Kits:
     Ability:
       - Spiderman
   Stomper:
-    Description: 'The Stomper kit is really effective and useful on a large scale. You take 2 hearts of fall damage, regardless of the height you fall. And if you fall onto someone else, the damage you would normally take is passed onto them. the closer they are, The more damage they take. A ''stomp'' penetrates armor, too! To counter it be higher then the stomper or sneak to reduce damage by half'
+    Description: 'The GroundPound kit is for those who have fond memories of doing cannon balls at the local public pool. You take a stable 2 hearts of fall damage and if you land on someone else, they are given the fall damage you would normally have taken. The damage they take is based on how close they are to you'
     Free: true
     Price: 0
     Icon: ANVIL 0 1
     Ability:
       - Stomper
   Summoner:
-    Description: 'The Summoner kit will give you the ability to capture any mob that has a spawn egg. You can use the spawn egg to place down a mob that can fight in your stead, do know it might attack you as well!'
+    Description: 'The Summoner kit gives you the ability to capture any mob your thrown egg hits. When hit the mob will disappear and a monster egg will spawn in its place. Pick it up and choose where the monster appears next!'
     Free: true
     Price: 0
     Icon: MOB_SPAWNER 0 1
@@ -501,14 +501,14 @@ Kits:
     Ability:
       - Summoner
   Surprise:
-    Description: 'The Surprise kit will turn you into one of all the kits as soon as the game starts, even kits that you do not own, making this a nice kit to try out kits you might not own yet, and get a little variation!'
+    Description: 'The surprise kit is a randomizer, you are given a random kit when the game starts. Even if you do not own that kit. A great way to try out these kits and get a little variation!'
     Free: true
     Price: 0
     Icon: CAKE_BLOCK 0 1
     Ability:
       - Surprise
   Tarzan:
-    Description: 'The Tarzan kit will make all blocks around you become covered with vines as long as you''re holding your vine, this will give you the chance to evade combat, climb up and down ravines, everything you can think of!'
+    Description: '"YOLO! I have SWAG!" you screamed as you jumped off the cliff. Hearing the gasps of wonder from above, you smile to yourself. How could they possibly know you are tarzan? You whip out your vine and instantly all areas around you are now covered in vines! You climb back up to be carried on the shoulders of your imaginary fans'
     Free: true
     Price: 0
     Icon: VINE 0 1
@@ -517,7 +517,7 @@ Kits:
     Ability:
       - Tarzan
   Thor:
-    Description: 'Right click with your wooden axe on a block to call down lightning! This excellent kit is great for aggressive players, and is brilliant for countering towers, and also gives you a nice boost in PVP! You can craft another wooden axe in case you die, or if you lose it.'
+    Description: 'Right click with a wooden axe on a block to call down a lightning strike! Great for aggressive strategies. The block you click turns into netherrack and the block above turns into fire! Great for lighting up a cave system!'
     Free: true
     Price: 0
     Icon: WOOD_AXE 0 1
@@ -533,14 +533,14 @@ Kits:
     Ability:
       - Tracker
   Turtle:
-    Description: 'The Turtle kit review is the ultimate-defense kit, or decoy kit. You can crouch and block and you''ll take half a heart, however you cannot attack if you''re crouched.'
+    Description: 'You found your ultimate defense, Just by crouching and blocking with a sword. You only take half a heart of damage! However you find this position awkward to attack with when you are crouching.'
     Free: true
     Price: 0
     Icon: IRON_DOOR_BLOCK 0 1
     Ability:
       - Turtle
   Urgal:
-    Description: 'The Urgal kit starts with three Strength I potions. You can use the pots early, or late game depending on your strategy. It really is an excellent, attacking kit that can be supportive or solo intended.'
+    Description: 'The Hulk kit starts with three Strength I potions. The difficulty comes in deciding when to use your potions... early to wipe out a few unsuspecting victims, or late game when that little bit of extra damage could turn the fight!'
     Free: true
     Price: 0
     Icon: POTION 8201 3
@@ -549,28 +549,28 @@ Kits:
     Ability:
       - Urgal
   Vampire:
-    Description: 'The Vampire kit is superb for attacking and dominating teams. You get a big health boost when killing players, a smaller health boost when killing monsters and a even smaller health boost when killing animals. If you do not need the health however when you kill a player. You get a health potion!'
+    Description: 'The Dracula kit is a fantastic solo kit. You gain a large health boost when you kill players, a medium health boost when slaying monsters, or a small health boost when killing animals. If you already have full health when slaying another player, you gain a health pot!'
     Free: true
     Price: 0
     Icon: Potion 16421 1
     Ability:
       - Vampire
   Viper:
-    Description: 'The Viper kit is really useful for getting that extra bit of damage done to your opponent in key battles. There''s a 33% chance of poisoning your enemy everytime you hit him.'
+    Description: 'You coated your sword in your saliva, strangely people seem to randomly have adverse reactions to it. You have a 1/3 chance of poisoning your foe!'
     Free: true
     Price: 0
     Icon: Potion 8196 1
     Ability:
       - Viper
   Warder:
-    Description: 'The warder kit gives you the ability to place an 8 long wall of portals. Walking through this wall will give you Speed 1 for 5 seconds and Protection 1 for 30 seconds, This effect gets added to anybody walking through the field. The field has a warmup time of roughly half a second, then stays for 5 seconds. Placing a field has a cooldown time of 1 minute.'
+    Description: 'You are given a tome of protection, use this to place a 8 long wall of potions. Walking through the ward will give you speed I and protection I for 30 seconds. This effect is added to everyone walking through it. There is a warmup period of 1/2 second and it stays for 5 seconds. The book is usable again after a minute'
     Free: true
     Price: 0
     Icon: BOOK 0 1
     Items:
       - BOOK 0 1 Unlootable 1 Name=Tome_of_Protection UniqueItem
   Werewolf:
-    Description: 'The Werewolf kit is perfect for night-time battles. During the night you have constant Strength I and Speed I effect, however during the day you have Weakness I. Wolves will never attack you, either. Spawn with a clock to check the time of day!'
+    Description: 'he Nightwalker kit is given constant Strength I and Speed I effect at night, however during the day is given Weakness I. Wolves will also avoid attacking you. Spawn with a clock to check if it is night or day.'
     Free: true
     Price: 0
     Icon: WATCH 0 1
