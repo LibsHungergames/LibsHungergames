@@ -197,7 +197,7 @@ public class TranslationManager {
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
     private String messagePlayerHasHealthAndHunger = ChatColor.RED
-            + "%1$2s has %2$2s/20 health\n%1$2s has %3$2s/20 hunger\n%1$2sis using kit: %4$2s";
+            + "%1$2s has %2$2s/20 health\n%1$2s has %3$2s/20 hunger\n%1$2s is using kit: %4$2s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
@@ -223,7 +223,7 @@ public class TranslationManager {
     private String messagePlayerShowKitsOtherKits = ChatColor.DARK_GREEN + "Other kits:" + ChatColor.RESET + " %s";
     private String messagePlayerShowKitsUseKitInfo = ChatColor.AQUA + "To view the information on a kit, Use /kitinfo <Kit Name>";
     private String messagePlayerTrack = ChatColor.YELLOW + "Compass pointing at %s";
-    private String messagePlayerTrackNoVictim = "No players found, Pointing at spawn";
+    private String messagePlayerTrackNoVictim = ChatColor.YELLOW + "No players found, Pointing at spawn";
     private String messagePlayerUpdateAvailable = ChatColor.RED + "[Hungergames]" + ChatColor.DARK_RED
             + " There is a update available, The new version is " + ChatColor.RED + "%s" + ChatColor.DARK_RED
             + " while your current version is " + ChatColor.RED + "%s";
