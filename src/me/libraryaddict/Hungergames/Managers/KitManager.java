@@ -88,7 +88,7 @@ public class KitManager {
         List<String> kitNames = new ArrayList<String>();
         for (Kit kit : kits)
             kitNames.add(kit.getName());
-        Collections.sort(kitNames);
+        Collections.sort(kitNames, String.CASE_INSENSITIVE_ORDER);
         ArrayList<Kit> newKits = new ArrayList<Kit>();
         for (int i = 0; i < kitNames.size(); i++) {
             Kit kit = getKitByName(kitNames.get(i));
@@ -125,6 +125,7 @@ public class KitManager {
     }
 
     public Kit getKitByName(String name) {
+        name = ChatColor.stripColor(name);
         for (Kit kit : kits)
             if (ChatColor.stripColor(kit.getName()).equalsIgnoreCase(name))
                 return kit;

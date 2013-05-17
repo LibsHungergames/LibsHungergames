@@ -82,7 +82,6 @@ public class ConfigManager {
      */
 
     /**
-     * 
      * @param Current
      *            time
      * @return Should it advertise about the feast?
@@ -114,7 +113,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @param Currenttime
      * @return Should it advertise about invincibility?
      */
@@ -129,7 +127,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Should it display messages about the game starting in bla bla?
      */
     public boolean displayMessages() {
@@ -137,7 +134,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Should it use scoreboards at all?
      */
     public boolean displayScoreboards() {
@@ -145,7 +141,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Does the border close in after the feast starts?
      */
     public boolean doesBorderCloseIn() {
@@ -153,7 +148,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return The feast starts in T-Minus <Seconds>
      */
     public int feastStartsIn() {
@@ -161,7 +155,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Should the plugin force the worlds spawn to be here
      */
     public boolean forceCords() {
@@ -169,7 +162,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Should it generate pillars beneath spawn to make it realistic
      */
     public boolean generatePillars() {
@@ -177,7 +169,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How much does the border close in per second?
      */
     public double getBorderCloseInRate() {
@@ -185,7 +176,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the current size of the border?
      */
     public double getBorderSize() {
@@ -193,7 +183,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How many layers high is the feast
      */
     public int getChestLayers() {
@@ -201,7 +190,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the material used for the outside covering of the feast
      */
     public ItemStack getFeast() {
@@ -209,7 +197,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the material used for the feast ground
      */
     public ItemStack getFeastGround() {
@@ -217,16 +204,13 @@ public class ConfigManager {
     }
 
     /**
-     * 
-     * @return Whats the material used for the inside of the feast where no one
-     *         sees
+     * @return Whats the material used for the inside of the feast where no one sees
      */
     public ItemStack getFeastInsides() {
         return feastInsides;
     }
 
     /**
-     * 
      * @return How big is the feast generation
      */
     public int getFeastSize() {
@@ -234,7 +218,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How much delay before shutting the game down?
      */
     public int getGameShutdownDelay() {
@@ -242,7 +225,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How long does invincibility last?
      */
     public int getInvincibilityTime() {
@@ -275,7 +257,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How many players are required to start the game
      */
     public int getMinPlayers() {
@@ -290,7 +271,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the material used for the pillars corners
      */
     public ItemStack getPillarCorner() {
@@ -298,7 +278,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the material used for the rest of the pillars
      */
     public ItemStack getPillarInsides() {
@@ -306,7 +285,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the X its forcing spawn to be
      */
     public int getSpawnX() {
@@ -314,7 +292,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Whats the Z its forcing spawn to be
      */
     public int getSpawnZ() {
@@ -322,7 +299,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How long until the feast starts?
      */
     public int getTimeFeastStarts() {
@@ -330,7 +306,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How much delay before crowing the name of the winner?
      */
     public int getWinnerBroadcastDelay() {
@@ -338,7 +313,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Invincibility wears off in T-Minus <Seconds>
      */
     public int invincibilityWearsOffIn() {
@@ -346,16 +320,13 @@ public class ConfigManager {
     }
 
     /**
-     * 
-     * @return Does the topmost tnt hidden under the enchanting table ignite on
-     *         punch?
+     * @return Does the topmost tnt hidden under the enchanting table ignite on punch?
      */
     public boolean isFeastTntIgnite() {
         return feastTnt;
     }
 
     /**
-     * 
      * @return Should there be forest fires before the game starts?
      */
     public boolean isFireSpreadDisabled() {
@@ -367,7 +338,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Is mushroom stew enabled?
      */
     public boolean isMushroomStew() {
@@ -375,7 +345,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Is the plugin using mysql
      */
     public boolean isMySqlEnabled() {
@@ -390,16 +359,13 @@ public class ConfigManager {
     }
 
     /**
-     * 
-     * @return Is spectator chat hidden from mortal eyes to prevent the giving
-     *         away of tactics and distractions?
+     * @return Is spectator chat hidden from mortal eyes to prevent the giving away of tactics and distractions?
      */
     public boolean isSpectatorChatHidden() {
         return spectatorChat;
     }
 
     /**
-     * 
      * @return Do players spectate when killed? Or joining? Or are they kicked?
      */
     public boolean isSpectatorsEnabled() {
@@ -455,7 +421,7 @@ public class ConfigManager {
                     }
                 }
             }
-        });
+        }, 2);
         if (hg.getConfig().getBoolean("CheckUpdates"))
             Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
                 public void run() {
@@ -563,7 +529,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return How much hearts or hunger should soup restore
      */
     public int mushroomStewRestores() {
@@ -571,7 +536,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @param String
      *            containing item
      * @return Itemstack parsed from the string
@@ -585,7 +549,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @param Whats
      *            the new border size?
      */
@@ -594,7 +557,6 @@ public class ConfigManager {
     }
 
     /**
-     * 
      * @return Should it give players that fancy kit selector
      */
     public boolean useKitSelector() {
