@@ -4,7 +4,7 @@ author: libraryaddict
 version: ${project.version}
 website: http://www.spigotmc.org/resources/libs-hungergames.55/
 load: startup
-softdepend: [LibsCommands, iDisguise, Vault]
+softdepend: [LibsDisguises, Vault]
 permissions:
   ThisIsUsedForMessaging:
     description: Used for messages in LibsHungergames

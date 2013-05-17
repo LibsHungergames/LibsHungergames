@@ -11,13 +11,10 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_5_R3.CraftServer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import de.robingrether.idisguise.iDisguise;
 
 public class ConfigManager {
 
@@ -404,21 +401,6 @@ public class ConfigManager {
                     ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
                     ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
                     System.out.println(cm.getLoggerChangedHeightLimit());
-                }
-                if (Bukkit.getPluginManager().getPlugin("iDisguise") != null) {
-                    PlayerDeathEvent.getHandlerList().unregister(
-                            ((iDisguise) (Bukkit.getPluginManager().getPlugin("iDisguise"))).playerListener);
-                    if (hg.getConfig().getBoolean("ChangeDisguiseConfig", true)) {
-                        iDisguise disguise = (iDisguise) Bukkit.getPluginManager().getPlugin("iDisguise");
-                        FileConfiguration config = disguise.getConfig();
-                        if (config.getBoolean("save-disguises") || config.getBoolean("undisguise-on-hit")) {
-                            config.set("save-disguises", false);
-                            config.set("undisguise-on-hit", false);
-                            disguise.saveConfig();
-                            disguise.config.loadConfig();
-                            System.out.print(cm.getLoggerChangedIDisguiseConfig());
-                        }
-                    }
                 }
             }
         }, 2);

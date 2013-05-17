@@ -70,9 +70,9 @@
 			<version>1.2.26-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>idisguise</groupId>
-			<artifactId>idisguise</artifactId>
-			<version>v2.0pre</version>
+			<groupId>libsdisguises</groupId>
+			<artifactId>libsdisguises</artifactId>
+			<version>v1.0</version>
 		</dependency>
 	</dependencies>
 </project>
