@@ -284,6 +284,7 @@ public class Hungergames extends JavaPlugin {
             HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
             Bukkit.broadcastMessage(cm.getBroadcastFeastBegun());
             ScoreboardManager.updateStage();
+            world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
         } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn(), config.feastStartsIn());
             if (config.advertiseFeast(currentTime)) {

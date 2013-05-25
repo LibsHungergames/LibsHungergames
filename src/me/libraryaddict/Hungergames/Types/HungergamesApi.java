@@ -13,7 +13,7 @@ public class HungergamesApi {
     private static ConfigManager config;
     private static FeastManager fm;
     private static Hungergames hg;
-    private static KitSelectorManager icon;
+    private static InventoryManager icon;
     private static KitManager kits;
     private static MySqlManager mysql;
     private static PlayerManager pm;
@@ -125,9 +125,9 @@ public class HungergamesApi {
      * @return Kit Selector which handles the inventory which allows them to
      *         pick a kit
      */
-    public static KitSelectorManager getKitSelector() {
+    public static InventoryManager getInventoryManager() {
         if (icon == null)
-            icon = new KitSelectorManager();
+            icon = new InventoryManager();
         return icon;
     }
 

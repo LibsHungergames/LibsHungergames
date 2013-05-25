@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class KitSelectorManager {
+public class InventoryManager {
 
     private ItemStack kitSelector = null;
 
@@ -60,7 +60,7 @@ public class KitSelectorManager {
         return HungergamesApi.getTranslationManager().getItemKitSelectorName();
     }
 
-    public void openInventory(Player p) {
+    public void openKitInventory(Player p) {
         KitInventory inv = new KitInventory(p);
         inv.setKits();
         inv.openInventory();

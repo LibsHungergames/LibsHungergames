@@ -22,84 +22,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class KitInventory implements Listener {
-
-    private ItemStack backAPage = null;
-    private int currentPage = 0;
-    private boolean dynamicInventorySize = HungergamesApi.getConfigManager().isKitSelectorDynamicSize();
-    private ItemStack forwardsAPage = null;
-    private Hungergames hg;
-    private Inventory inv;
-    private boolean listenForClose = true;
-    private int maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
-    private HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
-    private String title;
-    private Player user;
+public class KitInventory extends PageInventory {
 
     public KitInventory(Player player) {
-        hg = HungergamesApi.getHungergames();
-        user = player;
+        super(player, HungergamesApi.getConfigManager().isKitSelectorDynamicSize());
+        maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
         title = HungergamesApi.getTranslationManager().getInventoryWindowSelectKitTitle();
-        user.setMetadata("KitInventory", new FixedMetadataValue(hg, this));
-        Bukkit.getPluginManager().registerEvents(this, hg);
-    }
-
-    public ItemStack[] generatePage(int itemsSize) {
-        if (itemsSize > maxInvSize)
-            itemsSize = maxInvSize;
-        itemsSize = (int) (Math.ceil((double) itemsSize / 9)) * 9;
-        return new ItemStack[itemsSize];
-    }
-
-    public ItemStack getBackPage() {
-        if (backAPage == null) {
-            TranslationManager chat = HungergamesApi.getTranslationManager();
-            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
-            backAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
-                    chat.getItemKitSelectorBackName(), chat.getItemKitSelectorBackDescription());
-            backAPage.setAmount(0);
-        }
-        return backAPage;
-    }
-
-    public int getCurrentPage() {
-        return currentPage;
-    }
-
-    public ItemStack getForwardsPage() {
-        if (forwardsAPage == null) {
-            TranslationManager chat = HungergamesApi.getTranslationManager();
-            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorForward();
-            forwardsAPage = HungergamesApi.getKitSelector().generateItem(item.getType(), item.getDurability(),
-                    chat.getItemKitSelectorForwardsName(), chat.getItemKitSelectorForwardsDescription());
-            forwardsAPage.setAmount(0);
-        }
-        return forwardsAPage;
-    }
-
-    public ItemStack[] getPage(int pageNumber) {
-        return pages.get(pageNumber);
-    }
-
-    public HashMap<Integer, ItemStack[]> getPages() {
-        return pages;
-    }
-
-    public Player getPlayer() {
-        return user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    @EventHandler
-    public void onClose(InventoryCloseEvent event) {
-        if (listenForClose && event.getPlayer() == user) {
-            HandlerList.unregisterAll(this);
-            if (user.hasMetadata("KitInventory") && user.getMetadata("KitInventory").get(0).value() == this)
-                user.removeMetadata("KitInventory", hg);
-        }
+        ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
+        backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
+                tm.getItemKitSelectorBackName(), tm.getItemKitSelectorBackDescription());
+        backAPage.setAmount(0);
+        item = HungergamesApi.getConfigManager().getKitSelectorForward();
+        forwardsAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
+                tm.getItemKitSelectorForwardsName(), tm.getItemKitSelectorForwardsDescription());
+        forwardsAPage.setAmount(0);
     }
 
     @EventHandler
@@ -120,26 +56,6 @@ public class KitInventory implements Listener {
                 }
             }
         }
-    }
-
-    public void openInventory() {
-        if (inv == null) {
-            int size = maxInvSize;
-            if (pages.size() > 0) {
-                size = pages.values().iterator().next().length;
-            }
-            inv = Bukkit.createInventory(null, size, title);
-            setPage(currentPage);
-        }
-        user.openInventory(inv);
-    }
-
-    public void setBackPage(ItemStack newBack) {
-        backAPage = newBack;
-    }
-
-    public void setForwardsPage(ItemStack newForwards) {
-        forwardsAPage = newForwards;
     }
 
     public void setKits() {
@@ -184,36 +100,6 @@ public class KitInventory implements Listener {
             }
         }
         currentPage = 0;
-    }
-
-    public void setPage(int newPage) {
-        if (pages.containsKey(newPage)) {
-            currentPage = newPage;
-            ItemStack[] pageItems = pages.get(currentPage);
-            if (pageItems.length != inv.getSize()) {
-                listenForClose = false;
-                inv = Bukkit.createInventory(null, pageItems.length, title);
-                inv.setContents(pageItems);
-                user.closeInventory();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                    public void run() {
-                        user.openInventory(inv);
-                        listenForClose = true;
-                    }
-                });
-            } else
-                inv.setContents(pageItems);
-            // TODO Potentially display title for page no
-        }
-    }
-
-    public void setPage(int pageNo, ItemStack[] items) {
-        if (items.length % 9 == 0)
-            pages.put(pageNo, items);
-    }
-
-    public void setTitle(String newTitle) {
-        title = newTitle;
     }
 
     private List<String> wrap(String string) {

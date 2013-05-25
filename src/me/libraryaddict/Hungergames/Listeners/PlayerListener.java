@@ -12,7 +12,7 @@ import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
-import me.libraryaddict.Hungergames.Managers.KitSelectorManager;
+import me.libraryaddict.Hungergames.Managers.InventoryManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
     private final TranslationManager cm = HungergamesApi.getTranslationManager();
     private final ConfigManager config = HungergamesApi.getConfigManager();
     private final Hungergames hg = HungergamesApi.getHungergames();
-    private final KitSelectorManager icon = HungergamesApi.getKitSelector();
+    private final InventoryManager icon = HungergamesApi.getInventoryManager();
     private final KitManager kits = HungergamesApi.getKitManager();
     private final PlayerManager pm = HungergamesApi.getPlayerManager();
     private final ChatManager chat = HungergamesApi.getChatManager();
@@ -214,7 +214,7 @@ public class PlayerListener implements Listener {
                     p.leaveVehicle();
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
-                    icon.openInventory(p);
+                    icon.openKitInventory(p);
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
