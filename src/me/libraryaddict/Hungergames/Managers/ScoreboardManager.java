@@ -5,6 +5,7 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -14,9 +15,10 @@ public class ScoreboardManager {
     private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
 
     public static Objective getObjective(Scoreboard board, DisplaySlot slot) {
-        if (board.getObjective(slot.name()) == null)
+        if (board.getObjective(slot.name()) == null) {
             board.registerNewObjective(slot.name(), slot.name());
-        board.getObjective(slot.name()).setDisplaySlot(slot);
+            board.getObjective(slot.name()).setDisplaySlot(slot);
+        }
         return board.getObjective(slot.name());
     }
 
@@ -31,8 +33,9 @@ public class ScoreboardManager {
             name = name.substring(0, 16);
         if (HungergamesApi.getConfigManager().displayScoreboards()) {
             Scoreboard board = getScoreboard(scoreboardName);
-            if (board.getPlayers().contains(Bukkit.getOfflinePlayer(name)))
-                board.resetScores(Bukkit.getOfflinePlayer(name));
+            OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+            if (board.getPlayers().contains(player))
+                board.resetScores(player);
         }
     }
 
