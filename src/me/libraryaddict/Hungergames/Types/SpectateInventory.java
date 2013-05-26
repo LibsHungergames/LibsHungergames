@@ -3,8 +3,6 @@ package me.libraryaddict.Hungergames.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import org.bukkit.ChatColor;
@@ -62,15 +60,16 @@ public class SpectateInventory extends PageInventory {
         ArrayList<ItemStack> heads = new ArrayList<ItemStack>();
         for (String name : names) {
             Gamer gamer = pm.getGamer(name);
-            ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) new Random().nextInt(4));
+            ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) 3);
+            Kit kit = kits.getKitByPlayer(gamer.getPlayer());
+            if (kit != null && kit.getIcon() != null)
+                head = kit.getIcon();
+            head.setAmount(0);
             ItemMeta meta = head.getItemMeta();
             meta.setDisplayName(ChatColor.GREEN + name);
             List<String> lore = new ArrayList<String>();
             lore.add(String.format(tm.getSpectatorHeadKills(), gamer.getKills()));
-            lore.add(String.format(
-                    tm.getSpectatorHeadKit(),
-                    (kits.getKitByPlayer(gamer.getPlayer()) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
-                            gamer.getPlayer()).getName())));
+            lore.add(String.format(tm.getSpectatorHeadKit(), (kit == null ? tm.getMessagePlayerShowKitsNoKit() : kit.getName())));
             meta.setLore(lore);
             head.setItemMeta(meta);
             heads.add(head);
