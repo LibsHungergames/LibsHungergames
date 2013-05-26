@@ -22,6 +22,7 @@ public class ConfigManager {
     private boolean borderCloseIn;
     private double borderClosesIn;
     private int chestLayers;
+    private List<String> commandsToRunBeforeShutdown;
     private boolean displayMessages;
     private boolean displayScoreboards;
     private ItemStack feast;
@@ -44,6 +45,7 @@ public class ConfigManager {
     private ItemStack kitSelectorForward;
     private ItemStack kitSelectorIcon;
     private int kitSelectorInventorySize;
+    private String latestVersion = null;
     private int minPlayers;
     public int mobSpawnChance;
     private boolean mushroomStew;
@@ -53,30 +55,19 @@ public class ConfigManager {
     private ItemStack pillarInsides;
     private boolean shortenNames;
     private boolean spectatorChat;
+    private ItemStack spectatorItemBack;
+    private ItemStack spectatorItemForwards;
     private boolean spectators;
     private int timeTillFeast;
+    private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
     private int z;
-    private String latestVersion = null;
-    private UpdateChecker updateChecker;
-    private List<String> commandsToRunBeforeShutdown;
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
         loadConfig();
     }
-
-    /**
-     * Get the latest version released
-     */
-    public String getLatestVersion() {
-        return latestVersion;
-    }
-
-    /**
-     * Check for a update
-     */
 
     /**
      * @param Current
@@ -121,6 +112,25 @@ public class ConfigManager {
         } else if (time % 180 == 0 || time % (5 * 60) == 0)
             return true;
         return invincibilityBroadcastTimes.contains(time);
+    }
+
+    /**
+     * Check for a update
+     */
+
+    /**
+     * Makes the update checker check for a update
+     */
+    public void checkUpdate() throws Exception {
+        updateChecker = new UpdateChecker();
+        updateChecker.checkUpdate(hg.getDescription().getVersion());
+        latestVersion = updateChecker.getLatestVersion();
+        if (latestVersion != null) {
+            for (Player p : Bukkit.getOnlinePlayers())
+                if (p.hasPermission("hungergames.update"))
+                    p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(), hg
+                            .getDescription().getVersion(), getLatestVersion()));
+        }
     }
 
     /**
@@ -184,6 +194,13 @@ public class ConfigManager {
      */
     public int getChestLayers() {
         return chestLayers;
+    }
+
+    /**
+     * Get the commands to run before shutdown
+     */
+    public List<String> getCommandsToRunBeforeShutdown() {
+        return commandsToRunBeforeShutdown;
     }
 
     /**
@@ -254,6 +271,13 @@ public class ConfigManager {
     }
 
     /**
+     * Get the latest version released
+     */
+    public String getLatestVersion() {
+        return latestVersion;
+    }
+
+    /**
      * @return How many players are required to start the game
      */
     public int getMinPlayers() {
@@ -293,6 +317,14 @@ public class ConfigManager {
      */
     public int getSpawnZ() {
         return z;
+    }
+
+    public ItemStack getSpectatorInventoryBack() {
+        return spectatorItemBack;
+    }
+
+    public ItemStack getSpectatorInventoryForwards() {
+        return spectatorItemForwards;
     }
 
     /**
@@ -455,6 +487,14 @@ public class ConfigManager {
         kitSelectorForward = parseItem(hg.getConfig().getString("KitSelectorBack"));
         if (kitSelectorForward == null)
             kitSelectorForward = new ItemStack(Material.SUGAR_CANE_BLOCK);
+
+        spectatorItemBack = parseItem(hg.getConfig().getString("SpectatorInventoryForward"));
+        if (spectatorItemBack == null)
+            spectatorItemBack = new ItemStack(Material.SUGAR_CANE_BLOCK);
+        spectatorItemForwards = parseItem(hg.getConfig().getString("SpectatorInventoryBack"));
+        if (spectatorItemForwards == null)
+            spectatorItemForwards = new ItemStack(Material.SUGAR_CANE_BLOCK);
+
         kitSelectorDynamicSize = hg.getConfig().getBoolean("KitSelectorDynamicSize");
         kitSelectorInventorySize = hg.getConfig().getInt("KitSelectorInventorySize");
         mobSpawnChance = hg.getConfig().getInt("MobSpawnChance");
@@ -486,28 +526,6 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
-    }
-
-    /**
-     * Get the commands to run before shutdown
-     */
-    public List<String> getCommandsToRunBeforeShutdown() {
-        return commandsToRunBeforeShutdown;
-    }
-
-    /**
-     * Makes the update checker check for a update
-     */
-    public void checkUpdate() throws Exception {
-        updateChecker = new UpdateChecker();
-        updateChecker.checkUpdate(hg.getDescription().getVersion());
-        latestVersion = updateChecker.getLatestVersion();
-        if (latestVersion != null) {
-            for (Player p : Bukkit.getOnlinePlayers())
-                if (p.hasPermission("hungergames.update"))
-                    p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(), hg
-                            .getDescription().getVersion(), getLatestVersion()));
-        }
     }
 
     /**

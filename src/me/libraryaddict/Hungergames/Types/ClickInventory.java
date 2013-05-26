@@ -15,13 +15,13 @@ public abstract class ClickInventory implements Listener {
         Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void clone(Inventory newInv) {
         inv = Bukkit.createInventory(null, newInv.getSize(), title);
         inv.setContents(newInv.getContents());
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String newTitle) {

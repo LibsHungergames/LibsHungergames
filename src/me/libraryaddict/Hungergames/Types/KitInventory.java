@@ -19,7 +19,7 @@ public class KitInventory extends PageInventory {
     public KitInventory(Player player) {
         super(player, HungergamesApi.getConfigManager().isKitSelectorDynamicSize());
         maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
-        title = HungergamesApi.getTranslationManager().getInventoryWindowSelectKitTitle();
+        title = tm.getSelectKitInventoryTitle();
         ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
         backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
                 tm.getItemKitSelectorBackName(), tm.getItemKitSelectorBackDescription());

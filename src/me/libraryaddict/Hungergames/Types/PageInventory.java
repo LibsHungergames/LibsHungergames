@@ -40,50 +40,6 @@ public abstract class PageInventory extends ClickInventory {
         return new ItemStack[itemsSize];
     }
 
-    public void setPages(ItemStack[] allItems) {
-        pages.clear();
-        int oldPage = currentPage;
-        currentPage = 0;
-        boolean usePages = allItems.length > maxInvSize;
-        ItemStack[] items = null;
-        int currentSlot = 0;
-        for (int currentItem = 0; currentItem < allItems.length; currentItem++) {
-            if (items == null) {
-                int size = maxInvSize;
-                if (dynamicInventorySize) {
-                    size = allItems.length - currentItem;
-                    if (usePages)
-                        size += 9;
-                }
-                if (!dynamicInventorySize)
-                    size = maxInvSize;
-                items = generatePage(size);
-            }
-            ItemStack item = allItems[currentItem];
-            items[currentSlot++] = item;
-            if (currentSlot == items.length - (usePages ? 9 : 0) || currentItem + 1 == allItems.length) {
-                if (usePages) {
-                    if (currentPage != 0)
-                        items[items.length - 9] = getBackPage();
-                    if (currentItem + 1 < allItems.length)
-                        items[items.length - 1] = getForwardsPage();
-                }
-                pages.put(currentPage, items);
-                currentPage++;
-                currentSlot = 0;
-                items = null;
-            }
-        }
-        currentPage = oldPage;
-        if (pages.keySet().size() < oldPage)
-            currentPage = pages.keySet().size() - 1;
-        setPage(currentPage);
-    }
-
-    public void setPages(ArrayList<ItemStack> allItems) {
-        setPages(allItems.toArray(new ItemStack[allItems.size()]));
-    }
-
     public ItemStack getBackPage() {
         if (backAPage == null) {
             ItemStack item = new ItemStack(Material.SUGAR_CANE_BLOCK);
@@ -198,6 +154,50 @@ public abstract class PageInventory extends ClickInventory {
     public void setPage(int pageNo, ItemStack[] items) {
         if (items.length % 9 == 0)
             pages.put(pageNo, items);
+    }
+
+    public void setPages(ArrayList<ItemStack> allItems) {
+        setPages(allItems.toArray(new ItemStack[allItems.size()]));
+    }
+
+    public void setPages(ItemStack[] allItems) {
+        pages.clear();
+        int oldPage = currentPage;
+        currentPage = 0;
+        boolean usePages = allItems.length > maxInvSize;
+        ItemStack[] items = null;
+        int currentSlot = 0;
+        for (int currentItem = 0; currentItem < allItems.length; currentItem++) {
+            if (items == null) {
+                int size = maxInvSize;
+                if (dynamicInventorySize) {
+                    size = allItems.length - currentItem;
+                    if (usePages)
+                        size += 9;
+                }
+                if (!dynamicInventorySize)
+                    size = maxInvSize;
+                items = generatePage(size);
+            }
+            ItemStack item = allItems[currentItem];
+            items[currentSlot++] = item;
+            if (currentSlot == items.length - (usePages ? 9 : 0) || currentItem + 1 == allItems.length) {
+                if (usePages) {
+                    if (currentPage != 0)
+                        items[items.length - 9] = getBackPage();
+                    if (currentItem + 1 < allItems.length)
+                        items[items.length - 1] = getForwardsPage();
+                }
+                pages.put(currentPage, items);
+                currentPage++;
+                currentSlot = 0;
+                items = null;
+            }
+        }
+        currentPage = oldPage;
+        if (pages.keySet().size() < oldPage)
+            currentPage = pages.keySet().size() - 1;
+        setPage(currentPage);
     }
 
 }

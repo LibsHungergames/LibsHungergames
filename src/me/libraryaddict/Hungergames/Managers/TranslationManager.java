@@ -112,6 +112,8 @@ public class TranslationManager {
     private String commandReplyReceiveReply = ChatColor.GRAY + "[%s" + ChatColor.RESET + ChatColor.GRAY + " -> me] "
             + ChatColor.RESET + "%s";
     private String commandReplyReceiverLeft = ChatColor.GREEN + "Cannot find %s!";
+    private String commandReplySendReply = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
+            + ChatColor.RESET + "%s";
     private String commandRideNameOfRideall = "rideall";
     private String commandRideRideAll = ChatColor.GREEN + "Giddy up horsie!";
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
@@ -126,7 +128,6 @@ public class TranslationManager {
     private transient YamlConfiguration config;
     private transient File configFile;
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
-    private String inventoryWindowSelectKitTitle = ChatColor.DARK_RED + "Select Kit";
     private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "back a page" };
     private String itemKitSelectorBackName = ChatColor.RED + "Back";
@@ -136,6 +137,12 @@ public class TranslationManager {
             ChatColor.LIGHT_PURPLE + "forwards a page" };
     private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
     private String itemKitSelectorName = ChatColor.WHITE + "Kit Selector";
+    private String[] itemSpectatorInventoryBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "forwards a page" };
+    private String itemSpectatorInventoryBackName = ChatColor.RED + "Back";
+    private String[] itemSpectatorInventoryForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "forwards a page" };
+    private String itemSpectatorInventoryForwardsName = ChatColor.RED + "Back";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
     private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Plugin provided by libraryaddict";
@@ -214,8 +221,6 @@ public class TranslationManager {
     private String messagePlayerSendKitItemsKitName = ChatColor.DARK_AQUA + "Kit Name:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsNoItems = "No other items to display";
     private String messagePlayerSendKitItemsOtherItems = ChatColor.DARK_AQUA + "Other items:" + ChatColor.AQUA + " %s";
-    private String messagePlayerSendReply = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
-            + ChatColor.RESET + "%s";
     private String messagePlayerShowKitsCurrentSelectedKit = ChatColor.DARK_GREEN + "Your current kit:" + ChatColor.RESET + " %s";
     private String messagePlayerShowKitsHisKits = ChatColor.DARK_GREEN + "Your kits:" + ChatColor.RESET + " %s";
     private String messagePlayerShowKitsNoKit = "None";
@@ -242,7 +247,11 @@ public class TranslationManager {
     private String scoreboardStageInvincibility = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Invincibility";
     private String scoreboardStagePreFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pre-Feast";
     private String scoreboardStagePreGame = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pregame";
+    private String selectKitInventoryTitle = ChatColor.DARK_RED + "Select Kit";
     private boolean shouldIMessagePlayersWhosePlugin = true;
+    private String spectatorHeadKills = ChatColor.GREEN + "Kills: " + ChatColor.BLUE + "%s";
+    private String spectatorHeadKit = ChatColor.GREEN + "Kit: " + ChatColor.BLUE + "%s";
+    private String spectatorInventoryTitle = ChatColor.DARK_GRAY + "Alive gamers";
     private String timeFormatMinute = "%s minute";
     private String timeFormatMinutes = "%s minutes";
     private String timeFormatMotdMinute = ChatColor.DARK_GREEN + "Game starting in %s minute.";
@@ -664,7 +673,7 @@ public class TranslationManager {
     }
 
     public String getCommandReplySendReply() {
-        return messagePlayerSendReply;
+        return commandReplySendReply;
     }
 
     public String getCommandRideNameOfRideall() {
@@ -715,10 +724,6 @@ public class TranslationManager {
         return gameStartedMotd;
     }
 
-    public String getInventoryWindowSelectKitTitle() {
-        return inventoryWindowSelectKitTitle;
-    }
-
     public String[] getItemKitSelectorBackDescription() {
         return itemKitSelectorBackDescription;
     }
@@ -741,6 +746,22 @@ public class TranslationManager {
 
     public String getItemKitSelectorName() {
         return itemKitSelectorName;
+    }
+
+    public String[] getItemSpectatorInventoryBackDescription() {
+        return itemSpectatorInventoryBackDescription;
+    }
+
+    public String getItemSpectatorInventoryBackName() {
+        return itemSpectatorInventoryBackName;
+    }
+
+    public String[] getItemSpectatorInventoryForwardsDescription() {
+        return itemSpectatorInventoryForwardsDescription;
+    }
+
+    public String getItemSpectatorInventoryForwardsName() {
+        return itemSpectatorInventoryForwardsName;
     }
 
     public String getKickGameFull() {
@@ -1095,8 +1116,24 @@ public class TranslationManager {
         return scoreboardStagePreGame;
     }
 
+    public String getSelectKitInventoryTitle() {
+        return selectKitInventoryTitle;
+    }
+
     public boolean getShouldIMessagePlayersWhosePlugin() {
         return shouldIMessagePlayersWhosePlugin;
+    }
+
+    public String getSpectatorHeadKills() {
+        return spectatorHeadKills;
+    }
+
+    public String getSpectatorHeadKit() {
+        return spectatorHeadKit;
+    }
+
+    public String getSpectatorInventoryTitle() {
+        return spectatorInventoryTitle;
     }
 
     public String getTimeFormatMinute() {

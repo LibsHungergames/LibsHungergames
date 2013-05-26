@@ -104,10 +104,10 @@ KitSelectorForward: SUGAR_CANE_BLOCK 0
 KitSelectorBack: SUGAR_CANE_BLOCK 0
 
 # What item is the button to go forward for the spectator selector
-SpectatorSelectorForward: SUGAR_CANE_BLOCK 0
+SpectatorInventoryForward: SUGAR_CANE_BLOCK 0
 
 # What item is the button to go Back for the spectator selector
-SpectatorSelectorBack: SUGAR_CANE_BLOCK 0
+SpectatorInventoryBack: SUGAR_CANE_BLOCK 0
 
 # If false. Then whats the max size of the inventory?
 # Try keep it in a multiple of 9. I'll fix it if it isn't however.

@@ -16,12 +16,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class SpectateInventory extends PageInventory {
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     private KitManager kits = HungergamesApi.getKitManager();
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public SpectateInventory(Player player) {
         super(player, true);
-        title = ChatColor.DARK_GRAY + "Alive gamers";
+        title = tm.getSpectatorInventoryTitle();
+        ItemStack item = HungergamesApi.getConfigManager().getSpectatorInventoryBack();
+        backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
+                tm.getItemSpectatorInventoryBackName(), tm.getItemSpectatorInventoryBackDescription());
+        backAPage.setAmount(0);
+        item = HungergamesApi.getConfigManager().getSpectatorInventoryForwards();
+        forwardsAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
+                tm.getItemSpectatorInventoryForwardsName(), tm.getItemSpectatorInventoryForwardsDescription());
+        forwardsAPage.setAmount(0);
     }
 
     @EventHandler
@@ -58,12 +66,11 @@ public class SpectateInventory extends PageInventory {
             ItemMeta meta = head.getItemMeta();
             meta.setDisplayName(ChatColor.GREEN + name);
             List<String> lore = new ArrayList<String>();
-            lore.add(ChatColor.GREEN + "Kills: " + ChatColor.BLUE + gamer.getKills());
-            lore.add(ChatColor.GREEN
-                    + "Kit: "
-                    + ChatColor.BLUE
-                    + (kits.getKitByPlayer(gamer.getPlayer()) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
-                            gamer.getPlayer()).getName()));
+            lore.add(String.format(tm.getSpectatorHeadKills(), gamer.getKills()));
+            lore.add(String.format(
+                    tm.getSpectatorHeadKit(),
+                    (kits.getKitByPlayer(gamer.getPlayer()) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
+                            gamer.getPlayer()).getName())));
             meta.setLore(lore);
             head.setItemMeta(meta);
             heads.add(head);
