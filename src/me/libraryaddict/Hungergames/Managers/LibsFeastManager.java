@@ -262,6 +262,7 @@ public class LibsFeastManager implements FeastManager {
             // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
             // b.getY(), b.getZ() & 15, typeId, data);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
         return true;
