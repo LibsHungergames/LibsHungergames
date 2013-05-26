@@ -86,7 +86,7 @@ public abstract class PageInventory extends ClickInventory {
         }
     }
 
-    @EventHandler
+    //@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
             event.setCancelled(true);
