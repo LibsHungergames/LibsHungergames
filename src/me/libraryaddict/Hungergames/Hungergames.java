@@ -307,7 +307,7 @@ public class Hungergames extends JavaPlugin {
                 ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
             } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
-                        returnTime(config.invincibilityWearsOffIn()) + "!"));
+                        returnTime(config.invincibilityWearsOffIn())));
             }
 
         }
@@ -373,8 +373,8 @@ public class Hungergames extends JavaPlugin {
             p.setFireTicks(0);
             p.setFallDistance(0);
             pm.sendToSpawn(gamer);
-            if (config.isShortenedNames() && p.getPlayerListName().length() > 13) {
-                p.setPlayerListName(p.getPlayerListName().substring(0, 13));
+            if (config.isShortenedNames() && p.getPlayerListName().length() > 12) {
+                p.setPlayerListName(p.getPlayerListName().substring(0, 12));
             }
         }
         for (Gamer gamer : pm.getGamers())
