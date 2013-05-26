@@ -427,15 +427,12 @@ public class ConfigManager {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
             System.out.println(cm.getLoggerChangedSpawnRadius());
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                if (hg.world.getMaxHeight() > 128 && hg.getConfig().getBoolean("ChangeHeightLimit", true)) {
-                    ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
-                    ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
-                    System.out.println(cm.getLoggerChangedHeightLimit());
-                }
-            }
-        }, 2);
+        if (((CraftServer) hg.getServer()).getServer().getPropertyManager().getInt("max-build-height", 128) > 128
+                && hg.getConfig().getBoolean("ChangeHeightLimit", true)) {
+            ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
+            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
+            System.out.println(cm.getLoggerChangedHeightLimit());
+        }
         if (hg.getConfig().getBoolean("CheckUpdates"))
             Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
                 public void run() {

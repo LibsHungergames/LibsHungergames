@@ -27,6 +27,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -142,6 +144,11 @@ public class Hungergames extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
         HungergamesApi.getAbilityManager();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
+        if (Bukkit.getPluginManager().getPermission("ThisIsUsedForMessaging") == null) {
+            Permission perm = new Permission("ThisIsUsedForMessaging", PermissionDefault.TRUE);
+            perm.setDescription("Used for messages in LibsHungergames");
+            Bukkit.getPluginManager().addPermission(perm);
+        }
     }
 
     public void onDisable() {

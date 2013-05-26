@@ -2,7 +2,6 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,11 +22,11 @@ public class libraryaddict extends AbilityListener {
                 event.getPlayer().setItemInHand(new ItemStack(0));
             final Item explodingBook = event.getPlayer().getWorld()
                     .dropItem(event.getPlayer().getEyeLocation(), new ItemStack(Material.BOOK));
-            explodingBook.setVelocity(event.getPlayer().getEyeLocation().getDirection().multiply(2));
+            explodingBook.setVelocity(event.getPlayer().getEyeLocation().getDirection().multiply(0.6));
             explodingBook.setPickupDelay(99999);
             Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                 public void run() {
-                    explodingBook.getWorld().createExplosion(explodingBook.getLocation(), 3);
+                    explodingBook.getWorld().createExplosion(explodingBook.getLocation(), 1.5F);
                     explodingBook.remove();
                 }
             }, 20 * 3);

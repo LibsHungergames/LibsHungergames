@@ -5,7 +5,3 @@ version: ${project.version}
 website: http://www.spigotmc.org/resources/libs-hungergames.55/
 load: startup
 softdepend: [LibsDisguises, Vault]
-permissions:
-  ThisIsUsedForMessaging:
-    description: Used for messages in LibsHungergames
-    default: true
