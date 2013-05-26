@@ -2,14 +2,11 @@ package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,6 +21,7 @@ public class SpectateInventory extends PageInventory {
 
     public SpectateInventory(Player player) {
         super(player, true);
+        title = ChatColor.DARK_GRAY + "Alive gamers";
     }
 
     @EventHandler
@@ -37,7 +35,10 @@ public class SpectateInventory extends PageInventory {
                 } else if (item.equals(getForwardsPage())) {
                     setPage(currentPage + 1);
                 } else {
-                    // Do whatever
+                    Gamer toTeleport = pm.getGamer(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                    if (toTeleport != null) {
+                        event.getWhoClicked().teleport(toTeleport.getPlayer());
+                    }
                 }
             }
         }
@@ -50,31 +51,23 @@ public class SpectateInventory extends PageInventory {
                 names.add(gamer.getName());
         }
         Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
-        Iterator<String> itel = names.iterator();
-        for (int i = 0; i < 27; i++) {
-            if (i >= 21 && i <= 23)
-                continue;
-            if (itel.hasNext()) {
-                String name = itel.next();
-                Gamer gamer = pm.getGamer(name);
-                ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) 3);
-                ItemMeta meta = head.getItemMeta();
-                meta.setDisplayName(ChatColor.GREEN + name);
-                List<String> lore = new ArrayList<String>();
-                lore.add(ChatColor.GREEN + "Kills:" + ChatColor.BLUE + gamer.getKills() + gamer.getKills());
-                lore.add(ChatColor.GREEN
-                        + "Kit: "
-                        + ChatColor.BLUE
-                        + (kits.getKitByPlayer(gamer.getPlayer()) == null ? tm.getMessagePlayerShowKitsNoKit() : kits
-                                .getKitByPlayer(gamer.getPlayer()).getName()));
-                meta.setLore(lore);
-                head.setItemMeta(meta);
-                inv.setItem(i, head);
-            } else {
-                ItemStack item = inv.getItem(i);
-                if (item != null && item.getType() != Material.AIR)
-                    inv.setItem(i, new ItemStack(0));
-            }
+        ArrayList<ItemStack> heads = new ArrayList<ItemStack>();
+        for (String name : names) {
+            Gamer gamer = pm.getGamer(name);
+            ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) new Random().nextInt(4));
+            ItemMeta meta = head.getItemMeta();
+            meta.setDisplayName(ChatColor.GREEN + name);
+            List<String> lore = new ArrayList<String>();
+            lore.add(ChatColor.GREEN + "Kills: " + ChatColor.BLUE + gamer.getKills());
+            lore.add(ChatColor.GREEN
+                    + "Kit: "
+                    + ChatColor.BLUE
+                    + (kits.getKitByPlayer(gamer.getPlayer()) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
+                            gamer.getPlayer()).getName()));
+            meta.setLore(lore);
+            head.setItemMeta(meta);
+            heads.add(head);
         }
+        setPages(heads);
     }
 }

@@ -5,7 +5,9 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.KitInventory;
+import me.libraryaddict.Hungergames.Types.SpectateInventory;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,7 +43,7 @@ public class InventoryManager {
         return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
     }
 
-    public KitInventory getInventory(Player p) {
+    public KitInventory getKitInventory(Player p) {
         if (p.hasMetadata("KitInventory"))
             return (KitInventory) p.getMetadata("KitInventory").get(0).value();
         return null;
@@ -64,5 +66,19 @@ public class InventoryManager {
         KitInventory inv = new KitInventory(p);
         inv.setKits();
         inv.openInventory();
+    }
+
+    public void updateSpectatorHeads() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.hasMetadata("SpectateInventory")) {
+                ((SpectateInventory) p.getMetadata("SpectateInventory").get(0).value()).setHeads();
+            }
+        }
+    }
+
+    public void openSpectatorInventory(Player p) {
+        SpectateInventory specs = new SpectateInventory(p);
+        specs.setHeads();
+        specs.openInventory();
     }
 }

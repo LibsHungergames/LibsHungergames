@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import me.libraryaddict.Hungergames.Hungergames;
 import org.bukkit.Bukkit;
@@ -37,6 +38,50 @@ public abstract class PageInventory extends ClickInventory {
             itemsSize = maxInvSize;
         itemsSize = (int) (Math.ceil((double) itemsSize / 9)) * 9;
         return new ItemStack[itemsSize];
+    }
+
+    public void setPages(ItemStack[] allItems) {
+        pages.clear();
+        int oldPage = currentPage;
+        currentPage = 0;
+        boolean usePages = allItems.length > maxInvSize;
+        ItemStack[] items = null;
+        int currentSlot = 0;
+        for (int currentItem = 0; currentItem < allItems.length; currentItem++) {
+            if (items == null) {
+                int size = maxInvSize;
+                if (dynamicInventorySize) {
+                    size = allItems.length - currentItem;
+                    if (usePages)
+                        size += 9;
+                }
+                if (!dynamicInventorySize)
+                    size = maxInvSize;
+                items = generatePage(size);
+            }
+            ItemStack item = allItems[currentItem];
+            items[currentSlot++] = item;
+            if (currentSlot == items.length - (usePages ? 9 : 0) || currentItem + 1 == allItems.length) {
+                if (usePages) {
+                    if (currentPage != 0)
+                        items[items.length - 9] = getBackPage();
+                    if (currentItem + 1 < allItems.length)
+                        items[items.length - 1] = getForwardsPage();
+                }
+                pages.put(currentPage, items);
+                currentPage++;
+                currentSlot = 0;
+                items = null;
+            }
+        }
+        currentPage = oldPage;
+        if (pages.keySet().size() < oldPage)
+            currentPage = pages.keySet().size() - 1;
+        setPage(currentPage);
+    }
+
+    public void setPages(ArrayList<ItemStack> allItems) {
+        setPages(allItems.toArray(new ItemStack[allItems.size()]));
     }
 
     public ItemStack getBackPage() {
@@ -123,6 +168,13 @@ public abstract class PageInventory extends ClickInventory {
     }
 
     public void setPage(int newPage) {
+        if (inv == null) {
+            int size = maxInvSize;
+            if (pages.size() > 0) {
+                size = pages.values().iterator().next().length;
+            }
+            inv = Bukkit.createInventory(null, size, getTitle());
+        }
         if (pages.containsKey(newPage)) {
             currentPage = newPage;
             ItemStack[] pageItems = pages.get(currentPage);

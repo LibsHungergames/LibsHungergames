@@ -8,8 +8,8 @@ import org.bukkit.inventory.Inventory;
 
 public abstract class ClickInventory implements Listener {
     protected Inventory inv;
-    protected String title;
-   protected TranslationManager tm = HungergamesApi.getTranslationManager();
+    protected String title = "Inventory";
+    protected TranslationManager tm = HungergamesApi.getTranslationManager();
 
     public ClickInventory() {
         Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());

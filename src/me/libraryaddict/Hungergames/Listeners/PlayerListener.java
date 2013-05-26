@@ -177,7 +177,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onHungry(FoodLevelChangeEvent event) {
-        if (!pm.getGamer(event.getEntity()).isAlive()) 
+        if (!pm.getGamer(event.getEntity()).isAlive())
             event.setCancelled(true);
     }
 
@@ -189,7 +189,8 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
         ItemStack item = event.getItem();
-        if (item != null && item.getType() == Material.COMPASS && event.getAction() != Action.PHYSICAL) {
+        if (item != null && item.getType() == Material.COMPASS && event.getAction() != Action.PHYSICAL
+                && (gamer.isAlive() || event.getAction().name().contains("LEFT"))) {
             double distance = 10000;
             Player victim = null;
             for (Gamer game : HungergamesApi.getPlayerManager().getAliveGamers()) {
@@ -215,6 +216,9 @@ public class PlayerListener implements Listener {
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
                     icon.openKitInventory(p);
+                    event.setCancelled(true);
+                } else if (item.getType() == Material.COMPASS && !gamer.isAlive()) {
+                    icon.openSpectatorInventory(p);
                     event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {

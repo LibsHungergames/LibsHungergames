@@ -34,23 +34,11 @@ public class Hungergames extends JavaPlugin {
     private TranslationManager cm;
     private ConfigManager config;
     /**
-     * This plugin is licensed under
-     * http://creativecommons.org/licenses/by-nc/3.0/
-     * 
-     * Namely. No code may be taken from this for commercial use and the plugin
-     * may not be adapted for commercial use.
-     * 
-     * Keep the /creator command in, leave my name in as the author.
-     * 
-     * Do not attempt to change the author, such as 'Notch made this plugin
-     * specially for hungergames.com!'
-     * 
-     * No seriously. I had idiots approaching me for a previous plugin
-     * "How do I remove your name and add mine instead?"
-     * 
-     * This is something I've invested time, effort and knowledge in.
-     * 
-     * Creator being: libraryaddict
+     * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
+     * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
+     * author. Do not attempt to change the author, such as 'Notch made this plugin specially for hungergames.com!' No seriously.
+     * I had idiots approaching me for a previous plugin "How do I remove your name and add mine instead?" This is something I've
+     * invested time, effort and knowledge in. Creator being: libraryaddict
      */
     public int currentTime = -270;
     /**
@@ -153,6 +141,7 @@ public class Hungergames extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
         HungergamesApi.getAbilityManager();
+        HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }
 
     public void onDisable() {
@@ -398,5 +387,6 @@ public class Hungergames extends JavaPlugin {
             l.getWorld().spawnEntity(l, entitys.get(l));
         entitys.clear();
         checkWinner();
+        HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }
 }

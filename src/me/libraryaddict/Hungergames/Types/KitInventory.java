@@ -1,11 +1,8 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 
 import org.bukkit.Bukkit;
@@ -13,14 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class KitInventory extends PageInventory {
 
@@ -59,24 +51,10 @@ public class KitInventory extends PageInventory {
     }
 
     public void setKits() {
-        pages.clear();
         KitManager kits = HungergamesApi.getKitManager();
-        boolean usePages = kits.getKits().size() > maxInvSize;
-        ItemStack[] items = null;
-        int currentSlot = 0;
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ArrayList<Kit> allKits = kits.getKits();
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
-            if (items == null) {
-                int size = maxInvSize;
-                if (dynamicInventorySize) {
-                    size = allKits.size() - currentKit;
-                    if (usePages)
-                        size += 9;
-                }
-                if (!dynamicInventorySize)
-                    size = maxInvSize;
-                items = generatePage(size);
-            }
             Kit kit = allKits.get(currentKit);
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
@@ -85,21 +63,9 @@ public class KitInventory extends PageInventory {
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
                 item.setAmount(0);
-            items[currentSlot++] = item;
-            if (currentSlot == items.length - (usePages ? 9 : 0) || currentKit + 1 == allKits.size()) {
-                if (usePages) {
-                    if (currentPage != 0)
-                        items[items.length - 9] = getBackPage();
-                    if (currentKit + 1 < allKits.size())
-                        items[items.length - 1] = getForwardsPage();
-                }
-                pages.put(currentPage, items);
-                currentPage++;
-                currentSlot = 0;
-                items = null;
-            }
+            items.add(item);
         }
-        currentPage = 0;
+        this.setPages(items);
     }
 
     private List<String> wrap(String string) {

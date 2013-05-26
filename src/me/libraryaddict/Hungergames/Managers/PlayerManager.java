@@ -37,6 +37,7 @@ public class PlayerManager {
     public static int returnChance(int start, int end) {
         return start + (int) (Math.random() * ((end - start) + 1));
     }
+
     TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
     Hungergames hg = HungergamesApi.getHungergames();
@@ -183,6 +184,7 @@ public class PlayerManager {
         if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
             p.kickPlayer(event.getDeathMessage());
         HungergamesApi.getAbilityManager().unregisterPlayer(p);
+        HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }
 
     public Gamer registerGamer(Player p) {
