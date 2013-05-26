@@ -361,13 +361,13 @@ public class PlayerListener implements Listener {
         chat.removeChatter(event.getPlayer().getName());
         event.setQuitMessage(null);
         Gamer gamer = pm.getGamer(event.getPlayer());
-        Kit kit = kits.getKitByPlayer(event.getPlayer());
-        if (kit != null)
-            kit.removePlayer(event.getPlayer());
         if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
             pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
                     String.format(cm.getKillMessageLeavingGame(), gamer.getName()));
         }
+        Kit kit = kits.getKitByPlayer(event.getPlayer());
+        if (kit != null)
+            kit.removePlayer(event.getPlayer());
         pm.unregisterGamer(gamer);
     }
 
