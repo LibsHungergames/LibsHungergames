@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -12,6 +13,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class libraryaddict extends AbilityListener {
     public String bookName = "Explosive Reading";
+    public int grenadeTimer = 3;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -24,12 +26,19 @@ public class libraryaddict extends AbilityListener {
                     .dropItem(event.getPlayer().getEyeLocation(), new ItemStack(Material.BOOK));
             explodingBook.setVelocity(event.getPlayer().getEyeLocation().getDirection().multiply(0.6));
             explodingBook.setPickupDelay(99999);
+            for (int i = 0; i < grenadeTimer * 2; i++) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    public void run() {
+                        explodingBook.getWorld().playSound(explodingBook.getLocation(), Sound.CLICK, 1, 10F);
+                    }
+                }, i * 10);
+            }
             Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                 public void run() {
                     explodingBook.getWorld().createExplosion(explodingBook.getLocation(), 1.5F);
                     explodingBook.remove();
                 }
-            }, 20 * 3);
+            }, 20 * grenadeTimer);
         }
     }
 
