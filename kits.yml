@@ -73,6 +73,13 @@ Kits:
     Icon: SULPHUR 0 1
     Ability:
       - Creeper
+  Icicles:
+    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds!'
+    Free: true
+    Price: 0
+    Icon: ICE 0 1
+    Ability:
+      - Icicles
   Ghost:
     Description: 'When the game starts you are invisible until invincibility runs out!'
     Free: true
@@ -88,7 +95,14 @@ Kits:
     Items:
       - NETHER_STAR 0 1 Unlootable 1 Name=Herobrines_Escape
     Ability:
-      - Herobrine
+      - Herobrine  
+  libraryaddict:
+    Description: 'Its no secret some people love books. Infact, some people love books to the extent where they turn them into exploding weapons! Using this kit you have 5 exploding books, chuck it like a grenade and RUN'
+    Free: true
+    Price: 0
+    Icon: BOOK 0 1
+    Items:
+      - BOOK 0 5 Unlootable 1 Name=Explosive_Reading
   Miser:
     Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
     Free: true
