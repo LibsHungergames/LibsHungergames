@@ -125,8 +125,9 @@ public class ConfigManager {
     public void checkUpdate() throws Exception {
         updateChecker = new UpdateChecker();
         updateChecker.checkUpdate(getCurrentVersion());
-        latestVersion = "v" + updateChecker.getLatestVersion();
+        latestVersion = updateChecker.getLatestVersion();
         if (latestVersion != null) {
+            latestVersion = "v" + latestVersion;
             for (Player p : Bukkit.getOnlinePlayers())
                 if (p.hasPermission("hungergames.update"))
                     p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(),

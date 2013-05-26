@@ -31,7 +31,7 @@ public class Icicles extends AbilityListener {
     private Hungergames hg = HungergamesApi.getHungergames();
     public String thawedOut = ChatColor.RED + "You thawed out";
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player p = (Player) event.getDamager();

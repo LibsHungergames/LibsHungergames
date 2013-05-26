@@ -108,7 +108,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && !pm.getGamer(event.getDamager()).canInteract()) {
             event.setCancelled(true);
