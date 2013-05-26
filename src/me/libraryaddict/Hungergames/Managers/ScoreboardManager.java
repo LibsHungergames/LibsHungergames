@@ -7,6 +7,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class ScoreboardManager {
@@ -28,15 +29,21 @@ public class ScoreboardManager {
     public static void hideScore(String scoreboardName, DisplaySlot slot, String name) {
         if (name.length() > 16)
             name = name.substring(0, 16);
-        if (HungergamesApi.getConfigManager().displayScoreboards())
-            getScoreboard(scoreboardName).resetScores(Bukkit.getOfflinePlayer(name));
+        if (HungergamesApi.getConfigManager().displayScoreboards()) {
+            Scoreboard board = getScoreboard(scoreboardName);
+            if (board.getPlayers().contains(Bukkit.getOfflinePlayer(name)))
+                board.resetScores(Bukkit.getOfflinePlayer(name));
+        }
     }
 
     public static void makeScore(String scoreboardName, DisplaySlot slot, String name, int score) {
         if (name.length() > 16)
             name = name.substring(0, 16);
-        if (HungergamesApi.getConfigManager().displayScoreboards())
-            getObjective(getScoreboard(scoreboardName), slot).getScore(Bukkit.getOfflinePlayer(name)).setScore(score);
+        if (HungergamesApi.getConfigManager().displayScoreboards()) {
+            Score scoreboard = getObjective(getScoreboard(scoreboardName), slot).getScore(Bukkit.getOfflinePlayer(name));
+            if (scoreboard.getScore() != score)
+                scoreboard.setScore(score);
+        }
     }
 
     public static void resetScoreboard(String scoreboardName) {
