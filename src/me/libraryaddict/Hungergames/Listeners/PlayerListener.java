@@ -62,14 +62,14 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
 
+    private final ChatManager chat = HungergamesApi.getChatManager();
     private final TranslationManager cm = HungergamesApi.getTranslationManager();
     private final ConfigManager config = HungergamesApi.getConfigManager();
     private final Hungergames hg = HungergamesApi.getHungergames();
     private final InventoryManager icon = HungergamesApi.getInventoryManager();
     private final KitManager kits = HungergamesApi.getKitManager();
-    private final PlayerManager pm = HungergamesApi.getPlayerManager();
-    private final ChatManager chat = HungergamesApi.getChatManager();
     private final NameManager name = HungergamesApi.getNameManager();
+    private final PlayerManager pm = HungergamesApi.getPlayerManager();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
@@ -89,17 +89,6 @@ public class PlayerListener implements Listener {
                 if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
                     players.remove();
             }
-        }
-    }
-
-    @EventHandler
-    public void onMessage(PrivateMessageEvent event) {
-        Gamer gamer = pm.getGamer(event.getSender().getName());
-        Gamer receiver = pm.getGamer(event.getReceiver().getName());
-        if (gamer != null && receiver != null && config.isSpectatorChatHidden() && gamer.isAlive() != receiver.isAlive()
-                && hg.doSeconds && !event.getReceiver().hasPermission("hungergames.spectatorchat")
-                && !event.getSender().hasPermission("hungergames.spectatorchat")) {
-            event.setCancelled(true);
         }
     }
 
@@ -292,7 +281,7 @@ public class PlayerListener implements Listener {
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
         if (cm.getShouldIMessagePlayersWhosePlugin())
-            p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion()));
+            p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
@@ -320,8 +309,8 @@ public class PlayerListener implements Listener {
         gamer.updateSelfToOthers();
         pm.loadGamer.add(gamer);
         if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)
-            p.sendMessage(String.format(cm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(), hg.getDescription()
-                    .getVersion()));
+            p.sendMessage(String.format(cm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(),
+                    config.getCurrentVersion()));
     }
 
     @EventHandler
@@ -335,6 +324,17 @@ public class PlayerListener implements Listener {
             event.disallow(Result.KICK_FULL, cm.getKickGameFull());
         else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
             event.disallow(Result.KICK_OTHER, cm.getKickSpectatorsDisabled());
+    }
+
+    @EventHandler
+    public void onMessage(PrivateMessageEvent event) {
+        Gamer gamer = pm.getGamer(event.getSender().getName());
+        Gamer receiver = pm.getGamer(event.getReceiver().getName());
+        if (gamer != null && receiver != null && config.isSpectatorChatHidden() && gamer.isAlive() != receiver.isAlive()
+                && hg.doSeconds && !event.getReceiver().hasPermission("hungergames.spectatorchat")
+                && !event.getSender().hasPermission("hungergames.spectatorchat")) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

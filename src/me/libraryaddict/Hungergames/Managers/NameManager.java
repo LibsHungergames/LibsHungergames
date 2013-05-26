@@ -23,6 +23,24 @@ public class NameManager {
         load();
     }
 
+    public String getEnchantName(Enchantment enchant) {
+        return getName(enchant.getName());
+    }
+
+    public String getItemName(ItemStack item) {
+        if (item == null)
+            item = new ItemStack(0);
+        if (config.contains("" + item.getType().getId()))
+            return config.getString("" + item.getType().getId());
+        return getName(item.getType().name());
+    }
+
+    public String getName(String string) {
+        if (config.contains(string))
+            return config.getString(string);
+        return toReadable(string);
+    }
+
     public void load() {
         try {
             if (!configFile.exists())
@@ -65,24 +83,6 @@ public class NameManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getItemName(ItemStack item) {
-        if (item == null)
-            item = new ItemStack(0);
-        if (config.contains("" + item.getType().getId()))
-            return config.getString("" + item.getType().getId());
-        return getName(item.getType().name());
-    }
-
-    public String getName(String string) {
-        if (config.contains(string))
-            return config.getString(string);
-        return toReadable(string);
-    }
-
-    public String getEnchantName(Enchantment enchant) {
-        return getName(enchant.getName());
     }
 
     public String toReadable(String string) {

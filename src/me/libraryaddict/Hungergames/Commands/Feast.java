@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 
 public class Feast implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
     public String description = "Point your compass towards the feast";
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (hg.feastLoc.getY() > 0) {

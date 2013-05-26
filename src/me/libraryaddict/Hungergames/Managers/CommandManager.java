@@ -39,45 +39,31 @@ public class CommandManager {
         load();
     }
 
-    private void registerCommand(String name, CommandExecutor exc) throws Exception {
-        PluginCommand command = Bukkit.getServer().getPluginCommand(name.toLowerCase());
-        if (command == null) {
-            Constructor<?> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            constructor.setAccessible(true);
-            command = (PluginCommand) constructor.newInstance(name, HungergamesApi.getHungergames());
-        }
-        command.setExecutor(exc);
-        try {
-            Field field = exc.getClass().getDeclaredField("aliases");
-            if (field.get(exc) instanceof String[]) {
-                List<String> list = Arrays.asList((String[]) field.get(exc));
-                if (exc.getClass().getSimpleName().equals("Creator"))
-                    addCreatorAliases(list, name);
-                command.setAliases(list);
-            }
-        } catch (Exception ex) {
-            if (exc.getClass().getSimpleName().equals("Creator")) {
-                List<String> list = new ArrayList<String>();
-                addCreatorAliases(list, name);
-                command.setAliases(list);
-            }
-        }
-        try {
-            Field field = exc.getClass().getDeclaredField("description");
-            if (field != null && field.get(exc) instanceof String)
-                command.setDescription(ChatColor.translateAlternateColorCodes('&', (String) field.get(exc)));
-        } catch (Exception ex) {
-        }
-        Field field = CraftServer.class.getDeclaredField("commandMap");
-        field.setAccessible(true);
-        SimpleCommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
-        map.register(name, command);
-    }
-
     private void addCreatorAliases(List<String> list, String commandName) {
         for (String string : new String[] { "author", "maker", "coder", "download", "hungergames", "creator" })
             if (!commandName.equalsIgnoreCase(string) && !list.contains(string))
                 list.add(string);
+    }
+
+    public ConfigurationSection getConfigSection(String commandName) {
+        ConfigurationSection section = config.getConfigurationSection(commandName);
+        if (section == null) {
+            section = config.createSection(commandName);
+        }
+        return section;
+    }
+
+    public void load() {
+        try {
+            if (!configFile.exists())
+                save();
+            else
+                newFile = false;
+            config.load(configFile);
+            loadCommands(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Commands");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean loadCommand(CommandExecutor exc, boolean save) {
@@ -208,25 +194,39 @@ public class CommandManager {
         return false;
     }
 
-    public ConfigurationSection getConfigSection(String commandName) {
-        ConfigurationSection section = config.getConfigurationSection(commandName);
-        if (section == null) {
-            section = config.createSection(commandName);
+    private void registerCommand(String name, CommandExecutor exc) throws Exception {
+        PluginCommand command = Bukkit.getServer().getPluginCommand(name.toLowerCase());
+        if (command == null) {
+            Constructor<?> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            constructor.setAccessible(true);
+            command = (PluginCommand) constructor.newInstance(name, HungergamesApi.getHungergames());
         }
-        return section;
-    }
-
-    public void load() {
+        command.setExecutor(exc);
         try {
-            if (!configFile.exists())
-                save();
-            else
-                newFile = false;
-            config.load(configFile);
-            loadCommands(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Commands");
-        } catch (Exception e) {
-            e.printStackTrace();
+            Field field = exc.getClass().getDeclaredField("aliases");
+            if (field.get(exc) instanceof String[]) {
+                List<String> list = Arrays.asList((String[]) field.get(exc));
+                if (exc.getClass().getSimpleName().equals("Creator"))
+                    addCreatorAliases(list, name);
+                command.setAliases(list);
+            }
+        } catch (Exception ex) {
+            if (exc.getClass().getSimpleName().equals("Creator")) {
+                List<String> list = new ArrayList<String>();
+                addCreatorAliases(list, name);
+                command.setAliases(list);
+            }
         }
+        try {
+            Field field = exc.getClass().getDeclaredField("description");
+            if (field != null && field.get(exc) instanceof String)
+                command.setDescription(ChatColor.translateAlternateColorCodes('&', (String) field.get(exc)));
+        } catch (Exception ex) {
+        }
+        Field field = CraftServer.class.getDeclaredField("commandMap");
+        field.setAccessible(true);
+        SimpleCommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
+        map.register(name, command);
     }
 
     public void save() {

@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 
 public class Invis implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     public String description = "Used for toggling invisibility";
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.invis")) {

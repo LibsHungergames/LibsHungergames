@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 
 public class Ride implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     public String description = "Toggle the ability to ride on top of mobs and players";
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

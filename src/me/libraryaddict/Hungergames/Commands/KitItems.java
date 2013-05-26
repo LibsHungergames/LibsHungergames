@@ -19,18 +19,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitItems implements CommandExecutor {
 
-    private final TranslationManager tm = HungergamesApi.getTranslationManager();
-    private final NameManager name = HungergamesApi.getNameManager();
-    private final KitManager kits = HungergamesApi.getKitManager();
     public String description = "View the items given with a kit";
-
-    private String toReadable(String string) {
-        String[] names = string.split("_");
-        for (int i = 0; i < names.length; i++) {
-            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
-        }
-        return StringUtils.join(names, " ");
-    }
+    private final KitManager kits = HungergamesApi.getKitManager();
+    private final NameManager name = HungergamesApi.getNameManager();
+    private final TranslationManager tm = HungergamesApi.getTranslationManager();
 
     private String itemToName(ItemStack item) {
         if (item == null)
@@ -74,6 +66,14 @@ public class KitItems implements CommandExecutor {
         } else
             sender.sendMessage(tm.getCommandKitItemsDefineKitName());
         return true;
+    }
+
+    private String toReadable(String string) {
+        String[] names = string.split("_");
+        for (int i = 0; i < names.length; i++) {
+            names[i] = names[i].substring(0, 1) + names[i].substring(1).toLowerCase();
+        }
+        return StringUtils.join(names, " ");
     }
 
 }

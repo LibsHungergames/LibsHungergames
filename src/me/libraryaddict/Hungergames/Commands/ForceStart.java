@@ -10,10 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class ForceStart implements CommandExecutor {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
     public String[] aliases = new String[] { "fstart" };
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "Change the time until the game starts";
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.forcestart")) {

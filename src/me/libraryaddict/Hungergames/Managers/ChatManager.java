@@ -15,6 +15,12 @@ public class ChatManager {
     private HashMap<String, String> lastMsg = new HashMap<String, String>();
     private TranslationManager tm = HungergamesApi.getTranslationManager();
 
+    public CommandSender getOtherChatter(String player) {
+        if (lastMsg.containsKey(player))
+            return getSender(lastMsg.get(player));
+        return null;
+    }
+
     public CommandSender getSender(String name) {
         Set<Permissible> permissibles = Bukkit.getPluginManager().getPermissionSubscriptions("ThisIsUsedForMessaging");
         for (Permissible permissible : permissibles) {
@@ -27,18 +33,8 @@ public class ChatManager {
         return null;
     }
 
-    public CommandSender getOtherChatter(String player) {
-        if (lastMsg.containsKey(player))
-            return getSender(lastMsg.get(player));
-        return null;
-    }
-
     public boolean hasOtherChatter(String player) {
         return lastMsg.containsKey(player);
-    }
-
-    public void setChatter(String chatter, String receiver) {
-        lastMsg.put(chatter, receiver);
     }
 
     public void removeChatter(String chatter) {
@@ -73,5 +69,9 @@ public class ChatManager {
             setChatter(event.getSender().getName(), event.getReceiver().getName());
             setChatter(event.getReceiver().getName(), event.getSender().getName());
         }
+    }
+
+    public void setChatter(String chatter, String receiver) {
+        lastMsg.put(chatter, receiver);
     }
 }

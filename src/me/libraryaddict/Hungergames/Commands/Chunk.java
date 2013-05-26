@@ -14,10 +14,10 @@ import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Chunk implements CommandExecutor {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     public String[] aliases = new String[] { "stuck" };
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "This command refreshes the chunk of the command user";
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

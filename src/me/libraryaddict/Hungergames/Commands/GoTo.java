@@ -13,9 +13,9 @@ import org.bukkit.command.CommandSender;
 
 public class GoTo implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
+    public String description = "A command for spectators to teleport to people";
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
-    public String description = "A command for spectators to teleport to people";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

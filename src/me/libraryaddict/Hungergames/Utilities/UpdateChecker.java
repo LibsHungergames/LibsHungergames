@@ -10,6 +10,18 @@ import java.util.regex.Pattern;
 public class UpdateChecker {
     private String latestVersion;
 
+    private boolean checkHigher(String currentVersion, String newVersion) {
+        String current = toReadable(currentVersion);
+        String newVers = toReadable(newVersion);
+        return current.compareTo(newVers) < 0;
+    }
+
+    public void checkUpdate(String currentVersion) throws Exception {
+        String version = getVersion("98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4", 55);
+        if (checkHigher(currentVersion, version))
+            latestVersion = version;
+    }
+
     public String getLatestVersion() {
         return latestVersion;
     }
@@ -26,18 +38,6 @@ public class UpdateChecker {
             ex.printStackTrace();
         }
         return version;
-    }
-
-    public void checkUpdate(String currentVersion) throws Exception {
-        String version = getVersion("98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4", 55);
-        if (checkHigher(currentVersion, version))
-            latestVersion = version;
-    }
-
-    private boolean checkHigher(String currentVersion, String newVersion) {
-        String current = toReadable(currentVersion);
-        String newVers = toReadable(newVersion);
-        return current.compareTo(newVers) < 0;
     }
 
     public String toReadable(String version) {

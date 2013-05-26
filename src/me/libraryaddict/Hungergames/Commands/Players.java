@@ -18,9 +18,9 @@ import org.bukkit.command.CommandSender;
 
 public class Players implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
+    public String description = "See the gamers and spectators online";
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
-    public String description = "See the gamers and spectators online";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         List<Gamer> gamers = pm.getAliveGamers();

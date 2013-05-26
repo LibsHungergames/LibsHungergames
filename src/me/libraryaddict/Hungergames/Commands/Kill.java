@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 
 public class Kill implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
     public String description = "Use /suicide instead to suicide";
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {

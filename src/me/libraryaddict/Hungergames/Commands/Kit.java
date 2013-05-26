@@ -17,11 +17,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Kit implements CommandExecutor {
+    public String[] aliases = new String[] { "kits" };
     private TranslationManager cm = HungergamesApi.getTranslationManager();
+    public String description = "Use this to select your kit or display them";
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitManager kits = HungergamesApi.getKitManager();
-    public String[] aliases = new String[] { "kits" };
-    public String description = "Use this to select your kit or display them";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Player p = Bukkit.getPlayerExact(sender.getName());

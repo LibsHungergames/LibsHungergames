@@ -23,6 +23,7 @@ public class ConfigManager {
     private double borderClosesIn;
     private int chestLayers;
     private List<String> commandsToRunBeforeShutdown;
+    private String currentVersion;
     private boolean displayMessages;
     private boolean displayScoreboards;
     private ItemStack feast;
@@ -123,13 +124,13 @@ public class ConfigManager {
      */
     public void checkUpdate() throws Exception {
         updateChecker = new UpdateChecker();
-        updateChecker.checkUpdate(hg.getDescription().getVersion());
-        latestVersion = updateChecker.getLatestVersion();
+        updateChecker.checkUpdate(getCurrentVersion());
+        latestVersion = "v" + updateChecker.getLatestVersion();
         if (latestVersion != null) {
             for (Player p : Bukkit.getOnlinePlayers())
                 if (p.hasPermission("hungergames.update"))
-                    p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(), hg
-                            .getDescription().getVersion(), getLatestVersion()));
+                    p.sendMessage(String.format(HungergamesApi.getTranslationManager().getMessagePlayerUpdateAvailable(),
+                            getCurrentVersion(), getLatestVersion()));
         }
     }
 
@@ -201,6 +202,10 @@ public class ConfigManager {
      */
     public List<String> getCommandsToRunBeforeShutdown() {
         return commandsToRunBeforeShutdown;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
     }
 
     /**
@@ -433,6 +438,7 @@ public class ConfigManager {
             ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
             System.out.println(cm.getLoggerChangedHeightLimit());
         }
+        currentVersion = "v" + hg.getDescription().getVersion();
         if (hg.getConfig().getBoolean("CheckUpdates"))
             Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
                 public void run() {

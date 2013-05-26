@@ -16,11 +16,11 @@ public class PlayerTrackEvent extends Event implements Cancellable {
     }
 
     private boolean cancelled = false;
-    private String message;
-    private Gamer tracker;
-
-    private Player victim;
     private Location compassLoc;
+    private String message;
+
+    private Gamer tracker;
+    private Player victim;
 
     public PlayerTrackEvent(Gamer tracker, Player victim, String trackMessage) {
         this.tracker = tracker;
@@ -32,16 +32,12 @@ public class PlayerTrackEvent extends Event implements Cancellable {
             compassLoc = tracker.getPlayer().getWorld().getSpawnLocation().clone();
     }
     
-    public void setLocation(Location loc) {
-        compassLoc = loc.clone();
+    public HandlerList getHandlers() {
+        return handlers;
     }
     
     public Location getLocation() {
         return compassLoc.clone();
-    }
-
-    public HandlerList getHandlers() {
-        return handlers;
     }
 
     public String getMessage() {
@@ -63,6 +59,10 @@ public class PlayerTrackEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         cancelled = isCancelled;
+    }
+
+    public void setLocation(Location loc) {
+        compassLoc = loc.clone();
     }
 
     public void setMessage(String message) {

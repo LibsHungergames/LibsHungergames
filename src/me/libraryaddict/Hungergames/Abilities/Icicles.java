@@ -22,59 +22,14 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Icicles extends AbilityListener {
 
-    private HashMap<Player, Integer> frozen = new HashMap<Player, Integer>();
     private HashMap<Player, Integer> cooldown = new HashMap<Player, Integer>();
-    public String crackString = ChatColor.AQUA + "*crack*";
-    public String thawedOut = ChatColor.RED + "You thawed out";
     public int cooldownTime = 20;
-    public int frozenTime = 10;
+    public String crackString = ChatColor.AQUA + "*crack*";
     public boolean fireAndLavaThaws = true;
+    private HashMap<Player, Integer> frozen = new HashMap<Player, Integer>();
+    public int frozenTime = 10;
     private Hungergames hg = HungergamesApi.getHungergames();
-
-    @EventHandler
-    public void onKilled(PlayerKilledEvent event) {
-        if (frozen.containsKey(event.getKilled()))
-            frozen.remove(event.getKilled());
-        if (cooldown.containsKey(event.getKilled()))
-            cooldown.remove(event.getKilled());
-    }
-
-    @EventHandler
-    public void onInvClick(InventoryClickEvent event) {
-        if (frozen.containsKey(event.getWhoClicked()))
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onTime(TimeSecondEvent event) {
-        if (frozen.containsValue(hg.currentTime)) {
-            Iterator<Player> itel = frozen.keySet().iterator();
-            while (itel.hasNext()) {
-                Player p = itel.next();
-                if (frozen.get(p) <= hg.currentTime) {
-                    itel.remove();
-                    p.sendMessage(thawedOut);
-                    p.playSound(p.getEyeLocation(), Sound.LAVA_POP, 1, 0);
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInvSwitch(PlayerItemHeldEvent event) {
-        if (frozen.containsKey(event.getPlayer()))
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageEvent event) {
-        if (fireAndLavaThaws && frozen.containsKey(event.getEntity()))
-            if (event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK
-                    || event.getCause() == DamageCause.LAVA) {
-                frozen.remove(event.getEntity());
-                ((Player) event.getEntity()).sendMessage(thawedOut);
-            }
-    }
+    public String thawedOut = ChatColor.RED + "You thawed out";
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -90,6 +45,51 @@ public class Icicles extends AbilityListener {
                         frozen.put(victim, hg.currentTime + frozenTime);
                         cooldown.put(p, HungergamesApi.getHungergames().currentTime + cooldownTime);
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (fireAndLavaThaws && frozen.containsKey(event.getEntity()))
+            if (event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK
+                    || event.getCause() == DamageCause.LAVA) {
+                frozen.remove(event.getEntity());
+                ((Player) event.getEntity()).sendMessage(thawedOut);
+            }
+    }
+
+    @EventHandler
+    public void onInvClick(InventoryClickEvent event) {
+        if (frozen.containsKey(event.getWhoClicked()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInvSwitch(PlayerItemHeldEvent event) {
+        if (frozen.containsKey(event.getPlayer()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onKilled(PlayerKilledEvent event) {
+        if (frozen.containsKey(event.getKilled()))
+            frozen.remove(event.getKilled());
+        if (cooldown.containsKey(event.getKilled()))
+            cooldown.remove(event.getKilled());
+    }
+
+    @EventHandler
+    public void onTime(TimeSecondEvent event) {
+        if (frozen.containsValue(hg.currentTime)) {
+            Iterator<Player> itel = frozen.keySet().iterator();
+            while (itel.hasNext()) {
+                Player p = itel.next();
+                if (frozen.get(p) <= hg.currentTime) {
+                    itel.remove();
+                    p.sendMessage(thawedOut);
+                    p.playSound(p.getEyeLocation(), Sound.LAVA_POP, 1, 0);
                 }
             }
         }

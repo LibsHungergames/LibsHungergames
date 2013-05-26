@@ -10,10 +10,10 @@ import org.bukkit.command.CommandSender;
 
 public class Reply implements CommandExecutor {
 
-    private transient ChatManager chat = HungergamesApi.getChatManager();
-    private transient TranslationManager tm = HungergamesApi.getTranslationManager();
     public String[] aliases = new String[] { "r", "respond" };
+    private transient ChatManager chat = HungergamesApi.getChatManager();
     public String description = "Reply to a players private message";
+    private transient TranslationManager tm = HungergamesApi.getTranslationManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 0) {

@@ -68,17 +68,17 @@ public class InventoryManager {
         inv.openInventory();
     }
 
+    public void openSpectatorInventory(Player p) {
+        SpectateInventory specs = new SpectateInventory(p);
+        specs.setHeads();
+        specs.openInventory();
+    }
+
     public void updateSpectatorHeads() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasMetadata("SpectateInventory")) {
                 ((SpectateInventory) p.getMetadata("SpectateInventory").get(0).value()).setHeads();
             }
         }
-    }
-
-    public void openSpectatorInventory(Player p) {
-        SpectateInventory specs = new SpectateInventory(p);
-        specs.setHeads();
-        specs.openInventory();
     }
 }

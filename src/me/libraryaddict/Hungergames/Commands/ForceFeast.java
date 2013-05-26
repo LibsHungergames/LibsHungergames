@@ -12,11 +12,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ForceFeast implements CommandExecutor {
+    public String[] aliases = new String[] { "ffeast" };
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConfigManager config = HungergamesApi.getConfigManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
-    public String[] aliases = new String[] { "ffeast" };
     public String description = "Force a feast to generate at your feet";
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.forcefeast")) {

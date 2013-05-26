@@ -8,18 +8,18 @@ import me.libraryaddict.Hungergames.Managers.*;
 public class HungergamesApi {
     private static AbilityConfigManager abilityConfigManager;
     private static AbilityManager abilityManager;
+    private static ChatManager chat;
     private static TranslationManager chatManager;
     private static ChestManager cm;
+    private static CommandManager commands;
     private static ConfigManager config;
     private static FeastManager fm;
     private static Hungergames hg;
     private static InventoryManager icon;
     private static KitManager kits;
     private static MySqlManager mysql;
-    private static PlayerManager pm;
-    private static CommandManager commands;
-    private static ChatManager chat;
     private static NameManager name;
+    private static PlayerManager pm;
 
     /**
      * @return AbilityConfigManager which is used to load the configs of
@@ -32,39 +32,12 @@ public class HungergamesApi {
     }
 
     /**
-     * @return CommandManager manages the names of commands and registers them
-     */
-    public static CommandManager getCommandManager() {
-        if (commands == null)
-            commands = new CommandManager();
-        return commands;
-    }
-
-    /**
-     * @return NameManager - Manages the names of itemstacks
-     */
-    public static NameManager getNameManager() {
-        if (name == null)
-            name = new NameManager();
-        return name;
-    }
-
-    /**
      * @return AbilityManager which is used to load abilitys and handle them
      */
     public static AbilityManager getAbilityManager() {
         if (abilityManager == null)
             abilityManager = new AbilityManager();
         return abilityManager;
-    }
-
-    /**
-     * @return TranslationManager which is used for translations
-     */
-    public static TranslationManager getTranslationManager() {
-        if (chatManager == null)
-            chatManager = new TranslationManager();
-        return chatManager;
     }
 
     /**
@@ -83,6 +56,15 @@ public class HungergamesApi {
         if (cm == null)
             cm = new LibsChestManager();
         return cm;
+    }
+
+    /**
+     * @return CommandManager manages the names of commands and registers them
+     */
+    public static CommandManager getCommandManager() {
+        if (commands == null)
+            commands = new CommandManager();
+        return commands;
     }
 
     /**
@@ -112,16 +94,6 @@ public class HungergamesApi {
     }
 
     /**
-     * @return KitManager, Used for parsing items, kits and handling the kits
-     *         themselves
-     */
-    public static KitManager getKitManager() {
-        if (kits == null)
-            kits = new KitManager();
-        return kits;
-    }
-
-    /**
      * @return Kit Selector which handles the inventory which allows them to
      *         pick a kit
      */
@@ -129,6 +101,16 @@ public class HungergamesApi {
         if (icon == null)
             icon = new InventoryManager();
         return icon;
+    }
+
+    /**
+     * @return KitManager, Used for parsing items, kits and handling the kits
+     *         themselves
+     */
+    public static KitManager getKitManager() {
+        if (kits == null)
+            kits = new KitManager();
+        return kits;
     }
 
     /**
@@ -141,6 +123,15 @@ public class HungergamesApi {
     }
 
     /**
+     * @return NameManager - Manages the names of itemstacks
+     */
+    public static NameManager getNameManager() {
+        if (name == null)
+            name = new NameManager();
+        return name;
+    }
+
+    /**
      * @return Player Manager which is used to get the gamer, alive players and
      *         handle kills
      */
@@ -148,6 +139,15 @@ public class HungergamesApi {
         if (pm == null)
             pm = new PlayerManager();
         return pm;
+    }
+
+    /**
+     * @return TranslationManager which is used for translations
+     */
+    public static TranslationManager getTranslationManager() {
+        if (chatManager == null)
+            chatManager = new TranslationManager();
+        return chatManager;
     }
 
     /**

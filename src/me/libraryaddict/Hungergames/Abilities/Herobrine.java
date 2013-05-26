@@ -22,33 +22,9 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Herobrine extends AbilityListener {
-    private transient HashMap<String, Long> damagers = new HashMap<String, Long>();
     private transient HashMap<String, Long> cooldown = new HashMap<String, Long>();
     public int cooldownTime = 120;
-
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
-        Player damager = null;
-        if (event.getEntity() instanceof Player && hasAbility((Player) event.getEntity())) {
-            if (event.getDamager() instanceof Player)
-                damager = (Player) event.getDamager();
-            else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() != null
-                    && ((Projectile) event.getDamager()).getShooter() instanceof Player)
-                damager = (Player) ((Projectile) event.getDamager()).getShooter();
-            if (damager != null) {
-                PlayerInventory dInv = damager.getInventory();
-                int armorValue1 = 0;
-                for (ItemStack item : dInv.getArmorContents())
-                    armorValue1 += getArmorValue(item);
-                PlayerInventory inv = ((Player) event.getEntity()).getInventory();
-                int armorValue2 = 0;
-                for (ItemStack item : inv.getArmorContents())
-                    armorValue2 += getArmorValue(item);
-                if (armorValue1 > armorValue2)
-                    damagers.put(((Player) event.getEntity()).getName(), System.currentTimeMillis());
-            }
-        }
-    }
+    private transient HashMap<String, Long> damagers = new HashMap<String, Long>();
 
     private int getArmorValue(ItemStack armor) {
         if (armor == null || armor.getType() == Material.AIR)
@@ -72,6 +48,30 @@ public class Herobrine extends AbilityListener {
         if (mat == Material.DIAMOND_CHESTPLATE)
             return 8;
         return 0;
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        Player damager = null;
+        if (event.getEntity() instanceof Player && hasAbility((Player) event.getEntity())) {
+            if (event.getDamager() instanceof Player)
+                damager = (Player) event.getDamager();
+            else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() != null
+                    && ((Projectile) event.getDamager()).getShooter() instanceof Player)
+                damager = (Player) ((Projectile) event.getDamager()).getShooter();
+            if (damager != null) {
+                PlayerInventory dInv = damager.getInventory();
+                int armorValue1 = 0;
+                for (ItemStack item : dInv.getArmorContents())
+                    armorValue1 += getArmorValue(item);
+                PlayerInventory inv = ((Player) event.getEntity()).getInventory();
+                int armorValue2 = 0;
+                for (ItemStack item : inv.getArmorContents())
+                    armorValue2 += getArmorValue(item);
+                if (armorValue1 > armorValue2)
+                    damagers.put(((Player) event.getEntity()).getName(), System.currentTimeMillis());
+            }
+        }
     }
 
     @EventHandler

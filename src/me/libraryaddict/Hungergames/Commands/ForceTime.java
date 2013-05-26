@@ -9,10 +9,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class ForceTime implements CommandExecutor {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private Hungergames hg = HungergamesApi.getHungergames();
     public String[] aliases = new String[] { "ftime" };
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "Change the current internal time of the game";
+    private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("Hungergames.forcetime")) {

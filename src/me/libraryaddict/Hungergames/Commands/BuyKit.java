@@ -14,9 +14,9 @@ import org.bukkit.command.CommandSender;
 
 public class BuyKit implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
+    public String description = "When mysql is enabled you can use this command to buy kits";
     private KitManager kits = HungergamesApi.getKitManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
-    public String description = "When mysql is enabled you can use this command to buy kits";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

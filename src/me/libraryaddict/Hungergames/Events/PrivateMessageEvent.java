@@ -9,13 +9,17 @@ import org.bukkit.event.HandlerList;
 
 public class PrivateMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
     private boolean cancelled = false;
-    private String message;
-    private CommandSender sender;
-    private CommandSender receiver;
-    private String displayNameSender;
     private String displayNameReceiver;
+    private String displayNameSender;
+    private String message;
+    private CommandSender receiver;
     private boolean replying;
+
+    private CommandSender sender;
 
     public PrivateMessageEvent(CommandSender sender, CommandSender receiver, String message, boolean reply) {
         this.sender = sender;
@@ -38,20 +42,32 @@ public class PrivateMessageEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public String getSenderDisplayName() {
-        return displayNameSender;
+    public String getMessage() {
+        return message;
+    }
+
+    public CommandSender getReceiver() {
+        return receiver;
     }
 
     public String getReceiverDisplayName() {
         return displayNameReceiver;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public CommandSender getSender() {
+        return sender;
+    }
+
+    public String getSenderDisplayName() {
+        return displayNameSender;
     }
 
     public boolean isCancelled() {
         return cancelled;
+    }
+
+    public boolean isReply() {
+        return replying;
     }
 
     public void setCancelled(boolean setCancelled) {
@@ -60,22 +76,6 @@ public class PrivateMessageEvent extends Event implements Cancellable {
 
     public void setMessage(String newMessage) {
         message = newMessage;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public CommandSender getSender() {
-        return sender;
-    }
-
-    public CommandSender getReceiver() {
-        return receiver;
-    }
-
-    public boolean isReply() {
-        return replying;
     }
 
 }
