@@ -74,8 +74,9 @@ public class ScoreboardManager {
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
         else if (hg.currentTime >= config.getTimeFeastStarts() - (5 * 60) && hg.currentTime < config.getTimeFeastStarts())
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreFeast());
+        else if (hg.currentTime >= config.getTimeFeastStarts() && hg.currentTime <= config.getTimeFeastStarts() + (5 * 60))
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFeastHappening());
         else
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFeastHappened());
     }
-
 }

@@ -243,6 +243,7 @@ public class TranslationManager {
     private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible";
     private String scoreboardPlayersLength = ChatColor.GREEN + "Players:";
     private String scoreboardStageFeastHappened = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Finishing Up";
+    private String scoreboardStageFeastHappening = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Looting Feast";
     private String scoreboardStageFighting = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Fighting";
     private String scoreboardStageInvincibility = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Invincibility";
     private String scoreboardStagePreFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pre-Feast";
@@ -1098,6 +1099,10 @@ public class TranslationManager {
 
     public String getScoreboardStageFeastHappened() {
         return scoreboardStageFeastHappened;
+    }
+
+    public String getScoreboardStageFeastHappening() {
+        return scoreboardStageFeastHappening;
     }
 
     public String getScoreboardStageFighting() {

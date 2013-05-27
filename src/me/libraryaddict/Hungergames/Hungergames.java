@@ -298,6 +298,8 @@ public class Hungergames extends JavaPlugin {
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());
         }
+        if (currentTime > config.getTimeFeastStarts() + (5 * 60))
+            ScoreboardManager.updateStage();
         if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
                     config.invincibilityWearsOffIn());
