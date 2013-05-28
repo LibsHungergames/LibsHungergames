@@ -106,14 +106,28 @@ public class PlayerManager {
     public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
         if (!hg.doSeconds || hg.currentTime < 0)
             return;
-        Damage dmg = lastDamager.get(gamer);
-        Gamer backup = null;
-        if (dmg != null)
-            if (dmg.getTime() >= System.currentTimeMillis() / 1000)
-                backup = dmg.getDamager();
-        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, backup, deathMsg, dropLoc, drops);
+        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), deathMsg, dropLoc, drops);
         Bukkit.getPluginManager().callEvent(event);
         manageDeath(event);
+    }
+
+    public Gamer getKiller(Gamer victim) {
+        Damage dmg = lastDamager.get(victim);
+        Gamer backup = null;
+        if (dmg != null)
+            if (dmg.getTime() >= System.currentTimeMillis())
+                backup = dmg.getDamager();
+        return backup;
+    }
+
+    public void removeKilled(Gamer gamer) {
+        lastDamager.remove(gamer);
+        Iterator<Gamer> itel = lastDamager.keySet().iterator();
+        while (itel.hasNext()) {
+            Gamer g = itel.next();
+            if (lastDamager.get(g).getDamager() == gamer)
+                itel.remove();
+        }
     }
 
     public void manageDeath(PlayerKilledEvent event) {
@@ -127,12 +141,6 @@ public class PlayerManager {
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        Iterator<Gamer> itel = lastDamager.keySet().iterator();
-        while (itel.hasNext()) {
-            Gamer g = itel.next();
-            if (lastDamager.get(g).getDamager() == killed)
-                itel.remove();
-        }
         if (event.getDeathMessage().equalsIgnoreCase(ChatColor.stripColor(event.getDeathMessage())))
             event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
         p.setLevel(0);

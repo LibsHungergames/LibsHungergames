@@ -58,7 +58,7 @@ public class AbilityManager {
      */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
-        System.out.print(String.format(cm.getLoggerLoadAbilitysInPackage(), plugin.getName(), packageName));
+        System.out.print(String.format(cm.getLoggerLoadAbilitiesInPackage(), plugin.getName(), packageName));
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {

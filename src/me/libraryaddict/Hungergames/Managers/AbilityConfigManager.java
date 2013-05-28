@@ -55,7 +55,7 @@ public class AbilityConfigManager {
     public void save() {
         try {
             if (!configFile.exists()) {
-                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitysConfig());
+                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitiesConfig());
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 newFile = true;

@@ -1,7 +1,6 @@
 package me.libraryaddict.Hungergames;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +13,9 @@ import me.libraryaddict.Hungergames.Listeners.GeneralListener;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
-import me.libraryaddict.Hungergames.Types.FileUtils;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Utilities.MapLoader;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -72,41 +72,18 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_USER = getConfig().getString("MySqlUser");
         mysql.startJoinThread();
         String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
+        File worldFolder = new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
+                + worldName);
         if (getConfig().getBoolean("DeleteWorld", true))
-            FileUtils.clear(new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
-                    + worldName));
+            MapLoader.clear(worldFolder);
         if (getConfig().getBoolean("LoadMap", false)) {
             File path = this.getDataFolder().getAbsoluteFile();
             if (getConfig().contains("MapPath")) {
-                if (getConfig().getBoolean("MapPathStartsPluginFolder")) {
-                    String[] mapPath = getConfig().getString("MapPath").split("/");
-                    for (String string : mapPath) {
-                        if (string.equalsIgnoreCase(".."))
-                            path = path.getParentFile();
-                        else
-                            path = new File(path.toString() + "/" + string + "/");
-                    }
-                } else
+                if (getConfig().getBoolean("MapPathStartsPluginFolder"))
+                    path = MapLoader.convertToFile(path, getConfig().getString("MapPath").split("/"));
+                else
                     path = new File(getConfig().getString("MapPath"));
-                List<File> maps = new ArrayList<File>();
-                if (path.exists())
-                    for (File file : path.listFiles())
-                        if (file.isDirectory())
-                            maps.add(file);
-                if (maps.size() > 0) {
-                    File toLoad = maps.get(new Random().nextInt(maps.size()));
-                    try {
-                        File[] files = toLoad.listFiles();
-                        for (File f : files) {
-                            FileUtils.copy(f, new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile() + "/"
-                                    + worldName));
-                        }
-                    } catch (IOException e) {
-
-                    }
-                    System.out.print(cm.getLoggerSucessfullyLoadedMap());
-                } else
-                    System.out.print(String.format(cm.getLoggerNoMapsFound(), path.toString()));
+                MapLoader.loadMap(path, worldFolder);
             }
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {

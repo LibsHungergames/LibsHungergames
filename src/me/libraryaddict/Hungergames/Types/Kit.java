@@ -60,7 +60,7 @@ public class Kit {
     }
 
     public ItemStack getIcon() {
-        return icon;
+        return icon.clone();
     }
 
     public int getId() {

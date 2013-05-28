@@ -170,7 +170,7 @@ public class TranslationManager {
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
     private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
-    private String loggerCreatingAbilitysConfig = "[Hungergames] Creating ability config file";
+    private String loggerCreatingAbilitiesConfig = "[Hungergames] Creating ability config file";
     private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands config file";
     private String loggerCreatingNamesConfig = "[Hungergames] Creating names config file";
     private String loggerCreatingTranslationConfig = "[Hungergames] Creating translation config file";
@@ -186,7 +186,7 @@ public class TranslationManager {
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
-    private String loggerLoadAbilitysInPackage = "[HungerGames] Initializing all abilitys found in %s in the %s package";
+    private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerMetricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
@@ -837,8 +837,8 @@ public class TranslationManager {
         return loggerCommandsMissingValue;
     }
 
-    public String getLoggerCreatingAbilitysConfig() {
-        return loggerCreatingAbilitysConfig;
+    public String getLoggerCreatingAbilitiesConfig() {
+        return loggerCreatingAbilitiesConfig;
     }
 
     public String getLoggerCreatingCommandsConfig() {
@@ -901,8 +901,8 @@ public class TranslationManager {
         return loggerFoundCommandInPackage;
     }
 
-    public String getLoggerLoadAbilitysInPackage() {
-        return loggerLoadAbilitysInPackage;
+    public String getLoggerLoadAbilitiesInPackage() {
+        return loggerLoadAbilitiesInPackage;
     }
 
     public String getLoggerLoadCommandsInPackage() {

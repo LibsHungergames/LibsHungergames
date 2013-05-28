@@ -126,8 +126,7 @@ public class PlayerListener implements Listener {
             }
             if (damager != null) {
                 if (damager.canInteract())
-                    pm.lastDamager.put(pm.getGamer(event.getEntity()), new Damage((System.currentTimeMillis() / 1000) + 60,
-                            damager));
+                    pm.lastDamager.put(pm.getGamer(event.getEntity()), new Damage(System.currentTimeMillis() + 60000, damager));
             }
         }
     }
@@ -368,6 +367,7 @@ public class PlayerListener implements Listener {
         Kit kit = kits.getKitByPlayer(event.getPlayer());
         if (kit != null)
             kit.removePlayer(event.getPlayer());
+        pm.removeKilled(gamer);
         pm.unregisterGamer(gamer);
     }
 
