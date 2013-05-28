@@ -26,6 +26,9 @@ public class Pussy extends AbilityListener implements Disableable {
         if (Bukkit.getPluginManager().getPlugin("LibsDisguises") == null)
             throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
                     "Plugin LibsDisguises"));
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+                    "Plugin ProtocolLib"));
     }
 
     @EventHandler
