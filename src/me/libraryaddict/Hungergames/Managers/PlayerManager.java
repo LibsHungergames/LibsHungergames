@@ -189,8 +189,8 @@ public class PlayerManager {
             if (entity instanceof Creature && ((Creature) entity).getTarget() == p)
                 ((Creature) entity).setTarget(null);
         }
-        if (!HungergamesApi.getConfigManager().isSpectatorsEnabled() && !p.hasPermission("hungergames.spectate"))
-            p.kickPlayer(event.getDeathMessage());
+        if (HungergamesApi.getConfigManager().isKickOnDeath() && !p.hasPermission("hungergames.spectate"))
+            p.kickPlayer(String.format(HungergamesApi.getTranslationManager().getKickDeathMessage(), event.getDeathMessage()));
         HungergamesApi.getAbilityManager().unregisterPlayer(p);
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }

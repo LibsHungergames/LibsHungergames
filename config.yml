@@ -12,6 +12,8 @@ ChestLayers: 3
 SpectatorChat: false
 # Are there spectators. Permission to bypass is Hungergames.Spectate
 Spectators: true
+# Does the game kick them when they die?
+KickOnDeath: false
 # Does the border close in after the feast has happened?
 BorderCloseIn: true
 #What size is the border initially?

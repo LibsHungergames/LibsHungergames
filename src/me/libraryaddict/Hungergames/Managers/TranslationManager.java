@@ -143,6 +143,7 @@ public class TranslationManager {
     private String[] itemSpectatorInventoryForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "forwards a page" };
     private String itemSpectatorInventoryForwardsName = ChatColor.RED + "Back";
+    private String kickDeathMessage = "%s";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
     private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Plugin provided by libraryaddict";
@@ -763,6 +764,10 @@ public class TranslationManager {
 
     public String getItemSpectatorInventoryForwardsName() {
         return itemSpectatorInventoryForwardsName;
+    }
+
+    public String getKickDeathMessage() {
+        return kickDeathMessage;
     }
 
     public String getKickGameFull() {

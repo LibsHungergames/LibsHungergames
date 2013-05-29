@@ -40,6 +40,7 @@ public class ConfigManager {
     private Hungergames hg;
     private int invincibility;
     private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
+    private boolean kickOnDeath;
     private boolean kitSelector;
     private ItemStack kitSelectorBack;
     private boolean kitSelectorDynamicSize;
@@ -368,6 +369,13 @@ public class ConfigManager {
         return fireSpread;
     }
 
+    /**
+     * @return Does the game kick the players on death
+     */
+    public boolean isKickOnDeath() {
+        return kickOnDeath;
+    }
+
     public boolean isKitSelectorDynamicSize() {
         return kitSelectorDynamicSize;
     }
@@ -406,7 +414,7 @@ public class ConfigManager {
     public boolean isSpectatorsEnabled() {
         return spectators;
     }
-
+    
     /**
      * Reload the config. This doesn't reload some values however
      */
@@ -469,6 +477,7 @@ public class ConfigManager {
         spectatorChat = !hg.getConfig().getBoolean("SpectatorChat", true);
         shortenNames = hg.getConfig().getBoolean("ShortenNames");
         spectators = hg.getConfig().getBoolean("Spectators", true);
+        kickOnDeath = hg.getConfig().getBoolean("KickOnDeath");
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
         mushroomStewRestores = hg.getConfig().getInt("MushroomStewRestores", 5);
         kitSelector = hg.getConfig().getBoolean("UseKitSelector", true);
