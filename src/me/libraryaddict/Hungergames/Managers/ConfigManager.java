@@ -409,7 +409,7 @@ public class ConfigManager {
     }
 
     /**
-     * @return Do players spectate when killed? Or joining? Or are they kicked?
+     * @return Are players allowed to join a game in progress?
      */
     public boolean isSpectatorsEnabled() {
         return spectators;
