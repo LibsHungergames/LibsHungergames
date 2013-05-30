@@ -37,6 +37,8 @@ public class ClassGetter {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unexpected ClassNotFoundException loading class '" + className + "'");
+        } catch (NoClassDefFoundError e) {
+            return null;
         }
     }
 
@@ -60,7 +62,9 @@ public class ClassGetter {
                 className = entryName.replace('/', '.').replace('\\', '.').replace(".class", "");
             }
             if (className != null) {
-                classes.add(loadClass(className));
+                Class<?> c = loadClass(className);
+                if (c != null)
+                    classes.add(c);
             }
         }
     }

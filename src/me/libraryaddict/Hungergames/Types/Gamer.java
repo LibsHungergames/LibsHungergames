@@ -11,6 +11,7 @@ import net.minecraft.server.v1_5_R3.EntityPlayer;
 import net.minecraft.server.v1_5_R3.Packet201PlayerInfo;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -29,12 +30,37 @@ public class Gamer {
     private int kills = 0;
     private Player player;
     /**
-     * True when the game hasn't started. If he wants to see other players.
-     * 
-     * False when the game has started if he wants to see other players
+     * True when the game hasn't started. If he wants to see other players. False when the game has started if he wants to see
+     * other players
      */
     private boolean seeInvis = true;
     private boolean spectating = false;
+
+    public void setAlive(boolean alive) {
+        String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
+        if (alive && !isAlive()) {
+            setSpectating(!alive);
+            setHuman();
+            show();
+            player.setFallDistance(0F);
+            player.setAllowFlight(false);
+            updateSelfToOthers();
+            if (player.getDisplayName().equals(name))
+                player.setDisplayName(player.getName());
+        } else if (!alive && isAlive()) {
+            setSpectating(!alive);
+            setGhost();
+            hide();
+            player.setAllowFlight(true);
+            player.setFlying(true);
+            updateSelfToOthers();
+            player.setFoodLevel(20);
+            player.setHealth(20);
+            player.setFireTicks(0);
+            if (player.getDisplayName().equals(player.getName()))
+                player.setDisplayName(name);
+        }
+    }
 
     public Gamer(Player player) {
         this.player = player;

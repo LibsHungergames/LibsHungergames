@@ -244,24 +244,13 @@ public class PlayerManager {
         });
     }
 
-    public void setSpectator(Gamer gamer) {
-        gamer.setGhost();
-        gamer.hide();
-        gamer.setSpectating(true);
-        final Player p = gamer.getPlayer();
-        p.setAllowFlight(true);
-        p.setFlying(true);
-        p.setFoodLevel(20);
-        p.setHealth(20);
-        p.setFireTicks(0);
-        gamer.updateSelfToOthers();
+    public void setSpectator(final Gamer gamer) {
+        gamer.setAlive(false);
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
-                p.getInventory().addItem(new ItemStack(Material.COMPASS));
+                gamer.getPlayer().getInventory().addItem(new ItemStack(Material.COMPASS));
             }
         });
-        if (p.getDisplayName().equals(p.getName()))
-            p.setDisplayName(ChatColor.DARK_GRAY + p.getName() + ChatColor.RESET);
     }
 
     public Gamer unregisterGamer(Entity entity) {
