@@ -27,6 +27,8 @@ package me.libraryaddict.Hungergames;
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -500,7 +502,7 @@ public class Metrics {
                 }
                 return true;
             }
-            return configuration.getBoolean("opt-out", false);
+            return HungergamesApi.getConfigManager().isMetricsDisabled();
         }
     }
 

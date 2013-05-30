@@ -414,7 +414,13 @@ public class ConfigManager {
     public boolean isSpectatorsEnabled() {
         return spectators;
     }
-    
+
+    private boolean disableMetrics;
+
+    public boolean isMetricsDisabled() {
+        return disableMetrics;
+    }
+
     /**
      * Reload the config. This doesn't reload some values however
      */
@@ -515,6 +521,7 @@ public class ConfigManager {
             commandsToRunBeforeShutdown = hg.getConfig().getStringList("CommandsToRunBeforeShutdown");
         else
             commandsToRunBeforeShutdown = new ArrayList<String>();
+        disableMetrics = hg.getConfig().getBoolean("DisableMetrics");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();

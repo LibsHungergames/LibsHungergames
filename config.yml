@@ -163,3 +163,7 @@ CheckUpdates: true
 #  - 'kick libraryaddict You smell'
 #  - 'kick minecraftchick You suck'
 #  - 'say Attention all: libraryaddict loves you'
+
+# This is to disable metrics. Please dont..
+
+DisableMetrics: false
