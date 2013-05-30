@@ -5,6 +5,7 @@ import me.libraryaddict.Hungergames.Utilities.ClassGetter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
@@ -23,6 +24,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Austin Date: 11/7/12 Time: 12:04 PM
@@ -163,14 +166,9 @@ public class CommandManager {
                             field.set(exc, value);
                         if (field.getName().equals("commandCreator")) {
                             /**
-                             * Touch this and you better leave this entire
-                             * plugin alone because I didn't give you permission
-                             * to modify this.
-                             * 
-                             * By changing the creatorMessage to something which
-                             * doesn't refer players to the plugin itself.
-                             * 
-                             * You are going against my wishes.
+                             * Touch this and you better leave this entire plugin alone because I didn't give you permission to
+                             * modify this. By changing the creatorMessage to something which doesn't refer players to the plugin
+                             * itself. You are going against my wishes.
                              */
                             String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kWBpO").toLowerCase();
                             if (!message.contains("libraryaddict") && !message.contains("http://ow.ly/kwbpo")
@@ -217,6 +215,10 @@ public class CommandManager {
                 command.setAliases(list);
             }
         }
+        if (command.getAliases() != null) {
+            for (String alias : command.getAliases())
+                unregisterCommand(alias);
+        }
         try {
             Field field = exc.getClass().getDeclaredField("description");
             if (field != null && field.get(exc) instanceof String)
@@ -227,6 +229,22 @@ public class CommandManager {
         field.setAccessible(true);
         SimpleCommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
         map.register(name, command);
+    }
+
+    private void unregisterCommand(String name) {
+        try {
+            Field known = SimpleCommandMap.class.getDeclaredField("knownCommands");
+            Field alias = SimpleCommandMap.class.getDeclaredField("aliases");
+            known.setAccessible(true);
+            alias.setAccessible(true);
+            Map<String, Command> knownCommands = (Map<String, Command>) known.get(((CraftServer) Bukkit.getServer())
+                    .getCommandMap());
+            Set<String> aliases = (Set<String>) alias.get(((CraftServer) Bukkit.getServer()).getCommandMap());
+            knownCommands.remove(name.toLowerCase());
+            aliases.remove(name.toLowerCase());
+        } catch (Exception ex) {
+
+        }
     }
 
     public void save() {

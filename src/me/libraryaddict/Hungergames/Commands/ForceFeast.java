@@ -46,8 +46,7 @@ public class ForceFeast implements CommandExecutor {
                     }
                 }
             }
-            Player p = (Player) sender;
-            Location loc = p.getLocation().clone();
+            Location loc = ((Player) sender).getLocation().clone();
             int height = HungergamesApi.getFeastManager().getSpawnHeight(loc, radius);
             loc.setY(height);
             HungergamesApi.getFeastManager().generatePlatform(loc, height, radius);
