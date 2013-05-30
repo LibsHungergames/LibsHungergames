@@ -264,7 +264,7 @@ public class Hungergames extends JavaPlugin {
                 if (feastLoc.getBlockY() == 0) {
                     feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
                     int feastHeight = HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize());
-                    HungergamesApi.getFeastManager().generateSpawn(feastLoc, feastHeight, config.getFeastSize());
+                    HungergamesApi.getFeastManager().generatePlatform(feastLoc, feastHeight, config.getFeastSize());
                     ScoreboardManager.updateStage();
                 }
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),

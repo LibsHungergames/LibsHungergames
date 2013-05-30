@@ -19,7 +19,7 @@ import org.bukkit.command.CommandSender;
 public class Players implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "See the gamers and spectators online";
-    public String[] aliases = new String[] { "list", "who" };
+    public String[] aliases = new String[] { "list", "who", "gamers" };
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 

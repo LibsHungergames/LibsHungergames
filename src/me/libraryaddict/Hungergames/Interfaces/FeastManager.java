@@ -18,7 +18,7 @@ public interface FeastManager {
      * @param lowestLevel
      * @param radius
      */
-    public void generateSpawn(final Location loc, int lowestLevel, int radius);
+    public void generatePlatform(final Location loc, int lowestLevel, int radius);
 
     /**
      * Generates the chests, the quartz and the enchanting table. As well as the tnt inside

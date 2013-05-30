@@ -101,8 +101,8 @@ public class TranslationManager {
             + ChatColor.RESET + "%s";
     private String commandMessageSendMessage = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
             + ChatColor.RESET + "%s";
-    private String commandPlayers = ChatColor.DARK_GRAY + "There are " + ChatColor.GRAY + "%1$2s " + ChatColor.DARK_GRAY
-            + "gamers and " + ChatColor.GRAY + "%2$2s" + ChatColor.DARK_GRAY + " spectators\n" + ChatColor.DARK_GRAY + "Gamers: "
+    private String commandPlayers = ChatColor.DARK_GRAY + "There are " + ChatColor.GRAY + "%s" + ChatColor.DARK_GRAY
+            + " gamers and " + ChatColor.GRAY + "%s" + ChatColor.DARK_GRAY + " spectators\n" + ChatColor.DARK_GRAY + "Gamers: "
             + ChatColor.GRAY + "%3$2s";
     private String commandPlayersTimeStatusStarted = ChatColor.DARK_GRAY + "The game has been going for %s.";
     private String commandPlayersTimeStatusStarting = ChatColor.DARK_GRAY + "The game is starting in %s.";

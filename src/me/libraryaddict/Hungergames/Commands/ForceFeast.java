@@ -50,7 +50,7 @@ public class ForceFeast implements CommandExecutor {
             Location loc = p.getLocation().clone();
             int height = HungergamesApi.getFeastManager().getSpawnHeight(loc, radius);
             loc.setY(height);
-            HungergamesApi.getFeastManager().generateSpawn(loc, height, radius);
+            HungergamesApi.getFeastManager().generatePlatform(loc, height, radius);
             HungergamesApi.getFeastManager().generateChests(loc, chestLayers);
             Bukkit.broadcastMessage(String.format(cm.getCommandForceFeastGenerated(), loc.getBlockX(), loc.getBlockY(),
                     loc.getBlockZ()));

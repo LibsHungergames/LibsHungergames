@@ -96,7 +96,7 @@ public class LibsFeastManager implements FeastManager {
      * @param lowestLevel
      * @param radius
      */
-    public void generateSpawn(final Location loc, int lowestLevel, int radius) {
+    public void generatePlatform(final Location loc, int lowestLevel, int radius) {
         ConfigManager config = HungergamesApi.getConfigManager();
         ItemStack feastGround = config.getFeastGround();
         loc.setY(lowestLevel + 1);
