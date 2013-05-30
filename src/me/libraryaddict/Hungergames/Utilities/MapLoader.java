@@ -27,11 +27,13 @@ public class MapLoader {
 
     public static void loadMap(File mapDir, File dest) {
         List<File> maps = new ArrayList<File>();
-        if (dest.exists())
+        if (dest.exists()) {
             for (File file : dest.listFiles())
                 if (file.isDirectory()) {
                     maps.add(file);
                 }
+        } else
+            System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), dest.toString()));
         if (maps.size() > 0) {
             Collections.shuffle(maps, new Random());
             File toLoad = maps.get(0);
