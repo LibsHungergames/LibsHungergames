@@ -350,8 +350,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
-        if (!pm.getGamer(event.getPlayer()).canInteract()
-                || event.getBlock().getLocation().getBlockY() > event.getBlock().getWorld().getMaxHeight())
+        if (!pm.getGamer(event.getPlayer()).canInteract())
             event.setCancelled(true);
     }
 
