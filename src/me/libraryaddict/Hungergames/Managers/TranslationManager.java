@@ -189,6 +189,10 @@ public class TranslationManager {
     private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
+    private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
+    private String loggerMapConfigLoaded= "[Hungergames] Successfully loaded map config";
+    private String loggerMapConfigNotFound = "[Hungergames] Map config not found";
+    private String loggerMapConfigNowLoading = "[Hungergames] Now loading map config";
     private String loggerMetricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
     private String loggerMySqlClosing = "[%s] Disconnecting from MySQL database...";
     private String loggerMySqlClosingError = "[%s] Error while closing the connection...";
@@ -916,6 +920,22 @@ public class TranslationManager {
 
     private String getLoggerLoadTranslationConfig() {
         return loggerLoadTranslationConfig;
+    }
+
+    public String getLoggerMapConfigChangedBorderSize() {
+        return loggerMapConfigChangedBorderSize;
+    }
+
+    public String getLoggerMapConfigLoaded() {
+        return loggerMapConfigLoaded;
+    }
+
+    public String getLoggerMapConfigNotFound() {
+        return loggerMapConfigNotFound;
+    }
+
+    public String getLoggerMapConfigNowLoading() {
+        return loggerMapConfigNowLoading;
     }
 
     public String getLoggerMetricsMessage() {
