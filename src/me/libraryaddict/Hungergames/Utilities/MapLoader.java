@@ -21,16 +21,6 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
 
-    public static File convertToFile(File path, String[] mapPath) {
-        for (String string : mapPath) {
-            if (string.equalsIgnoreCase(".."))
-                path = path.getParentFile();
-            else
-                path = new File(path.toString() + "/" + string + "/");
-        }
-        return path;
-    }
-
     public static void loadMap() {
         Hungergames hg = HungergamesApi.getHungergames();
         File mapConfig = new File(hg.getDataFolder() + "/map.yml");
@@ -43,7 +33,7 @@ public class MapLoader {
                 config.save(mapConfig);
             }
             if (!config.contains("MapPath")) {
-                config.set("MapPath", "/Maps/");
+                config.set("MapPath", hg.getDataFolder().getAbsoluteFile().getParent() + "/Maps/");
                 config.save(mapConfig);
             }
             if (!config.contains("UseMaps")) {
@@ -57,7 +47,6 @@ public class MapLoader {
                 clear(worldFolder);
             if (config.getBoolean("UseMaps")) {
                 File mapFolder = worldFolder.getParentFile();
-                mapFolder = convertToFile(mapFolder, config.getString("MapPath").split("/"));
                 loadMap(mapFolder, worldFolder, config);
                 loadMapConfiguration(worldFolder);
             }

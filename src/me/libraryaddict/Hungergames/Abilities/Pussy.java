@@ -23,10 +23,12 @@ public class Pussy extends AbilityListener implements Disableable {
     public String transformedIntoCat = ChatColor.BLUE + "Meow!";
 
     public Pussy() throws Exception {
-        if (Bukkit.getPluginManager().getPlugin("LibsDisguises") == null
-                || !Bukkit.getPluginManager().getPlugin("LibsDisguises").isEnabled())
+        if (Bukkit.getPluginManager().getPlugin("LibsDisguises") == null)
             throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
                     "Plugin LibsDisguises"));
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
+            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+                    "Plugin ProtocolLib"));
     }
 
     @EventHandler
