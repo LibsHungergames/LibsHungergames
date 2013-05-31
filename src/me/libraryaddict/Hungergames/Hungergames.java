@@ -71,21 +71,7 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
         mysql.SQL_USER = getConfig().getString("MySqlUser");
         mysql.startJoinThread();
-        String worldName = ((CraftServer) getServer()).getServer().getPropertyManager().getString("level-name", "world");
-        File worldFolder = new File(getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
-                + worldName);
-        if (getConfig().getBoolean("DeleteWorld", true))
-            MapLoader.clear(worldFolder);
-        if (getConfig().getBoolean("LoadMap", false)) {
-            File path = this.getDataFolder().getAbsoluteFile();
-            if (getConfig().contains("MapPath")) {
-                if (getConfig().getBoolean("MapPathStartsPluginFolder"))
-                    path = MapLoader.convertToFile(path, getConfig().getString("MapPath").split("/"));
-                else
-                    path = new File(getConfig().getString("MapPath"));
-                MapLoader.loadMap(path, worldFolder);
-            }
-        }
+        MapLoader.loadMap();
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 world = Bukkit.getWorlds().get(0);

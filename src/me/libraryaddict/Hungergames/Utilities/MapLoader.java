@@ -11,6 +11,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_5_R3.CraftServer;
+
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Managers.ConfigManager;
+import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
@@ -25,15 +31,65 @@ public class MapLoader {
         return path;
     }
 
-    public static void loadMap(File mapDir, File dest) {
+    public static void loadMap() {
+        Hungergames hg = HungergamesApi.getHungergames();
+        File mapConfig = new File(hg.getDataFolder() + "/map.yml");
+        try {
+            if (!mapConfig.exists())
+                mapConfig.createNewFile();
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(mapConfig);
+            if (!config.contains("DeleteWorld")) {
+                config.set("DeleteWorld", true);
+                config.save(mapConfig);
+            }
+            if (!config.contains("MapPath")) {
+                config.set("MapPath", "/Maps/");
+                config.save(mapConfig);
+            }
+            if (!config.contains("UseMaps")) {
+                config.set("LoadMap", false);
+                config.save(mapConfig);
+            }
+            String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
+            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParentFile().toString() + "/"
+                    + worldName);
+            if (config.getBoolean("DeleteWorld"))
+                clear(worldFolder);
+            if (config.getBoolean("UseMaps")) {
+                File mapFolder = worldFolder.getParentFile();
+                mapFolder = convertToFile(mapFolder, config.getString("MapPath").split("/"));
+                loadMap(mapFolder, worldFolder, config);
+                loadMapConfiguration(worldFolder);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadMapConfiguration(File worldConfig) {
+        ConfigManager configManager = HungergamesApi.getConfigManager();
+        try {
+            if (!worldConfig.exists())
+                return;
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(worldConfig);
+            if (config.contains("BorderSize"))
+                configManager.setBorderSize(config.getDouble("BorderSize"));
+        } catch (Exception ex) {
+
+        }
+    }
+
+    private static void loadMap(File mapDir, File dest, YamlConfiguration config) {
+        TranslationManager tm = HungergamesApi.getTranslationManager();
+        System.out.print(String.format(tm.getLoggerNowAttemptingToLoadAMap(), dest.toString()));
         List<File> maps = new ArrayList<File>();
         if (dest.exists()) {
             for (File file : dest.listFiles())
                 if (file.isDirectory()) {
-                    maps.add(file);
+                    if (new File(file.toString() + "/level.dat").exists())
+                        maps.add(file);
                 }
-        } else
-            System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), dest.toString()));
+        }
         if (maps.size() > 0) {
             Collections.shuffle(maps, new Random());
             File toLoad = maps.get(0);

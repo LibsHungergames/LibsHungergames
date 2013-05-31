@@ -13,7 +13,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class TranslationManager {
-
     private String broadcastFeastBegun = ChatColor.RED + "The feast has begun!";
     private String broadcastFeastStartingCompassMessage = "\nUse /feast to fix your compass on it!";
     private String broadcastFeastStartingIn = ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s";
@@ -197,6 +196,7 @@ public class TranslationManager {
     private String loggerMySqlConnectingError = "[%s] Error while connecting to MySQL. %s";
     private String loggerMySqlErrorLoadPlayer = "[PlayerJoinThread] Error while loading player %s - %s";
     private String loggerNoMapsFound = "[Hungergames] There are no maps to be found in %s";
+    private String loggerNowAttemptingToLoadAMap = "[Hungergames] Now attempting to load a map from the path %s";
     private String loggerShutdownCancelled = "[Hungergames] Shutdown event was cancelled by some plugin!";
     private String loggerShuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
     private String loggerSucessfullyLoadedMap = "[Hungergames] Sucessfully loaded map %s";
@@ -944,6 +944,10 @@ public class TranslationManager {
 
     public String getLoggerNoMapsFound() {
         return loggerNoMapsFound;
+    }
+
+    public String getLoggerNowAttemptingToLoadAMap() {
+        return loggerNowAttemptingToLoadAMap;
     }
 
     public String getLoggerShutdownCancelled() {
