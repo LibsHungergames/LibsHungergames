@@ -23,13 +23,13 @@ public class MapLoader {
 
     public static void loadMap() {
         Hungergames hg = HungergamesApi.getHungergames();
-        File mapConfig = new File(hg.getDataFolder() + "\\map.yml");
+        File mapConfig = new File(hg.getDataFolder() + "/map.yml");
         try {
             if (!mapConfig.exists())
                 mapConfig.createNewFile();
             YamlConfiguration config = YamlConfiguration.loadConfiguration(mapConfig);
             if (!config.contains("MapPath")) {
-                config.set("MapPath", hg.getDataFolder().getAbsoluteFile().getParentFile().getParent() + "\\Maps\\");
+                config.set("MapPath", hg.getDataFolder().getAbsoluteFile().getParentFile().getParent() + "/Maps/");
                 config.save(mapConfig);
             }
             if (!config.contains("UseMaps")) {
@@ -37,7 +37,7 @@ public class MapLoader {
                 config.save(mapConfig);
             }
             String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
-            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "\\"
+            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
             if (!worldFolder.exists())
                 worldFolder.mkdirs();
@@ -78,7 +78,7 @@ public class MapLoader {
         if (dest.exists()) {
             for (File file : dest.listFiles())
                 if (file.isDirectory()) {
-                    if (new File(file.toString() + "\\level.dat").exists())
+                    if (new File(file.toString() + "/level.dat").exists())
                         maps.add(file);
                 }
         }
@@ -88,7 +88,7 @@ public class MapLoader {
             copy(toLoad, dest);
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerSucessfullyLoadedMap(),
                     toLoad.getName()));
-            loadMapConfiguration(new File(dest.toString() + "\\config.yml"));
+            loadMapConfiguration(new File(dest.toString() + "/config.yml"));
         } else
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), mapDir.toString()));
     }
