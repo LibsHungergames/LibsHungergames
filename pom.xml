@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>libsdisguises</groupId>
 			<artifactId>libsdisguises</artifactId>
-			<version>v1.0</version>
+			<version>v1.1</version>
 		</dependency>
 	</dependencies>
 </project>
