@@ -66,6 +66,13 @@ Kits:
     Icon: COMPASS 0 1
     Ability:
       - Bourne
+  Butcher:
+    Description: 'Destroy all the mobs in two hits! The first hit you do will almost kill it. The second hit will finish it off!'
+    Free: true
+    Price: 0
+    Icon: PORK 0 1
+    Ability:
+      - Butcher
   Creeper:
     Description: 'Explode with the majestic power of a creeper upon death! Wreck havoc upon thy enemies for daring to kill one as powerful as you! Ruin their day as you destroy any hope and chance they had of winning! However! Theres a chance you will barely explode. Because as we all know. Humans were never meant to explode'
     Free: true
