@@ -39,6 +39,8 @@ public class MapLoader {
             String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "\\"
                     + worldName);
+            if (!worldFolder.exists())
+                worldFolder.mkdirs();
             if (config.getBoolean("UseMaps")) {
                 clear(worldFolder);
                 File mapFolder = new File(config.getString("MapPath"));
