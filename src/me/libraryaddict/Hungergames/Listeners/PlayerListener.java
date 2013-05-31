@@ -240,7 +240,7 @@ public class PlayerListener implements Listener {
         if (!gamer.canInteract()) {
             event.setCancelled(true);
         }
-        if (!gamer.isAlive()) {
+        if (!gamer.isAlive() && hg.currentTime >= 0) {
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
                 Player p = event.getPlayer();
