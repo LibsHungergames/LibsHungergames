@@ -23,23 +23,6 @@ MushroomStew: false
 MushroomStewRestores: 6
 # Border closes in every second by so and so much.
 BorderClosesIn: 0.2
-# Should it delete the world when the plugin loads?
-DeleteWorld: true
-# Should it load a map?
-LoadMap: false
-# If so. Where should the maps be located?
-# '..' means move up a level. So its going from its plugin folder. To /plugins. To /serverfolder then to /serverfolder/maps/
-# Its surrounded by single quotes just incase.
-# So you want this to point at the folder containing the maps. It will then load a random map from there.
-# By default it starts in /Server/plugins/LibsHungergames/
-# This setting makes it go to the folder the server is in.
-# Like you are in a folder with 2 folders. The maps folder and the server folder. Three guesses whats in what.
-MapPath: '../../../Maps/'
-# Turn this to false if you want to define the entire map path in 'MapPath'
-# Only recommended if you know the map path. Aka linuix installations and so on.
-# Not recommended if you have to google 'What is a map path and how do I find it'
-# So instead of the default mappath. you could use '/Minecraft/Maps/'
-MapPathStartsPluginFolder: true
 
 # What command to stop the server?
 StopServerCommand: stop
