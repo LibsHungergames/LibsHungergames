@@ -75,12 +75,13 @@ public class MapLoader {
         TranslationManager tm = HungergamesApi.getTranslationManager();
         System.out.print(String.format(tm.getLoggerNowAttemptingToLoadAMap(), mapDir.toString()));
         List<File> maps = new ArrayList<File>();
-        if (dest.exists()) {
-            for (File file : dest.listFiles())
+        if (mapDir.exists()) {
+            for (File file : mapDir.listFiles()) {
                 if (file.isDirectory()) {
                     if (new File(file.toString() + "/level.dat").exists())
                         maps.add(file);
                 }
+            }
         }
         if (maps.size() > 0) {
             Collections.shuffle(maps, new Random());

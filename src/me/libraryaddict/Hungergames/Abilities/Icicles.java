@@ -37,13 +37,13 @@ public class Icicles extends AbilityListener {
             Player p = (Player) event.getDamager();
             Player victim = (Player) event.getEntity();
             if (hasAbility(p)) {
-                if (!cooldown.containsKey(p) || cooldown.get(p) <= HungergamesApi.getHungergames().currentTime) {
+                if (!cooldown.containsKey(p) || cooldown.get(p) <= hg.currentTime) {
                     if (!frozen.containsKey(victim)) {
                         victim.sendMessage(crackString);
                         p.sendMessage(crackString);
                         victim.getWorld().playEffect(victim.getEyeLocation(), Effect.STEP_SOUND, 20);
                         frozen.put(victim, hg.currentTime + frozenTime);
-                        cooldown.put(p, HungergamesApi.getHungergames().currentTime + cooldownTime);
+                        cooldown.put(p, hg.currentTime + cooldownTime);
                     }
                 }
             }
