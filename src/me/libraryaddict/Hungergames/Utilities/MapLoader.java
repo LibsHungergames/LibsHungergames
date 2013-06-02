@@ -2,10 +2,12 @@ package me.libraryaddict.Hungergames.Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,13 +38,19 @@ public class MapLoader {
                 config.set("UseMaps", false);
                 config.save(mapConfig);
             }
+            if (!config.contains("DeleteMap")) {
+                config.set("DeleteMap", true);
+                config.save(mapConfig);
+            }
             String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
             if (!worldFolder.exists())
                 worldFolder.mkdirs();
-            if (config.getBoolean("UseMaps")) {
+            if (config.getBoolean("DeleteMap") || config.getBoolean("UseMaps")) {
                 clear(worldFolder);
+            }
+            if (config.getBoolean("UseMaps")) {
                 File mapFolder = new File(config.getString("MapPath"));
                 loadMap(mapFolder, worldFolder, config);
             }
@@ -61,11 +69,11 @@ public class MapLoader {
                 return;
             }
             YamlConfiguration config = YamlConfiguration.loadConfiguration(worldConfig);
-            System.out.print(tm.getLoggerMapConfigLoaded());
             if (config.contains("BorderSize")) {
                 configManager.setBorderSize(config.getInt("BorderSize"));
                 System.out.print(String.format(tm.getLoggerMapConfigChangedBorderSize(), config.getInt("BorderSize")));
             }
+            System.out.print(tm.getLoggerMapConfigLoaded());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -86,7 +94,8 @@ public class MapLoader {
         if (maps.size() > 0) {
             Collections.shuffle(maps, new Random());
             File toLoad = maps.get(0);
-            copy(toLoad, dest);
+            for (File f : toLoad.listFiles())
+                copy(f, dest);
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerSucessfullyLoadedMap(),
                     toLoad.getName()));
             loadMapConfiguration(new File(dest.toString() + "/config.yml"));
@@ -94,16 +103,17 @@ public class MapLoader {
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), mapDir.toString()));
     }
 
-    public static void copyFile(File source, File destination) throws IOException {
-        if (source.getName().equalsIgnoreCase("uid.dat"))
-            return;
+    private static void copyFile(File source, File destination) throws IOException {
+        destination.mkdirs();
         if (destination.isDirectory())
             destination = new File(destination, source.getName());
+        if (source.getName().equalsIgnoreCase("uid.dat"))
+            return;
         FileInputStream input = new FileInputStream(source);
         copyFile(input, destination);
     }
 
-    public static void copyFile(InputStream input, File destination) throws IOException {
+    private static void copyFile(InputStream input, File destination) throws IOException {
         OutputStream output = null;
         output = new FileOutputStream(destination);
         byte[] buffer = new byte[1024];
@@ -116,7 +126,7 @@ public class MapLoader {
         output.close();
     }
 
-    public static void copy(File from, File dest) {
+    private static void copy(File from, File dest) {
         if (from.isFile()) {
             try {
                 copyFile(from, dest);
@@ -125,15 +135,17 @@ public class MapLoader {
             }
         } else
             for (File f : from.listFiles())
-                copy(f, dest);
+                copy(f, new File(dest.toString(), from.getName()));
     }
 
-    public static void clear(File file) {
+    private static void clear(File file) {
         if (file.isFile())
             file.delete();
-        else
+        else {
             for (File f : file.listFiles())
                 clear(f);
+            file.delete();
+        }
     }
 
 }

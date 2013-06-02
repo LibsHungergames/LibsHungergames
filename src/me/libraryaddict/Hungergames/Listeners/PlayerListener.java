@@ -272,7 +272,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         if (kits.getKitByPlayer(event.getPlayer()) == null)
             kits.setKit(event.getPlayer(), kits.defaultKitName);
