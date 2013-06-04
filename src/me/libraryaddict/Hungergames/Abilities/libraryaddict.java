@@ -14,6 +14,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class libraryaddict extends AbilityListener {
     public String bookName = "Explosive Reading";
     public int grenadeTimer = 3;
+    public float explosionSize = 1.5F;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -35,7 +36,7 @@ public class libraryaddict extends AbilityListener {
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                 public void run() {
-                    explodingBook.getWorld().createExplosion(explodingBook.getLocation(), 1.5F);
+                    explodingBook.getWorld().createExplosion(explodingBook.getLocation(), explosionSize);
                     explodingBook.remove();
                 }
             }, 20 * grenadeTimer);
