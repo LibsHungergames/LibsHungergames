@@ -368,6 +368,9 @@ public class PlayerListener implements Listener {
             kit.removePlayer(event.getPlayer());
         pm.removeKilled(gamer);
         pm.unregisterGamer(gamer);
+        if (hg.currentTime < 0)
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
+                    Bukkit.getOnlinePlayers().length);
     }
 
     @EventHandler

@@ -67,13 +67,14 @@ public class GeneralListener implements Listener {
             event.setCancelled(true);
         if (hg.currentTime < 0) {
             if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
-                    && event.getSpawnReason() == SpawnReason.CHUNK_GEN) {
+                    && (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL)) {
                 event.setCancelled(true);
                 if (new Random().nextInt(config.getMobSpawnChance()) == 0)
                     hg.entitys.put(event.getLocation().clone(), event.getEntityType());
             }
         } else if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
-                && event.getSpawnReason() == SpawnReason.CHUNK_GEN && new Random().nextInt(config.getMobSpawnChance()) != 0)
+                && (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL)
+                && new Random().nextInt(config.getMobSpawnChance()) != 0)
             event.setCancelled(true);
     }
 
