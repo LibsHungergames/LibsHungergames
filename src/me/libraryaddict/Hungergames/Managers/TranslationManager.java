@@ -145,7 +145,7 @@ public class TranslationManager {
     private String kickDeathMessage = "%s";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
-    private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Plugin provided by libraryaddict";
+    private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Thanks for playing!\nServer restarting!";
     private String kickNobodyWonMessage = "Nobody won..\n\nThat could of been you!";
     private String kickSpectatorsDisabled = "Spectators have been disabled!";
     private String killMessageFellToDeath = "%s fell to their death";
@@ -190,7 +190,7 @@ public class TranslationManager {
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
-    private String loggerMapConfigLoaded= "[Hungergames] Successfully loaded map config";
+    private String loggerMapConfigLoaded = "[Hungergames] Successfully loaded map config";
     private String loggerMapConfigNotFound = "[Hungergames] Map config not found";
     private String loggerMapConfigNowLoading = "[Hungergames] Now loading map config";
     private String loggerMetricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
