@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
@@ -26,7 +27,7 @@ public class Kit {
     private ItemStack[] items;
     private String kitName;
     private String permission;
-    private List<Player> players = new ArrayList<Player>();
+    private HashSet<Player> players = new HashSet<Player>();
     private int price = -1;
 
     public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
@@ -79,7 +80,7 @@ public class Kit {
         return permission;
     }
 
-    public List<Player> getPlayers() {
+    public HashSet<Player> getPlayers() {
         return players;
     }
 

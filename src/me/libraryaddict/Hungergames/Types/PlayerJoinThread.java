@@ -74,6 +74,8 @@ public class PlayerJoinThread extends Thread {
             if (pm.loadGamer.peek() != null) {
                 Gamer gamer = pm.loadGamer.poll();
                 try {
+                    if (con.isClosed())
+                        mySqlConnect();
                     Statement stmt = con.createStatement();
                     ResultSet r = stmt.executeQuery("SELECT * FROM `HGKits` WHERE `Name` = '" + gamer.getName() + "' ;");
                     r.beforeFirst();
