@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Listeners;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
@@ -11,6 +12,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -23,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
 public class GeneralListener implements Listener {
@@ -37,6 +40,16 @@ public class GeneralListener implements Listener {
         if (hg.currentTime < 0 && config.isFireSpreadDisabled()) {
             event.setCancelled(true);
             return;
+        }
+    }
+
+    @EventHandler
+    public void onPotion(PotionSplashEvent event) {
+        Iterator<LivingEntity> itel = event.getAffectedEntities().iterator();
+        while (itel.hasNext()) {
+            LivingEntity e = itel.next();
+            if (e instanceof Player && !pm.getGamer(e).isAlive())
+                itel.remove();
         }
     }
 
