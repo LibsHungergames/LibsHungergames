@@ -38,8 +38,8 @@ public class Gamer {
 
     public void setAlive(boolean alive) {
         String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
-        if (alive && !isAlive()) {
-            setSpectating(!alive);
+        if (alive) {
+            setSpectating(false);
             setHuman();
             show();
             player.setFallDistance(0F);
@@ -47,8 +47,8 @@ public class Gamer {
             updateSelfToOthers();
             if (player.getDisplayName().equals(name))
                 player.setDisplayName(player.getName());
-        } else if (!alive && isAlive()) {
-            setSpectating(!alive);
+        } else if (!alive) {
+            setSpectating(true);
             setGhost();
             hide();
             player.setAllowFlight(true);
