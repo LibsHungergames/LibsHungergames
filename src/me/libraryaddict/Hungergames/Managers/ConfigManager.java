@@ -486,7 +486,7 @@ public class ConfigManager {
         kickOnDeath = hg.getConfig().getBoolean("KickOnDeath");
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
         mushroomStewRestores = hg.getConfig().getInt("MushroomStewRestores", 5);
-        kitSelector = hg.getConfig().getBoolean("UseKitSelector", true);
+        kitSelector = hg.getConfig().getBoolean("EnableKitSelector", true);
         feastTnt = hg.getConfig().getBoolean("FeastTnt", true);
         feastGround = parseItem(hg.getConfig().getString("FeastGround"));
         feast = parseItem(hg.getConfig().getString("Feast"));
