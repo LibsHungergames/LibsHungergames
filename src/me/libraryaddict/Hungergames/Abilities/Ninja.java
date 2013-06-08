@@ -14,10 +14,10 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class Ninja extends AbilityListener implements Disableable {
     public String[] potionEffectsDay = new String[] { "SPEED 12000 1" };
     public String[] potionEffectsNight = new String[] { "JUMP 12000 1" };
+    private int scheduler = -1;
 
-    @EventHandler
-    public void gameStartEvent(GameStartEvent event) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
+    private Runnable getRunnable() {
+        return new Runnable() {
             public void run() {
                 for (Player p : getMyPlayers()) {
                     if (HungergamesApi.getHungergames().world.getTime() > 0
@@ -38,7 +38,18 @@ public class Ninja extends AbilityListener implements Disableable {
                     }
                 }
             }
-        }, 0, 12000);
+        };
     }
 
+    public void registerPlayer(Player player) {
+        super.registerPlayer(player);
+        if (scheduler < 0 && HungergamesApi.getHungergames().currentTime >= 0)
+            scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(), 0,
+                    12000 - (HungergamesApi.getHungergames().world.getTime() % 12000));
+    }
+
+    @EventHandler
+    public void gameStartEvent(GameStartEvent event) {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(), 0, 12000);
+    }
 }

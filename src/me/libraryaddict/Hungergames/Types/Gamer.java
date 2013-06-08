@@ -44,7 +44,14 @@ public class Gamer {
             show();
             player.setFallDistance(0F);
             player.setAllowFlight(false);
+            player.setFireTicks(0);
+            setRiding(false);
+            player.leaveVehicle();
+            player.eject();
             updateSelfToOthers();
+            if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() > 12) {
+                player.setPlayerListName(player.getPlayerListName().substring(0, 12));
+            }
             if (player.getDisplayName().equals(name))
                 player.setDisplayName(player.getName());
         } else if (!alive) {

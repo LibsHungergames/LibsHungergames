@@ -327,18 +327,10 @@ public class Hungergames extends JavaPlugin {
             Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
                     returnTime(config.getInvincibilityTime())));
         for (Gamer gamer : pm.getGamers()) {
-            gamer.setRiding(false);
             gamer.clearInventory();
             gamer.seeInvis(false);
-            gamer.setSpectating(false);
-            Player p = gamer.getPlayer();
-            p.setAllowFlight(false);
-            p.setFireTicks(0);
-            p.setFallDistance(0);
+            gamer.setAlive(true);
             pm.sendToSpawn(gamer);
-            if (config.isShortenedNames() && p.getPlayerListName().length() > 12) {
-                p.setPlayerListName(p.getPlayerListName().substring(0, 12));
-            }
         }
         for (Gamer gamer : pm.getGamers())
             gamer.updateSelfToOthers();

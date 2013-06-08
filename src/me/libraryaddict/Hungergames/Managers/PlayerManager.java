@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
@@ -86,6 +87,8 @@ public class PlayerManager {
         for (Gamer g : gamers)
             if (g.getPlayer() == entity)
                 return g;
+        if (entity.getType() == EntityType.PLAYER)
+            System.out.print("Unable to find the gamer " + ((Player) entity).getName() + " even though he is a player.. Returning null. Expect a error. Please show to the plugin author");
         return null;
     }
 

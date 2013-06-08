@@ -47,10 +47,8 @@ public abstract class AbilityListener implements Listener {
     }
 
     /**
-     * 
-     * Is this items displayname set by the plugin and matches this. Aka. It
-     * checks the displayname has a chatcolor in it. Unsettable by the client.
-     * Then it compares the stripped colors to the string fed.
+     * Is this items displayname set by the plugin and matches this. Aka. It checks the displayname has a chatcolor in it.
+     * Unsettable by the client. Then it compares the stripped colors to the string fed.
      */
     public boolean isSpecialItem(ItemStack item, String displayName) {
         if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
