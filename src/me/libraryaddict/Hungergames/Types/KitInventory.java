@@ -41,8 +41,17 @@ public class KitInventory extends PageInventory {
                 } else if (item.equals(getForwardsPage())) {
                     setPage(currentPage + 1);
                 } else {
-                    Kit kit = HungergamesApi.getKitManager().getKitByName(
-                            ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                    String name = item.getItemMeta().getDisplayName();
+                    Kit kit = null;
+                    KitManager kits = HungergamesApi.getKitManager();
+                    for (Kit k : kits.getKits()) {
+                        String kitName = ChatColor.WHITE + k.getName()
+                                + (kits.ownsKit(user, k) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit());
+                        if (kitName.equals(name)) {
+                            kit = k;
+                            break;
+                        }
+                    }
                     if (kit != null)
                         Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());
                 }

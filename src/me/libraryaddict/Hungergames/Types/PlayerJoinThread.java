@@ -5,6 +5,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import org.bukkit.Bukkit;
+
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
@@ -72,7 +75,7 @@ public class PlayerJoinThread extends Thread {
         PlayerManager pm = HungergamesApi.getPlayerManager();
         while (true) {
             if (pm.loadGamer.peek() != null) {
-                Gamer gamer = pm.loadGamer.poll();
+                final Gamer gamer = pm.loadGamer.poll();
                 try {
                     if (con.isClosed())
                         mySqlConnect();
@@ -82,6 +85,12 @@ public class PlayerJoinThread extends Thread {
                     while (r.next()) {
                         kits.addKitToPlayer(gamer.getPlayer(), kits.getKitByName(r.getString("KitName")));
                     }
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                        public void run() {
+                            if (HungergamesApi.getConfigManager().useKitSelector())
+                                gamer.getPlayer().getInventory().addItem(HungergamesApi.getInventoryManager().getKitSelector());
+                        }
+                    });
                     r.close();
                     stmt.close();
                 } catch (Exception ex) {

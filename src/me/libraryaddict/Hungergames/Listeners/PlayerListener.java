@@ -296,12 +296,12 @@ public class PlayerListener implements Listener {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length);
             gamer.clearInventory();
-            if (config.useKitSelector())
+            if (config.useKitSelector() && !config.isMySqlEnabled())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                     public void run() {
                         gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
                     }
-                }, 0L);
+                });
         }
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
