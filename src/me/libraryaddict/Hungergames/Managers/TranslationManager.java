@@ -127,6 +127,8 @@ public class TranslationManager {
     private transient YamlConfiguration config;
     private transient File configFile;
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
+    private String inventoryDontOwnKit = ChatColor.WHITE + " - " + ChatColor.DARK_RED + "Locked";
+    private String inventoryOwnKit = ChatColor.WHITE + " - " + ChatColor.DARK_GREEN + "Unlocked";
     private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "back a page" };
     private String itemKitSelectorBackName = ChatColor.RED + "Back";
@@ -728,6 +730,14 @@ public class TranslationManager {
 
     public String getGameStartedMotd() {
         return gameStartedMotd;
+    }
+
+    public String getInventoryDontOwnKit() {
+        return inventoryDontOwnKit;
+    }
+
+    public String getInventoryOwnKit() {
+        return inventoryOwnKit;
     }
 
     public String[] getItemKitSelectorBackDescription() {

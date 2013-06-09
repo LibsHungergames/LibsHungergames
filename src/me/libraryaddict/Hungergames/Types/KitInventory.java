@@ -54,11 +54,16 @@ public class KitInventory extends PageInventory {
         KitManager kits = HungergamesApi.getKitManager();
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ArrayList<Kit> allKits = kits.getKits();
+        List<Kit> hisKits = kits.getPlayersKits(user);
+        if (hisKits == null)
+            hisKits = new ArrayList<Kit>();
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
             Kit kit = allKits.get(currentKit);
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.WHITE + kit.getName());
+            boolean ownKit = kit.isFree() || hisKits.contains(kit);
+            meta.setDisplayName(ChatColor.WHITE + kit.getName()
+                    + (ownKit ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
             meta.setLore(wrap(kit.getDescription()));
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
