@@ -40,7 +40,7 @@ public class TranslationManager {
     private String commandChunkReloadedChunks = ChatColor.RED + "Chunks reloaded!";
     private String commandCreator = ChatColor.RED + "%s created this plugin!\nDownload it at %s";
     private String commandFeastHappened = ChatColor.YELLOW + "Compass now pointing to the feast!";
-    private String commandFeastNotHappened = ChatColor.RED + "The feast has not happened yet!";
+    private String commandFeastNotHappened = ChatColor.RED + "The feast has not happened yet!\nPointing compass to spawn";
     private String commandForceFeastGenerated = ChatColor.RED + "A feast has been spawned at (%s, %s, %s)";
     private String commandForceFeastNoPermission = ChatColor.RED + "You do not have permission to use this command";
     private String commandForceFeastNotANumber = ChatColor.RED + "'%s' isn't a number!";

@@ -17,8 +17,10 @@ public class Feast implements CommandExecutor {
         if (hg.feastLoc.getY() > 0) {
             ((Player) sender).setCompassTarget(hg.feastLoc);
             sender.sendMessage(cm.getCommandFeastHappened());
-        } else
+        } else {
             sender.sendMessage(cm.getCommandFeastNotHappened());
+            ((Player) sender).setCompassTarget(hg.world.getSpawnLocation());
+        }
         return true;
     }
 }
