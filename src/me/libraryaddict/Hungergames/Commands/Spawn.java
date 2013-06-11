@@ -11,10 +11,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Spawn implements CommandExecutor {
+    public String[] aliases = new String[] { "hgspawn" };
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "If spectating you can teleport back to spawn";
     private PlayerManager pm = HungergamesApi.getPlayerManager();
-    public String[] aliases = new String[] { "hgspawn" };
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Gamer gamer = pm.getGamer(sender.getName());

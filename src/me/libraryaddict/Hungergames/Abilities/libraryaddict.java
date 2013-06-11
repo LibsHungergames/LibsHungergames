@@ -13,8 +13,8 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class libraryaddict extends AbilityListener {
     public String bookName = "Explosive Reading";
-    public int grenadeTimer = 3;
     public float explosionSize = 1.5F;
+    public int grenadeTimer = 3;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

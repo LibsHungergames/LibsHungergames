@@ -24,6 +24,7 @@ public class ConfigManager {
     private int chestLayers;
     private List<String> commandsToRunBeforeShutdown;
     private String currentVersion;
+    private boolean disableMetrics;
     private boolean displayMessages;
     private boolean displayScoreboards;
     private ItemStack feast;
@@ -64,6 +65,7 @@ public class ConfigManager {
     private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
+
     private int z;
 
     public ConfigManager() {
@@ -103,6 +105,10 @@ public class ConfigManager {
     }
 
     /**
+     * Check for a update
+     */
+
+    /**
      * @param Currenttime
      * @return Should it advertise about invincibility?
      */
@@ -115,10 +121,6 @@ public class ConfigManager {
             return true;
         return invincibilityBroadcastTimes.contains(time);
     }
-
-    /**
-     * Check for a update
-     */
 
     /**
      * Makes the update checker check for a update
@@ -380,6 +382,10 @@ public class ConfigManager {
         return kitSelectorDynamicSize;
     }
 
+    public boolean isMetricsDisabled() {
+        return disableMetrics;
+    }
+
     /**
      * @return Is mushroom stew enabled?
      */
@@ -413,12 +419,6 @@ public class ConfigManager {
      */
     public boolean isSpectatorsEnabled() {
         return spectators;
-    }
-
-    private boolean disableMetrics;
-
-    public boolean isMetricsDisabled() {
-        return disableMetrics;
     }
 
     /**

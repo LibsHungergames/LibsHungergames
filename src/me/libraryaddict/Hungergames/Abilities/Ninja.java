@@ -16,6 +16,11 @@ public class Ninja extends AbilityListener implements Disableable {
     public String[] potionEffectsNight = new String[] { "JUMP 12000 1" };
     private int scheduler = -1;
 
+    @EventHandler
+    public void gameStartEvent(GameStartEvent event) {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(), 0, 12000);
+    }
+
     private Runnable getRunnable() {
         return new Runnable() {
             public void run() {
@@ -46,10 +51,5 @@ public class Ninja extends AbilityListener implements Disableable {
         if (scheduler < 0 && HungergamesApi.getHungergames().currentTime >= 0)
             scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(), 0,
                     12000 - (HungergamesApi.getHungergames().world.getTime() % 12000));
-    }
-
-    @EventHandler
-    public void gameStartEvent(GameStartEvent event) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(), 0, 12000);
     }
 }

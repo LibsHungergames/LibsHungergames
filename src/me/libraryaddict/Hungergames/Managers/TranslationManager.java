@@ -41,7 +41,6 @@ public class TranslationManager {
     private String commandCreator = ChatColor.RED + "%s created this plugin!\nDownload it at %s";
     private String commandFeastHappened = ChatColor.YELLOW + "Compass now pointing to the feast!";
     private String commandFeastNotHappened = ChatColor.RED + "The feast has not happened yet!";
-    private String commandSpawnPointingToSpawn = ChatColor.YELLOW + "Compass is now pointing to spawn";
     private String commandForceFeastGenerated = ChatColor.RED + "A feast has been spawned at (%s, %s, %s)";
     private String commandForceFeastNoPermission = ChatColor.RED + "You do not have permission to use this command";
     private String commandForceFeastNotANumber = ChatColor.RED + "'%s' isn't a number!";
@@ -117,6 +116,7 @@ public class TranslationManager {
     private String commandRideNameOfRideall = "rideall";
     private String commandRideRideAll = ChatColor.GREEN + "Giddy up horsie!";
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
+    private String commandSpawnPointingToSpawn = ChatColor.YELLOW + "Compass is now pointing to spawn";
     private String commandSuicideAssistedDeathMessage = "%s was helped on the path to suicide";
     private String commandSuicideDoesntExist = ChatColor.RED + "He doesn't exist";
     private String commandSuicideKillMessage = "%s commited suicide.";
@@ -694,6 +694,10 @@ public class TranslationManager {
 
     public String getCommandRideToggle() {
         return commandRideToggle;
+    }
+
+    public String getCommandSpawnPointingToSpawn() {
+        return commandSpawnPointingToSpawn;
     }
 
     public String getCommandSuicideAssistedDeathMessage() {
@@ -1337,9 +1341,5 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getCommandSpawnPointingToSpawn() {
-        return commandSpawnPointingToSpawn;
     }
 }

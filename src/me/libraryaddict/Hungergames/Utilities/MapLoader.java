@@ -21,6 +21,51 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
 
+    private static void clear(File file) {
+        if (file.isFile())
+            file.delete();
+        else {
+            for (File f : file.listFiles())
+                clear(f);
+            file.delete();
+        }
+    }
+
+    private static void copy(File from, File dest) {
+        if (from.isFile()) {
+            try {
+                copyFile(from, dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
+            for (File f : from.listFiles())
+                copy(f, new File(dest.toString(), from.getName()));
+    }
+
+    private static void copyFile(File source, File destination) throws IOException {
+        destination.mkdirs();
+        if (destination.isDirectory())
+            destination = new File(destination, source.getName());
+        if (source.getName().equalsIgnoreCase("uid.dat"))
+            return;
+        FileInputStream input = new FileInputStream(source);
+        copyFile(input, destination);
+    }
+
+    private static void copyFile(InputStream input, File destination) throws IOException {
+        OutputStream output = null;
+        output = new FileOutputStream(destination);
+        byte[] buffer = new byte[1024];
+        int bytesRead = input.read(buffer);
+        while (bytesRead >= 0) {
+            output.write(buffer, 0, bytesRead);
+            bytesRead = input.read(buffer);
+        }
+        input.close();
+        output.close();
+    }
+
     public static void loadMap() {
         Hungergames hg = HungergamesApi.getHungergames();
         File mapConfig = new File(hg.getDataFolder() + "/map.yml");
@@ -57,26 +102,6 @@ public class MapLoader {
         }
     }
 
-    private static void loadMapConfiguration(File worldConfig) {
-        ConfigManager configManager = HungergamesApi.getConfigManager();
-        TranslationManager tm = HungergamesApi.getTranslationManager();
-        try {
-            System.out.print(tm.getLoggerMapConfigNowLoading());
-            if (!worldConfig.exists()) {
-                System.out.print(tm.getLoggerMapConfigNotFound());
-                return;
-            }
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(worldConfig);
-            if (config.contains("BorderSize")) {
-                configManager.setBorderSize(config.getInt("BorderSize"));
-                System.out.print(String.format(tm.getLoggerMapConfigChangedBorderSize(), config.getInt("BorderSize")));
-            }
-            System.out.print(tm.getLoggerMapConfigLoaded());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private static void loadMap(File mapDir, File dest, YamlConfiguration config) {
         TranslationManager tm = HungergamesApi.getTranslationManager();
         System.out.print(String.format(tm.getLoggerNowAttemptingToLoadAMap(), mapDir.toString()));
@@ -101,48 +126,23 @@ public class MapLoader {
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), mapDir.toString()));
     }
 
-    private static void copyFile(File source, File destination) throws IOException {
-        destination.mkdirs();
-        if (destination.isDirectory())
-            destination = new File(destination, source.getName());
-        if (source.getName().equalsIgnoreCase("uid.dat"))
-            return;
-        FileInputStream input = new FileInputStream(source);
-        copyFile(input, destination);
-    }
-
-    private static void copyFile(InputStream input, File destination) throws IOException {
-        OutputStream output = null;
-        output = new FileOutputStream(destination);
-        byte[] buffer = new byte[1024];
-        int bytesRead = input.read(buffer);
-        while (bytesRead >= 0) {
-            output.write(buffer, 0, bytesRead);
-            bytesRead = input.read(buffer);
-        }
-        input.close();
-        output.close();
-    }
-
-    private static void copy(File from, File dest) {
-        if (from.isFile()) {
-            try {
-                copyFile(from, dest);
-            } catch (IOException e) {
-                e.printStackTrace();
+    private static void loadMapConfiguration(File worldConfig) {
+        ConfigManager configManager = HungergamesApi.getConfigManager();
+        TranslationManager tm = HungergamesApi.getTranslationManager();
+        try {
+            System.out.print(tm.getLoggerMapConfigNowLoading());
+            if (!worldConfig.exists()) {
+                System.out.print(tm.getLoggerMapConfigNotFound());
+                return;
             }
-        } else
-            for (File f : from.listFiles())
-                copy(f, new File(dest.toString(), from.getName()));
-    }
-
-    private static void clear(File file) {
-        if (file.isFile())
-            file.delete();
-        else {
-            for (File f : file.listFiles())
-                clear(f);
-            file.delete();
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(worldConfig);
+            if (config.contains("BorderSize")) {
+                configManager.setBorderSize(config.getInt("BorderSize"));
+                System.out.print(String.format(tm.getLoggerMapConfigChangedBorderSize(), config.getInt("BorderSize")));
+            }
+            System.out.print(tm.getLoggerMapConfigLoaded());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

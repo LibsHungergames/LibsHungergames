@@ -6,6 +6,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.ClassGetter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,7 +29,6 @@ public class AbilityManager {
     }
 
     /**
-     * 
      * @param Name
      *            of the ability
      * @param Ability
@@ -50,7 +50,6 @@ public class AbilityManager {
     }
 
     /**
-     * 
      * @param Your
      *            plugin
      * @param Package
@@ -58,6 +57,7 @@ public class AbilityManager {
      */
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
+        YamlConfiguration config = abilityConfigManager.load(plugin);
         System.out.print(String.format(cm.getLoggerLoadAbilitiesInPackage(), plugin.getName(), packageName));
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
@@ -65,9 +65,9 @@ public class AbilityManager {
                     // System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(),
                     // abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
-                    final boolean modified = abilityListener
-                            .load(abilityConfigManager.getConfigSection(abilityClass.getSimpleName()),
-                                    abilityConfigManager.isNewFile());
+                    final boolean modified = abilityListener.load(
+                            abilityConfigManager.getConfigSection(config, abilityClass.getSimpleName()),
+                            abilityConfigManager.isNewFile());
                     if (modified)
                         saveConfig = true;
                     if (abilityListener instanceof CommandExecutor && abilityListener.getCommand() != null) {
@@ -81,7 +81,7 @@ public class AbilityManager {
             }
         }
         if (saveConfig)
-            abilityConfigManager.save();
+            abilityConfigManager.save(plugin, config);
     }
 
     /**

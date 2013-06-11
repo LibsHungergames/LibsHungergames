@@ -106,14 +106,6 @@ public class PlayerManager {
         return game;
     }
 
-    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
-        if (!hg.doSeconds || hg.currentTime < 0)
-            return;
-        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), deathMsg, dropLoc, drops);
-        Bukkit.getPluginManager().callEvent(event);
-        manageDeath(event);
-    }
-
     public Gamer getKiller(Gamer victim) {
         Damage dmg = lastDamager.get(victim);
         Gamer backup = null;
@@ -123,14 +115,12 @@ public class PlayerManager {
         return backup;
     }
 
-    public void removeKilled(Gamer gamer) {
-        lastDamager.remove(gamer);
-        Iterator<Gamer> itel = lastDamager.keySet().iterator();
-        while (itel.hasNext()) {
-            Gamer g = itel.next();
-            if (lastDamager.get(g).getDamager() == gamer)
-                itel.remove();
-        }
+    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
+        if (!hg.doSeconds || hg.currentTime < 0)
+            return;
+        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), deathMsg, dropLoc, drops);
+        Bukkit.getPluginManager().callEvent(event);
+        manageDeath(event);
     }
 
     public void manageDeath(PlayerKilledEvent event) {
@@ -203,6 +193,16 @@ public class PlayerManager {
         gamers.add(gamer);
         gamer.clearInventory();
         return gamer;
+    }
+
+    public void removeKilled(Gamer gamer) {
+        lastDamager.remove(gamer);
+        Iterator<Gamer> itel = lastDamager.keySet().iterator();
+        while (itel.hasNext()) {
+            Gamer g = itel.next();
+            if (lastDamager.get(g).getDamager() == gamer)
+                itel.remove();
+        }
     }
 
     public void sendToSpawn(Gamer gamer) {

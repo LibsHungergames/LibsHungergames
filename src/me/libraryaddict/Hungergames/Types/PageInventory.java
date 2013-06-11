@@ -87,16 +87,6 @@ public abstract class PageInventory extends ClickInventory {
         }
     }
     
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        if (event.getPlayer() == user) {
-            HandlerList.unregisterAll(this);
-            if (user.hasMetadata(getClass().getSimpleName())
-                    && user.getMetadata(getClass().getSimpleName()).get(0).value() == this)
-                user.removeMetadata(getClass().getSimpleName(), hg);
-        }
-    }
-
     //@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
@@ -111,6 +101,16 @@ public abstract class PageInventory extends ClickInventory {
                     // Do whatever
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        if (event.getPlayer() == user) {
+            HandlerList.unregisterAll(this);
+            if (user.hasMetadata(getClass().getSimpleName())
+                    && user.getMetadata(getClass().getSimpleName()).get(0).value() == this)
+                user.removeMetadata(getClass().getSimpleName(), hg);
         }
     }
 

@@ -43,16 +43,6 @@ public class GeneralListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPotion(PotionSplashEvent event) {
-        Iterator<LivingEntity> itel = event.getAffectedEntities().iterator();
-        while (itel.hasNext()) {
-            LivingEntity e = itel.next();
-            if (e instanceof Player && !pm.getGamer(e).isAlive())
-                itel.remove();
-        }
-    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -64,6 +54,16 @@ public class GeneralListener implements Listener {
             }
         } else if (entity instanceof Tameable && ((Tameable) entity).isTamed() && hg.currentTime <= config.getInvincibilityTime())
             event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPotion(PotionSplashEvent event) {
+        Iterator<LivingEntity> itel = event.getAffectedEntities().iterator();
+        while (itel.hasNext()) {
+            LivingEntity e = itel.next();
+            if (e instanceof Player && !pm.getGamer(e).isAlive())
+                itel.remove();
+        }
     }
 
     @EventHandler

@@ -36,39 +36,6 @@ public class Gamer {
     private boolean seeInvis = true;
     private boolean spectating = false;
 
-    public void setAlive(boolean alive) {
-        String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
-        if (alive) {
-            setSpectating(false);
-            setHuman();
-            show();
-            player.setFallDistance(0F);
-            player.setAllowFlight(false);
-            player.setFireTicks(0);
-            setRiding(false);
-            player.leaveVehicle();
-            player.eject();
-            updateSelfToOthers();
-            if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() > 12) {
-                player.setPlayerListName(player.getPlayerListName().substring(0, 12));
-            }
-            if (player.getDisplayName().equals(name))
-                player.setDisplayName(player.getName());
-        } else if (!alive) {
-            setSpectating(true);
-            setGhost();
-            hide();
-            player.setAllowFlight(true);
-            player.setFlying(true);
-            updateSelfToOthers();
-            player.setFoodLevel(20);
-            player.setHealth(20);
-            player.setFireTicks(0);
-            if (player.getDisplayName().equals(player.getName()))
-                player.setDisplayName(name);
-        }
-    }
-
     public Gamer(Player player) {
         this.player = player;
         if (hg.currentTime >= 0) {
@@ -216,6 +183,39 @@ public class Gamer {
      */
     public void seeInvis(boolean seeInvis) {
         this.seeInvis = seeInvis;
+    }
+
+    public void setAlive(boolean alive) {
+        String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
+        if (alive) {
+            setSpectating(false);
+            setHuman();
+            show();
+            player.setFallDistance(0F);
+            player.setAllowFlight(false);
+            player.setFireTicks(0);
+            setRiding(false);
+            player.leaveVehicle();
+            player.eject();
+            updateSelfToOthers();
+            if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() > 12) {
+                player.setPlayerListName(player.getPlayerListName().substring(0, 12));
+            }
+            if (player.getDisplayName().equals(name))
+                player.setDisplayName(player.getName());
+        } else if (!alive) {
+            setSpectating(true);
+            setGhost();
+            hide();
+            player.setAllowFlight(true);
+            player.setFlying(true);
+            updateSelfToOthers();
+            player.setFoodLevel(20);
+            player.setHealth(20);
+            player.setFireTicks(0);
+            if (player.getDisplayName().equals(player.getName()))
+                player.setDisplayName(name);
+        }
     }
 
     /**

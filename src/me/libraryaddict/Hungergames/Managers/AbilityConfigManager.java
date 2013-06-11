@@ -5,6 +5,8 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,17 +15,9 @@ import java.io.IOException;
  */
 public class AbilityConfigManager {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private YamlConfiguration config;
-    private File configFile;
     private boolean newFile = false;
 
-    public AbilityConfigManager() {
-        configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "abilities.yml");
-        config = new YamlConfiguration();
-        load();
-    }
-
-    public ConfigurationSection getConfigSection(String abilityName) {
+    public ConfigurationSection getConfigSection(YamlConfiguration config, String abilityName) {
         ConfigurationSection section = config.getConfigurationSection(abilityName);
         if (section == null) {
             section = config.createSection(abilityName);
@@ -35,14 +29,18 @@ public class AbilityConfigManager {
         return newFile;
     }
 
-    public void load() {
+    public YamlConfiguration load(JavaPlugin plugin) {
         try {
-            if (!configFile.exists())
-                save();
-            else
+            YamlConfiguration config = new YamlConfiguration();
+            File configFile = new File(plugin.getDataFolder(), "abilities.yml");
+            if (!configFile.exists()) {
+                save(plugin, config);
+            } else
                 newFile = false;
             config.load(configFile);
+            return config;
         } catch (Exception e) {
+            newFile = false;
             e.printStackTrace();
             System.out
                     .print("You have setup your ability configuration wrong. Please make sure you are properly setting up every single line"
@@ -50,18 +48,22 @@ public class AbilityConfigManager {
                             + "\nFor more information, Please look up yaml configurations and how to properly do them");
 
         }
+        return null;
     }
 
-    public void save() {
+    public void save(JavaPlugin plugin, YamlConfiguration config) {
         try {
+            File configFile = new File(plugin.getDataFolder(), "abilities.yml");
             if (!configFile.exists()) {
                 Bukkit.getLogger().info(cm.getLoggerCreatingAbilitiesConfig());
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 newFile = true;
-            }
+            } else
+                newFile = false;
             config.save(configFile);
         } catch (IOException e) {
+            newFile = false;
             e.printStackTrace();
         }
     }

@@ -231,6 +231,20 @@ public class CommandManager {
         map.register(name, command);
     }
 
+    public void save() {
+        try {
+            if (!configFile.exists()) {
+                Bukkit.getLogger().info(cm.getLoggerCreatingCommandsConfig());
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+                newFile = true;
+            }
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void unregisterCommand(String name) {
         try {
             Field known = SimpleCommandMap.class.getDeclaredField("knownCommands");
@@ -244,20 +258,6 @@ public class CommandManager {
             aliases.remove(name.toLowerCase());
         } catch (Exception ex) {
 
-        }
-    }
-
-    public void save() {
-        try {
-            if (!configFile.exists()) {
-                Bukkit.getLogger().info(cm.getLoggerCreatingCommandsConfig());
-                configFile.getParentFile().mkdirs();
-                configFile.createNewFile();
-                newFile = true;
-            }
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
