@@ -110,6 +110,13 @@ Kits:
     Icon: BOOK 0 1
     Items:
       - BOOK 0 5 Unlootable 1 Name=Explosive_Reading
+  Linkage:
+    Description: 'You are given two teleporters, place them and you can teleport between them! As can other people! If your teleporter is broken, it respawns back in your inventory!'
+    Free: true
+    Price: 0
+    Icon: MOB_SPAWNER 0 1
+    Items: 
+      - MOB_SPAWNER 0 2 Unlootable 1 Name=Teleporter
   Miser:
     Description: 'Sick of people killing you and grabbing your hard earned loot? Worry no more! Revenge from the grave! They ain''t getting any of your loot! You no longer drop your items on death!'
     Free: true
