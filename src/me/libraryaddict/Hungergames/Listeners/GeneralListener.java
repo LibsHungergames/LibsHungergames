@@ -7,6 +7,7 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.entity.Animals;
@@ -95,8 +96,11 @@ public class GeneralListener implements Listener {
     public void onTarget(EntityTargetEvent event) {
         if (hg.currentTime < 0)
             event.setCancelled(true);
-        else if (event.getTarget() instanceof Player && !pm.getGamer((Player) event.getTarget()).isAlive())
-            event.setCancelled(true);
+        else if (event.getTarget() instanceof Player) {
+            Gamer gamer = pm.getGamer((Player) event.getTarget());
+            if (gamer == null || !gamer.isAlive())
+                event.setCancelled(true);
+        }
     }
 
     @EventHandler
