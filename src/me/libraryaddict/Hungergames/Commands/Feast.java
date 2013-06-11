@@ -19,7 +19,6 @@ public class Feast implements CommandExecutor {
             sender.sendMessage(cm.getCommandFeastHappened());
         } else {
             sender.sendMessage(cm.getCommandFeastNotHappened());
-            ((Player) sender).setCompassTarget(hg.world.getSpawnLocation());
         }
         return true;
     }

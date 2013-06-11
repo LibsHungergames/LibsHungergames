@@ -8,6 +8,7 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Spawn implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
@@ -19,8 +20,10 @@ public class Spawn implements CommandExecutor {
         if (!gamer.isAlive()) {
             pm.sendToSpawn(gamer);
             return true;
-        } else
-            gamer.getPlayer().sendMessage(cm.getCommandSpawnFail());
+        } else {
+            ((Player) sender).setCompassTarget(HungergamesApi.getHungergames().world.getSpawnLocation());
+            gamer.getPlayer().sendMessage(cm.getCommandSpawnPointingToSpawn());
+        }
         return true;
     }
 
