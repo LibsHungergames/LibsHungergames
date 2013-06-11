@@ -371,7 +371,7 @@ public class PlayerListener implements Listener {
         pm.unregisterGamer(gamer);
         if (hg.currentTime < 0)
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
-                    Bukkit.getOnlinePlayers().length);
+                    Bukkit.getOnlinePlayers().length - 1);
     }
 
     @EventHandler
