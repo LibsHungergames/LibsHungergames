@@ -211,15 +211,16 @@ public class PlayerListener implements Listener {
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
                     if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
+                        int restores = config.mushroomStewRestores();
                         event.setCancelled(true);
                         if (p.getHealth() < 20)
-                            if (p.getHealth() + config.mushroomStewRestores() <= 20)
-                                p.setHealth(p.getHealth() + config.mushroomStewRestores());
+                            if (p.getHealth() + restores <= 20)
+                                p.setHealth(p.getHealth() + restores);
                             else
                                 p.setHealth(20);
                         else if (p.getFoodLevel() < 20)
-                            if (p.getFoodLevel() + config.mushroomStewRestores() <= 20)
-                                p.setFoodLevel(p.getFoodLevel() + config.mushroomStewRestores());
+                            if (p.getFoodLevel() + restores <= 20)
+                                p.setFoodLevel(p.getFoodLevel() + restores);
                             else
                                 p.setFoodLevel(20);
                         if (item.getAmount() > 1) {
