@@ -14,7 +14,7 @@ import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Chunk implements CommandExecutor {
-    public String[] aliases = new String[] { "stuck" };
+    public String[] aliases = new String[] { "stuck", "refresh" };
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "This command refreshes the chunk of the command user";
     private PlayerManager pm = HungergamesApi.getPlayerManager();
