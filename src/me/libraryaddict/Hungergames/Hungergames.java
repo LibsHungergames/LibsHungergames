@@ -88,6 +88,7 @@ public class Hungergames extends JavaPlugin {
                 feastLoc = new Location(world, spawn.getX() + (new Random().nextInt(200) - 100), 0, spawn.getZ()
                         + (new Random().nextInt(200) - 100));
                 ScoreboardManager.updateStage();
+                HungergamesApi.getFeastManager();
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {

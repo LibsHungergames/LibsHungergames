@@ -1,13 +1,16 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Interfaces.ChestManager;
 import me.libraryaddict.Hungergames.Interfaces.FeastManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Types.RandomItem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,13 +19,14 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class LibsFeastManager implements FeastManager {
     // This manages the chests, The buildings
-    List<BlockFace> faces = new ArrayList<BlockFace>();
-    List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
+    private List<BlockFace> faces = new ArrayList<BlockFace>();
+    private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
 
     public LibsFeastManager() {
         faces.add(BlockFace.UP);
@@ -35,6 +39,28 @@ public class LibsFeastManager implements FeastManager {
         jungleFaces.add(BlockFace.UP);
         jungleFaces.add(BlockFace.SELF);
         jungleFaces.add(BlockFace.DOWN);
+        Hungergames hg = HungergamesApi.getHungergames();
+        File file = new File(hg.getDataFolder().toString() + "/feast.yml");
+        try {
+            if (!file.exists())
+                file.createNewFile();
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            ChestManager chest = HungergamesApi.getChestManager();
+            if (!config.contains("FeastLoot")) {
+                ArrayList<String> strings = new ArrayList<String>();
+                for (RandomItem item : chest.getRandomItems())
+                    strings.add(item.toString());
+                config.set("How To Use", "Chance in hundred, MinAmount, MaxAmount, ID or Material, Data Value, Addictional data like in kits items such as enchants");
+                config.set("FeastLoot", strings);
+                config.save(file);
+            }
+            chest.clearRandomItems();
+            for (String string : config.getStringList("FeastLoot")) {
+                chest.addRandomItem(new RandomItem(string));
+            }
+        } catch (Exception ex) {
+
+        }
     }
 
     /**
