@@ -209,7 +209,7 @@ public class PlayerListener implements Listener {
                     icon.openSpectatorInventory(p);
                     event.setCancelled(true);
                 }
-                if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew()) {
+                if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew() && !item.getItemMeta().hasDisplayName()) {
                     if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
                         int restores = config.mushroomStewRestores();
                         event.setCancelled(true);
