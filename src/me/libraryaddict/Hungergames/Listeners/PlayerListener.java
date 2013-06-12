@@ -283,7 +283,8 @@ public class PlayerListener implements Listener {
         if (cm.getShouldIMessagePlayersWhosePlugin())
             p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
-        p.setAllowFlight(true);
+        if (config.isFlyPreGame())
+            p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
             p.removePotionEffect(effect.getType());
         if (hg.currentTime >= 0) {

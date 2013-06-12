@@ -34,6 +34,7 @@ public class ConfigManager {
     private int feastSize;
     private boolean feastTnt;
     private boolean fireSpread;
+    private boolean flyPreGame;
     private boolean forceCords;
     private int gameShutdownDelay;
     private ArrayList<Integer> gameStartingBroadcastTimes = new ArrayList<Integer>();
@@ -65,7 +66,6 @@ public class ConfigManager {
     private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
-
     private int z;
 
     public ConfigManager() {
@@ -105,10 +105,6 @@ public class ConfigManager {
     }
 
     /**
-     * Check for a update
-     */
-
-    /**
      * @param Currenttime
      * @return Should it advertise about invincibility?
      */
@@ -121,6 +117,10 @@ public class ConfigManager {
             return true;
         return invincibilityBroadcastTimes.contains(time);
     }
+
+    /**
+     * Check for a update
+     */
 
     /**
      * Makes the update checker check for a update
@@ -371,6 +371,10 @@ public class ConfigManager {
         return fireSpread;
     }
 
+    public boolean isFlyPreGame() {
+        return flyPreGame;
+    }
+
     /**
      * @return Does the game kick the players on death
      */
@@ -522,6 +526,7 @@ public class ConfigManager {
         else
             commandsToRunBeforeShutdown = new ArrayList<String>();
         disableMetrics = hg.getConfig().getBoolean("DisableMetrics");
+        flyPreGame = hg.getConfig().getBoolean("FlyPregame");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();

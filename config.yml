@@ -27,6 +27,9 @@ BorderClosesIn: 0.2
 # What command to stop the server?
 StopServerCommand: stop
 
+# Shall players fly pregame?
+FlyPregame: true
+
 
 # Should the plugin use the mysql database?
 UseMySql: false
