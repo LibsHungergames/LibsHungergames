@@ -160,7 +160,7 @@ public class TranslationManager {
             "%Killer% slid a %Weapon% into %Killed% when he wasn't looking",
             "%Killed% was murdered in cold blood by %Killer% with a %Weapon%",
             "%Killed% gasped his last breath as %Killer% savagely stabbed him with a %Weapon%",
-            "%Killed% screamed in agnoy as he was bludgeoned over the head with a %Weapon% by %Killer%",
+            "%Killed% screamed in agony as he was bludgeoned over the head with a %Weapon% by %Killer%",
             "%Killed% was killed by %Killer% with a %Weapon%",
             "%Killer% gave %Killed% a helping hand into death's sweet embrace with his trusty %Weapon%",
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
