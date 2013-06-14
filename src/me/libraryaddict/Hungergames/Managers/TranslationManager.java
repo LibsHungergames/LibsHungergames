@@ -183,7 +183,7 @@ public class TranslationManager {
     private String loggerErrorWhileLoadingCommands = "[Hungergames] Error while loading the commands: %s - %s";
     private String loggerErrorWhileLoadingTranslation = "[Hungergames] Error while loading the translation: %s";
     private String loggerErrorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
-    private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungerames] Tried to register %s for the %s ability but it does not exist";
+    private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungergames] Tried to register %s for the %s ability but it does not exist";
     private String loggerFailedToChangIDisguiseConfig = "[Hungergames] Failed to change iDisguise config";
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
@@ -245,9 +245,9 @@ public class TranslationManager {
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
     private transient boolean newFile = false;
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
-    private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in";
-    private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in";
-    private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible";
+    private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
+    private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in:";
+    private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible:";
     private String scoreboardPlayersLength = ChatColor.GREEN + "Players:";
     private String scoreboardStageFeastHappened = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Finishing Up";
     private String scoreboardStageFeastHappening = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Looting Feast";
