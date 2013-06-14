@@ -86,7 +86,7 @@ public class PlayerListener implements Listener {
             Iterator<Player> players = event.getRecipients().iterator();
             while (players.hasNext()) {
                 Gamer g = pm.getGamer(players.next());
-                if (!g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
+                if (g != null && !g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
                     players.remove();
             }
         }
