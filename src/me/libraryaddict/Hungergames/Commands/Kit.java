@@ -11,6 +11,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -64,18 +65,17 @@ public class Kit implements CommandExecutor {
             if (hisKits.size() == 0)
                 sender.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), cm.getMessagePlayerShowKitsNoKits()));
             else {
-                String list = StringUtils.join(hisKits, ", ");
+                String list = StringUtils.join(hisKits, cm.getCommandKitKitsDivider());
                 sender.sendMessage(String.format(cm.getMessagePlayerShowKitsHisKits(), list));
             }
             if (otherKits.size() == 0)
                 sender.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), cm.getMessagePlayerShowKitsNoKits()));
             else {
-                String list = StringUtils.join(otherKits, ", ");
+                String list = StringUtils.join(otherKits, cm.getCommandKitKitsDivider());
                 sender.sendMessage(String.format(cm.getMessagePlayerShowKitsOtherKits(), list));
             }
             sender.sendMessage(cm.getMessagePlayerShowKitsUseKitInfo());
         }
         return true;
     }
-
 }
