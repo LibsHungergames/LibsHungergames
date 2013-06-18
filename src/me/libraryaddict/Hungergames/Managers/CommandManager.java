@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.ClassGetter;
 
@@ -37,9 +38,7 @@ public class CommandManager {
     private boolean newFile = false;
 
     public CommandManager() {
-        configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "commands.yml");
-        config = new YamlConfiguration();
-        load();
+        loadCommands(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Commands");
     }
 
     private void addCreatorAliases(List<String> list, String commandName) {
@@ -56,39 +55,55 @@ public class CommandManager {
         return section;
     }
 
-    public void load() {
+    public void load(File file) {
+        configFile = file;
         try {
-            if (!configFile.exists())
+            config = new YamlConfiguration();
+            if (!configFile.exists()) {
+                newFile = true;
                 save();
-            else
+            } else
                 newFile = false;
             config.load(configFile);
-            loadCommands(HungergamesApi.getHungergames(), "me.libraryaddict.Hungergames.Commands");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public boolean loadCommand(CommandExecutor exc, boolean save) {
-        String commandName = exc.getClass().getSimpleName();
-        try {
-            Method field = exc.getClass().getMethod("getCommand");
-            if (field != null)
-                commandName = (String) field.invoke(exc);
-        } catch (Exception ex) {
+    public boolean loadCommand(JavaPlugin owningPlugin, CommandExecutor exc, boolean save) {
+        File newFile = new File(owningPlugin.getDataFolder(), "commands.yml");
+        if (configFile == null || !configFile.equals(newFile)) {
+            load(newFile);
+        }
+        boolean modified = false;
+        if (exc instanceof AbilityListener) {
+            try {
+                Method field = exc.getClass().getMethod("getCommands");
+                if (field != null) {
+                    String[] commands = (String[]) field.invoke(exc);
+                    for (String command : commands) {
+                        boolean modify = startRegisteringCommand(exc, command);
+                        if (!modified)
+                            modified = modify;
+                    }
+                }
+            } catch (Exception ex) {
+            }
+            try {
+                Method field = exc.getClass().getMethod("getCommand");
+                String command = (String) field.invoke(exc);
+                if (command != null) {
+                    boolean modify = startRegisteringCommand(exc, command);
+                    if (!modified)
+                        modified = modify;
+                }
+            } catch (Exception ex) {
+            }
+        } else {
+            modified = startRegisteringCommand(exc, exc.getClass().getSimpleName());
         }
         // System.out.print(String.format(cm.getLoggerFoundCommandInPackage(),
         // commandName));
-        ConfigurationSection section = getConfigSection(commandName);
-        boolean modified = loadConfig(section, exc, commandName);
-        if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
-            try {
-                registerCommand(section.getString("CommandName"), exc);
-            } catch (Exception ex) {
-                System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), exc.getClass().getSimpleName(),
-                        ex.getMessage()));
-            }
-        }
         if (save && modified)
             save();
         return modified;
@@ -101,7 +116,7 @@ public class CommandManager {
             if (CommandExecutor.class.isAssignableFrom(commandClass)) {
                 try {
                     CommandExecutor commandListener = (CommandExecutor) commandClass.newInstance();
-                    final boolean modified = loadCommand(commandListener, false);
+                    final boolean modified = loadCommand(plugin, commandListener, false);
                     if (modified)
                         saveConfig = true;
                 } catch (Exception e) {
@@ -146,7 +161,7 @@ public class CommandManager {
                             }
                             modified = true;
                             if (!newFile)
-                                System.out.print(String.format(cm.getLoggerCommandsMissingValue(), field.getName()));
+                                System.out.print(String.format(cm.getLoggerCommandsMissingValue(), field.getName(), commandName));
                         } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                             List<Object> array = (List<Object>) value;
                             value = array.toArray(new String[array.size()]);
@@ -238,11 +253,26 @@ public class CommandManager {
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 newFile = true;
-            }
+            } else
+                newFile = false;
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean startRegisteringCommand(CommandExecutor exc, String commandName) {
+        ConfigurationSection section = getConfigSection(commandName);
+        boolean modified = loadConfig(section, exc, commandName);
+        if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
+            try {
+                registerCommand(section.getString("CommandName"), exc);
+            } catch (Exception ex) {
+                System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), exc.getClass().getSimpleName(),
+                        ex.getMessage()));
+            }
+        }
+        return modified;
     }
 
     private void unregisterCommand(String name) {

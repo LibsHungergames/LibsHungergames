@@ -172,7 +172,7 @@ public class TranslationManager {
     private String loggerChangedHeightLimit = "[Hungergames] Changed build height limit";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
-    private String loggerCommandsMissingValue = "[Hungergames] Restored commands missing config '%s'";
+    private String loggerCommandsMissingValue = "[Hungergames] Restored missing config '%s' for command %s";
     private String loggerCreatingAbilitiesConfig = "[Hungergames] Creating ability config file";
     private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands config file";
     private String loggerCreatingNamesConfig = "[Hungergames] Creating names config file";

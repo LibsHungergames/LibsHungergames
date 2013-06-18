@@ -28,6 +28,11 @@ public abstract class AbilityListener implements Listener {
         return null;
     }
 
+    // Does the same thing, but is for more then one command
+    public String[] getCommands() {
+        return new String[0];
+    }
+
     public List<Player> getMyPlayers() {
         List<Player> playerList = new ArrayList<Player>();
         for (String name : myPlayers) {

@@ -70,8 +70,9 @@ public class AbilityManager {
                             abilityConfigManager.isNewFile());
                     if (modified)
                         saveConfig = true;
-                    if (abilityListener instanceof CommandExecutor && abilityListener.getCommand() != null) {
-                        HungergamesApi.getCommandManager().loadCommand((CommandExecutor) abilityListener, true);
+                    if (abilityListener instanceof CommandExecutor
+                            && (abilityListener.getCommand() != null || abilityListener.getCommands() != null)) {
+                        HungergamesApi.getCommandManager().loadCommand(plugin, (CommandExecutor) abilityListener, true);
                     }
                     abilities.put(abilityClass.getSimpleName(), abilityListener);
                 } catch (Exception e) {
