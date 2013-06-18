@@ -70,9 +70,8 @@ public class KitInventory extends PageInventory {
             Kit kit = allKits.get(currentKit);
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
-            boolean ownKit = kit.isFree() || hisKits.contains(kit);
             meta.setDisplayName(ChatColor.WHITE + kit.getName()
-                    + (ownKit ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
+                    + (kits.ownsKit(user, kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
             meta.setLore(wrap(kit.getDescription()));
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
