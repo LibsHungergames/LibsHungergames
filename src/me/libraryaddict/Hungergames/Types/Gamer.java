@@ -198,8 +198,22 @@ public class Gamer {
             player.leaveVehicle();
             player.eject();
             updateSelfToOthers();
-            if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() > 12) {
-                player.setPlayerListName(player.getPlayerListName().substring(0, 12));
+            if (HungergamesApi.getConfigManager().isShortenedNames()
+                    && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
+                String listName = player.getPlayerListName().substring(0, 12);
+                try {
+                    player.setPlayerListName(listName);
+                } catch (Exception ex) {
+                    int i = 0;
+                    while (i <= 200) {
+                        try {
+                            player.setPlayerListName(listName + ChatColor.COLOR_CHAR + Character.toChars(i++)[0]);
+                        } catch (Exception e) {
+                            if (i == 200)
+                                e.printStackTrace();
+                        }
+                    }
+                }
             }
             if (player.getDisplayName().equals(name))
                 player.setDisplayName(player.getName());

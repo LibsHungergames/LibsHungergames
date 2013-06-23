@@ -69,7 +69,7 @@ public class ScoreboardManager {
         if (hg.currentTime < 0)
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
         else if (hg.currentTime < config.getInvincibilityTime())
-            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
+            setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageInvincibility());
         else if (hg.currentTime < config.getTimeFeastStarts() - (5 * 60))
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
         else if (hg.currentTime >= config.getTimeFeastStarts() - (5 * 60) && hg.currentTime < config.getTimeFeastStarts())
