@@ -8,10 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class libraryaddict extends AbilityListener {
+public class libraryaddict extends AbilityListener implements Disableable {
     public String bookName = "Explosive Reading";
     public float explosionSize = 1.5F;
     public int grenadeTimer = 3;
@@ -19,7 +20,8 @@ public class libraryaddict extends AbilityListener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (event.getAction().name().contains("RIGHT") && isSpecialItem(item, bookName) && item.getType() == Material.BOOK) {
+        if (event.getAction().name().contains("RIGHT") && isSpecialItem(item, bookName) && item.getType() == Material.BOOK
+                && hasAbility(event.getPlayer())) {
             item.setAmount(item.getAmount() - 1);
             if (item.getAmount() == 0)
                 event.getPlayer().setItemInHand(new ItemStack(0));

@@ -17,11 +17,12 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Herobrine extends AbilityListener {
+public class Herobrine extends AbilityListener implements Disableable {
     private transient HashMap<String, Long> cooldown = new HashMap<String, Long>();
     public int cooldownTime = 120;
     private transient HashMap<String, Long> damagers = new HashMap<String, Long>();

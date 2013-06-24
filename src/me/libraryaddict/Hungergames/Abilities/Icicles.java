@@ -17,10 +17,11 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Icicles extends AbilityListener {
+public class Icicles extends AbilityListener implements Disableable {
 
     private HashMap<Player, Integer> cooldown = new HashMap<Player, Integer>();
     public int cooldownTime = 20;

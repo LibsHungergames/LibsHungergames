@@ -23,12 +23,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
+import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
-public class Linkage extends AbilityListener {
+public class Linkage extends AbilityListener implements Disableable {
     private class Teleport {
         private List<Block> blocks = new ArrayList<Block>();
 
@@ -160,7 +161,7 @@ public class Linkage extends AbilityListener {
     public void onPlace(BlockPlaceEvent event) {
         Player p = event.getPlayer();
         Block block = event.getBlock();
-        if (pm.getGamer(p).isAlive()) {
+        if (pm.getGamer(p).isAlive() && hasAbility(p)) {
             if (block.getType() == Material.MOB_SPAWNER) {
                 Teleport teleport = teleporters.get(p);
                 if (teleport == null) {
