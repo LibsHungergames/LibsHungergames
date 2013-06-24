@@ -167,6 +167,7 @@ public class TranslationManager {
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
+    private String loggerAbilityAlreadyExists = "Ability already exists!";
     private String loggerAbilityMissingValue = "[Hungergames] Restored ability '%s' missing config '%s'";
     private String loggerAddAbility = "[Hungergames] Added ability: %s";
     private String loggerChangedHeightLimit = "[Hungergames] Changed build height limit";
@@ -189,6 +190,7 @@ public class TranslationManager {
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
+    private String loggerKitAlreadyExists = "[Hungergames] Error! Kit %s already exists!";
     private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
@@ -837,6 +839,10 @@ public class TranslationManager {
         return kitDescriptionDefault;
     }
 
+    public String getLoggerAbilityAlreadyExists() {
+        return loggerAbilityAlreadyExists;
+    }
+
     public String getLoggerAbilityMissingValue() {
         return loggerAbilityMissingValue;
     }
@@ -923,6 +929,10 @@ public class TranslationManager {
 
     public String getLoggerFoundCommandInPackage() {
         return loggerFoundCommandInPackage;
+    }
+
+    public String getLoggerKitAlreadyExists() {
+        return loggerKitAlreadyExists;
     }
 
     public String getLoggerLoadAbilitiesInPackage() {

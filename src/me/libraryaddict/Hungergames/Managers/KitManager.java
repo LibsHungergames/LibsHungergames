@@ -82,6 +82,10 @@ public class KitManager {
     }
 
     public void addKit(Kit newKit) {
+        if (getKitByName(newKit.getName()) != null) {
+            System.out.print(cm.getLoggerKitAlreadyExists());
+            return;
+        }
         kits.add(newKit);
         if (newKit.isFree())
             defaultKits.add(newKit);

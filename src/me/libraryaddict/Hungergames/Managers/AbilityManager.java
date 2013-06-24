@@ -62,6 +62,8 @@ public class AbilityManager {
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {
+                    if (abilities.containsKey(abilityClass.getSimpleName()))
+                        throw new Exception(cm.getLoggerAbilityAlreadyExists());
                     // System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(),
                     // abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
