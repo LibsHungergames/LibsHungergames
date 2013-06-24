@@ -138,6 +138,13 @@ Kits:
     Icon: POTION 16418 1
     Ability:
       - Pussy
+  Salamander:
+    Description: 'The salamander kit is a very nice kit for those who just cannot stop burning! You no longer must fear fire! Swim in lava! Bath in flames! However you seem to be allergic to water..'
+    Free: true
+    Price: 0
+    Icon: LAVA 0 1
+    Ability:
+      - Salamander
   Surprise:
     Description: 'The surprise kit is a randomizer, you are given a random kit when the game starts. Even if you do not own that kit. A great way to try out these kits and get a little variation!'
     Free: true
