@@ -148,7 +148,8 @@ public class TranslationManager {
     private String kickDeathMessage = "%s";
     private String kickGameFull = "The game is full!";
     private String kickGameShutdownUnexpected = "The game was shut down by a admin";
-    private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Thanks for playing!\nServer restarting!";
+    private String kickMessageWon = ChatColor.BLUE + "%s won!\n\n" + ChatColor.GREEN + "Thanks for playing!\n\n"
+            + ChatColor.DARK_GREEN + "Server restarting!";
     private String kickNobodyWonMessage = "Nobody won..\n\nThat could have been you!";
     private String kickSpectatorsDisabled = "Spectators have been disabled!";
     private String killMessageFellToDeath = "%s fell to their death";
