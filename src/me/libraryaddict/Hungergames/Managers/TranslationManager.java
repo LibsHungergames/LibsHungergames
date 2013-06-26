@@ -191,7 +191,7 @@ public class TranslationManager {
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
-    private String loggerKitAlreadyExists = "[Hungergames] Error! Kit %s already exists!";
+    private String loggerKitAlreadyExists = "[Hungergames] Error while registering kit! Kit %s already exists!";
     private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
@@ -214,8 +214,9 @@ public class TranslationManager {
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
-    private String messagePlayerHasHealthAndHunger = ChatColor.RED
-            + "%1$2s has %2$2s/20 health\n%1$2s has %3$2s/20 hunger\n%1$2s is using kit: %4$2s";
+    private String messagePlayerHasHealthAndHunger = ChatColor.DARK_RED + "%1$2s has" + ChatColor.RED + " %2$2s/20 health"
+            + ChatColor.DARK_RED + "\n%1$2s has" + ChatColor.RED + " %3$2s/20 hunger" + ChatColor.DARK_RED
+            + "\n%1$2s is using kit:" + ChatColor.RED + " %4$2s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";
     private String messagePlayerKitDesciprionPriceFree = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Free";
     private String messagePlayerKitDesciprionPriceUnbuyable = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " Unbuyable";
