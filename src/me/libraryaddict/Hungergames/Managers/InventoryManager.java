@@ -54,6 +54,7 @@ public class InventoryManager {
             ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
             kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(), HungergamesApi
                     .getTranslationManager().getItemKitSelectorDescription());
+            kitSelector.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
         }
         return kitSelector;
     }

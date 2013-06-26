@@ -328,7 +328,8 @@ public class Hungergames extends JavaPlugin {
             Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
                     returnTime(config.getInvincibilityTime())));
         for (Gamer gamer : pm.getGamers()) {
-            gamer.clearInventory();
+            if (config.useKitSelector())
+                gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
             gamer.seeInvis(false);
             gamer.setAlive(true);
             pm.sendToSpawn(gamer);

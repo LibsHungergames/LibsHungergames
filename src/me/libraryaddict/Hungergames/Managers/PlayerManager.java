@@ -188,7 +188,6 @@ public class PlayerManager {
     public Gamer registerGamer(Player p) {
         Gamer gamer = new Gamer(p);
         gamers.add(gamer);
-        gamer.clearInventory();
         return gamer;
     }
 
@@ -246,11 +245,11 @@ public class PlayerManager {
 
     public void setSpectator(final Gamer gamer) {
         gamer.setAlive(false);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                gamer.getPlayer().getInventory().addItem(new ItemStack(Material.COMPASS));
-            }
-        });
+        ItemStack compass = new ItemStack(Material.COMPASS);
+        compass.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
+        EnchantmentManager.updateEnchants(compass);
+        if (!gamer.getPlayer().getInventory().contains(compass))
+            gamer.getPlayer().getInventory().addItem(compass);
     }
 
     public Gamer unregisterGamer(Entity entity) {

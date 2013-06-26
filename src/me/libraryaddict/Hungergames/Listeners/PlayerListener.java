@@ -298,13 +298,9 @@ public class PlayerListener implements Listener {
         } else {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length);
-            gamer.clearInventory();
             if (config.useKitSelector() && !config.isMySqlEnabled())
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                    public void run() {
-                        gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
-                    }
-                });
+                if (!p.getInventory().contains(icon.getKitSelector()))
+                    gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
         }
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
@@ -341,8 +337,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPickup(PlayerDropItemEvent event) {
-        if (!pm.getGamer(event.getPlayer()).canInteract()
-                || (event.getItemDrop().getItemStack().containsEnchantment(EnchantmentManager.UNDROPPABLE)))
+        if (event.getItemDrop().getItemStack().containsEnchantment(EnchantmentManager.UNDROPPABLE))
             event.setCancelled(true);
     }
 
