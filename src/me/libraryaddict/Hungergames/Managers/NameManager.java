@@ -76,6 +76,8 @@ public class NameManager {
                 config.set(Enchantment.PROTECTION_EXPLOSIONS.getName(), "Blast Protection");
                 config.set(Enchantment.PROTECTION_PROJECTILE.getName(), "Projectile Protection");
                 config.set(Enchantment.PROTECTION_FIRE.getName(), "Fire Protection");
+                config.set(EnchantmentManager.UNLOOTABLE.getName(), "Unlootable");
+                config.set(EnchantmentManager.UNDROPPABLE.getName(), "Undroppable");
                 for (EntityType type : EntityType.values())
                     config.set(type.name(), toReadable(type.name()));
             }

@@ -4,7 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.libraryaddict.Hungergames.Enchants.Unlootable;
+import me.libraryaddict.Hungergames.Enchants.*;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
@@ -20,9 +21,11 @@ public class EnchantmentManager {
     private static final String[] RCODE = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 
     public static Enchantment UNLOOTABLE;
+    public static Enchantment UNDROPPABLE;
 
     static {
         UNLOOTABLE = new Unlootable(getId());
+        UNDROPPABLE = new Undroppable(getId());
         try {
             Field field = Enchantment.class.getDeclaredField("acceptingNew");
             field.setAccessible(true);
@@ -39,6 +42,8 @@ public class EnchantmentManager {
         if (Enchantment.getById(UNLOOTABLE.getId()) == null) {
             Enchantment.registerEnchantment(UNLOOTABLE);
             customEnchants.add(UNLOOTABLE.getId());
+            Enchantment.registerEnchantment(UNDROPPABLE);
+            customEnchants.add(UNDROPPABLE.getId());
         }
     }
 
@@ -75,15 +80,17 @@ public class EnchantmentManager {
 
     public static ItemStack updateEnchants(ItemStack item) {
         ArrayList<String> enchants = new ArrayList<String>();
+        NameManager nm = HungergamesApi.getNameManager();
         for (Enchantment ench : item.getEnchantments().keySet()) {
             if (!isNatural(ench)) {
-                if (!ench.getName().contains("%no%"))
-                    enchants.add(ChatColor.GRAY + ench.getName() + " " + toRoman(item.getEnchantments().get(ench)));
-                else
-                    enchants.add(ChatColor.GRAY + ench.getName().replace("%no%", "" + item.getEnchantments().get(ench)));
+                String enchantName = nm.getEnchantName(ench);
+                enchants.add(ChatColor.GRAY + enchantName + " " + toRoman(item.getEnchantments().get(ench)));
             }
         }
         ItemMeta meta = item.getItemMeta();
+        if (meta.hasLore())
+            for (String lore : meta.getLore())
+                enchants.add(lore);
         meta.setLore(enchants);
         item.setItemMeta(meta);
         return item;

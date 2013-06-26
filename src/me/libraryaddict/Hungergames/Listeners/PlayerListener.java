@@ -269,6 +269,7 @@ public class PlayerListener implements Listener {
                 if (!EnchantmentManager.isNatural(enchant)) {
                     event.setCancelled(true);
                     ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
+                    break;
                 }
         }
     }
@@ -340,7 +341,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPickup(PlayerDropItemEvent event) {
-        if (!pm.getGamer(event.getPlayer()).canInteract())
+        if (!pm.getGamer(event.getPlayer()).canInteract()
+                || (event.getItemDrop().getItemStack().containsEnchantment(EnchantmentManager.UNDROPPABLE)))
             event.setCancelled(true);
     }
 
