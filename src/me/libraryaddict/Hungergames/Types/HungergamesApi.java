@@ -22,8 +22,7 @@ public class HungergamesApi {
     private static PlayerManager pm;
 
     /**
-     * @return AbilityConfigManager which is used to load the configs of
-     *         abilitys
+     * @return AbilityConfigManager which is used to load the configs of abilitys
      */
     public static AbilityConfigManager getAbilityConfigManager() {
         if (abilityConfigManager == null)
@@ -77,8 +76,7 @@ public class HungergamesApi {
     }
 
     /**
-     * @return FeastManager which generates the feast and the chests as well as
-     *         getting the best 'Y' of the feast
+     * @return FeastManager which generates the feast and the chests as well as getting the best 'Y' of the feast
      */
     public static FeastManager getFeastManager() {
         if (fm == null)
@@ -94,8 +92,7 @@ public class HungergamesApi {
     }
 
     /**
-     * @return Kit Selector which handles the inventory which allows them to
-     *         pick a kit
+     * @return Kit Selector which handles the inventory which allows them to pick a kit
      */
     public static InventoryManager getInventoryManager() {
         if (icon == null)
@@ -104,8 +101,7 @@ public class HungergamesApi {
     }
 
     /**
-     * @return KitManager, Used for parsing items, kits and handling the kits
-     *         themselves
+     * @return KitManager, Used for parsing items, kits and handling the kits themselves
      */
     public static KitManager getKitManager() {
         if (kits == null)
@@ -132,8 +128,7 @@ public class HungergamesApi {
     }
 
     /**
-     * @return Player Manager which is used to get the gamer, alive players and
-     *         handle kills
+     * @return Player Manager which is used to get the gamer, alive players and handle kills
      */
     public static PlayerManager getPlayerManager() {
         if (pm == null)
@@ -172,5 +167,12 @@ public class HungergamesApi {
      */
     public static void setFeastManager(FeastManager manager) {
         fm = manager;
+    }
+
+    /**
+     * Set the inventory manager, perhaps you want to do your own one..
+     */
+    public static void setInventoryManager(InventoryManager newInv) {
+        icon = newInv;
     }
 }
