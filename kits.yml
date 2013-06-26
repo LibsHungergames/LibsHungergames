@@ -51,6 +51,8 @@
 # Default kit is Surprise which is a random kit
 DefaultKit: Surprise
 # Bad kits is kits which will not be usable.
+BadKits:
+  - NoCheatBypass
 Kits:
   Bombtastic:
     Description: 'Don''t you just hate creepers? The way they creep up, hiss and explode! Well its time to take your revenge! Rip their guts out on death! Bombtastic gives you 1/3 chance of the creeper dropping tnt. Its time, to take revenge!'
@@ -135,6 +137,13 @@ Kits:
     Icon: REDSTONE_WIRE 0 1
     Ability:
       - Ninja
+  NoCheatBypass:
+    Description: 'This is a kit merely meant to display how to use the ability Permissive, Permissive gives the perms to the player while he is still alive. You need to setup the kit name and permisions in the abilities.yml. This kit is NOT meant to be used. It will let anyone who uses it bypass nocheat.'
+    Free: true
+    Price: 0
+    Icon: DIAMOND 0 1
+    Ability:
+      - Permissive
   Pussy:
     Description: 'Ever get accused of being a pussy? Now you can rub it in! Turn into a kitty cat after 10 seconds of sprinting! Wonderful if you want to become hard to see while you are doing your trademark pussying!'
     Free: true
