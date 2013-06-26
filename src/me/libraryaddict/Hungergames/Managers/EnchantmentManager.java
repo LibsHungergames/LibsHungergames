@@ -20,8 +20,8 @@ public class EnchantmentManager {
     // Parallel arrays used in the conversion process.
     private static final String[] RCODE = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
 
-    public static Enchantment UNLOOTABLE;
     public static Enchantment UNDROPPABLE;
+    public static Enchantment UNLOOTABLE;
 
     static {
         UNLOOTABLE = new Unlootable(getId());
