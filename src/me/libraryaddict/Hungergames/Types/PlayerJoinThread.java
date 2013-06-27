@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
@@ -84,8 +86,12 @@ public class PlayerJoinThread extends Thread {
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
                             if (HungergamesApi.getConfigManager().useKitSelector()
-                                    && HungergamesApi.getHungergames().currentTime < 0)
-                                gamer.getPlayer().getInventory().addItem(HungergamesApi.getInventoryManager().getKitSelector());
+                                    && HungergamesApi.getHungergames().currentTime < 0) {
+                                ItemStack item = HungergamesApi.getInventoryManager().getKitSelector();
+                                PlayerInventory pInv = gamer.getPlayer().getInventory();
+                                if (!pInv.contains(item))
+                                    pInv.addItem(item);
+                            }
                         }
                     });
                     r.close();
