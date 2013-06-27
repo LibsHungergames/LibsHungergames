@@ -137,16 +137,18 @@ public class PlayerListener implements Listener {
         Player p = event.getEntity();
         EntityDamageEvent cause = event.getEntity().getLastDamageCause();
         String deathMessage = ChatColor.stripColor(event.getDeathMessage());
-        if (cause instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
-            if (entityEvent.getDamager() instanceof Player) {
-                Player dmg = (Player) entityEvent.getDamager();
-                deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
-                deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
-                        .replace("%Weapon%", name.getItemName(dmg.getItemInHand()));
-            }
-        } else if (cause.getCause() == DamageCause.FALL)
-            deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
+        if (cause != null) {
+            if (cause instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
+                if (entityEvent.getDamager() instanceof Player) {
+                    Player dmg = (Player) entityEvent.getDamager();
+                    deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
+                    deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
+                            .replace("%Weapon%", name.getItemName(dmg.getItemInHand()));
+                }
+            } else if (cause.getCause() == DamageCause.FALL)
+                deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
+        }
         Gamer gamer = pm.getGamer(p);
         pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
         event.setDeathMessage(null);
