@@ -264,6 +264,9 @@ public class TranslationManager {
     private boolean shouldIMessagePlayersWhosePlugin = true;
     private String spectatorHeadKills = ChatColor.GREEN + "Kills: " + ChatColor.BLUE + "%s";
     private String spectatorHeadKit = ChatColor.GREEN + "Kit: " + ChatColor.BLUE + "%s";
+    private String spectatorInventoryFeastDescription = ChatColor.GREEN + "Click this to be teleported\n" + ChatColor.GREEN
+            + "to the feast!";
+    private String spectatorInventoryFeastName = ChatColor.BLUE + "Feast";
     private String spectatorInventoryTitle = ChatColor.DARK_GRAY + "Alive gamers";
     private String timeFormatMinute = "%s minute";
     private String timeFormatMinutes = "%s minutes";
@@ -1191,6 +1194,14 @@ public class TranslationManager {
 
     public String getSpectatorHeadKit() {
         return spectatorHeadKit;
+    }
+
+    public String getSpectatorInventoryFeastDescription() {
+        return spectatorInventoryFeastDescription;
+    }
+
+    public String getSpectatorInventoryFeastName() {
+        return spectatorInventoryFeastName;
     }
 
     public String getSpectatorInventoryTitle() {

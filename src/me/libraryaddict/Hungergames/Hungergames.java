@@ -251,6 +251,7 @@ public class Hungergames extends JavaPlugin {
                     int feastHeight = HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize());
                     HungergamesApi.getFeastManager().generatePlatform(feastLoc, feastHeight, config.getFeastSize());
                     ScoreboardManager.updateStage();
+                    HungergamesApi.getInventoryManager().updateSpectatorHeads();
                 }
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),
                         feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn()))

@@ -1,10 +1,12 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,9 +43,14 @@ public class SpectateInventory extends PageInventory {
                 } else if (item.equals(getForwardsPage())) {
                     setPage(currentPage + 1);
                 } else {
-                    Gamer toTeleport = pm.getGamer(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                    if (toTeleport != null) {
-                        event.getWhoClicked().teleport(toTeleport.getPlayer());
+                    if (item.getItemMeta().getDisplayName().equals(tm.getSpectatorInventoryFeastName())) {
+                        event.getWhoClicked().teleport(
+                                hg.feastLoc.getWorld().getHighestBlockAt(hg.feastLoc).getLocation().clone().add(0.5, 1, 0.5));
+                    } else {
+                        Gamer toTeleport = pm.getGamer(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                        if (toTeleport != null) {
+                            event.getWhoClicked().teleport(toTeleport.getPlayer());
+                        }
                     }
                 }
             }
@@ -56,23 +63,36 @@ public class SpectateInventory extends PageInventory {
             if (gamer.isAlive())
                 names.add(gamer.getName());
         }
+        if (hg.feastLoc.getY() > 0) {
+            names.add("Feast");
+        }
         Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
         ArrayList<ItemStack> heads = new ArrayList<ItemStack>();
         for (String name : names) {
-            Gamer gamer = pm.getGamer(name);
-            ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) 3);
-            Kit kit = kits.getKitByPlayer(gamer.getPlayer());
-            if (kit != null && kit.getIcon() != null)
-                head = kit.getIcon();
-            head.setAmount(0);
-            ItemMeta meta = head.getItemMeta();
-            meta.setDisplayName(ChatColor.GREEN + name);
-            List<String> lore = new ArrayList<String>();
-            lore.add(String.format(tm.getSpectatorHeadKills(), gamer.getKills()));
-            lore.add(String.format(tm.getSpectatorHeadKit(), (kit == null ? tm.getMessagePlayerShowKitsNoKit() : kit.getName())));
-            meta.setLore(lore);
-            head.setItemMeta(meta);
-            heads.add(head);
+            if (name.equals("Feast")) {
+                ItemStack head = new ItemStack(Material.CAKE_BLOCK, 0);
+                ItemMeta meta = head.getItemMeta();
+                meta.setDisplayName(tm.getSpectatorInventoryFeastName());
+                meta.setLore(Arrays.asList(tm.getSpectatorInventoryFeastDescription().split("\n")));
+                head.setItemMeta(meta);
+                heads.add(head);
+            } else {
+                Gamer gamer = pm.getGamer(name);
+                ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) 3);
+                Kit kit = kits.getKitByPlayer(gamer.getPlayer());
+                if (kit != null && kit.getIcon() != null)
+                    head = kit.getIcon();
+                head.setAmount(0);
+                ItemMeta meta = head.getItemMeta();
+                meta.setDisplayName(ChatColor.GREEN + name);
+                List<String> lore = new ArrayList<String>();
+                lore.add(String.format(tm.getSpectatorHeadKills(), gamer.getKills()));
+                lore.add(String.format(tm.getSpectatorHeadKit(),
+                        (kit == null ? tm.getMessagePlayerShowKitsNoKit() : kit.getName())));
+                meta.setLore(lore);
+                head.setItemMeta(meta);
+                heads.add(head);
+            }
         }
         setPages(heads);
     }
