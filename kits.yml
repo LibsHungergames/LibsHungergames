@@ -55,7 +55,7 @@ BadKits:
   - NoCheatBypass
 Kits:
   Bombtastic:
-    Description: 'Don''t you just hate creepers? The way they creep up, hiss and explode! Well its time to take your revenge! Rip their guts out on death! Bombtastic gives you 1/3 chance of the creeper dropping tnt. Its time, to take revenge!'
+    Description: 'Don''t you just hate creepers? The way they creep up, hiss and explode! Well its time to take your revenge! Rip their guts out on death! Bombtastic gives you 50% chance of the creeper dropping tnt. Its time, to take revenge!'
     Free: true
     Price: 0
     Icon: TNT 0 1
@@ -83,14 +83,14 @@ Kits:
     Ability:
       - Creeper
   Icicles:
-    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds!'
+    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds! Chance of 20% they freeze!'
     Free: true
     Price: 0
     Icon: ICE 0 1
     Ability:
       - Icicles
   Ghost:
-    Description: 'When the game starts you are invisible until invincibility runs out!'
+    Description: 'When the game starts you are invisible until invincibility runs out! As well as a addictional 10 seconds for that surprise attack!'
     Free: true
     Price: 0
     Icon: POTION 16398 1
@@ -131,7 +131,7 @@ Kits:
     Ability:
       - Miser
   Ninja:
-    Description: 'Players with this kit have a Speed II buff during the day and a Jump II buff at night.'
+    Description: 'Players with this kit have a Speed I buff during the day and a night vison buff at night.'
     Free: true
     Price: 0
     Icon: REDSTONE_WIRE 0 1
