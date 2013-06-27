@@ -83,7 +83,7 @@ Kits:
     Ability:
       - Creeper
   Icicles:
-    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds! Chance of 20% they freeze!'
+    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds! Chance of 25% they freeze!'
     Free: true
     Price: 0
     Icon: ICE 0 1
@@ -97,7 +97,7 @@ Kits:
     Ability:
       - PotionLover
   Herobrine:
-    Description: 'Use your nether star to make a quick escape! Play a scary noise and sprint away, but there is a weakness effect for the distance you ran.. This only works against players with better armor then you however!'
+    Description: 'Use your nether star to make a quick escape! Play a scary noise and sprint away, but there is a weakness effect for the distance you ran.. This only works when you have been fighting another player!'
     Free: true
     Price: 0
     Icon: NETHER_STAR 0 1
