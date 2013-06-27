@@ -25,6 +25,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class Herobrine extends AbilityListener implements Disableable {
     private transient HashMap<String, Long> cooldown = new HashMap<String, Long>();
     public int cooldownTime = 120;
+    public String cooldownMessage = ChatColor.BLUE + "You may not use that yet! Wait %s seconds!";
     private transient HashMap<String, Long> damagers = new HashMap<String, Long>();
 
     private int getArmorValue(ItemStack armor) {
@@ -84,8 +85,8 @@ public class Herobrine extends AbilityListener implements Disableable {
             if (cooldown.containsKey(p.getName()))
                 lastUsed = cooldown.get(p.getName());
             if (lastUsed + (120000) > System.currentTimeMillis()) {
-                p.sendMessage(ChatColor.BLUE + "You may not use that yet! Wait "
-                        + (((lastUsed + (cooldownTime * 1000)) - System.currentTimeMillis()) / 1000) + " seconds!");
+                p.sendMessage(String.format(cooldownMessage,
+                        (((lastUsed + (cooldownTime * 1000)) - System.currentTimeMillis()) / 1000)));
             } else {
                 if (damagers.get(p.getName()) + 30000 > System.currentTimeMillis()) {
                     cooldown.put(p.getName(), System.currentTimeMillis());

@@ -131,7 +131,7 @@ public class PlayerManager {
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        if (event.getDeathMessage().equalsIgnoreCase(ChatColor.stripColor(event.getDeathMessage())))
+        if (event.getDeathMessage().equals(ChatColor.stripColor(event.getDeathMessage())))
             event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
         p.setLevel(0);
         p.setExp(0F);
