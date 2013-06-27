@@ -14,7 +14,7 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 public class Bombtastic extends AbilityListener implements Disableable {
     public int maxTntDrop = 3;
     public int minTntDrop = 1;
-    public int oneChanceInWhatOfDropping = 3;
+    public int oneChanceInWhatOfDropping = 2;
 
     @EventHandler
     public void onKilled(EntityDeathEvent event) {
