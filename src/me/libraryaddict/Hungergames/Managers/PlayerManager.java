@@ -246,11 +246,15 @@ public class PlayerManager {
     public void setSpectator(final Gamer gamer) {
         gamer.setAlive(false);
         gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
-        ItemStack compass = new ItemStack(Material.COMPASS);
-        compass.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
-        EnchantmentManager.updateEnchants(compass);
-        if (!gamer.getPlayer().getInventory().contains(compass))
-            gamer.getPlayer().getInventory().addItem(compass);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                ItemStack compass = new ItemStack(Material.COMPASS);
+                compass.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
+                EnchantmentManager.updateEnchants(compass);
+                if (!gamer.getPlayer().getInventory().contains(compass))
+                    gamer.getPlayer().getInventory().addItem(compass);
+            }
+        });
     }
 
     public Gamer unregisterGamer(Entity entity) {
