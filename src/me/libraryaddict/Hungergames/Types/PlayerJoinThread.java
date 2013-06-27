@@ -16,11 +16,6 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 public class PlayerJoinThread extends Thread {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     private Connection con = null;
-    MySqlManager mysql;
-
-    public PlayerJoinThread(MySqlManager mysql) {
-        this.mysql = mysql;
-    }
 
     public void checkTables(String tableName, String query) {
         try {
@@ -41,6 +36,7 @@ public class PlayerJoinThread extends Thread {
 
     public void mySqlConnect() {
         try {
+            MySqlManager mysql = HungergamesApi.getMySqlManager();
             System.out.println(String.format(cm.getLoggerMySqlConnecting(), getClass().getSimpleName()));
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             String conn = "jdbc:mysql://" + mysql.SQL_HOST/*

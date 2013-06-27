@@ -14,7 +14,7 @@ public class MySqlManager  {
     }
 
     public void startJoinThread() {
-        joinThread = new PlayerJoinThread(this);
+        joinThread = new PlayerJoinThread();
         joinThread.start();
     }
 
