@@ -245,12 +245,12 @@ public class PlayerManager {
 
     public void setSpectator(final Gamer gamer) {
         gamer.setAlive(false);
+        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
         ItemStack compass = new ItemStack(Material.COMPASS);
         compass.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
         EnchantmentManager.updateEnchants(compass);
         if (!gamer.getPlayer().getInventory().contains(compass))
             gamer.getPlayer().getInventory().addItem(compass);
-        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
     }
 
     public Gamer unregisterGamer(Entity entity) {
