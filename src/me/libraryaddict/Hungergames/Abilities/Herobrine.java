@@ -27,6 +27,7 @@ public class Herobrine extends AbilityListener implements Disableable {
     public int cooldownTime = 120;
     public String cooldownMessage = ChatColor.BLUE + "You may not use that yet! Wait %s seconds!";
     private transient HashMap<String, Long> damagers = new HashMap<String, Long>();
+    public String itemName = "Herobrines Escape";
 
     private int getArmorValue(ItemStack armor) {
         if (armor == null || armor.getType() == Material.AIR)
@@ -80,7 +81,7 @@ public class Herobrine extends AbilityListener implements Disableable {
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         Player p = event.getPlayer();
-        if (hasAbility(p) && item != null && item.getType() == Material.NETHER_STAR && damagers.containsKey(p.getName())) {
+        if (hasAbility(p) && isSpecialItem(item, itemName) && damagers.containsKey(p.getName())) {
             long lastUsed = 0;
             if (cooldown.containsKey(p.getName()))
                 lastUsed = cooldown.get(p.getName());
