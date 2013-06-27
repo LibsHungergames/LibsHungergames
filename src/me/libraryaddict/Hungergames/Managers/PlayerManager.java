@@ -250,6 +250,7 @@ public class PlayerManager {
         EnchantmentManager.updateEnchants(compass);
         if (!gamer.getPlayer().getInventory().contains(compass))
             gamer.getPlayer().getInventory().addItem(compass);
+        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
     }
 
     public Gamer unregisterGamer(Entity entity) {

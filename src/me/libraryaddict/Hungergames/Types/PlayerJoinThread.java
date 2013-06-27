@@ -83,7 +83,8 @@ public class PlayerJoinThread extends Thread {
                     }
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
-                            if (HungergamesApi.getConfigManager().useKitSelector())
+                            if (HungergamesApi.getConfigManager().useKitSelector()
+                                    && HungergamesApi.getHungergames().currentTime < 0)
                                 gamer.getPlayer().getInventory().addItem(HungergamesApi.getInventoryManager().getKitSelector());
                         }
                     });
