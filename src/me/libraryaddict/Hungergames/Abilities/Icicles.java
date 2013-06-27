@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -31,6 +32,7 @@ public class Icicles extends AbilityListener implements Disableable {
     public int frozenTime = 10;
     private Hungergames hg = HungergamesApi.getHungergames();
     public String thawedOut = ChatColor.RED + "You thawed out";
+    public int chanceInOneOfFreezing = 5;
 
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -39,7 +41,7 @@ public class Icicles extends AbilityListener implements Disableable {
             Player victim = (Player) event.getEntity();
             if (hasAbility(p)) {
                 if (!cooldown.containsKey(p) || cooldown.get(p) <= hg.currentTime) {
-                    if (!frozen.containsKey(victim)) {
+                    if (!frozen.containsKey(victim) && new Random().nextInt(chanceInOneOfFreezing) == 0) {
                         victim.sendMessage(crackString);
                         p.sendMessage(crackString);
                         victim.getWorld().playEffect(victim.getEyeLocation(), Effect.STEP_SOUND, 20);
