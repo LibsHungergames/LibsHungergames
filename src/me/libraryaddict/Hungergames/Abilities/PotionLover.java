@@ -14,7 +14,7 @@ import me.libraryaddict.Hungergames.Types.Kit;
 
 public class PotionLover extends AbilityListener implements Disableable {
 
-    public String[] potionEffects = new String[] { "Ghost INVISIBILITY 2400 0" };
+    public String[] potionEffects = new String[] { "Ghost INVISIBILITY 2600 0" };
 
     @EventHandler
     public void onGameStart(GameStartEvent event) {
