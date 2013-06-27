@@ -12,8 +12,8 @@ import org.bukkit.potion.PotionEffectType;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Ninja extends AbilityListener implements Disableable {
-    public String[] potionEffectsDay = new String[] { "SPEED 12000 1" };
-    public String[] potionEffectsNight = new String[] { "JUMP 12000 1" };
+    public String[] potionEffectsDay = new String[] { "SPEED 12000 0" };
+    public String[] potionEffectsNight = new String[] { "NIGHT_VISION 12000 0" };
     private int scheduler = -1;
 
     @EventHandler
