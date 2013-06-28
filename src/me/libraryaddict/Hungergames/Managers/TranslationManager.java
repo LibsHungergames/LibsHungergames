@@ -140,7 +140,7 @@ public class TranslationManager {
     private String itemKitSelectorForwardsName = ChatColor.RED + "Forward";
     private String itemKitSelectorName = ChatColor.WHITE + "Kit Selector";
     private String[] itemSpectatorInventoryBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
-            ChatColor.LIGHT_PURPLE + "forwards a page" };
+            ChatColor.LIGHT_PURPLE + "back a page" };
     private String itemSpectatorInventoryBackName = ChatColor.RED + "Back";
     private String[] itemSpectatorInventoryForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "forwards a page" };
