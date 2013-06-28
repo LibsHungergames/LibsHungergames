@@ -14,6 +14,7 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -80,16 +81,23 @@ public class GeneralListener implements Listener {
         if (event.getEntityType() == EntityType.SLIME)
             event.setCancelled(true);
         if (hg.currentTime < 0) {
-            if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
-                    && (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL)) {
-                event.setCancelled(true);
-                if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
-                    hg.entitys.put(event.getLocation().clone(), event.getEntityType());
+            if (event.getEntity() instanceof Monster) {
+                if (event.getSpawnReason() != SpawnReason.CHUNK_GEN && event.getSpawnReason() != SpawnReason.NATURAL)
+                    event.setCancelled(true);
+            } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
+                if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
+                    event.setCancelled(true);
+                    if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
+                        hg.entitys.put(event.getLocation().clone(), event.getEntityType());
+                }
             }
-        } else if ((event.getEntity() instanceof Animals || event.getEntity() instanceof NPC)
-                && (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL)
-                && (config.getMobSpawnChance() > 0 && new Random().nextInt(config.getMobSpawnChance()) != 0))
-            event.setCancelled(true);
+        } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
+            if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
+                event.setCancelled(true);
+                if (config.getMobSpawnChance() > 0 || new Random().nextInt(config.getMobSpawnChance()) != 0)
+                    event.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler
