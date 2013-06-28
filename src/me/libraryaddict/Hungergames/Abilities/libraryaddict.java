@@ -15,7 +15,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 public class libraryaddict extends AbilityListener implements Disableable {
     public String bookName = "Explosive Reading";
     public float explosionSize = 1.5F;
-    public int grenadeTimer = 3;
+    public float grenadeTimer = 2;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -41,7 +41,7 @@ public class libraryaddict extends AbilityListener implements Disableable {
                     explodingBook.getWorld().createExplosion(explodingBook.getLocation(), explosionSize);
                     explodingBook.remove();
                 }
-            }, 20 * grenadeTimer);
+            }, (int) (20 * grenadeTimer));
         }
     }
 
