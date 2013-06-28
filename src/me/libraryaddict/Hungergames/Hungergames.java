@@ -346,11 +346,11 @@ public class Hungergames extends JavaPlugin {
                     kit.giveKit();
                 HungergamesApi.getAbilityManager().registerAbilityListeners();
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());
+                for (Location l : entitys.keySet())
+                    l.getWorld().spawnEntity(l, entitys.get(l));
+                entitys.clear();
             }
         });
-        for (Location l : entitys.keySet())
-            l.getWorld().spawnEntity(l, entitys.get(l));
-        entitys.clear();
         checkWinner();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }
