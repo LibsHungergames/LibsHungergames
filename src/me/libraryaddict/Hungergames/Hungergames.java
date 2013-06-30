@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+import me.libraryaddict.Hungergames.Events.FeastAnnouncedEvent;
+import me.libraryaddict.Hungergames.Events.FeastSpawnedEvent;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
+import me.libraryaddict.Hungergames.Events.InvincibilityWearOffEvent;
 import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
@@ -243,6 +247,7 @@ public class Hungergames extends JavaPlugin {
             Bukkit.broadcastMessage(cm.getBroadcastFeastBegun());
             ScoreboardManager.updateStage();
             world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
+            Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
         } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn(), config.feastStartsIn());
             if (config.advertiseFeast(currentTime)) {
@@ -252,6 +257,7 @@ public class Hungergames extends JavaPlugin {
                     HungergamesApi.getFeastManager().generatePlatform(feastLoc, feastHeight, config.getFeastSize());
                     ScoreboardManager.updateStage();
                     HungergamesApi.getInventoryManager().updateSpectatorHeads();
+                    Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
                 }
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),
                         feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn()))
@@ -270,6 +276,7 @@ public class Hungergames extends JavaPlugin {
                 Bukkit.broadcastMessage(cm.getBroadcastInvincibilityWornOff());
                 ScoreboardManager.updateStage();
                 ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
+                Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
             } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
                         returnTime(config.invincibilityWearsOffIn())));
@@ -324,6 +331,8 @@ public class Hungergames extends JavaPlugin {
         if (config.getInvincibilityTime() > 0)
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
                     config.getInvincibilityTime());
+        else
+            Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
         Bukkit.broadcastMessage(cm.getBroadcastGameStartedMessage());
         if (config.getInvincibilityTime() > 0 && config.displayMessages())
             Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
