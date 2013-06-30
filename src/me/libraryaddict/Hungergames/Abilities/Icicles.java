@@ -77,9 +77,9 @@ public class Icicles extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onKilled(PlayerKilledEvent event) {
-        if (frozen.containsKey(event.getKilled()))
+        if (frozen.containsKey(event.getKilled().getPlayer()))
             frozen.remove(event.getKilled());
-        if (cooldown.containsKey(event.getKilled()))
+        if (cooldown.containsKey(event.getKilled().getPlayer()))
             cooldown.remove(event.getKilled());
     }
 
