@@ -310,13 +310,15 @@ public class TranslationManager {
                             foundMe = true;
                             break;
                         }
-                    if (!foundMe)
+                    if (!foundMe) {
+                        shouldIMessagePlayersWhosePlugin = true;
                         Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
                             public void run() {
                                 Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
                                         + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
                             }
                         }, 20 * 60 * 10, 20 * 60 * 10);
+                    }
                 }
             });
         } catch (Exception ex) {
