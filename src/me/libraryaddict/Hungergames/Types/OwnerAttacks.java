@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_6_R1.EntityCreature;
 import net.minecraft.server.v1_6_R1.EntityLiving;
-import net.minecraft.server.v1_6_R1.EntityTameableAnimal;
 import net.minecraft.server.v1_6_R1.PathfinderGoalTarget;
 
 public class OwnerAttacks extends PathfinderGoalTarget {
