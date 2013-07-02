@@ -1,5 +1,8 @@
 package me.libraryaddict.Hungergames.Types;
 
+import org.bukkit.craftbukkit.v1_6_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+
 import net.minecraft.server.v1_6_R1.EntityInsentient;
 import net.minecraft.server.v1_6_R1.EntityLiving;
 import net.minecraft.server.v1_6_R1.MathHelper;
@@ -18,13 +21,15 @@ public class FollowOwner extends PathfinderGoal {
     float c;
     private boolean i;
 
-    public FollowOwner(EntityInsentient paramEntityTameableAnimal, double paramDouble, float paramFloat1, float paramFloat2) {
+    public FollowOwner(EntityInsentient paramEntityTameableAnimal, double paramDouble, float paramFloat1, float paramFloat2,
+            Player owner) {
         this.d = paramEntityTameableAnimal;
         this.a = paramEntityTameableAnimal.world;
         this.f = paramDouble;
         this.g = paramEntityTameableAnimal.getNavigation();
         this.c = paramFloat1;
         this.b = paramFloat2;
+        e = ((CraftPlayer) owner).getHandle();
         a(3);
     }
 
