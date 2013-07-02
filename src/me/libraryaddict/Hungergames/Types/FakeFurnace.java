@@ -1,9 +1,9 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.*;
-import net.minecraft.server.v1_5_R3.*;
+import net.minecraft.server.v1_6_R1.*;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.craftbukkit.v1_5_R3.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_6_R1.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 
 public class FakeFurnace extends TileEntityFurnace {
@@ -57,9 +57,9 @@ public class FakeFurnace extends TileEntityFurnace {
         }
         // And consume the ingredient item
         // Goddamn, you have container functions, use them! Notch!
-        if (Item.byId[contents[0].id].t()) // Derpnote
+        if (Item.byId[contents[0].id].u()) // Derpnote
         {
-            contents[0] = new ItemStack(Item.byId[contents[0].id].s()); // Derpnote
+            contents[0] = new ItemStack(Item.byId[contents[0].id].t()); // Derpnote
         } else {
             contents[0].count--;
             // Let 0 be null
@@ -119,8 +119,7 @@ public class FakeFurnace extends TileEntityFurnace {
     }
 
     /*****
-     * The following methods are only here because they interact with the
-     * contents array, which is private
+     * The following methods are only here because they interact with the contents array, which is private
      *****/
 
     public ItemStack[] getContents() {

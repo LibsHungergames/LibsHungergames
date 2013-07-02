@@ -1,30 +1,30 @@
 package me.libraryaddict.Hungergames.Types;
 
-import net.minecraft.server.v1_5_R3.EntityLiving;
-import net.minecraft.server.v1_5_R3.MathHelper;
-import net.minecraft.server.v1_5_R3.Navigation;
-import net.minecraft.server.v1_5_R3.PathfinderGoal;
-import net.minecraft.server.v1_5_R3.World;
+import net.minecraft.server.v1_6_R1.EntityInsentient;
+import net.minecraft.server.v1_6_R1.EntityLiving;
+import net.minecraft.server.v1_6_R1.MathHelper;
+import net.minecraft.server.v1_6_R1.Navigation;
+import net.minecraft.server.v1_6_R1.PathfinderGoal;
+import net.minecraft.server.v1_6_R1.World;
 
 public class FollowOwner extends PathfinderGoal {
-    World a;
-    float b;
-    float c;
-    private EntityLiving d;
+    private EntityInsentient d;
     private EntityLiving e;
-    private float f;
+    World a;
+    private double f;
     private Navigation g;
     private int h;
+    float b;
+    float c;
+    private boolean i;
 
-    public FollowOwner(EntityLiving paramEntityTameableAnimal, float paramFloat1, float paramFloat2, float paramFloat3,
-            EntityLiving owner) {
+    public FollowOwner(EntityInsentient paramEntityTameableAnimal, double paramDouble, float paramFloat1, float paramFloat2) {
         this.d = paramEntityTameableAnimal;
         this.a = paramEntityTameableAnimal.world;
-        this.f = paramFloat1;
+        this.f = paramDouble;
         this.g = paramEntityTameableAnimal.getNavigation();
-        this.c = paramFloat2;
-        this.b = paramFloat3;
-        this.e = owner;
+        this.c = paramFloat1;
+        this.b = paramFloat2;
         a(3);
     }
 
@@ -35,29 +35,30 @@ public class FollowOwner extends PathfinderGoal {
     }
 
     public boolean b() {
-        return (!this.g.f()) && (this.d.e(this.e) > this.b * this.b);
+        return (!this.g.g()) && (this.d.e(this.e) > this.b * this.b);
     }
 
     public void c() {
         this.h = 0;
-        this.d.getNavigation().a(false);
+        this.i = g.a();
+        g.a(false);
     }
 
     public void d() {
-        return;
-        /*
-         * this.e = null; this.g.g(); this.d.getNavigation().a(this.i);
-         */
+        this.e = null;
+        this.g.h();
+        g.a(this.i);
     }
 
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, this.d.bs());
-
+        this.d.getControllerLook().a(this.e, 10.0F, this.d.bl());
         if (--this.h > 0)
             return;
         this.h = 10;
 
         if (this.g.a(this.e, this.f))
+            return;
+        if (this.d.bD())
             return;
         if (this.d.e(this.e) < 144.0D)
             return;
@@ -70,7 +71,7 @@ public class FollowOwner extends PathfinderGoal {
                 if ((n < 1) || (i1 < 1) || (n > 3) || (i1 > 3)) {
                     if ((this.a.w(j + n, m - 1, k + i1)) && (!this.a.u(j + n, m, k + i1)) && (!this.a.u(j + n, m + 1, k + i1))) {
                         this.d.setPositionRotation(j + n + 0.5F, m, k + i1 + 0.5F, this.d.yaw, this.d.pitch);
-                        this.g.g();
+                        this.g.h();
                         return;
                     }
                 }
