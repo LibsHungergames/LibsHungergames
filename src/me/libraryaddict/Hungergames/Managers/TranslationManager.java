@@ -312,12 +312,15 @@ public class TranslationManager {
                         }
                     if (!foundMe) {
                         shouldIMessagePlayersWhosePlugin = true;
-                        Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
+                        messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
+                                + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN
+                                + "libraryaddict";
+                        /*Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
                             public void run() {
                                 Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
                                         + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
                             }
-                        }, 20 * 60 * 10, 20 * 60 * 10);
+                        }, 20 * 60 * 10, 20 * 60 * 10);*/
                     }
                 }
             });
