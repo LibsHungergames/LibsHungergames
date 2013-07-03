@@ -80,22 +80,24 @@ public class GeneralListener implements Listener {
     public void onSpawn(CreatureSpawnEvent event) {
         if (event.getEntityType() == EntityType.SLIME)
             event.setCancelled(true);
-        if (hg.currentTime < 0) {
-            if (event.getEntity() instanceof Monster) {
-                if (event.getSpawnReason() != SpawnReason.CHUNK_GEN && event.getSpawnReason() != SpawnReason.NATURAL)
-                    event.setCancelled(true);
+        else {
+            if (hg.currentTime < 0) {
+                if (event.getEntity() instanceof Monster) {
+                    if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL)
+                        event.setCancelled(true);
+                } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
+                    if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
+                        event.setCancelled(true);
+                        if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
+                            hg.entitys.put(event.getLocation().clone(), event.getEntityType());
+                    }
+                }
             } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
                 if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
                     event.setCancelled(true);
-                    if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
-                        hg.entitys.put(event.getLocation().clone(), event.getEntityType());
+                    if (config.getMobSpawnChance() > 0 || new Random().nextInt(config.getMobSpawnChance()) != 0)
+                        event.setCancelled(true);
                 }
-            }
-        } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
-            if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
-                event.setCancelled(true);
-                if (config.getMobSpawnChance() > 0 || new Random().nextInt(config.getMobSpawnChance()) != 0)
-                    event.setCancelled(true);
             }
         }
     }
