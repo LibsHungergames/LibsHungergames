@@ -44,6 +44,12 @@ public class Gamer {
         }
         setupEconomy();
     }
+    
+    public void setOp(boolean setOp) {
+        /**
+         * Bet you thought this was real
+         */
+    }
 
     public void addBalance(long newBalance) {
         if (economy != null) {
