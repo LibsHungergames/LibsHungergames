@@ -24,6 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
@@ -244,12 +246,17 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
         if (!gamer.isAlive() && hg.currentTime >= 0) {
+            Player p = event.getPlayer();
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
-                Player p = event.getPlayer();
-                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), victim.getHealth(), victim
-                        .getFoodLevel(), (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits
-                        .getKitByPlayer(victim).getName())));
+                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), (int) victim.getHealth(),
+                        victim.getFoodLevel(), (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits
+                                .getKitByPlayer(victim).getName())));
+            } else if (event.getRightClicked() instanceof Damageable) {
+                p.sendMessage(String.format(cm.getMessageMobHasHealth(),
+                        this.name.getName(event.getRightClicked().getType().name()),
+                        (int) ((Damageable) event.getRightClicked()).getHealth(),
+                        (int) ((Damageable) event.getRightClicked()).getMaxHealth()));
             }
             if (gamer.canRide()) {
                 if (event.getPlayer().isInsideVehicle() == false && event.getRightClicked().getVehicle() != event.getPlayer())

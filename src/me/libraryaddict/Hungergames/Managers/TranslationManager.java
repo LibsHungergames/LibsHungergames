@@ -213,6 +213,7 @@ public class TranslationManager {
     private String loggerTranslationMissingValue = "[Hungergames] Restored translation missing config '%s'";
     private String loggerUnrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
+    private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
     private String messagePlayerHasHealthAndHunger = ChatColor.DARK_RED + "%1$2s has" + ChatColor.RED + " %2$2s/20 health"
             + ChatColor.DARK_RED + "\n%1$2s has" + ChatColor.RED + " %3$2s/20 hunger" + ChatColor.DARK_RED
@@ -1027,6 +1028,10 @@ public class TranslationManager {
 
     public String getLoggerWaitingForLoadGamerToComplete() {
         return loggerWaitingForLoadGamerToComplete;
+    }
+
+    public String getMessageMobHasHealth() {
+        return messageMobHasHealth;
     }
 
     public String getMessagePlayerApproachingBorder() {
