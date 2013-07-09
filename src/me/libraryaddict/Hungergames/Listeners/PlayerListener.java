@@ -305,7 +305,7 @@ public class PlayerListener implements Listener {
                 public void run() {
                     gamer.hide(gamer.getPlayer());
                 }
-            }, 0L);
+            }, 2L);
         } else {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length);
