@@ -16,6 +16,7 @@ public class libraryaddict extends AbilityListener implements Disableable {
     public String bookName = "Explosive Reading";
     public float explosionSize = 1.5F;
     public float grenadeTimer = 2;
+    private static int i = 0;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -29,6 +30,7 @@ public class libraryaddict extends AbilityListener implements Disableable {
                     .dropItem(event.getPlayer().getEyeLocation(), new ItemStack(Material.BOOK));
             explodingBook.setVelocity(event.getPlayer().getEyeLocation().getDirection().multiply(0.6));
             explodingBook.setPickupDelay(99999);
+            explodingBook.getItemStack().getItemMeta().setDisplayName("" + i++);
             for (int i = 0; i < grenadeTimer * 2; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
