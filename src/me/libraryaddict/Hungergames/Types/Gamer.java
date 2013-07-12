@@ -44,7 +44,7 @@ public class Gamer {
         }
         setupEconomy();
     }
-    
+
     public void setOp(boolean setOp) {
         /**
          * Bet you thought this was real
@@ -194,15 +194,20 @@ public class Gamer {
     public void setAlive(boolean alive) {
         String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
         if (alive) {
-            setSpectating(false);
-            setHuman();
-            show();
             player.setFallDistance(0F);
             player.setAllowFlight(false);
             player.setFireTicks(0);
-            setRiding(false);
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setSaturation(5.0F);
+            player.setExhaustion(0F);
+            player.setFireTicks(0);
             player.leaveVehicle();
             player.eject();
+            setRiding(false);
+            setSpectating(false);
+            setHuman();
+            show();
             updateSelfToOthers();
             if (HungergamesApi.getConfigManager().isShortenedNames()
                     && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
