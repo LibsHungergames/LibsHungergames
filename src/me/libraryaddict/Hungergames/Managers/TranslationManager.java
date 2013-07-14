@@ -93,6 +93,7 @@ public class TranslationManager {
     private String commandKitKitsDivider = ChatColor.DARK_GREEN + ", " + ChatColor.RESET;
     private String commandKitNoPermission = ChatColor.RED + "You do not have access to this kit!";
     private String commandKitNowUsingKit = ChatColor.AQUA + "Now using kit %s!";
+    private String commandMeSpectating = ChatColor.RED + "Spectators may not use this command!";
     private String commandMessageEventCancelled = ChatColor.GREEN + "You are forbidden to talk to %s!";
     private String commandMessageNoArgs = ChatColor.GREEN + "Please fill in a player name and message!";
     private String commandMessageNoReceiver = ChatColor.GREEN + "Player does not exist";
@@ -640,6 +641,10 @@ public class TranslationManager {
 
     public String getCommandKitNowUsingKit() {
         return commandKitNowUsingKit;
+    }
+
+    public String getCommandMeSpectating() {
+        return commandMeSpectating;
     }
 
     public String getCommandMessageEventCancelled() {
