@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +21,13 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -85,6 +88,20 @@ public class Hungergames extends JavaPlugin {
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
                         spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
+                File mapConfig = new File(getDataFolder() + "/map.yml");
+                YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
+                if (mapConfiguration.getBoolean("GenerateChunks")) {
+                    int chunks = (int) Math.ceil(config.getBorderSize() / 16);
+                    for (int x = -chunks; x <= chunks; x++) {
+                        for (int z = -chunks; z <= chunks; z++) {
+                            Chunk chunk = spawn.clone().add(x * 16, 0, z * 16).getChunk();
+                            if (chunk.isLoaded())
+                                continue;
+                            chunk.load();
+                            chunk.unload(true, false);
+                        }
+                    }
+                }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
                     world.setStorm(false);

@@ -85,6 +85,10 @@ public class MapLoader {
                 config.set("DeleteMap", true);
                 config.save(mapConfig);
             }
+            if (!config.contains("GenerateChunks")) {
+                config.set("GenerateChunks", false);
+                config.save(mapConfig);
+            }
             String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
