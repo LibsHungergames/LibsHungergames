@@ -268,7 +268,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!pm.getGamer(event.getWhoClicked()).canInteract()) {
+        if (event.getCurrentItem().containsEnchantment(EnchantmentManager.UNDROPPABLE)) {
             event.setCancelled(true);
         }
         if (event.getView().getTopInventory().getType() == InventoryType.ANVIL && event.getCurrentItem() != null
