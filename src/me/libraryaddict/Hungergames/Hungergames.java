@@ -91,9 +91,18 @@ public class Hungergames extends JavaPlugin {
                 File mapConfig = new File(getDataFolder() + "/map.yml");
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
                 if (mapConfiguration.getBoolean("GenerateChunks")) {
-                    int chunks = (int) Math.ceil(config.getBorderSize() / 16);
-                    for (int x = -chunks; x <= chunks; x++) {
-                        for (int z = -chunks; z <= chunks; z++) {
+                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16);
+                    double totalChunks = (chunks * 2) * (chunks * 2);
+                    double currentChunks = 0;
+                    long lastPrint = 0;
+                    for (int x = (int) -chunks; x <= chunks; x++) {
+                        for (int z = (int) -chunks; z <= chunks; z++) {
+                            currentChunks++;
+                            if (lastPrint + 2000 < System.currentTimeMillis()) {
+                                System.out.print(String.format(cm.getLoggerGeneratingChunks(),
+                                        (int) Math.floor((currentChunks / totalChunks) * 100)) + "%");
+                                lastPrint = System.currentTimeMillis();
+                            }
                             Chunk chunk = spawn.clone().add(x * 16, 0, z * 16).getChunk();
                             if (chunk.isLoaded())
                                 continue;
@@ -101,6 +110,7 @@ public class Hungergames extends JavaPlugin {
                             chunk.unload(true, false);
                         }
                     }
+                    System.out.print(String.format(cm.getLoggerChunksGenerated(), (int) currentChunks));
                 }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())

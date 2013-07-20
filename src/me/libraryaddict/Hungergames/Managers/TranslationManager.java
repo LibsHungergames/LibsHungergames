@@ -175,6 +175,7 @@ public class TranslationManager {
     private String loggerChangedHeightLimit = "[Hungergames] Changed build height limit";
     private String loggerChangedIDisguiseConfig = "[Hungergames] Changed iDisguise config";
     private String loggerChangedSpawnRadius = "[Hungergames] Changed spawn radius to 0";
+    private String loggerChunksGenerated = "[Hungergames] Generated %s chunks";
     private String loggerCommandsMissingValue = "[Hungergames] Restored missing config '%s' for command %s";
     private String loggerCreatingAbilitiesConfig = "[Hungergames] Creating ability config file";
     private String loggerCreatingCommandsConfig = "[Hungergames] Creating commands config file";
@@ -192,6 +193,7 @@ public class TranslationManager {
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
     private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
     private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
+    private String loggerGeneratingChunks = "[Hungergames] Generating chunks... %s";
     private String loggerKitAlreadyExists = "[Hungergames] Error while registering kit! Kit %s already exists!";
     private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
@@ -879,6 +881,10 @@ public class TranslationManager {
         return loggerChangedSpawnRadius;
     }
 
+    public String getLoggerChunksGenerated() {
+        return loggerChunksGenerated;
+    }
+
     public String getLoggerCommandsMissingValue() {
         return loggerCommandsMissingValue;
     }
@@ -945,6 +951,10 @@ public class TranslationManager {
 
     public String getLoggerFoundCommandInPackage() {
         return loggerFoundCommandInPackage;
+    }
+
+    public String getLoggerGeneratingChunks() {
+        return loggerGeneratingChunks;
     }
 
     public String getLoggerKitAlreadyExists() {
@@ -1385,4 +1395,5 @@ public class TranslationManager {
             e.printStackTrace();
         }
     }
+
 }
