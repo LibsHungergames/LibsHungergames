@@ -32,7 +32,7 @@ public class ReflectionManager {
         try {
             Object obj = p.getClass().getDeclaredMethod("getHandle").invoke(p);
             List list = (List) obj.getClass().getField("chunkCoordIntPairQueue").get(obj);
-            Constructor con = Class.forName(currentVersion + "ChunkCoordIntPair").getConstructor(int.class, int.class);
+            Constructor con = Class.forName(currentVersion + ".ChunkCoordIntPair").getConstructor(int.class, int.class);
             list.add(con.newInstance(x, z));
         } catch (Exception ex) {
             ex.printStackTrace();
