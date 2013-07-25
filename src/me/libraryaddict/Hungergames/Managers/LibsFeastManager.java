@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Managers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -22,11 +23,19 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class LibsFeastManager implements FeastManager {
+    private class BlockInfo {
+        int id;
+        byte data;
+    }
+
     // This manages the chests, The buildings
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
+    private HashMap<Block, BlockInfo> toSet = new HashMap<Block, BlockInfo>();
+    private BukkitRunnable runnable;
 
     public LibsFeastManager() {
         faces.add(BlockFace.UP);
@@ -50,7 +59,8 @@ public class LibsFeastManager implements FeastManager {
                 ArrayList<String> strings = new ArrayList<String>();
                 for (RandomItem item : chest.getRandomItems())
                     strings.add(item.toString());
-                config.set("How To Use", "Chance in hundred, MinAmount, MaxAmount, ID or Material, Data Value, Addictional data like in kits items such as enchants");
+                config.set("How To Use",
+                        "Chance in hundred, MinAmount, MaxAmount, ID or Material, Data Value, Addictional data like in kits items such as enchants");
                 config.set("FeastLoot", strings);
                 config.save(file);
             }
@@ -281,17 +291,39 @@ public class LibsFeastManager implements FeastManager {
         }
     }
 
-    private boolean setBlockFast(Block b, int typeId, short s) {
+    private void setBlockFast(Block b, int typeId, short s) {
         try {
-            if (b.getTypeId() != typeId || b.getData() != s)
-                return b.setTypeIdAndData(typeId, (byte) s, false);
-            // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
-            // b.getY(), b.getZ() & 15, typeId, data);
+            if (b.getTypeId() != typeId || b.getData() != s) {
+                BlockInfo info = new BlockInfo();
+                info.id = typeId;
+                info.data = (byte) s;
+                toSet.put(b, info);
+                if (runnable == null) {
+                    runnable = new BukkitRunnable() {
+                        public void run() {
+                            if (toSet.size() == 0) {
+                                runnable = null;
+                                cancel();
+                            }
+                            int i = 0;
+                            ArrayList<Block> toDo = new ArrayList<Block>();
+                            for (Block b : toSet.keySet()) {
+                                if (i == 200)
+                                    break;
+                                toDo.add(b);
+                            }
+                            for (Block b : toDo)
+                                b.setTypeIdAndData(toSet.get(b).id, toSet.remove(b).data, false);
+                        }
+                    };
+                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 0, 0);
+                }
+                // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
+                // b.getY(), b.getZ() & 15, typeId, data);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     private void setNature(Block b) {
