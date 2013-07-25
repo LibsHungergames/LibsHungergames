@@ -89,6 +89,14 @@ public class MapLoader {
                 config.set("GenerateChunks", false);
                 config.save(mapConfig);
             }
+            if (!config.contains("GenerateSpawnPlatform")) {
+                config.set("GenerateSpawnPlatform", false);
+                config.save(mapConfig);
+            }
+            if (!config.contains("SpawnPlatformSize")) {
+                config.set("SpawnPlatformSize", 30);
+                config.save(mapConfig);
+            }
             String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);

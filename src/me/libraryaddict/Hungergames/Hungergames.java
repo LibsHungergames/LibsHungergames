@@ -100,7 +100,8 @@ public class Hungergames extends JavaPlugin {
                             currentChunks++;
                             if (lastPrint + 2000 < System.currentTimeMillis()) {
                                 System.out.print(String.format(cm.getLoggerGeneratingChunks(),
-                                        (int) Math.floor((currentChunks / totalChunks) * 100)) + "%");
+                                        (int) Math.floor((currentChunks / totalChunks) * 100))
+                                        + "%");
                                 lastPrint = System.currentTimeMillis();
                             }
                             Chunk chunk = spawn.clone().add(x * 16, 0, z * 16).getChunk();
@@ -111,6 +112,12 @@ public class Hungergames extends JavaPlugin {
                         }
                     }
                     System.out.print(String.format(cm.getLoggerChunksGenerated(), (int) currentChunks));
+                }
+                if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
+                    HungergamesApi.getFeastManager().generatePlatform(
+                            world.getSpawnLocation(),
+                            HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
+                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"));
                 }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
