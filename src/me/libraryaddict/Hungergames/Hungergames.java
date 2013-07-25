@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -35,9 +36,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
+    private class BlockInfo {
+        int x;
+        int z;
+    }
+
     private TranslationManager cm;
     private ConfigManager config;
     /**
@@ -84,7 +91,7 @@ public class Hungergames extends JavaPlugin {
                 if (config.forceCords())
                     world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
                             config.getSpawnZ());
-                Location spawn = world.getSpawnLocation();
+                final Location spawn = world.getSpawnLocation();
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
                         spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
@@ -92,26 +99,47 @@ public class Hungergames extends JavaPlugin {
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
                 if (mapConfiguration.getBoolean("GenerateChunks")) {
                     final double chunks = (int) Math.ceil(config.getBorderSize() / 16);
-                    double totalChunks = (chunks * 2) * (chunks * 2);
-                    double currentChunks = 0;
-                    long lastPrint = 0;
+                    final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
                     for (int x = (int) -chunks; x <= chunks; x++) {
                         for (int z = (int) -chunks; z <= chunks; z++) {
-                            currentChunks++;
+                            BlockInfo info = new BlockInfo();
+                            info.x = spawn.getBlockX() + (x * 16);
+                            info.z = spawn.getBlockZ() + (z * 16);
+                            toProcess.add(info);
+                        }
+                    }
+                    final double totalChunks = toProcess.size();
+                    BukkitRunnable runnable = new BukkitRunnable() {
+                        long lastPrint = 0;
+                        int currentChunks = 0;
+
+                        public void run() {
                             if (lastPrint + 2000 < System.currentTimeMillis()) {
                                 System.out.print(String.format(cm.getLoggerGeneratingChunks(),
-                                        (int) Math.floor((currentChunks / totalChunks) * 100))
+                                        (int) Math.floor(((double) currentChunks / totalChunks) * 100))
                                         + "%");
                                 lastPrint = System.currentTimeMillis();
                             }
-                            Chunk chunk = spawn.clone().add(x * 16, 0, z * 16).getChunk();
-                            if (chunk.isLoaded())
-                                continue;
-                            chunk.load();
-                            chunk.unload(true, false);
+                            Iterator<BlockInfo> itel = toProcess.iterator();
+                            long started = System.currentTimeMillis();
+
+                            while (itel.hasNext() && started + 50 > System.currentTimeMillis()) {
+                                currentChunks++;
+                                BlockInfo info = itel.next();
+                                itel.remove();
+                                Chunk chunk = world.getChunkAt(info.x, info.z);
+                                if (chunk.isLoaded())
+                                    continue;
+                                chunk.load();
+                                chunk.unload(true, false);
+                            }
+                            if (!itel.hasNext()) {
+                                System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
+                                cancel();
+                            }
                         }
-                    }
-                    System.out.print(String.format(cm.getLoggerChunksGenerated(), (int) currentChunks));
+                    };
+                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
                 }
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
                     HungergamesApi.getFeastManager().generatePlatform(

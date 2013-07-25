@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
@@ -35,6 +38,8 @@ public class LibsFeastManager implements FeastManager {
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
     private HashMap<Block, BlockInfo> toSet = new HashMap<Block, BlockInfo>();
+    private LinkedList<Block> removeLeaves = new LinkedList<Block>();
+    private LinkedList<Block> processedLeaves = new LinkedList<Block>();
     private BukkitRunnable runnable;
 
     public LibsFeastManager() {
@@ -143,6 +148,8 @@ public class LibsFeastManager implements FeastManager {
                 if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
                     for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + (radius / 2); y++) {
                         Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
+                        if (!b.getChunk().isLoaded())
+                            b.getChunk().load();
                         removeLeaves(b);
                         if (y >= loc.getBlockY()) {// If its less then 0
                             setBlockFast(b, 0, (byte) 0);
@@ -224,10 +231,14 @@ public class LibsFeastManager implements FeastManager {
             int x = (int) (loc.getX() + .5 + radius * Math.cos(angle));
             int z = (int) (loc.getZ() + radius * Math.sin(angle));
             Block b = getHighest(loc.getWorld().getHighestBlockAt(x, z));
-            if (!b.getChunk().isLoaded())
+            boolean unload = b.getChunk().isLoaded();
+            if (!unload) {
                 b.getChunk().load(true);
+            }
             if (isBlockValid(b))
                 heightLevels.add(b.getY());
+            if (unload)
+                b.getChunk().unload(true);
             /*
              * // Do it again but at 2/3 the radius angle = degree * Math.PI /
              * 180; x = (int) (loc.getX() + .5 + ((radius / 3) * 2) *
@@ -283,7 +294,8 @@ public class LibsFeastManager implements FeastManager {
             Block newB = b.getRelative(face);
             if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {
                 setBlockFast(newB, 0, (byte) 0);
-                removeLeaves(newB);
+                if (!removeLeaves.contains(newB) && !processedLeaves.contains(newB))
+                    removeLeaves.add(newB);
                 if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT)
                     setBlockFast(newB.getRelative(BlockFace.DOWN), Material.GRASS.getId(), (byte) 0);
             } else if (newB.getType() == Material.SNOW && face == BlockFace.UP)
@@ -291,7 +303,7 @@ public class LibsFeastManager implements FeastManager {
         }
     }
 
-    private void setBlockFast(Block b, int typeId, short s) {
+    public void setBlockFast(Block b, int typeId, short s) {
         try {
             if (b.getTypeId() != typeId || b.getData() != s) {
                 BlockInfo info = new BlockInfo();
@@ -301,14 +313,20 @@ public class LibsFeastManager implements FeastManager {
                 if (runnable == null) {
                     runnable = new BukkitRunnable() {
                         public void run() {
-                            if (toSet.size() == 0) {
+                            if (toSet.size() == 0 && removeLeaves.size() == 0) {
                                 runnable = null;
+                                processedLeaves.clear();
                                 cancel();
+                            }
+                            while (removeLeaves.peek() != null) {
+                                Block b = removeLeaves.poll();
+                                processedLeaves.add(b);
+                                removeLeaves(b);
                             }
                             int i = 0;
                             ArrayList<Block> toDo = new ArrayList<Block>();
                             for (Block b : toSet.keySet()) {
-                                if (i == 200)
+                                if (i++ >= 200)
                                     break;
                                 toDo.add(b);
                             }
@@ -316,7 +334,7 @@ public class LibsFeastManager implements FeastManager {
                                 b.setTypeIdAndData(toSet.get(b).id, toSet.remove(b).data, false);
                         }
                     };
-                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 0, 0);
+                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
                 }
                 // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
                 // b.getY(), b.getZ() & 15, typeId, data);
