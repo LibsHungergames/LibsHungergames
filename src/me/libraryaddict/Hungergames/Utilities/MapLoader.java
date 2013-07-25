@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_6_R2.CraftServer;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
@@ -97,7 +96,7 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
-            String worldName = ((CraftServer) hg.getServer()).getServer().getPropertyManager().getString("level-name", "world");
+            String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
             if (!worldFolder.exists())

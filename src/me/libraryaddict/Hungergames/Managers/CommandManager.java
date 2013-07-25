@@ -12,7 +12,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_6_R2.CraftServer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -240,10 +239,7 @@ public class CommandManager {
                 command.setDescription(ChatColor.translateAlternateColorCodes('&', (String) field.get(exc)));
         } catch (Exception ex) {
         }
-        Field field = CraftServer.class.getDeclaredField("commandMap");
-        field.setAccessible(true);
-        SimpleCommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
-        map.register(name, command);
+        HungergamesApi.getReflectionManager().getCommandMap().register(name, command);
     }
 
     public void save() {
@@ -281,9 +277,9 @@ public class CommandManager {
             Field alias = SimpleCommandMap.class.getDeclaredField("aliases");
             known.setAccessible(true);
             alias.setAccessible(true);
-            Map<String, Command> knownCommands = (Map<String, Command>) known.get(((CraftServer) Bukkit.getServer())
+            Map<String, Command> knownCommands = (Map<String, Command>) known.get(HungergamesApi.getReflectionManager()
                     .getCommandMap());
-            Set<String> aliases = (Set<String>) alias.get(((CraftServer) Bukkit.getServer()).getCommandMap());
+            Set<String> aliases = (Set<String>) alias.get(HungergamesApi.getReflectionManager().getCommandMap());
             knownCommands.remove(name.toLowerCase());
             aliases.remove(name.toLowerCase());
         } catch (Exception ex) {

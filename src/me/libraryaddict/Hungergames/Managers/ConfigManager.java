@@ -12,7 +12,6 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_6_R2.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -441,20 +440,21 @@ public class ConfigManager {
             }
             System.out.println(cm.getLoggerDisabledEnd());
         }
+        ReflectionManager rm = HungergamesApi.getReflectionManager();
         if (hg.getServer().getAllowNether() && hg.getConfig().getBoolean("DisableNether", true)) {
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("allow-nether", false);
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
+            rm.setPropertiesConfig("allow-nether", false);
+            rm.savePropertiesConfig();
             System.out.println(cm.getLoggerDisabledNether());
         }
         if (hg.getServer().getSpawnRadius() > 0 && hg.getConfig().getBoolean("ChangeSpawnLimit", true)) {
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("spawn-protection", 0);
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
+            rm.setPropertiesConfig("spawn-protection", 0);
+            rm.savePropertiesConfig();
             System.out.println(cm.getLoggerChangedSpawnRadius());
         }
-        if (((CraftServer) hg.getServer()).getServer().getPropertyManager().getInt("max-build-height", 128) > 128
+        if ((Integer) rm.getPropertiesConfig("max-build-height", 128) > 128
                 && hg.getConfig().getBoolean("ChangeHeightLimit", true)) {
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().a("max-build-height", 128);
-            ((CraftServer) hg.getServer()).getServer().getPropertyManager().savePropertiesFile();
+            rm.setPropertiesConfig("max-build-height", 128);
+            rm.savePropertiesConfig();
             System.out.println(cm.getLoggerChangedHeightLimit());
         }
         currentVersion = "v" + hg.getDescription().getVersion();

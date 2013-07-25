@@ -4,13 +4,9 @@ import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
-import net.minecraft.server.v1_6_R2.ChunkCoordIntPair;
-import net.minecraft.server.v1_6_R2.EntityPlayer;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Chunk implements CommandExecutor {
@@ -26,12 +22,11 @@ public class Chunk implements CommandExecutor {
             gamer.setChunkCooldown((System.currentTimeMillis() / 1000) + 10);
             System.out.print(String.format(cm.getCommandChunkLoggerReloadingChunks(), p.getName()));
             org.bukkit.Chunk chunk = p.getWorld().getChunkAt(p.getLocation());
-            EntityPlayer player = ((CraftPlayer) p).getHandle();
             for (int i = -16; i <= 16; i = i + 16) {
                 for (int a = -16; a <= 16; a = a + 16) {
                     chunk = p.getWorld().getChunkAt((p.getLocation().getBlockX() + i) >> 4,
                             (p.getLocation().getBlockZ() + a) >> 4);
-                    player.chunkCoordIntPairQueue.add(new ChunkCoordIntPair(chunk.getX(), chunk.getZ()));
+                    HungergamesApi.getReflectionManager().sendChunk(p, chunk.getX(), chunk.getZ());
                 }
             }
             p.teleport(p.getLocation().add(0, 0.5, 0));

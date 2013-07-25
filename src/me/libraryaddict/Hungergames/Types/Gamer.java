@@ -7,13 +7,10 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_6_R2.EntityPlayer;
-import net.minecraft.server.v1_6_R2.Packet201PlayerInfo;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -158,11 +155,9 @@ public class Gamer {
      * @param hider
      */
     public void hide(Player hider) {
-        Packet201PlayerInfo packet = new Packet201PlayerInfo(hider.getPlayerListName(), false, 9999);
         if (hider != null)
             if (getPlayer().canSee(hider)) {
                 getPlayer().hidePlayer(hider);
-                ((CraftPlayer) getPlayer()).getHandle().playerConnection.sendPacket(packet);
             }
     }
 
@@ -258,18 +253,14 @@ public class Gamer {
      * Set their width and length to 0, Makes arrows move through them
      */
     public void setGhost() {
-        EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
-        p.width = 0;
-        p.length = 0;
+        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 0, 0, 0);
     }
 
     /**
      * Restore their width and length. Makes arrows hit them
      */
     public void setHuman() {
-        EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
-        p.width = 0.6F;
-        p.length = 1.8F;
+        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 1.8F, 0.6F, 1.8F);
     }
 
     public void setRiding(boolean ride) {
@@ -305,11 +296,9 @@ public class Gamer {
      * Shows the player to this gamer
      */
     public void show(Player hider) {
-        Packet201PlayerInfo packet = new Packet201PlayerInfo(hider.getPlayerListName(), true, 0);
         if (hider != null)
             if (!getPlayer().canSee(hider)) {
                 getPlayer().showPlayer(hider);
-                ((CraftPlayer) getPlayer()).getHandle().playerConnection.sendPacket(packet);
             }
     }
 
