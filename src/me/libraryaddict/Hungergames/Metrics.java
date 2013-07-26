@@ -309,6 +309,7 @@ public class Metrics {
      * The scheduled task
      */
     private volatile BukkitTask task = null;
+    private Graph kitsGraph;
 
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -334,6 +335,11 @@ public class Metrics {
         // Load the guid then
         guid = configuration.getString("guid");
         debug = configuration.getBoolean("debug", false);
+        kitsGraph = new Graph("Kits Used");
+    }
+
+    public Graph getKitsUsedGraph() {
+        return kitsGraph;
     }
 
     /**

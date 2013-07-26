@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Metrics;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
@@ -47,21 +48,8 @@ public class KitManager {
             if (config.contains("BadKits") && config.getStringList("BadKits").contains(string))
                 continue;
             Kit kit = parseKit(config.getConfigurationSection("Kits." + string));
-            kits.add(kit);
-            if (kit.isFree())
-                defaultKits.add(kit);
+            addKit(kit);
         }
-        List<String> kitNames = new ArrayList<String>();
-        for (Kit kit : kits)
-            kitNames.add(ChatColor.stripColor(kit.getName()));
-        Collections.sort(kitNames, String.CASE_INSENSITIVE_ORDER);
-        ArrayList<Kit> newKit = new ArrayList<Kit>();
-        for (int i = 0; i < kitNames.size(); i++) {
-            Kit kit = getKitByName(kitNames.get(i));
-            kit.setId(i);
-            newKit.add(kit);
-        }
-        kits = newKit;
     }
 
     public void addItem(Player p, ItemStack item) {
@@ -81,7 +69,7 @@ public class KitManager {
         }
     }
 
-    public void addKit(Kit newKit) {
+    public void addKit(final Kit newKit) {
         if (getKitByName(newKit.getName()) != null) {
             System.out.print(String.format(cm.getLoggerKitAlreadyExists(), newKit.getName()));
             return;
@@ -100,6 +88,15 @@ public class KitManager {
             newKits.add(kit);
         }
         kits = newKits;
+        Metrics metrics = HungergamesApi.getHungergames().getMetrics();
+        metrics.getKitsUsedGraph().addPlotter(new Metrics.Plotter(newKit.getName()) {
+
+            @Override
+            public int getValue() {
+                return newKit.getPlayerSize(); // Number of players who used a diamond sword
+            }
+
+        });
     }
 
     public boolean addKitToPlayer(Player player, Kit kit) {
