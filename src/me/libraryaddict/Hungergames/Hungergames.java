@@ -65,19 +65,21 @@ public class Hungergames extends JavaPlugin {
     private PlayerManager pm;
     protected long time = 0;
     public World world;
+    private Metrics metrics;
 
     public void onEnable() {
         HungergamesApi.init(this);
-        cm = HungergamesApi.getTranslationManager();
-        pm = HungergamesApi.getPlayerManager();
-        config = HungergamesApi.getConfigManager();
-        MySqlManager mysql = HungergamesApi.getMySqlManager();
         try {
-            if (!new Metrics(this).start())
+            metrics = new Metrics(this);
+            if (!metrics.start())
                 System.out.print(cm.getLoggerMetricsMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        cm = HungergamesApi.getTranslationManager();
+        pm = HungergamesApi.getPlayerManager();
+        config = HungergamesApi.getConfigManager();
+        MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
         mysql.SQL_PASS = getConfig().getString("MySqlPass");
@@ -114,7 +116,7 @@ public class Hungergames extends JavaPlugin {
                         int currentChunks = 0;
 
                         public void run() {
-                            if (lastPrint + 2000 < System.currentTimeMillis()) {
+                            if (lastPrint + 5000 < System.currentTimeMillis()) {
                                 System.out.print(String.format(cm.getLoggerGeneratingChunks(),
                                         (int) Math.floor(((double) currentChunks / totalChunks) * 100))
                                         + "%");
@@ -177,6 +179,10 @@ public class Hungergames extends JavaPlugin {
             perm.setDescription("Used for messages in LibsHungergames");
             Bukkit.getPluginManager().addPermission(perm);
         }
+    }
+
+    public Metrics getMetrics() {
+        return metrics;
     }
 
     public void onDisable() {
