@@ -41,7 +41,7 @@ public class ReflectionManager {
 
     public Object setPropertiesConfig(String name, Object obj) {
         try {
-            return propertyManager.getClass().getMethod("a").invoke(propertyManager, name, obj);
+            return propertyManager.getClass().getMethod("a", String.class, Object.class).invoke(propertyManager, name, obj);
         } catch (Exception e) {
             e.printStackTrace();
         }
