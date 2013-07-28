@@ -187,7 +187,6 @@ public class Gamer {
     }
 
     public void setAlive(boolean alive) {
-        String name = ChatColor.DARK_GRAY + player.getName() + ChatColor.RESET;
         if (alive) {
             player.setFallDistance(0F);
             player.setAllowFlight(false);
@@ -221,8 +220,6 @@ public class Gamer {
                     }
                 }
             }
-            if (player.getDisplayName().equals(name))
-                player.setDisplayName(player.getName());
         } else if (!alive) {
             setSpectating(true);
             setGhost();
@@ -233,8 +230,6 @@ public class Gamer {
             player.setFoodLevel(20);
             player.setHealth(20);
             player.setFireTicks(0);
-            if (player.getDisplayName().equals(player.getName()))
-                player.setDisplayName(name);
         }
     }
 
