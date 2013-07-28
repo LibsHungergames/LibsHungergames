@@ -144,10 +144,17 @@ public class Hungergames extends JavaPlugin {
                     runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
                 }
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
-                    HungergamesApi.getFeastManager().generatePlatform(
+                    ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
+                    LibsFeastManager feastManager;
+                    if (HungergamesApi.getFeastManager() instanceof LibsFeastManager)
+                        feastManager = (LibsFeastManager) HungergamesApi.getFeastManager();
+                    else
+                        feastManager = new LibsFeastManager();
+                    feastManager.generatePlatform(
                             world.getSpawnLocation(),
                             HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
-                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"));
+                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"),
+                            spawnGround.getTypeId(), spawnGround.getDurability());
                 }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())

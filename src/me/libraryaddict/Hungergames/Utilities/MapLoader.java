@@ -96,6 +96,10 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
+            if (!config.contains("SpawnPlatformIDandData")) {
+                config.set("SpawnPlatformIDandData", "GRASS 0");
+                config.save(mapConfig);
+            }
             String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);

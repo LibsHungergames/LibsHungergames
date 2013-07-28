@@ -28,17 +28,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LibsFeastManager implements FeastManager {
     private class BlockInfo {
-        int id;
         byte data;
+        int id;
     }
 
     // This manages the chests, The buildings
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
-    private HashMap<Block, BlockInfo> toSet = new HashMap<Block, BlockInfo>();
-    private LinkedList<Block> removeLeaves = new LinkedList<Block>();
     private LinkedList<Block> processedLeaves = new LinkedList<Block>();
+    private LinkedList<Block> removeLeaves = new LinkedList<Block>();
     private BukkitRunnable runnable;
+    private HashMap<Block, BlockInfo> toSet = new HashMap<Block, BlockInfo>();
 
     public LibsFeastManager() {
         faces.add(BlockFace.UP);
@@ -128,38 +128,10 @@ public class LibsFeastManager implements FeastManager {
         }
     }
 
-    /**
-     * Generates a feast
-     * 
-     * @param loc
-     * @param lowestLevel
-     * @param radius
-     */
-    public void generatePlatform(final Location loc, int lowestLevel, int radius) {
-        ConfigManager config = HungergamesApi.getConfigManager();
-        ItemStack feastGround = config.getFeastGround();
-        loc.setY(lowestLevel + 1);
-        double radiusSquared = radius * radius;
-        // Sets to air and generates to stand on
-        for (int radiusX = -radius; radiusX <= radius; radiusX++) {
-            for (int radiusZ = -radius; radiusZ <= radius; radiusZ++) {
-                if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
-                    for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + (radius / 2); y++) {
-                        Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
-                        if (!b.getChunk().isLoaded())
-                            b.getChunk().load();
-                        removeLeaves(b);
-                        if (y >= loc.getBlockY()) {// If its less then 0
-                            setBlockFast(b, 0, (byte) 0);
-                        } else {
-                            // Generates to stand on
-                            setBlockFast(b, feastGround.getTypeId(), feastGround.getDurability());
-                        }
-                    }
-                }
-            }
-        }
+    public void generatePillars(Location loc, int radius) {
         // Generates pillars
+
+        ConfigManager config = HungergamesApi.getConfigManager();
         int[] cords = new int[] { (int) (-radius / 2.5), (int) (radius / 2.5) };
         int pillarRadius = Math.round(radius / 8);
         ItemStack pillarCorner = config.getPillarCorner();
@@ -181,6 +153,51 @@ public class LibsFeastManager implements FeastManager {
                         }
                     }
         // naturalizeSpawn(loc, radius);
+    }
+
+    /**
+     * Generates a feast
+     * 
+     * @param loc
+     * @param lowestLevel
+     * @param radius
+     */
+    public void generatePlatform(Location loc, int lowestLevel, int radius) {
+        ConfigManager config = HungergamesApi.getConfigManager();
+        ItemStack feastGround = config.getFeastGround();
+        generatePlatform(loc, lowestLevel, radius, feastGround.getTypeId(), feastGround.getDurability());
+        generatePillars(loc, radius);
+    }
+
+    /**
+     * Generates a feast
+     * 
+     * @param loc
+     * @param lowestLevel
+     * @param radius
+     */
+    public void generatePlatform(Location loc, int lowestLevel, int radius, int platformGround, short platformDurability) {
+        loc.setY(lowestLevel + 1);
+        double radiusSquared = radius * radius;
+        // Sets to air and generates to stand on
+        for (int radiusX = -radius; radiusX <= radius; radiusX++) {
+            for (int radiusZ = -radius; radiusZ <= radius; radiusZ++) {
+                if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
+                    for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + (radius / 2); y++) {
+                        Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
+                        if (!b.getChunk().isLoaded())
+                            b.getChunk().load();
+                        removeLeaves(b);
+                        if (y >= loc.getBlockY()) {// If its less then 0
+                            setBlockFast(b, 0, (byte) 0);
+                        } else {
+                            // Generates to stand on
+                            setBlockFast(b, platformGround, platformDurability);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public int getHeight(ArrayList<Integer> heights, int radius) {
