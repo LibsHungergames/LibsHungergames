@@ -82,13 +82,30 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
-        if (config.isSpectatorChatHidden() && !gamer.isAlive() && hg.doSeconds
-                && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
-            Iterator<Player> players = event.getRecipients().iterator();
-            while (players.hasNext()) {
-                Gamer g = pm.getGamer(players.next());
-                if (g != null && !g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
-                    players.remove();
+        String currentKit = cm.getMessagePlayerShowKitsNoKit();
+        if (kits.getKitByPlayer(event.getPlayer()) != null)
+            currentKit = kits.getKitByPlayer(event.getPlayer()).getName();
+        if (!gamer.isAlive()) {
+            if (config.isSpectatorChatHidden() && hg.doSeconds && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
+                Iterator<Player> players = event.getRecipients().iterator();
+                while (players.hasNext()) {
+                    Gamer g = pm.getGamer(players.next());
+                    if (g != null && !g.getPlayer().hasPermission("hungergames.spectatorchat") && g.isAlive())
+                        players.remove();
+                }
+            }
+            if (config.getSpectatingPrefix() != null) {
+                String format = ChatColor.translateAlternateColorCodes('&', config.getSpectatingPrefix());
+                format = format.replace("%Kit%", currentKit);
+                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%1$2s");
+                event.setFormat(format);
+            }
+        } else {
+            if (config.getAlivePrefix() != null) {
+                String format = ChatColor.translateAlternateColorCodes('&', config.getAlivePrefix());
+                format = format.replace("%Kit%", currentKit);
+                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%1$2s");
+                event.setFormat(format);
             }
         }
     }

@@ -119,9 +119,6 @@ PillarCorner: QUARTZ_BLOCK 2
 # ID of material inside
 PillarInsides: GLASS 0
 
-# Change disguise config to a better version for HG?
-ChangeDisguiseConfig: true
-
 # Change the build height limit to 128?
 ChangeHeightLimit: true
 
@@ -134,6 +131,23 @@ ForceZ: 0
 # You know when you press tab, it displays the kills next to the name?
 # Some people have names which are too long. The plugin shortens them.
 ShortenNames: true
+
+# Some people want to have their kit name display as a prefix.
+# So I'll let you change the prefixes for the game..
+
+# Add the below options to ensure no one has problems..
+# Seriously. Gonna have to move some of these options out someday.
+
+ChangeAlivePrefix: true
+ChangeSpectatingPrefix: true
+
+# Prefix when they havn't died.
+AlivePrefix: '<%Name%> %Message%'
+# AlivePrefix: '&6[&r%Kit%&6]&r %Name%: %Message%'
+
+# Prefix for when they have died.
+SpectatingPrefix: '<&7%Name%&r> %Message%'
+# AlivePrefix: '&6[&r%Kit%&6]&r &7%Name%&r: %Message%'
 
 # Chance out of ? of animals spawning
 # Used for limiting mob spawns to raise the difficulty

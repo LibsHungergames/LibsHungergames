@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 
 public class ReflectionManager {
     private SimpleCommandMap commandMap;
-    private Object propertyManager;
     private String currentVersion;
+    private Object propertyManager;
 
     public ReflectionManager() {
         try {
@@ -28,32 +28,8 @@ public class ReflectionManager {
         }
     }
 
-    public void sendChunk(Player p, int x, int z) {
-        try {
-            Object obj = p.getClass().getDeclaredMethod("getHandle").invoke(p);
-            List list = (List) obj.getClass().getField("chunkCoordIntPairQueue").get(obj);
-            Constructor con = Class.forName(currentVersion + ".ChunkCoordIntPair").getConstructor(int.class, int.class);
-            list.add(con.newInstance(x, z));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public Object setPropertiesConfig(String name, Object obj) {
-        try {
-            return propertyManager.getClass().getMethod("a", String.class, Object.class).invoke(propertyManager, name, obj);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
-    public void savePropertiesConfig() {
-        try {
-            propertyManager.getClass().getMethod("savePropertiesFile").invoke(propertyManager);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public SimpleCommandMap getCommandMap() {
+        return commandMap;
     }
 
     public Object getPropertiesConfig(String name, Object obj) {
@@ -79,6 +55,34 @@ public class ReflectionManager {
         return obj;
     }
 
+    public void savePropertiesConfig() {
+        try {
+            propertyManager.getClass().getMethod("savePropertiesFile").invoke(propertyManager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendChunk(Player p, int x, int z) {
+        try {
+            Object obj = p.getClass().getDeclaredMethod("getHandle").invoke(p);
+            List list = (List) obj.getClass().getField("chunkCoordIntPairQueue").get(obj);
+            Constructor con = Class.forName(currentVersion + ".ChunkCoordIntPair").getConstructor(int.class, int.class);
+            list.add(con.newInstance(x, z));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Object setPropertiesConfig(String name, Object obj) {
+        try {
+            return propertyManager.getClass().getMethod("a", String.class, Object.class).invoke(propertyManager, name, obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
     public void setWidthHeight(Player p, float height, float width, float length) {
         try {
             Method handle = p.getClass().getMethod("getHandle");
@@ -92,9 +96,5 @@ public class ReflectionManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public SimpleCommandMap getCommandMap() {
-        return commandMap;
     }
 }

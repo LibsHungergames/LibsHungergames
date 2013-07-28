@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ConfigManager {
 
+    private String alivePrefix;
     private double border;
     private boolean borderCloseIn;
     private double borderClosesIn;
@@ -57,6 +58,7 @@ public class ConfigManager {
     private ItemStack pillarCorner;
     private ItemStack pillarInsides;
     private boolean shortenNames;
+    private String spectatingPrefix;
     private boolean spectatorChat;
     private ItemStack spectatorItemBack;
     private ItemStack spectatorItemForwards;
@@ -177,6 +179,10 @@ public class ConfigManager {
      */
     public boolean generatePillars() {
         return generatePillars;
+    }
+
+    public String getAlivePrefix() {
+        return alivePrefix;
     }
 
     /**
@@ -325,6 +331,10 @@ public class ConfigManager {
      */
     public int getSpawnZ() {
         return z;
+    }
+
+    public String getSpectatingPrefix() {
+        return spectatingPrefix;
     }
 
     public ItemStack getSpectatorInventoryBack() {
@@ -527,6 +537,10 @@ public class ConfigManager {
             commandsToRunBeforeShutdown = new ArrayList<String>();
         disableMetrics = hg.getConfig().getBoolean("DisableMetrics");
         flyPreGame = hg.getConfig().getBoolean("FlyPregame");
+        if (hg.getConfig().getBoolean("ChangeAlivePrefix"))
+            alivePrefix = hg.getConfig().getString("AlivePrefix");
+        if (hg.getConfig().getBoolean("ChangeSpectatingPrefix"))
+            spectatingPrefix = hg.getConfig().getString("SpectatingPrefix");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -565,7 +579,7 @@ public class ConfigManager {
      *            containing item
      * @return Itemstack parsed from the string
      */
-    private ItemStack parseItem(String string) {
+    public ItemStack parseItem(String string) {
         String[] args = string.split(" ");
         int id = hg.isNumeric(args[0]) ? Integer.parseInt(args[0])
                 : (Material.getMaterial(args[0].toUpperCase()) == null ? Material.AIR : Material.getMaterial(args[0]
