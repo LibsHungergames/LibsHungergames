@@ -241,44 +241,67 @@ public class Hungergames extends JavaPlugin {
 
     private void doBorder(Gamer gamer) {
         Player p = gamer.getPlayer();
-        Location loc = p.getLocation();
-        Location sLoc = world.getSpawnLocation();
-        Location tpTo = loc.clone();
-        int fromSpawn = loc.getBlockX() - sLoc.getBlockX();
+        Location loc = p.getLocation().clone();
+        Location sLoc = world.getSpawnLocation().clone();
         final double border = config.getBorderSize();
-        if (fromSpawn > border - 20) {
-            tpTo.setX(((border - 2) + sLoc.getBlockX()));
-        }
-        if (fromSpawn < -(border - 20)) {
-            tpTo.setX((-(border - 2) + sLoc.getBlockX()));
-        }
-        boolean hurt = Math.abs(fromSpawn) >= border;
-        fromSpawn = loc.getBlockZ() - sLoc.getBlockZ();
-        if (fromSpawn > (border - 20)) {
-            tpTo.setZ(((border - 2) + sLoc.getBlockZ()));
-        }
-        if (fromSpawn < -(border - 20)) {
-            tpTo.setZ((-(border - 2) + sLoc.getBlockZ()));
-        }
-        if (!hurt)
-            hurt = Math.abs(fromSpawn) >= border;
-        if (!loc.equals(tpTo))
-            p.sendMessage(cm.getMessagePlayerApproachingBorder());
-        if (hurt) {
-            if (gamer.isAlive()) {
-                // Damage and potentially kill.
-                if (p.getHealth() - 2 > 0) {
-                    p.damage(0);
-                    p.setHealth(p.getHealth() - 2);
-                } else {
-                    List<ItemStack> list = new ArrayList<ItemStack>();
-                    for (ItemStack item : p.getInventory())
-                        list.add(item);
-                    pm.killPlayer(gamer, null, loc, gamer.getInventory(),
-                            String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
+        if (config.isRoundedBorder()) {
+            sLoc.setY(loc.getY());
+            double fromBorder = loc.distance(sLoc) - border;
+            if (fromBorder - 20 > 0) {
+                // Warn
+                p.sendMessage(cm.getMessagePlayerApproachingBorder());
+                if (fromBorder > 0) {
+                    // Punish
+                    if (gamer.isAlive()) {
+                        // Damage and potentially kill.
+                        if (p.getHealth() - 2 > 0) {
+                            p.damage(0);
+                            p.setHealth(p.getHealth() - 2);
+                        } else {
+                            pm.killPlayer(gamer, null, loc, gamer.getInventory(),
+                                    String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
+                        }
+                    } else if (border > 10) {
+                        // Hmm. Preferably I tp them back inside.
+                        // May as well just tp to spawn. No harm done.
+                        pm.sendToSpawn(gamer);
+                    }
                 }
-            } else
-                gamer.getPlayer().teleport(tpTo);
+            }
+        } else {
+            Location tpTo = loc.clone();
+            int fromSpawn = loc.getBlockX() - sLoc.getBlockX();
+            if (fromSpawn > border - 20) {
+                tpTo.setX(((border - 2) + sLoc.getBlockX()));
+            }
+            if (fromSpawn < -(border - 20)) {
+                tpTo.setX((-(border - 2) + sLoc.getBlockX()));
+            }
+            boolean hurt = Math.abs(fromSpawn) >= border;
+            fromSpawn = loc.getBlockZ() - sLoc.getBlockZ();
+            if (fromSpawn > (border - 20)) {
+                tpTo.setZ(((border - 2) + sLoc.getBlockZ()));
+            }
+            if (fromSpawn < -(border - 20)) {
+                tpTo.setZ((-(border - 2) + sLoc.getBlockZ()));
+            }
+            if (!hurt)
+                hurt = Math.abs(fromSpawn) >= border;
+            if (!loc.equals(tpTo))
+                p.sendMessage(cm.getMessagePlayerApproachingBorder());
+            if (hurt) {
+                if (gamer.isAlive()) {
+                    // Damage and potentially kill.
+                    if (p.getHealth() - 2 > 0) {
+                        p.damage(0);
+                        p.setHealth(p.getHealth() - 2);
+                    } else {
+                        pm.killPlayer(gamer, null, loc, gamer.getInventory(),
+                                String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
+                    }
+                } else if (border > 10)
+                    gamer.getPlayer().teleport(tpTo);
+            }
         }
     }
 
@@ -338,7 +361,7 @@ public class Hungergames extends JavaPlugin {
                         feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn()))
                         + (config.feastStartsIn() > 10 ? cm.getBroadcastFeastStartingCompassMessage() : ""));
             }
-        } else if (config.doesBorderCloseIn() && currentTime > config.getTimeFeastStarts()) {
+        } else if (config.getBorderCloseInRate() > 0 && currentTime > config.getTimeFeastStarts()) {
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());
         }
