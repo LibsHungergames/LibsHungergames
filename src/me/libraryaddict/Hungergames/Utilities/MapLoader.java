@@ -101,11 +101,11 @@ public class MapLoader {
                 config.save(mapConfig);
             }
             if (!config.contains("RoundedBorder")) {
-                config.set("RoundedBorder", "false");
+                config.set("RoundedBorder", false);
                 config.save(mapConfig);
             }
             if (!config.contains("BorderSize")) {
-                config.set("BorderSize", "500");
+                config.set("BorderSize", 500);
                 config.save(mapConfig);
             }
             if (!config.contains("BorderCloseInRate")) {
@@ -128,6 +128,7 @@ public class MapLoader {
                 File mapFolder = new File(config.getString("MapPath"));
                 loadMap(mapFolder, worldFolder, config);
             }
+            loadMapConfiguration(new File(worldFolder, "config.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -152,7 +153,6 @@ public class MapLoader {
                 copy(f, dest);
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerSucessfullyLoadedMap(),
                     toLoad.getName()));
-            loadMapConfiguration(new File(dest.toString() + "/config.yml"));
         } else
             System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), mapDir.toString()));
     }
@@ -165,7 +165,6 @@ public class MapLoader {
             YamlConfiguration config = null;
             if (!worldConfig.exists()) {
                 System.out.print(tm.getLoggerMapConfigNotFound());
-                return;
             } else
                 config = YamlConfiguration.loadConfiguration(worldConfig);
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new File(HungergamesApi.getHungergames()
@@ -192,7 +191,8 @@ public class MapLoader {
                         .print(String.format(tm.getLoggerMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
             } else
                 configManager.setTimeOfDay(defaultConfig.getInt("TimeOfDayWhenGameStarts"));
-            System.out.print(tm.getLoggerMapConfigLoaded());
+            if (config != null)
+                System.out.print(tm.getLoggerMapConfigLoaded());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
