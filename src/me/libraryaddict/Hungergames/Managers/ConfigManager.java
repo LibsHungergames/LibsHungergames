@@ -19,7 +19,6 @@ public class ConfigManager {
 
     private String alivePrefix;
     private double border;
-    private boolean borderCloseIn;
     private double borderClosesIn;
     private int chestLayers;
     private List<String> commandsToRunBeforeShutdown;
@@ -68,6 +67,15 @@ public class ConfigManager {
     private int wonBroadcastsDelay;
     private int x;
     private int z;
+    private boolean roundedBorder;
+
+    public void setBorderCloseInRate(double rate) {
+        this.borderClosesIn = rate;
+    }
+
+    public void setRoundedBorder(boolean roundedBorder) {
+        this.roundedBorder = roundedBorder;
+    }
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -151,13 +159,6 @@ public class ConfigManager {
      */
     public boolean displayScoreboards() {
         return displayScoreboards;
-    }
-
-    /**
-     * @return Does the border close in after the feast starts?
-     */
-    public boolean doesBorderCloseIn() {
-        return borderCloseIn;
     }
 
     /**
@@ -489,11 +490,8 @@ public class ConfigManager {
         gameShutdownDelay = hg.getConfig().getInt("GameShutdownDelay");
         feastSize = hg.getConfig().getInt("FeastSize", 20);
         invincibility = hg.getConfig().getInt("Invincibility", 120);
-        border = hg.getConfig().getInt("BorderSize", 500);
         chestLayers = hg.getConfig().getInt("ChestLayers", 500);
         timeTillFeast = hg.getConfig().getInt("TimeTillFeast", 500);
-        borderCloseIn = hg.getConfig().getBoolean("BorderCloseIn", true);
-        borderClosesIn = hg.getConfig().getDouble("BorderClosesIn", 0.2);
         spectatorChat = !hg.getConfig().getBoolean("SpectatorChat", true);
         shortenNames = hg.getConfig().getBoolean("ShortenNames");
         spectators = hg.getConfig().getBoolean("Spectators", true);
@@ -572,6 +570,10 @@ public class ConfigManager {
      */
     public int mushroomStewRestores() {
         return mushroomStewRestores;
+    }
+
+    public boolean isRoundedBorder() {
+        return roundedBorder;
     }
 
     /**

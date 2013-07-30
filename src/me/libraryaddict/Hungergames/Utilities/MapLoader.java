@@ -100,6 +100,18 @@ public class MapLoader {
                 config.set("SpawnPlatformIDandData", "GRASS 0");
                 config.save(mapConfig);
             }
+            if (!config.contains("RoundedBorder")) {
+                config.set("RoundedBorder", "false");
+                config.save(mapConfig);
+            }
+            if (!config.contains("BorderSize")) {
+                config.set("BorderSize", "500");
+                config.save(mapConfig);
+            }
+            if (!config.contains("BorderCloseInRate")) {
+                config.set("BorderCloseInRate", 0.2);
+                config.save(mapConfig);
+            }
             String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
@@ -146,19 +158,33 @@ public class MapLoader {
         TranslationManager tm = HungergamesApi.getTranslationManager();
         try {
             System.out.print(tm.getLoggerMapConfigNowLoading());
+            YamlConfiguration config = null;
             if (!worldConfig.exists()) {
                 System.out.print(tm.getLoggerMapConfigNotFound());
                 return;
-            }
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(worldConfig);
-            if (config.contains("BorderSize")) {
+            } else
+                config = YamlConfiguration.loadConfiguration(worldConfig);
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new File(HungergamesApi.getHungergames()
+                    .getDataFolder(), "map.yml"));
+            if (config != null && config.contains("BorderSize")) {
                 configManager.setBorderSize(config.getInt("BorderSize"));
                 System.out.print(String.format(tm.getLoggerMapConfigChangedBorderSize(), config.getInt("BorderSize")));
-            }
+            } else
+                configManager.setBorderSize(defaultConfig.getInt("BorderSize"));
+            if (config != null && config.contains("RoundedBorder")) {
+                configManager.setRoundedBorder(config.getBoolean("RoundedBorder"));
+                System.out.print(String.format(tm.getLoggerMapConfigChangedRoundedBorder(), config.getBoolean("RoundedBorder")));
+            } else
+                configManager.setRoundedBorder(defaultConfig.getBoolean("RoundedBorder"));
+            if (config != null && config.contains("BorderCloseInRate")) {
+                configManager.setBorderCloseInRate(config.getDouble("BorderCloseInRate"));
+                System.out.print(String.format(tm.getLoggerMapConfigChangedBorderCloseInRate(),
+                        config.getDouble("BorderCloseInRate")));
+            } else
+                configManager.setBorderCloseInRate(defaultConfig.getDouble("BorderCloseInRate"));
             System.out.print(tm.getLoggerMapConfigLoaded());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 }
