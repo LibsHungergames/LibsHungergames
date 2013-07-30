@@ -250,7 +250,7 @@ public class Gamer {
      * Restore their width and length. Makes arrows hit them
      */
     public void setHuman() {
-        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 1.8F, 0.6F, 1.8F);
+        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 0F, 0.6F, 1.8F);
     }
 
     public void setOp(boolean setOp) {

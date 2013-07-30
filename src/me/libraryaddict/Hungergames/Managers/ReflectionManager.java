@@ -87,11 +87,12 @@ public class ReflectionManager {
         try {
             Method handle = p.getClass().getMethod("getHandle");
             Class c = Class.forName(currentVersion + ".Entity");
-            Field field1 = c.getDeclaredField("width");
-            Field field2 = c.getDeclaredField("height");
+            Field field1 = c.getDeclaredField("height");
+            Field field2 = c.getDeclaredField("width");
             Field field3 = c.getDeclaredField("length");
-            field1.setFloat(handle.invoke(p), (float) width);
-            field2.setFloat(handle.invoke(p), (float) height);
+            System.out.print(field1.get(handle.invoke(p)) + " " + field2.get(handle.invoke(p)) + " " + field3.get(handle.invoke(p)));
+            field1.setFloat(handle.invoke(p), (float) height);
+            field2.setFloat(handle.invoke(p), (float) width);
             field3.setFloat(handle.invoke(p), (float) length);
         } catch (Exception ex) {
             ex.printStackTrace();
