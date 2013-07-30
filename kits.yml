@@ -82,13 +82,13 @@ Kits:
     Icon: SULPHUR 0 1
     Ability:
       - Creeper
-  Icicles:
-    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds! Chance of 25% they freeze!'
+  Flower:
+    Description: 'While standing under the sun your weapons, armor and tools are repaired. A awesome way to get practically unlimited uses out of your enquipment'
     Free: true
     Price: 0
-    Icon: ICE 0 1
+    Icon: YELLOW_FLOWER 0 1
     Ability:
-      - Icicles
+      - Flower
   Ghost:
     Description: 'When the game starts you are invisible until invincibility runs out! As well as a addictional 10 seconds for that surprise attack!'
     Free: true
@@ -105,6 +105,13 @@ Kits:
       - NETHER_STAR 0 1 Unlootable 1 Name=Herobrines_Escape
     Ability:
       - Herobrine  
+  Icicles:
+    Description: 'Attack someone to freeze their hands! When frozen they are unable to switch their items such as from cobblestone to a iron sword. The effect lasts for 10 seconds and has a cool down of 20 seconds! Chance of 25% they freeze!'
+    Free: true
+    Price: 0
+    Icon: ICE 0 1
+    Ability:
+      - Icicles
   libraryaddict:
     Description: 'Its no secret some people love books. Infact, some people love books to the extent where they turn them into exploding weapons! Using this kit you have 5 exploding books, chuck it like a grenade and RUN'
     Free: true

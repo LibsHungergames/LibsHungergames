@@ -90,7 +90,6 @@ public class ReflectionManager {
             Field field1 = c.getDeclaredField("height");
             Field field2 = c.getDeclaredField("width");
             Field field3 = c.getDeclaredField("length");
-            System.out.print(field1.get(handle.invoke(p)) + " " + field2.get(handle.invoke(p)) + " " + field3.get(handle.invoke(p)));
             field1.setFloat(handle.invoke(p), (float) height);
             field2.setFloat(handle.invoke(p), (float) width);
             field3.setFloat(handle.invoke(p), (float) length);
