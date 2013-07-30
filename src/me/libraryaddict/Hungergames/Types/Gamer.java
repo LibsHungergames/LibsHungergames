@@ -201,7 +201,6 @@ public class Gamer {
             setRiding(false);
             setSpectating(false);
             setHuman();
-            show();
             updateSelfToOthers();
             if (HungergamesApi.getConfigManager().isShortenedNames()
                     && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
@@ -221,12 +220,13 @@ public class Gamer {
                 }
             }
         } else if (!alive) {
+            seeInvis(true);
             setSpectating(true);
             setGhost();
-            hide();
             player.setAllowFlight(true);
             player.setFlying(true);
             updateSelfToOthers();
+            updateOthersToSelf();
             player.setFoodLevel(20);
             player.setHealth(20);
             player.setFireTicks(0);
