@@ -444,6 +444,7 @@ public class Hungergames extends JavaPlugin {
         }
         for (Gamer gamer : pm.getGamers())
             gamer.updateSelfToOthers();
+        world.setTime(config.getTimeOfDay());
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {

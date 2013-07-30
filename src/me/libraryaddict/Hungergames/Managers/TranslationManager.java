@@ -200,6 +200,7 @@ public class TranslationManager {
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
     private String loggerMapConfigChangedRoundedBorder = "[Hungergames] Map config - Changed rounded border to %s";
+    private String loggerMapConfigChangedTimeOfDay = "[Hungergames] Map config - Changed time of day game starts as %s";
     private String loggerMapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String loggerMapConfigLoaded = "[Hungergames] Successfully loaded map config";
     private String loggerMapConfigNotFound = "[Hungergames] Map config not found";
@@ -1404,6 +1405,10 @@ public class TranslationManager {
 
     public String getLoggerMapConfigChangedBorderCloseInRate() {
         return loggerMapConfigChangedBorderCloseInRate;
+    }
+
+    public String getLoggerMapConfigChangedTimeOfDay() {
+        return loggerMapConfigChangedTimeOfDay;
     }
 
 }

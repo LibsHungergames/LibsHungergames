@@ -603,4 +603,14 @@ public class ConfigManager {
     public boolean useKitSelector() {
         return kitSelector;
     }
+
+    public void setTimeOfDay(int timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
+
+    private int timeOfDay = 0;
+
+    public int getTimeOfDay() {
+        return timeOfDay;
+    }
 }

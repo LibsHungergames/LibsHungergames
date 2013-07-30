@@ -112,6 +112,10 @@ public class MapLoader {
                 config.set("BorderCloseInRate", 0.2);
                 config.save(mapConfig);
             }
+            if (!config.contains("TimeOfDayWhenGameStarts")) {
+                config.set("TimeOfDayWhenGameStarts", 0);
+                config.save(mapConfig);
+            }
             String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
                     + worldName);
@@ -182,6 +186,12 @@ public class MapLoader {
                         config.getDouble("BorderCloseInRate")));
             } else
                 configManager.setBorderCloseInRate(defaultConfig.getDouble("BorderCloseInRate"));
+            if (config != null && config.contains("TimeOfDayWhenGameStarts")) {
+                configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
+                System.out
+                        .print(String.format(tm.getLoggerMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
+            } else
+                configManager.setTimeOfDay(defaultConfig.getInt("TimeOfDayWhenGameStarts"));
             System.out.print(tm.getLoggerMapConfigLoaded());
         } catch (Exception ex) {
             ex.printStackTrace();
