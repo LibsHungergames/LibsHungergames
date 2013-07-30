@@ -223,10 +223,6 @@ public class Metrics {
      */
     private static final String CUSTOM_DATA_SEPARATOR = "~~";
     /**
-     * Interval of time to ping (in minutes)
-     */
-    private static final int PING_INTERVAL = 10;
-    /**
      * The url used to report a server's status
      */
     private static final String REPORT_URL = "/report/%s";
@@ -621,7 +617,7 @@ public class Metrics {
             }
 
             // Begin hitting the server with glorious data
-            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            task = plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
@@ -659,7 +655,7 @@ public class Metrics {
                         }
                     }
                 }
-            }, 0, PING_INTERVAL * 1200);
+            }, 0);
 
             return true;
         }

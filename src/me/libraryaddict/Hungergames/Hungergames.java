@@ -203,7 +203,7 @@ public class Hungergames extends JavaPlugin {
         HungergamesApi.init(this);
         try {
             metrics = new Metrics(this);
-            if (!metrics.start())
+            if (metrics.isOptOut())
                 System.out.print(cm.getLoggerMetricsMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -423,6 +423,7 @@ public class Hungergames extends JavaPlugin {
 
     public void startGame() {
         currentTime = 0;
+        metrics.start();
         ScoreboardManager.updateStage();
         ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
