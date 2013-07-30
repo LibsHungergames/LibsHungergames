@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
         String currentKit = cm.getMessagePlayerShowKitsNoKit();
         if (kits.getKitByPlayer(event.getPlayer()) != null)
             currentKit = kits.getKitByPlayer(event.getPlayer()).getName();
-        if (!gamer.isAlive()) {
+        if (!gamer.isAlive() && hg.currentTime >= 0) {
             if (config.isSpectatorChatHidden() && hg.doSeconds && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
                 Iterator<Player> players = event.getRecipients().iterator();
                 while (players.hasNext()) {
@@ -97,14 +97,14 @@ public class PlayerListener implements Listener {
             if (config.getSpectatingPrefix() != null) {
                 String format = ChatColor.translateAlternateColorCodes('&', config.getSpectatingPrefix());
                 format = format.replace("%Kit%", currentKit);
-                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%1$2s");
+                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%2$1s");
                 event.setFormat(format);
             }
         } else {
             if (config.getAlivePrefix() != null) {
                 String format = ChatColor.translateAlternateColorCodes('&', config.getAlivePrefix());
                 format = format.replace("%Kit%", currentKit);
-                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%1$2s");
+                format = format.replace("%Name%", "%1$1s").replace("%Message%", "%2$1s");
                 event.setFormat(format);
             }
         }
