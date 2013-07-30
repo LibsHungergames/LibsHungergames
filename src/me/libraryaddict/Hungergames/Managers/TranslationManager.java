@@ -199,6 +199,8 @@ public class TranslationManager {
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
     private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
+    private String loggerMapConfigChangedRoundedBorder = "[Hungergames] Map config - Changed rounded border to %s";
+    private String loggerMapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String loggerMapConfigLoaded = "[Hungergames] Successfully loaded map config";
     private String loggerMapConfigNotFound = "[Hungergames] Map config not found";
     private String loggerMapConfigNowLoading = "[Hungergames] Now loading map config";
@@ -1394,6 +1396,14 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getLoggerMapConfigChangedRoundedBorder() {
+        return loggerMapConfigChangedRoundedBorder;
+    }
+
+    public String getLoggerMapConfigChangedBorderCloseInRate() {
+        return loggerMapConfigChangedBorderCloseInRate;
     }
 
 }

@@ -14,15 +14,9 @@ SpectatorChat: false
 Spectators: true
 # Does the game kick them when they die?
 KickOnDeath: false
-# Does the border close in after the feast has happened?
-BorderCloseIn: true
-#What size is the border initially?
-BorderSize: 500
 # Should mushroom stew be enabled? This is instant eat for hunger or health regains
 MushroomStew: false
 MushroomStewRestores: 6
-# Border closes in every second by so and so much.
-BorderClosesIn: 0.2
 
 # What command to stop the server?
 StopServerCommand: stop
