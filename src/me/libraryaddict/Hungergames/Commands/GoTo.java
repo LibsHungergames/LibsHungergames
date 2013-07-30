@@ -12,9 +12,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class GoTo implements CommandExecutor {
+    public String[] aliases = new String[] { "watch" };
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "A command for spectators to teleport to people";
-    public String[] aliases = new String[] { "watch" };
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 

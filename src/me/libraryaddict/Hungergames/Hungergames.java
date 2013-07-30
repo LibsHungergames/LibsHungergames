@@ -61,146 +61,11 @@ public class Hungergames extends JavaPlugin {
     public boolean doSeconds = true;
     public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
     public Location feastLoc;
+    private Metrics metrics;
     private PlayerListener playerListener;
     private PlayerManager pm;
     protected long time = 0;
     public World world;
-    private Metrics metrics;
-
-    public void onEnable() {
-        HungergamesApi.init(this);
-        try {
-            metrics = new Metrics(this);
-            if (!metrics.start())
-                System.out.print(cm.getLoggerMetricsMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        cm = HungergamesApi.getTranslationManager();
-        pm = HungergamesApi.getPlayerManager();
-        config = HungergamesApi.getConfigManager();
-        MySqlManager mysql = HungergamesApi.getMySqlManager();
-        mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
-        mysql.SQL_HOST = getConfig().getString("MySqlUrl");
-        mysql.SQL_PASS = getConfig().getString("MySqlPass");
-        mysql.SQL_USER = getConfig().getString("MySqlUser");
-        mysql.startJoinThread();
-        MapLoader.loadMap();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-            public void run() {
-                world = Bukkit.getWorlds().get(0);
-                world.setTime(0);
-                if (config.forceCords())
-                    world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
-                            config.getSpawnZ());
-                final Location spawn = world.getSpawnLocation();
-                for (int x = -5; x <= 5; x++)
-                    for (int z = -5; z <= 5; z++)
-                        spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
-                File mapConfig = new File(getDataFolder() + "/map.yml");
-                YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
-                if (mapConfiguration.getBoolean("GenerateChunks")) {
-                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16);
-                    final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
-                    for (int x = (int) -chunks; x <= chunks; x++) {
-                        for (int z = (int) -chunks; z <= chunks; z++) {
-                            BlockInfo info = new BlockInfo();
-                            info.x = spawn.getBlockX() + (x * 16);
-                            info.z = spawn.getBlockZ() + (z * 16);
-                            toProcess.add(info);
-                        }
-                    }
-                    final double totalChunks = toProcess.size();
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        long lastPrint = 0;
-                        int currentChunks = 0;
-
-                        public void run() {
-                            if (lastPrint + 5000 < System.currentTimeMillis()) {
-                                System.out.print(String.format(cm.getLoggerGeneratingChunks(),
-                                        (int) Math.floor(((double) currentChunks / totalChunks) * 100))
-                                        + "%");
-                                lastPrint = System.currentTimeMillis();
-                            }
-                            Iterator<BlockInfo> itel = toProcess.iterator();
-                            long started = System.currentTimeMillis();
-
-                            while (itel.hasNext() && started + 50 > System.currentTimeMillis()) {
-                                currentChunks++;
-                                BlockInfo info = itel.next();
-                                itel.remove();
-                                Chunk chunk = world.getChunkAt(info.x, info.z);
-                                if (chunk.isLoaded())
-                                    continue;
-                                chunk.load();
-                                chunk.unload(true, false);
-                            }
-                            if (!itel.hasNext()) {
-                                System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
-                                cancel();
-                            }
-                        }
-                    };
-                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
-                }
-                if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
-                    ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
-                    LibsFeastManager feastManager;
-                    if (HungergamesApi.getFeastManager() instanceof LibsFeastManager)
-                        feastManager = (LibsFeastManager) HungergamesApi.getFeastManager();
-                    else
-                        feastManager = new LibsFeastManager();
-                    feastManager.generatePlatform(
-                            world.getSpawnLocation(),
-                            HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
-                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"),
-                            spawnGround.getTypeId(), spawnGround.getDurability());
-                }
-                world.setDifficulty(Difficulty.HARD);
-                if (world.hasStorm())
-                    world.setStorm(false);
-                world.setWeatherDuration(999999999);
-                feastLoc = new Location(world, spawn.getX() + (new Random().nextInt(200) - 100), 0, spawn.getZ()
-                        + (new Random().nextInt(200) - 100));
-                ScoreboardManager.updateStage();
-                HungergamesApi.getFeastManager();
-            }
-        });
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            public void run() {
-                if (System.currentTimeMillis() >= time && doSeconds) {
-                    time = System.currentTimeMillis() + 1000;
-                    onSecond();
-                    Bukkit.getPluginManager().callEvent(new TimeSecondEvent());
-                }
-            }
-        }, 2L, 1L);
-        HungergamesApi.getCommandManager();
-        playerListener = new PlayerListener();
-        Bukkit.getPluginManager().registerEvents(playerListener, this);
-        Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
-        HungergamesApi.getAbilityManager();
-        HungergamesApi.getInventoryManager().updateSpectatorHeads();
-        if (Bukkit.getPluginManager().getPermission("ThisIsUsedForMessaging") == null) {
-            Permission perm = new Permission("ThisIsUsedForMessaging", PermissionDefault.TRUE);
-            perm.setDescription("Used for messages in LibsHungergames");
-            Bukkit.getPluginManager().addPermission(perm);
-        }
-    }
-
-    public Metrics getMetrics() {
-        return metrics;
-    }
-
-    public void onDisable() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer(cm.getKickGameShutdownUnexpected());
-            PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
-            playerListener.onQuit(event);
-        }
-        HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
-        HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
-    }
 
     public void cannon() {
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
@@ -305,6 +170,10 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
+    public Metrics getMetrics() {
+        return metrics;
+    }
+
     public int getPrize(int pos) {
         if (getConfig().contains("Winner" + pos))
             return getConfig().getInt("Winner" + pos, 0);
@@ -318,6 +187,137 @@ public class Hungergames extends JavaPlugin {
             return false;
         }
         return true;
+    }
+
+    public void onDisable() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.kickPlayer(cm.getKickGameShutdownUnexpected());
+            PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
+            playerListener.onQuit(event);
+        }
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
+        HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
+    }
+
+    public void onEnable() {
+        HungergamesApi.init(this);
+        try {
+            metrics = new Metrics(this);
+            if (!metrics.start())
+                System.out.print(cm.getLoggerMetricsMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        cm = HungergamesApi.getTranslationManager();
+        pm = HungergamesApi.getPlayerManager();
+        config = HungergamesApi.getConfigManager();
+        MySqlManager mysql = HungergamesApi.getMySqlManager();
+        mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
+        mysql.SQL_HOST = getConfig().getString("MySqlUrl");
+        mysql.SQL_PASS = getConfig().getString("MySqlPass");
+        mysql.SQL_USER = getConfig().getString("MySqlUser");
+        mysql.startJoinThread();
+        MapLoader.loadMap();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            public void run() {
+                world = Bukkit.getWorlds().get(0);
+                world.setTime(0);
+                if (config.forceCords())
+                    world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
+                            config.getSpawnZ());
+                final Location spawn = world.getSpawnLocation();
+                for (int x = -5; x <= 5; x++)
+                    for (int z = -5; z <= 5; z++)
+                        spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
+                File mapConfig = new File(getDataFolder() + "/map.yml");
+                YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
+                if (mapConfiguration.getBoolean("GenerateChunks")) {
+                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16);
+                    final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
+                    for (int x = (int) -chunks; x <= chunks; x++) {
+                        for (int z = (int) -chunks; z <= chunks; z++) {
+                            BlockInfo info = new BlockInfo();
+                            info.x = spawn.getBlockX() + (x * 16);
+                            info.z = spawn.getBlockZ() + (z * 16);
+                            toProcess.add(info);
+                        }
+                    }
+                    final double totalChunks = toProcess.size();
+                    BukkitRunnable runnable = new BukkitRunnable() {
+                        int currentChunks = 0;
+                        long lastPrint = 0;
+
+                        public void run() {
+                            if (lastPrint + 5000 < System.currentTimeMillis()) {
+                                System.out.print(String.format(cm.getLoggerGeneratingChunks(),
+                                        (int) Math.floor(((double) currentChunks / totalChunks) * 100))
+                                        + "%");
+                                lastPrint = System.currentTimeMillis();
+                            }
+                            Iterator<BlockInfo> itel = toProcess.iterator();
+                            long started = System.currentTimeMillis();
+
+                            while (itel.hasNext() && started + 50 > System.currentTimeMillis()) {
+                                currentChunks++;
+                                BlockInfo info = itel.next();
+                                itel.remove();
+                                Chunk chunk = world.getChunkAt(info.x, info.z);
+                                if (chunk.isLoaded())
+                                    continue;
+                                chunk.load();
+                                chunk.unload(true, false);
+                            }
+                            if (!itel.hasNext()) {
+                                System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
+                                cancel();
+                            }
+                        }
+                    };
+                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
+                }
+                if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
+                    ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
+                    LibsFeastManager feastManager;
+                    if (HungergamesApi.getFeastManager() instanceof LibsFeastManager)
+                        feastManager = (LibsFeastManager) HungergamesApi.getFeastManager();
+                    else
+                        feastManager = new LibsFeastManager();
+                    feastManager.generatePlatform(
+                            world.getSpawnLocation(),
+                            HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
+                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"),
+                            spawnGround.getTypeId(), spawnGround.getDurability());
+                }
+                world.setDifficulty(Difficulty.HARD);
+                if (world.hasStorm())
+                    world.setStorm(false);
+                world.setWeatherDuration(999999999);
+                feastLoc = new Location(world, spawn.getX() + (new Random().nextInt(200) - 100), 0, spawn.getZ()
+                        + (new Random().nextInt(200) - 100));
+                ScoreboardManager.updateStage();
+                HungergamesApi.getFeastManager();
+            }
+        });
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            public void run() {
+                if (System.currentTimeMillis() >= time && doSeconds) {
+                    time = System.currentTimeMillis() + 1000;
+                    onSecond();
+                    Bukkit.getPluginManager().callEvent(new TimeSecondEvent());
+                }
+            }
+        }, 2L, 1L);
+        HungergamesApi.getCommandManager();
+        playerListener = new PlayerListener();
+        Bukkit.getPluginManager().registerEvents(playerListener, this);
+        Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
+        HungergamesApi.getAbilityManager();
+        HungergamesApi.getInventoryManager().updateSpectatorHeads();
+        if (Bukkit.getPluginManager().getPermission("ThisIsUsedForMessaging") == null) {
+            Permission perm = new Permission("ThisIsUsedForMessaging", PermissionDefault.TRUE);
+            perm.setDescription("Used for messages in LibsHungergames");
+            Bukkit.getPluginManager().addPermission(perm);
+        }
     }
 
     private void onSecond() {

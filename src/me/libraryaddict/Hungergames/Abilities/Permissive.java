@@ -14,8 +14,8 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
 public class Permissive extends AbilityListener implements Disableable {
-    public String[] kitPermissions = new String[] { "KitName Permission Permission Permission", "NoCheatBypass nocheat.bypass" };
     private HashMap<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
+    public String[] kitPermissions = new String[] { "KitName Permission Permission Permission", "NoCheatBypass nocheat.bypass" };
 
     @EventHandler
     public void onGameStart(GameStartEvent event) {

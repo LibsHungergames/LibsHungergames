@@ -56,26 +56,20 @@ public class ConfigManager {
     private boolean mysqlEnabled;
     private ItemStack pillarCorner;
     private ItemStack pillarInsides;
+    private boolean roundedBorder;
     private boolean shortenNames;
     private String spectatingPrefix;
     private boolean spectatorChat;
     private ItemStack spectatorItemBack;
     private ItemStack spectatorItemForwards;
     private boolean spectators;
+    private int timeOfDay = 0;
     private int timeTillFeast;
     private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
+
     private int z;
-    private boolean roundedBorder;
-
-    public void setBorderCloseInRate(double rate) {
-        this.borderClosesIn = rate;
-    }
-
-    public void setRoundedBorder(boolean roundedBorder) {
-        this.roundedBorder = roundedBorder;
-    }
 
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
@@ -128,10 +122,6 @@ public class ConfigManager {
     }
 
     /**
-     * Check for a update
-     */
-
-    /**
      * Makes the update checker check for a update
      */
     public void checkUpdate() throws Exception {
@@ -146,6 +136,10 @@ public class ConfigManager {
                             getCurrentVersion(), getLatestVersion()));
         }
     }
+
+    /**
+     * Check for a update
+     */
 
     /**
      * @return Should it display messages about the game starting in bla bla?
@@ -353,6 +347,10 @@ public class ConfigManager {
         return timeTillFeast;
     }
 
+    public int getTimeOfDay() {
+        return timeOfDay;
+    }
+
     /**
      * @return How much delay before crowing the name of the winner?
      */
@@ -412,6 +410,10 @@ public class ConfigManager {
      */
     public boolean isMySqlEnabled() {
         return mysqlEnabled;
+    }
+
+    public boolean isRoundedBorder() {
+        return roundedBorder;
     }
 
     /**
@@ -572,10 +574,6 @@ public class ConfigManager {
         return mushroomStewRestores;
     }
 
-    public boolean isRoundedBorder() {
-        return roundedBorder;
-    }
-
     /**
      * @param String
      *            containing item
@@ -589,6 +587,10 @@ public class ConfigManager {
         return new ItemStack(id, 1, Short.parseShort(args[1]));
     }
 
+    public void setBorderCloseInRate(double rate) {
+        this.borderClosesIn = rate;
+    }
+
     /**
      * @param Whats
      *            the new border size?
@@ -597,20 +599,18 @@ public class ConfigManager {
         border = newBorder;
     }
 
-    /**
-     * @return Should it give players that fancy kit selector
-     */
-    public boolean useKitSelector() {
-        return kitSelector;
+    public void setRoundedBorder(boolean roundedBorder) {
+        this.roundedBorder = roundedBorder;
     }
 
     public void setTimeOfDay(int timeOfDay) {
         this.timeOfDay = timeOfDay;
     }
 
-    private int timeOfDay = 0;
-
-    public int getTimeOfDay() {
-        return timeOfDay;
+    /**
+     * @return Should it give players that fancy kit selector
+     */
+    public boolean useKitSelector() {
+        return kitSelector;
     }
 }

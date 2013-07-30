@@ -22,12 +22,6 @@ public class HungergamesApi {
     private static PlayerManager pm;
     private static ReflectionManager rm;
     
-    public static ReflectionManager getReflectionManager() {
-        if (rm == null)
-            rm = new ReflectionManager();
-        return rm;
-    }
-
     /**
      * @return AbilityConfigManager which is used to load the configs of abilitys
      */
@@ -141,6 +135,12 @@ public class HungergamesApi {
         if (pm == null)
             pm = new PlayerManager();
         return pm;
+    }
+
+    public static ReflectionManager getReflectionManager() {
+        if (rm == null)
+            rm = new ReflectionManager();
+        return rm;
     }
 
     /**

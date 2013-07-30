@@ -295,6 +295,8 @@ public class Metrics {
      */
     private final String guid;
 
+    private Graph kitsGraph;
+
     /**
      * Lock for synchronization
      */
@@ -304,12 +306,10 @@ public class Metrics {
      * The plugin this metrics submits for
      */
     private final Plugin plugin;
-
     /**
      * The scheduled task
      */
     private volatile BukkitTask task = null;
-    private Graph kitsGraph;
 
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -336,10 +336,6 @@ public class Metrics {
         guid = configuration.getString("guid");
         debug = configuration.getBoolean("debug", false);
         kitsGraph = new Graph("Kits Used");
-    }
-
-    public Graph getKitsUsedGraph() {
-        return kitsGraph;
     }
 
     /**
@@ -447,6 +443,10 @@ public class Metrics {
 
         // return => base/plugins/PluginMetrics/config.yml
         return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
+    }
+
+    public Graph getKitsUsedGraph() {
+        return kitsGraph;
     }
 
     /**

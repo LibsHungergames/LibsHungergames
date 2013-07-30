@@ -198,10 +198,10 @@ public class TranslationManager {
     private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
     private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
     private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
+    private String loggerMapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
     private String loggerMapConfigChangedRoundedBorder = "[Hungergames] Map config - Changed rounded border to %s";
     private String loggerMapConfigChangedTimeOfDay = "[Hungergames] Map config - Changed time of day game starts as %s";
-    private String loggerMapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String loggerMapConfigLoaded = "[Hungergames] Successfully loaded map config";
     private String loggerMapConfigNotFound = "[Hungergames] Map config not found";
     private String loggerMapConfigNowLoading = "[Hungergames] Now loading map config";
@@ -976,8 +976,20 @@ public class TranslationManager {
         return loggerLoadTranslationConfig;
     }
 
+    public String getLoggerMapConfigChangedBorderCloseInRate() {
+        return loggerMapConfigChangedBorderCloseInRate;
+    }
+
     public String getLoggerMapConfigChangedBorderSize() {
         return loggerMapConfigChangedBorderSize;
+    }
+
+    public String getLoggerMapConfigChangedRoundedBorder() {
+        return loggerMapConfigChangedRoundedBorder;
+    }
+
+    public String getLoggerMapConfigChangedTimeOfDay() {
+        return loggerMapConfigChangedTimeOfDay;
     }
 
     public String getLoggerMapConfigLoaded() {
@@ -1397,18 +1409,6 @@ public class TranslationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getLoggerMapConfigChangedRoundedBorder() {
-        return loggerMapConfigChangedRoundedBorder;
-    }
-
-    public String getLoggerMapConfigChangedBorderCloseInRate() {
-        return loggerMapConfigChangedBorderCloseInRate;
-    }
-
-    public String getLoggerMapConfigChangedTimeOfDay() {
-        return loggerMapConfigChangedTimeOfDay;
     }
 
 }

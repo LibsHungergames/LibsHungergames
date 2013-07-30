@@ -24,6 +24,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Icicles extends AbilityListener implements Disableable {
 
+    public int chanceInOneOfFreezing = 4;
     private HashMap<Player, Integer> cooldown = new HashMap<Player, Integer>();
     public int cooldownTime = 20;
     public String crackString = ChatColor.AQUA + "*crack*";
@@ -32,7 +33,6 @@ public class Icicles extends AbilityListener implements Disableable {
     public int frozenTime = 10;
     private Hungergames hg = HungergamesApi.getHungergames();
     public String thawedOut = ChatColor.RED + "You thawed out";
-    public int chanceInOneOfFreezing = 4;
 
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {

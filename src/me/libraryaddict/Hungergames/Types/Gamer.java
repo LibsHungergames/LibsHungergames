@@ -42,12 +42,6 @@ public class Gamer {
         setupEconomy();
     }
 
-    public void setOp(boolean setOp) {
-        /**
-         * Bet you thought this was real
-         */
-    }
-
     public void addBalance(long newBalance) {
         if (economy != null) {
             if (newBalance > 0)
@@ -257,6 +251,12 @@ public class Gamer {
      */
     public void setHuman() {
         HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 1.8F, 0.6F, 1.8F);
+    }
+
+    public void setOp(boolean setOp) {
+        /**
+         * Bet you thought this was real
+         */
     }
 
     public void setRiding(boolean ride) {

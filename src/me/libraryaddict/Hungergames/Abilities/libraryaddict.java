@@ -13,10 +13,10 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class libraryaddict extends AbilityListener implements Disableable {
+    private static int i = 0;
     public String bookName = "Explosive Reading";
     public float explosionSize = 1.5F;
     public float grenadeTimer = 2;
-    private static int i = 0;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
