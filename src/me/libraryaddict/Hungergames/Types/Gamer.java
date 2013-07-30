@@ -198,6 +198,7 @@ public class Gamer {
             player.setFireTicks(0);
             player.leaveVehicle();
             player.eject();
+            seeInvis(false);
             setRiding(false);
             setSpectating(false);
             setHuman();
