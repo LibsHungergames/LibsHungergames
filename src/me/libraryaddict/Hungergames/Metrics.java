@@ -227,7 +227,11 @@ public class Metrics {
      */
     private static final String REPORT_URL = "/report/%s";
     /**
-     * The current revision number
+     * Interval of time to ping (in minutes)
+     */
+    private static final int PING_INTERVAL = 10;
+    /**
+     * /** The current revision number
      */
     private final static int REVISION = 6;
 
@@ -402,23 +406,6 @@ public class Metrics {
             if (task != null) {
                 task.cancel();
                 task = null;
-            }
-        }
-    }
-
-    /**
-     * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
-     * 
-     * @throws java.io.IOException
-     */
-    public void enable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the
-        // task.
-        synchronized (optOutLock) {
-
-            // Enable Task, if it is not running
-            if (task == null) {
-                start();
             }
         }
     }
@@ -617,7 +604,7 @@ public class Metrics {
             }
 
             // Begin hitting the server with glorious data
-            task = plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
@@ -655,7 +642,7 @@ public class Metrics {
                         }
                     }
                 }
-            }, 0);
+            }, 0, PING_INTERVAL * 1200);
 
             return true;
         }
