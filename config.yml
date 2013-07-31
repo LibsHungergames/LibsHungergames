@@ -141,7 +141,7 @@ AlivePrefix: '<%Name%> %Message%'
 
 # Prefix for when they have died.
 SpectatingPrefix: '<&7%Name%&r> %Message%'
-# AlivePrefix: '&6[&r%Kit%&6]&r &7%Name%&r: %Message%'
+# SpectatingPrefix: '&6[&r%Kit%&6]&r &7%Name%&r: %Message%'
 
 # Chance out of ? of animals spawning
 # Used for limiting mob spawns to raise the difficulty
