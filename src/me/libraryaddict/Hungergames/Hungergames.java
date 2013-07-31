@@ -282,11 +282,12 @@ public class Hungergames extends JavaPlugin {
                         feastManager = (LibsFeastManager) HungergamesApi.getFeastManager();
                     else
                         feastManager = new LibsFeastManager();
-                    feastManager.generatePlatform(
-                            world.getSpawnLocation(),
-                            HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
-                                    mapConfiguration.getInt("SpawnPlatformSize")), mapConfiguration.getInt("SpawnPlatformSize"),
-                            spawnGround.getTypeId(), spawnGround.getDurability());
+                    int platformHeight = HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
+                            mapConfiguration.getInt("SpawnPlatformSize"));
+                    feastManager.generatePlatform(world.getSpawnLocation(), platformHeight,
+                            mapConfiguration.getInt("SpawnPlatformSize"), 100, spawnGround.getTypeId(),
+                            spawnGround.getDurability());
+                    world.getSpawnLocation().setY(platformHeight + 2);
                 }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
