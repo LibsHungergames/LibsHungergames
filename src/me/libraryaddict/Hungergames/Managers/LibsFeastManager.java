@@ -165,7 +165,7 @@ public class LibsFeastManager implements FeastManager {
     public void generatePlatform(Location loc, int lowestLevel, int radius) {
         ConfigManager config = HungergamesApi.getConfigManager();
         ItemStack feastGround = config.getFeastGround();
-        generatePlatform(loc, lowestLevel, radius, feastGround.getTypeId(), feastGround.getDurability());
+        generatePlatform(loc, lowestLevel, radius, radius / 2, feastGround.getTypeId(), feastGround.getDurability());
         generatePillars(loc, radius);
     }
 
@@ -176,14 +176,17 @@ public class LibsFeastManager implements FeastManager {
      * @param lowestLevel
      * @param radius
      */
-    public void generatePlatform(Location loc, int lowestLevel, int radius, int platformGround, short platformDurability) {
+    public void generatePlatform(Location loc, int lowestLevel, int radius, int yHeight, int platformGround,
+            short platformDurability) {
         loc.setY(lowestLevel + 1);
         double radiusSquared = radius * radius;
         // Sets to air and generates to stand on
         for (int radiusX = -radius; radiusX <= radius; radiusX++) {
             for (int radiusZ = -radius; radiusZ <= radius; radiusZ++) {
                 if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
-                    for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + (radius / 2); y++) {
+                    for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + yHeight; y++) {
+                        if (y > loc.getWorld().getMaxHeight())
+                            break;
                         Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
                         if (!b.getChunk().isLoaded())
                             b.getChunk().load();
