@@ -19,6 +19,7 @@ import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Types.Kit;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
 
 import org.bukkit.Bukkit;
@@ -424,6 +425,19 @@ public class Hungergames extends JavaPlugin {
 
     public void startGame() {
         currentTime = 0;
+        for (Kit kit : HungergamesApi.getKitManager().getKits()) {
+            final int amount = kit.getPlayerSize();
+            if (amount <= 0)
+                continue;
+            metrics.getKitsUsedGraph().addPlotter(new Metrics.Plotter(kit.getName()) {
+
+                @Override
+                public int getValue() {
+                    return amount;
+                }
+
+            });
+        }
         metrics.start();
         ScoreboardManager.updateStage();
         ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());

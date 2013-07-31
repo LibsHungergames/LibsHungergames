@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Metrics;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
@@ -88,15 +87,6 @@ public class KitManager {
             newKits.add(kit);
         }
         kits = newKits;
-        Metrics metrics = HungergamesApi.getHungergames().getMetrics();
-        metrics.getKitsUsedGraph().addPlotter(new Metrics.Plotter(newKit.getName()) {
-
-            @Override
-            public int getValue() {
-                return newKit.getPlayerSize(); // Number of players who used a diamond sword
-            }
-
-        });
     }
 
     public boolean addKitToPlayer(Player player, Kit kit) {
