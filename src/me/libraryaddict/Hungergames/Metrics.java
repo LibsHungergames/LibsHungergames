@@ -331,7 +331,7 @@ public class Metrics {
         // Load the guid then
         guid = configuration.getString("guid");
         debug = configuration.getBoolean("debug", false);
-        kitsGraph = new Graph("Kits Used");
+        kitsGraph = createGraph("Kits Used");
     }
 
     /**
