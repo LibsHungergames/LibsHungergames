@@ -165,6 +165,15 @@ Kits:
     Icon: LAVA 0 1
     Ability:
       - Salamander
+  Rapper:
+    Description: 'Right click on a noteblock and give everything in audible range nausea. The nausea doesn't stack and you are effected by it too! Can you handle your rap?'
+    Free: true
+    Price: 0
+    Icon: GOLD_RECORD 0 1
+    Items:
+      - 'NOTE_BLOCK 0 1 Name=Rapper''s_Studio Unlootable'
+    Ability:
+      - Rapper
   Surprise:
     Description: 'The surprise kit is a randomizer, you are given a random kit when the game starts. Even if you do not own that kit. A great way to try out these kits and get a little variation!'
     Free: true
