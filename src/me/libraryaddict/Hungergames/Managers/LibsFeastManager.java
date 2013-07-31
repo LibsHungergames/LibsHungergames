@@ -28,6 +28,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LibsFeastManager implements FeastManager {
     private class BlockInfo {
+        public BlockInfo(int id, byte data) {
+            this.id = id;
+            this.data = data;
+        }
+
         byte data;
         int id;
     }
@@ -35,10 +40,10 @@ public class LibsFeastManager implements FeastManager {
     // This manages the chests, The buildings
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
-    private LinkedList<Block> processedLeaves = new LinkedList<Block>();
-    private LinkedList<Block> removeLeaves = new LinkedList<Block>();
+    private LinkedList<Block> processedBlocks = new LinkedList<Block>();
     private BukkitRunnable runnable;
-    private HashMap<Block, BlockInfo> toSet = new HashMap<Block, BlockInfo>();
+    private BukkitRunnable chestGenerator;
+    private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
 
     public LibsFeastManager() {
         faces.add(BlockFace.UP);
@@ -72,7 +77,7 @@ public class LibsFeastManager implements FeastManager {
                 chest.addRandomItem(new RandomItem(string));
             }
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 
@@ -84,47 +89,58 @@ public class LibsFeastManager implements FeastManager {
      * @param height
      *            of chests
      */
-    public void generateChests(Location loc, int height) {
-        ChestManager cm = HungergamesApi.getChestManager();
-        ConfigManager config = HungergamesApi.getConfigManager();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Location l = p.getLocation().clone();
-            l.setY(loc.getY());
-            if (l.distance(loc) < height && p.getLocation().getY() >= l.getY() && p.getLocation().getY() - l.getY() <= height) {
-                l.setY(l.getY() + height + 1);
-                p.teleport(l);
-            }
-        }
-        ItemStack feast = config.getFeast();
-        ItemStack feastInsides = config.getFeastInsides();
-        for (int x = -height; x < height + 1; x++) {
-            for (int z = -height; z < height + 1; z++) {
-                int y = Math.abs(x);
-                if (Math.abs(z) > y)
-                    y = Math.abs(z);
-                y = -y + height;
-                Block block = loc.clone().add(x, y, z).getBlock();
-                Block b = block;
-                // while repeated > 0
-                for (int yLevel = y; yLevel > 0; yLevel--) {
-                    b = b.getRelative(BlockFace.DOWN);
-                    if (y - 1 >= yLevel)
-                        setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
-                    else
-                        setBlockFast(b, feast.getTypeId(), feast.getDurability());
+    public void generateChests(final Location loc, final int height) {
+        chestGenerator = new BukkitRunnable() {
+            public void run() {
+                ChestManager cm = HungergamesApi.getChestManager();
+                ConfigManager config = HungergamesApi.getConfigManager();
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    Location l = p.getLocation().clone();
+                    l.setY(loc.getY());
+                    if (l.distance(loc) < height && p.getLocation().getY() >= l.getY()
+                            && p.getLocation().getY() - l.getY() <= height) {
+                        l.setY(l.getY() + height + 1);
+                        p.teleport(l);
+                    }
                 }
-                if (x == 0 && z == 0) {
-                    setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
-                    setBlockFast(block.getRelative(BlockFace.DOWN), feastInsides.getType().getId(), (config.isFeastTntIgnite()
-                            && feastInsides.getType() == Material.TNT ? (byte) 1 : feastInsides.getDurability()));
-                } else if (Math.abs(x + z) % 2 == 0) {
-                    setBlockFast(block, Material.CHEST.getId(), (byte) 0);
-                    Chest chest = (Chest) block.getState();
-                    cm.fillChest(chest.getInventory());
-                    chest.update();
-                } else
-                    setBlockFast(block, feast.getTypeId(), feast.getDurability());
+                ItemStack feast = config.getFeast();
+                ItemStack feastInsides = config.getFeastInsides();
+                for (int x = -height; x < height + 1; x++) {
+                    for (int z = -height; z < height + 1; z++) {
+                        int y = Math.abs(x);
+                        if (Math.abs(z) > y)
+                            y = Math.abs(z);
+                        y = -y + height;
+                        Block block = loc.clone().add(x, y, z).getBlock();
+                        Block b = block;
+                        // while repeated > 0
+                        for (int yLevel = y; yLevel > 0; yLevel--) {
+                            b = b.getRelative(BlockFace.DOWN);
+                            if (y - 1 >= yLevel)
+                                setBlockFast(b, feastInsides.getTypeId(), feastInsides.getDurability());
+                            else
+                                setBlockFast(b, feast.getTypeId(), feast.getDurability());
+                        }
+                        if (x == 0 && z == 0) {
+                            setBlockFast(block, Material.ENCHANTMENT_TABLE.getId(), (byte) 0);
+                            setBlockFast(block.getRelative(BlockFace.DOWN), feastInsides.getType().getId(),
+                                    (config.isFeastTntIgnite() && feastInsides.getType() == Material.TNT ? (byte) 1
+                                            : feastInsides.getDurability()));
+                        } else if (Math.abs(x + z) % 2 == 0) {
+                            block.setTypeIdAndData(Material.CHEST.getId(), (byte) 0, false);
+                            processedBlocks.add(block);
+                            Chest chest = (Chest) block.getState();
+                            cm.fillChest(chest.getInventory());
+                            chest.update();
+                        } else
+                            setBlockFast(block, feast.getTypeId(), feast.getDurability());
+                    }
+                }
             }
+        };
+        if (runnable == null) {
+            chestGenerator.runTask(HungergamesApi.getHungergames());
+            chestGenerator = null;
         }
     }
 
@@ -188,8 +204,6 @@ public class LibsFeastManager implements FeastManager {
                         if (y > loc.getWorld().getMaxHeight())
                             break;
                         Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
-                        if (!b.getChunk().isLoaded())
-                            b.getChunk().load();
                         removeLeaves(b);
                         if (y >= loc.getBlockY()) {// If its less then 0
                             setBlockFast(b, 0, (byte) 0);
@@ -249,14 +263,8 @@ public class LibsFeastManager implements FeastManager {
             int x = (int) (loc.getX() + .5 + radius * Math.cos(angle));
             int z = (int) (loc.getZ() + radius * Math.sin(angle));
             Block b = getHighest(loc.getWorld().getHighestBlockAt(x, z));
-            boolean unload = b.getChunk().isLoaded();
-            if (!unload) {
-                b.getChunk().load(true);
-            }
             if (isBlockValid(b))
                 heightLevels.add(b.getY());
-            if (unload)
-                b.getChunk().unload(true);
             /*
              * // Do it again but at 2/3 the radius angle = degree * Math.PI /
              * 180; x = (int) (loc.getX() + .5 + ((radius / 3) * 2) *
@@ -310,49 +318,64 @@ public class LibsFeastManager implements FeastManager {
     private void removeLeaves(Block b) {
         for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS) ? jungleFaces : faces)) {
             Block newB = b.getRelative(face);
-            if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {
-                setBlockFast(newB, 0, (byte) 0);
-                if (!removeLeaves.contains(newB) && !processedLeaves.contains(newB))
-                    removeLeaves.add(newB);
-                if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT)
-                    setBlockFast(newB.getRelative(BlockFace.DOWN), Material.GRASS.getId(), (byte) 0);
-            } else if (newB.getType() == Material.SNOW && face == BlockFace.UP)
-                setBlockFast(newB, 0, (byte) 0);
+            if ((newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE)) {
+                if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+                    setBlockFast(newB, 0, (byte) 0);
+                    if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT) {
+                        newB = newB.getRelative(BlockFace.DOWN);
+                        if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+                            setBlockFast(newB, Material.GRASS.getId(), (byte) 0);
+                        }
+                    }
+                }
+            } else if (newB.getType() == Material.SNOW && face == BlockFace.UP) {
+                if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+                    setBlockFast(newB, 0, (byte) 0);
+                }
+            }
         }
     }
 
     public void setBlockFast(Block b, int typeId, short s) {
         try {
             if (b.getTypeId() != typeId || b.getData() != s) {
-                BlockInfo info = new BlockInfo();
-                info.id = typeId;
-                info.data = (byte) s;
-                toSet.put(b, info);
+                queued.put(b, new BlockInfo(typeId, (byte) s));
                 if (runnable == null) {
                     runnable = new BukkitRunnable() {
                         public void run() {
-                            if (toSet.size() == 0 && removeLeaves.size() == 0) {
+                            if (queued.size() == 0) {
                                 runnable = null;
-                                processedLeaves.clear();
+                                processedBlocks.clear();
+                                if (chestGenerator != null) {
+                                    chestGenerator.runTask(HungergamesApi.getHungergames());
+                                    chestGenerator = null;
+                                }
                                 cancel();
                             }
-                            while (removeLeaves.peek() != null) {
-                                Block b = removeLeaves.poll();
-                                processedLeaves.add(b);
-                                removeLeaves(b);
-                            }
                             int i = 0;
-                            ArrayList<Block> toDo = new ArrayList<Block>();
-                            for (Block b : toSet.keySet()) {
+                            HashMap<Block, BlockInfo> toDo = new HashMap<Block, BlockInfo>();
+                            for (Block b : queued.keySet()) {
                                 if (i++ >= 200)
                                     break;
-                                toDo.add(b);
+                                toDo.put(b, queued.get(b));
+                                b = b.getRelative(BlockFace.UP);
+                                while (b != null
+                                        && queued.containsKey(b)
+                                        && (b.isLiquid() || b.getType() == Material.SAND || b.getType() == Material.ANVIL || b
+                                                .getType() == Material.GRAVEL)) {
+                                    toDo.put(b, queued.get(b));
+                                    b = b.getRelative(BlockFace.UP);
+                                }
                             }
-                            for (Block b : toDo)
-                                b.setTypeIdAndData(toSet.get(b).id, toSet.remove(b).data, false);
+                            for (Block b : toDo.keySet()) {
+                                if (!processedBlocks.contains(b))
+                                    processedBlocks.add(b);
+                                queued.remove(b);
+                                b.setTypeIdAndData(toDo.get(b).id, toDo.get(b).data, true);
+                            }
                         }
                     };
-                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
+                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 2, 1);
                 }
                 // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
                 // b.getY(), b.getZ() & 15, typeId, data);
