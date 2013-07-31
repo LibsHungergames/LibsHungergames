@@ -166,7 +166,7 @@ Kits:
     Ability:
       - Salamander
   Rapper:
-    Description: 'Right click on a noteblock and give everything in audible range nausea. The nausea doesn't stack and you are effected by it too! Can you handle your rap?'
+    Description: 'Right click on a noteblock and give everything in audible range nausea. The nausea doesn''t stack and you are effected by it too! Can you handle your rap?'
     Free: true
     Price: 0
     Icon: GOLD_RECORD 0 1
