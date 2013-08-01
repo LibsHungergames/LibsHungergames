@@ -183,7 +183,28 @@ public class Gamer {
     }
 
     public void setAlive(boolean alive) {
+        if (HungergamesApi.getHungergames().currentTime >= 0 && HungergamesApi.getConfigManager().isShortenedNames()
+                && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
+            String listName = player.getPlayerListName().substring(0, 12);
+            try {
+                player.setPlayerListName(listName);
+            } catch (Exception ex) {
+                int i = 0;
+                while (i <= 200) {
+                    try {
+                        player.setPlayerListName(listName + ChatColor.COLOR_CHAR + Character.toChars(i++)[0]);
+                    } catch (Exception e) {
+                        if (i == 200)
+                            e.printStackTrace();
+                    }
+                }
+            }
+        }
         if (alive) {
+            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
+                player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            }
             player.setFallDistance(0F);
             player.setAllowFlight(false);
             player.setFireTicks(0);
@@ -199,29 +220,11 @@ public class Gamer {
             setSpectating(false);
             setHuman();
             updateSelfToOthers();
-            if (HungergamesApi.getConfigManager().isShortenedNames()
-                    && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
-                String listName = player.getPlayerListName().substring(0, 12);
-                try {
-                    player.setPlayerListName(listName);
-                } catch (Exception ex) {
-                    int i = 0;
-                    while (i <= 200) {
-                        try {
-                            player.setPlayerListName(listName + ChatColor.COLOR_CHAR + Character.toChars(i++)[0]);
-                        } catch (Exception e) {
-                            if (i == 200)
-                                e.printStackTrace();
-                        }
-                    }
-                }
-            }
-            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
-                player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
-                player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            }
+            updateOthersToSelf();
         } else if (!alive) {
             if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
+                if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() <= 14)
+                    player.setPlayerListName(ChatColor.GRAY + player.getPlayerListName());
                 seeInvis(true);
                 player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
@@ -236,11 +239,11 @@ public class Gamer {
             setGhost();
             player.setAllowFlight(true);
             player.setFlying(true);
-            updateSelfToOthers();
-            updateOthersToSelf();
             player.setFoodLevel(20);
             player.setHealth(20);
             player.setFireTicks(0);
+            updateSelfToOthers();
+            updateOthersToSelf();
         }
     }
 
