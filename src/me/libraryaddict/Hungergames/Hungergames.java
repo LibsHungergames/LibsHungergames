@@ -429,7 +429,7 @@ public class Hungergames extends JavaPlugin {
             final int amount = kit.getPlayerSize();
             if (amount <= 0)
                 continue;
-            metrics.getKitsUsedGraph().addPlotter(new Metrics.Plotter(kit.getName()) {
+            metrics.getKitsUsed().addPlotter(new Metrics.Plotter(kit.getName()) {
 
                 @Override
                 public int getValue() {
