@@ -14,8 +14,8 @@ import me.libraryaddict.disguise.DisguiseTypes.DisguiseType;
 import me.libraryaddict.disguise.DisguiseTypes.FlagWatcher;
 import me.libraryaddict.disguise.DisguiseTypes.MobDisguise;
 
-public class Infected extends AbilityListener implements Disableable {
-    public Infected() throws Exception {
+public class Zombifier extends AbilityListener implements Disableable {
+    public Zombifier() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("LibsDisguises") == null)
             throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
                     "Plugin LibsDisguises"));
@@ -31,7 +31,6 @@ public class Infected extends AbilityListener implements Disableable {
                 Disguise disguise = new MobDisguise(DisguiseType.ZOMBIE);
                 DisguiseAPI.disguiseToAll(event.getPlayer(), disguise);
                 FlagWatcher watcher = disguise.getWatcher();
-                watcher.setSneaking(true);
                 watcher.setSneaking(false);
                 for (int i = 0; i < 4; i++)
                     watcher.setItemStack(i, new ItemStack(0));
