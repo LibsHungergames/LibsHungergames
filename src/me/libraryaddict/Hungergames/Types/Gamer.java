@@ -14,6 +14,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Gamer {
@@ -214,6 +216,10 @@ public class Gamer {
                     }
                 }
             }
+            if (HungergamesApi.getConfigManager().displayScoreboards()) {
+                player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            }
         } else if (!alive) {
             seeInvis(true);
             setSpectating(true);
@@ -225,6 +231,14 @@ public class Gamer {
             player.setFoodLevel(20);
             player.setHealth(20);
             player.setFireTicks(0);
+            if (HungergamesApi.getConfigManager().displayScoreboards()) {
+                player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    public void run() {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
+                    }
+                });
+            }
         }
     }
 

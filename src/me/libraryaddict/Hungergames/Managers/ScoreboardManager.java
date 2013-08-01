@@ -50,8 +50,10 @@ public class ScoreboardManager {
     }
 
     public static void resetScoreboard(String scoreboardName) {
-        if (!boards.containsKey(scoreboardName))
+        if (!boards.containsKey(scoreboardName)) {
             boards.put(scoreboardName, Bukkit.getScoreboardManager().getNewScoreboard());
+            boards.get(scoreboardName).registerNewTeam("Spectators").setCanSeeFriendlyInvisibles(true);
+        }
         for (Objective obj : boards.get(scoreboardName).getObjectives()) {
             obj.unregister();
         }
