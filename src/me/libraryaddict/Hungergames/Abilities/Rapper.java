@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,13 +15,13 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Rapper extends AbilityListener implements Disableable {
-    public int nauseaLength = 5;
+    public int nauseaLength = 7;
     public int hearingRange = 16;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (hasAbility(event.getPlayer())) {
-            if (event.getAction().name().contains("RIGHT")) {
+            if (event.getAction() != Action.PHYSICAL && event.getClickedBlock() != null) {
                 if (event.getClickedBlock().getType() == Material.NOTE_BLOCK) {
                     for (Entity entity : event.getPlayer().getNearbyEntities(hearingRange, hearingRange, hearingRange)) {
                         if (!(entity instanceof Player) || HungergamesApi.getPlayerManager().getGamer(entity).isAlive()) {
