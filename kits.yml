@@ -171,7 +171,7 @@ Kits:
     Price: 0
     Icon: GOLD_RECORD 0 1
     Items:
-      - 'NOTE_BLOCK 0 1 Name=Rapper''s_Studio Unlootable'
+      - 'NOTE_BLOCK 0 1 Name=Rapper''s_Studio Unlootable 1'
     Ability:
       - Rapper
   Surprise:
