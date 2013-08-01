@@ -218,9 +218,6 @@ public class PlayerListener implements Listener {
             }
         }
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (gamer.isAlive() && gamer.canRide())
-                if (p.isInsideVehicle() == true)
-                    p.leaveVehicle();
             if (item != null) {
                 if (item.equals(icon.getKitSelector())) {
                     icon.openKitInventory(p);
@@ -275,7 +272,7 @@ public class PlayerListener implements Listener {
                         (int) ((Damageable) event.getRightClicked()).getMaxHealth()));
             }
             if (gamer.canRide()) {
-                if (event.getPlayer().isInsideVehicle() == false && event.getRightClicked().getVehicle() != event.getPlayer())
+                if (!event.getPlayer().isInsideVehicle() && event.getRightClicked().getVehicle() == null)
                     event.getRightClicked().setPassenger(event.getPlayer());
                 else
                     event.getPlayer().leaveVehicle();
