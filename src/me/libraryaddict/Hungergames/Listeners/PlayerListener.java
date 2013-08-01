@@ -262,9 +262,14 @@ public class PlayerListener implements Listener {
             Player p = event.getPlayer();
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
-                p.sendMessage(String.format(cm.getMessagePlayerHasHealthAndHunger(), victim.getName(), (int) victim.getHealth(),
-                        victim.getFoodLevel(), (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits
-                                .getKitByPlayer(victim).getName())));
+                if (pm.getGamer(victim).isAlive())
+                    p.sendMessage(String.format(
+                            cm.getMessagePlayerHasHealthAndHunger(),
+                            victim.getName(),
+                            (int) victim.getHealth(),
+                            victim.getFoodLevel(),
+                            (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
+                                    victim).getName())));
             } else if (event.getRightClicked() instanceof Damageable) {
                 p.sendMessage(String.format(cm.getMessageMobHasHealth(),
                         this.name.getName(event.getRightClicked().getType().name()),
