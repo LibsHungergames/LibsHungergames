@@ -49,6 +49,7 @@ public class ConfigManager {
     private ItemStack kitSelectorIcon;
     private int kitSelectorInventorySize;
     private String latestVersion = null;
+    private boolean invisSpectators;
     private int minPlayers;
     public int mobSpawnChance;
     private boolean mushroomStew;
@@ -541,6 +542,7 @@ public class ConfigManager {
             alivePrefix = hg.getConfig().getString("AlivePrefix");
         if (hg.getConfig().getBoolean("ChangeSpectatingPrefix"))
             spectatingPrefix = hg.getConfig().getString("SpectatingPrefix");
+        invisSpectators = hg.getConfig().getBoolean("InvisibleSpectators");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
@@ -613,4 +615,9 @@ public class ConfigManager {
     public boolean useKitSelector() {
         return kitSelector;
     }
+
+    public boolean isInvisSpectators() {
+        return invisSpectators;
+    }
+
 }

@@ -216,12 +216,12 @@ public class Gamer {
                     }
                 }
             }
-            if (HungergamesApi.getConfigManager().displayScoreboards()) {
+            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
                 player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
         } else if (!alive) {
-            if (HungergamesApi.getConfigManager().displayScoreboards()) {
+            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
                 seeInvis(true);
                 player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
