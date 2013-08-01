@@ -542,7 +542,7 @@ public class ConfigManager {
             alivePrefix = hg.getConfig().getString("AlivePrefix");
         if (hg.getConfig().getBoolean("ChangeSpectatingPrefix"))
             spectatingPrefix = hg.getConfig().getString("SpectatingPrefix");
-        invisSpectators = hg.getConfig().getBoolean("InvisibleSpectators");
+        invisSpectators = !hg.getConfig().getBoolean("InvisibleSpectators");
 
         // Create the times where it broadcasts and advertises the feast
         feastBroadcastTimes.clear();
