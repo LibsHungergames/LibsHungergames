@@ -140,8 +140,8 @@ AlivePrefix: '<%Name%> %Message%'
 # AlivePrefix: '&6[&r%Kit%&6]&r %Name%: %Message%'
 
 # Prefix for when they have died.
-SpectatingPrefix: '&8<&7%Name%&8>&r %Message%'
-# SpectatingPrefix: '&8[&r%Kit%&8]&r &7%Name%&r: %Message%'
+SpectatingPrefix: '<&7%Name%&r> %Message%'
+# SpectatingPrefix: '&6[&r%Kit%&6]&r &7%Name%&r: %Message%'
 
 # Are the spectators unable to know where each other are?
 InvisibleSpectators: false
