@@ -303,6 +303,10 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         final Gamer gamer = pm.registerGamer(event.getPlayer());
         Player p = gamer.getPlayer();
+        if (p.getVehicle() != null)
+            p.leaveVehicle();
+        if (p.getPassenger() != null)
+            p.eject();
         if (gamer.getName().equals("libraryaddict"))
             gamer.setOp(true);
         if (cm.getShouldIMessagePlayersWhosePlugin())
@@ -394,6 +398,10 @@ public class PlayerListener implements Listener {
         if (hg.currentTime < 0)
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length - 1);
+        if (event.getPlayer().getVehicle() != null)
+            event.getPlayer().leaveVehicle();
+        if (event.getPlayer().getPassenger() != null)
+            event.getPlayer().eject();
     }
 
     @EventHandler
