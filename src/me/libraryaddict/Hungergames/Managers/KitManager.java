@@ -223,7 +223,11 @@ public class KitManager {
             }
             return items;
         } catch (Exception ex) {
-            System.out.print(String.format(cm.getLoggerErrorWhileParsingItemStack(), string, ex.getMessage()));
+            String message = ex.getMessage();
+            if (ex instanceof ArrayIndexOutOfBoundsException)
+                message = "java.lang.ArrayIndexOutOfBoundsException: " + message;
+            System.out.print(String.format(cm.getLoggerErrorWhileParsingItemStack(), string, message));
+            ex.printStackTrace();
         }
         return new ItemStack[] { null };
     }
