@@ -5,6 +5,7 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -53,6 +54,7 @@ public class ScoreboardManager {
         if (!boards.containsKey(scoreboardName)) {
             boards.put(scoreboardName, Bukkit.getScoreboardManager().getNewScoreboard());
             boards.get(scoreboardName).registerNewTeam("Spectators").setCanSeeFriendlyInvisibles(true);
+            boards.get(scoreboardName).getTeam("Spectators").setPrefix(ChatColor.GRAY + "");
         }
         for (Objective obj : boards.get(scoreboardName).getObjectives()) {
             obj.unregister();
