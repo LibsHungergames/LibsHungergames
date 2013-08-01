@@ -54,7 +54,7 @@ public class ScoreboardManager {
         if (!boards.containsKey(scoreboardName)) {
             boards.put(scoreboardName, Bukkit.getScoreboardManager().getNewScoreboard());
             boards.get(scoreboardName).registerNewTeam("Spectators").setCanSeeFriendlyInvisibles(true);
-            boards.get(scoreboardName).getTeam("Spectators").setPrefix(ChatColor.GRAY + "");
+            boards.get(scoreboardName).getTeam("Spectators").setPrefix(ChatColor.DARK_GRAY + "");
         }
         for (Objective obj : boards.get(scoreboardName).getObjectives()) {
             obj.unregister();
