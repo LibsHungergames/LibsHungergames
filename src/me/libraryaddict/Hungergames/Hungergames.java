@@ -202,13 +202,6 @@ public class Hungergames extends JavaPlugin {
 
     public void onEnable() {
         HungergamesApi.init(this);
-        try {
-            metrics = new Metrics(this);
-            if (metrics.isOptOut())
-                System.out.print(cm.getLoggerMetricsMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         cm = HungergamesApi.getTranslationManager();
         pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
@@ -219,6 +212,13 @@ public class Hungergames extends JavaPlugin {
         mysql.SQL_USER = getConfig().getString("MySqlUser");
         mysql.startJoinThread();
         MapLoader.loadMap();
+        try {
+            metrics = new Metrics(this);
+            if (metrics.isOptOut())
+                System.out.print(cm.getLoggerMetricsMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 world = Bukkit.getWorlds().get(0);
