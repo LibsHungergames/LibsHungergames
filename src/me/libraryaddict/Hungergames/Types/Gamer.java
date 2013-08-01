@@ -221,7 +221,17 @@ public class Gamer {
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
         } else if (!alive) {
-            seeInvis(true);
+            if (HungergamesApi.getConfigManager().displayScoreboards()) {
+                seeInvis(true);
+                player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    public void run() {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
+                    }
+                });
+            } else {
+                seeInvis(false);
+            }
             setSpectating(true);
             setGhost();
             player.setAllowFlight(true);
@@ -231,14 +241,6 @@ public class Gamer {
             player.setFoodLevel(20);
             player.setHealth(20);
             player.setFireTicks(0);
-            if (HungergamesApi.getConfigManager().displayScoreboards()) {
-                player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
-                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-                    public void run() {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
-                    }
-                });
-            }
         }
     }
 
