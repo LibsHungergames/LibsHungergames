@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>libsdisguises</groupId>
 			<artifactId>libsdisguises</artifactId>
-			<version>v1.1</version>
+			<version>v7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
