@@ -181,7 +181,10 @@ public class LibsFeastManager implements FeastManager {
     public void generatePlatform(Location loc, int lowestLevel, int radius) {
         ConfigManager config = HungergamesApi.getConfigManager();
         ItemStack feastGround = config.getFeastGround();
-        generatePlatform(loc, lowestLevel, radius, radius / 2, feastGround.getTypeId(), feastGround.getDurability());
+        int yHeight = radius / 2;
+        if (yHeight < 4)
+            yHeight = 4;
+        generatePlatform(loc, lowestLevel, radius, yHeight, feastGround.getTypeId(), feastGround.getDurability());
         generatePillars(loc, radius);
     }
 
