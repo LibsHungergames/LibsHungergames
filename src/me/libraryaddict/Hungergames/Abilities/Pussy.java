@@ -18,7 +18,7 @@ import me.libraryaddict.disguise.DisguiseTypes.MobDisguise;
 
 public class Pussy extends AbilityListener implements Disableable {
     private transient HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
-    public int timeToTransform = 10;
+    public int timeToTransform = 5;
     public String transformedFromCat = ChatColor.BLUE + "HISS!";
     public String transformedIntoCat = ChatColor.BLUE + "Meow!";
 
