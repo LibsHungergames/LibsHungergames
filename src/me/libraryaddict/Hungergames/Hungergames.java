@@ -216,6 +216,7 @@ public class Hungergames extends JavaPlugin {
             metrics = new Metrics(this);
             if (metrics.isOptOut())
                 System.out.print(cm.getLoggerMetricsMessage());
+            metrics.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,7 +234,7 @@ public class Hungergames extends JavaPlugin {
                 File mapConfig = new File(getDataFolder() + "/map.yml");
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
                 if (mapConfiguration.getBoolean("GenerateChunks")) {
-                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16);
+                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16) + Bukkit.getViewDistance();
                     final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
                     for (int x = (int) -chunks; x <= chunks; x++) {
                         for (int z = (int) -chunks; z <= chunks; z++) {
@@ -438,7 +439,6 @@ public class Hungergames extends JavaPlugin {
 
             });
         }
-        metrics.start();
         ScoreboardManager.updateStage();
         ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
