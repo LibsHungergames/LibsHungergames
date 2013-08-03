@@ -223,6 +223,7 @@ public class Hungergames extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 world = Bukkit.getWorlds().get(0);
+                world.setGameRuleValue("doDaylightCycle", "false");
                 world.setTime(0);
                 if (config.forceCords())
                     world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
@@ -460,6 +461,7 @@ public class Hungergames extends JavaPlugin {
         }
         for (Gamer gamer : pm.getGamers())
             gamer.updateSelfToOthers();
+        world.setGameRuleValue("doDaylightCycle", "true");
         world.setTime(config.getTimeOfDay());
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
