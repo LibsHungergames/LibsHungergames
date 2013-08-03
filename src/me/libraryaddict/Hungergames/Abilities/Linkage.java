@@ -146,12 +146,14 @@ public class Linkage extends AbilityListener implements Disableable {
             Block clicked = event.getClickedBlock();
             if (clicked.getType() == Material.MOB_SPAWNER) {
                 Player p = event.getPlayer();
-                Teleport teleport = getTeleport(clicked);
-                if (teleport != null) {
-                    if (teleport.getSize() >= 2)
-                        teleport.teleport(p, clicked);
-                    else
-                        p.sendMessage(teleporterNoOtherSide);
+                if (pm.getGamer(p).isAlive()) {
+                    Teleport teleport = getTeleport(clicked);
+                    if (teleport != null) {
+                        if (teleport.getSize() >= 2)
+                            teleport.teleport(p, clicked);
+                        else
+                            p.sendMessage(teleporterNoOtherSide);
+                    }
                 }
             }
         }
