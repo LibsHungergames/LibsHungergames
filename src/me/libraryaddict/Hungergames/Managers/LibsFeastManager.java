@@ -374,6 +374,7 @@ public class LibsFeastManager implements FeastManager {
                                 if (!processedBlocks.contains(b))
                                     processedBlocks.add(b);
                                 queued.remove(b);
+                                removeLeaves(b);
                                 b.setTypeIdAndData(toDo.get(b).id, toDo.get(b).data, true);
                             }
                         }
