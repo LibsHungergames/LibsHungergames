@@ -63,8 +63,10 @@ public class GeneralListener implements Listener {
         Iterator<LivingEntity> itel = event.getAffectedEntities().iterator();
         while (itel.hasNext()) {
             LivingEntity e = itel.next();
-            if (e instanceof Player && !pm.getGamer(e).isAlive())
+            Gamer gamer = pm.getGamer(e);
+            if (gamer != null && !gamer.isAlive()) {
                 itel.remove();
+            }
         }
     }
 
