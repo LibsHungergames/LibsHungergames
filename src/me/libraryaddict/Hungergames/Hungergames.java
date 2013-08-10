@@ -65,7 +65,6 @@ public class Hungergames extends JavaPlugin {
     private Metrics metrics;
     private PlayerListener playerListener;
     private PlayerManager pm;
-    protected long time = 0;
     public World world;
 
     public void cannon() {
@@ -171,6 +170,84 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
+    private void generateChunks() {
+        final Location spawn = world.getSpawnLocation();
+        for (int x = -5; x <= 5; x++)
+            for (int z = -5; z <= 5; z++)
+                spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
+        File mapConfig = new File(getDataFolder() + "/map.yml");
+        YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
+        if (mapConfiguration.getBoolean("GenerateChunks")) {
+            final double chunks = (int) Math.ceil(config.getBorderSize() / 16) + Bukkit.getViewDistance();
+            final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
+            for (int x = (int) -chunks; x <= chunks; x++) {
+                for (int z = (int) -chunks; z <= chunks; z++) {
+                    BlockInfo info = new BlockInfo();
+                    info.x = spawn.getBlockX() + (x * 16);
+                    info.z = spawn.getBlockZ() + (z * 16);
+                    toProcess.add(info);
+                }
+            }
+            final double totalChunks = toProcess.size();
+            if (mapConfiguration.getBoolean("GenerateChunksBackground")) {
+                BukkitRunnable runnable = new BukkitRunnable() {
+                    int currentChunks = 0;
+                    long lastPrint = 0;
+
+                    public void run() {
+                        if (lastPrint + 5000 < System.currentTimeMillis()) {
+                            System.out.print(String.format(cm.getLoggerGeneratingChunks(),
+                                    (int) Math.floor(((double) currentChunks / totalChunks) * 100))
+                                    + "%");
+                            lastPrint = System.currentTimeMillis();
+                        }
+                        Iterator<BlockInfo> itel = toProcess.iterator();
+                        long started = System.currentTimeMillis();
+
+                        while (itel.hasNext() && started + 50 > System.currentTimeMillis()) {
+                            currentChunks++;
+                            BlockInfo info = itel.next();
+                            itel.remove();
+                            Chunk chunk = world.getChunkAt(info.x, info.z);
+                            if (chunk.isLoaded())
+                                continue;
+                            chunk.load();
+                            chunk.unload(true, false);
+                        }
+                        if (!itel.hasNext()) {
+                            System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
+                            cancel();
+                        }
+                    }
+                };
+                runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
+            } else {
+                int currentChunks = 0;
+                long lastPrint = 0;
+
+                Iterator<BlockInfo> itel = toProcess.iterator();
+
+                while (itel.hasNext()) {
+                    currentChunks++;
+                    BlockInfo info = itel.next();
+                    itel.remove();
+                    Chunk chunk = world.getChunkAt(info.x, info.z);
+                    if (chunk.isLoaded())
+                        continue;
+                    chunk.load();
+                    chunk.unload(true, false);
+                    if (lastPrint + 5000 < System.currentTimeMillis()) {
+                        System.out.print(String.format(cm.getLoggerGeneratingChunks(),
+                                (int) Math.floor(((double) currentChunks / totalChunks) * 100))
+                                + "%");
+                        lastPrint = System.currentTimeMillis();
+                    }
+                }
+                System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
+            }
+        }
+    }
+
     public Metrics getMetrics() {
         return metrics;
     }
@@ -234,50 +311,7 @@ public class Hungergames extends JavaPlugin {
                         spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
                 File mapConfig = new File(getDataFolder() + "/map.yml");
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
-                if (mapConfiguration.getBoolean("GenerateChunks")) {
-                    final double chunks = (int) Math.ceil(config.getBorderSize() / 16) + Bukkit.getViewDistance();
-                    final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
-                    for (int x = (int) -chunks; x <= chunks; x++) {
-                        for (int z = (int) -chunks; z <= chunks; z++) {
-                            BlockInfo info = new BlockInfo();
-                            info.x = spawn.getBlockX() + (x * 16);
-                            info.z = spawn.getBlockZ() + (z * 16);
-                            toProcess.add(info);
-                        }
-                    }
-                    final double totalChunks = toProcess.size();
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        int currentChunks = 0;
-                        long lastPrint = 0;
-
-                        public void run() {
-                            if (lastPrint + 5000 < System.currentTimeMillis()) {
-                                System.out.print(String.format(cm.getLoggerGeneratingChunks(),
-                                        (int) Math.floor(((double) currentChunks / totalChunks) * 100))
-                                        + "%");
-                                lastPrint = System.currentTimeMillis();
-                            }
-                            Iterator<BlockInfo> itel = toProcess.iterator();
-                            long started = System.currentTimeMillis();
-
-                            while (itel.hasNext() && started + 50 > System.currentTimeMillis()) {
-                                currentChunks++;
-                                BlockInfo info = itel.next();
-                                itel.remove();
-                                Chunk chunk = world.getChunkAt(info.x, info.z);
-                                if (chunk.isLoaded())
-                                    continue;
-                                chunk.load();
-                                chunk.unload(true, false);
-                            }
-                            if (!itel.hasNext()) {
-                                System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
-                                cancel();
-                            }
-                        }
-                    };
-                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 1);
-                }
+                generateChunks();
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
                     ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
                     LibsFeastManager feastManager;
@@ -303,6 +337,8 @@ public class Hungergames extends JavaPlugin {
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            private long time = 0;
+
             public void run() {
                 if (System.currentTimeMillis() >= time && doSeconds) {
                     time = System.currentTimeMillis() + 1000;

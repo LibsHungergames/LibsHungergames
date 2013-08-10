@@ -43,11 +43,11 @@ public class MapLoader {
     }
 
     private static void copyFile(File source, File destination) throws IOException {
+        if (source.getName().equalsIgnoreCase("uid.dat"))
+            return;
         destination.mkdirs();
         if (destination.isDirectory())
             destination = new File(destination, source.getName());
-        if (source.getName().equalsIgnoreCase("uid.dat"))
-            return;
         FileInputStream input = new FileInputStream(source);
         copyFile(input, destination);
     }
@@ -114,6 +114,10 @@ public class MapLoader {
             }
             if (!config.contains("TimeOfDayWhenGameStarts")) {
                 config.set("TimeOfDayWhenGameStarts", 0);
+                config.save(mapConfig);
+            }
+            if (!config.contains("GenerateChunksBackground")) {
+                config.set("GenerateChunksBackground", true);
                 config.save(mapConfig);
             }
             String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
