@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Abilities;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,9 @@ import me.libraryaddict.disguise.Events.UndisguisedEvent;
 public class Skinner extends AbilityListener implements Disableable {
     public int chanceInOneOfSkinning = 3;
     private boolean disable = true;
+    public boolean doMessageForSkinned = true;
     public String skinName = "Default";
+    public String skinnedMessage = ChatColor.RED + "%s has just skinned you! You are now known as %s!";
     public boolean skinUsersOfKit = true;
 
     public Skinner() throws Exception {
@@ -47,11 +50,16 @@ public class Skinner extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+        if (!event.isCancelled() && event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             if (hasAbility((Player) event.getDamager())
-                    && (this.chanceInOneOfSkinning <= 0 || new Random().nextInt(this.chanceInOneOfSkinning) == 0)) {
+                    && (this.chanceInOneOfSkinning <= 0 || new Random().nextInt(this.chanceInOneOfSkinning) == 0)
+                    && !isSkinned(event.getEntity())) {
                 this.disable = false;
                 DisguiseAPI.disguiseToAll(event.getEntity(), new PlayerDisguise(this.skinName));
+                if (this.doMessageForSkinned) {
+                    ((Player) event.getEntity()).sendMessage(String.format(this.skinnedMessage,
+                            ((Player) event.getDamager()).getName(), skinName));
+                }
             }
         }
     }

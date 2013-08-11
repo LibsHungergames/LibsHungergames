@@ -172,6 +172,13 @@ Kits:
     Icon: LAVA 0 1
     Ability:
       - Salamander
+  Skinner:
+    Description: 'You have a chance in 3 of skinning another player alive! Once skinned, they will forever have the nameplate ''Default'' for the remainder of the game! Even while spectating! But, all users of this kit are already known as ''Default''!'
+    Free: true
+    Price: 0
+    Icon: SKULL_ITEM 3 1
+    Ability:
+      - Skinner
   Rapper:
     Description: 'Right click on a noteblock and give everything in audible range nausea. The nausea doesn''t stack and you are effected by it too! Can you handle your rap?'
     Free: true
