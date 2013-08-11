@@ -15,8 +15,8 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class Rapper extends AbilityListener implements Disableable {
-    public int nauseaLength = 7;
     public int hearingRange = 16;
+    public int nauseaLength = 7;
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

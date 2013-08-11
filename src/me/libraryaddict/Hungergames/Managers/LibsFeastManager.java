@@ -28,22 +28,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LibsFeastManager implements FeastManager {
     private class BlockInfo {
+        byte data;
+
+        int id;
         public BlockInfo(int id, byte data) {
             this.id = id;
             this.data = data;
         }
-
-        byte data;
-        int id;
     }
 
+    private BukkitRunnable chestGenerator;
     // This manages the chests, The buildings
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
     private LinkedList<Block> processedBlocks = new LinkedList<Block>();
-    private BukkitRunnable runnable;
-    private BukkitRunnable chestGenerator;
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
+    private BukkitRunnable runnable;
 
     public LibsFeastManager() {
         faces.add(BlockFace.UP);

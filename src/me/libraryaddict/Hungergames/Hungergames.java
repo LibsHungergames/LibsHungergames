@@ -301,7 +301,7 @@ public class Hungergames extends JavaPlugin {
             public void run() {
                 world = Bukkit.getWorlds().get(0);
                 world.setGameRuleValue("doDaylightCycle", "false");
-                world.setTime(0);
+                world.setTime(6000);
                 if (config.forceCords())
                     world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
                             config.getSpawnZ());

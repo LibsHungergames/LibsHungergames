@@ -20,7 +20,7 @@ import java.util.*;
  */
 public abstract class AbilityListener implements Listener {
 
-    private transient Set<String> myPlayers = new HashSet<String>();
+    protected transient Set<String> myPlayers = new HashSet<String>();
 
     // Just in case an abilitylistener also implements commandexecutor and has a
     // command to claim.

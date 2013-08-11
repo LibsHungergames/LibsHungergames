@@ -41,6 +41,7 @@ public class ConfigManager {
     private Hungergames hg;
     private int invincibility;
     private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
+    private boolean invisSpectators;
     private boolean kickOnDeath;
     private boolean kitSelector;
     private ItemStack kitSelectorBack;
@@ -49,7 +50,6 @@ public class ConfigManager {
     private ItemStack kitSelectorIcon;
     private int kitSelectorInventorySize;
     private String latestVersion = null;
-    private boolean invisSpectators;
     private int minPlayers;
     public int mobSpawnChance;
     private boolean mushroomStew;
@@ -384,6 +384,10 @@ public class ConfigManager {
         return flyPreGame;
     }
 
+    public boolean isInvisSpectators() {
+        return invisSpectators;
+    }
+
     /**
      * @return Does the game kick the players on death
      */
@@ -614,10 +618,6 @@ public class ConfigManager {
      */
     public boolean useKitSelector() {
         return kitSelector;
-    }
-
-    public boolean isInvisSpectators() {
-        return invisSpectators;
     }
 
 }

@@ -11,8 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 public class Flower extends AbilityListener implements Disableable {
-    public int repairsEveryWhatSecond = 5;
     private int currentSecond = 0;
+    public int repairsEveryWhatSecond = 5;
 
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
