@@ -31,6 +31,7 @@ public class LibsFeastManager implements FeastManager {
         byte data;
 
         int id;
+
         public BlockInfo(int id, byte data) {
             this.id = id;
             this.data = data;
@@ -181,7 +182,7 @@ public class LibsFeastManager implements FeastManager {
     public void generatePlatform(Location loc, int lowestLevel, int radius) {
         ConfigManager config = HungergamesApi.getConfigManager();
         ItemStack feastGround = config.getFeastGround();
-        int yHeight = radius / 2;
+        int yHeight = radius;
         if (yHeight < 4)
             yHeight = 4;
         generatePlatform(loc, lowestLevel, radius, yHeight, feastGround.getTypeId(), feastGround.getDurability());
