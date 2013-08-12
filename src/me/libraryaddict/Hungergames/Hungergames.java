@@ -46,6 +46,7 @@ public class Hungergames extends JavaPlugin {
         int z;
     }
 
+    public boolean chunksGenerating = true;
     private TranslationManager cm;
     private ConfigManager config;
     /**
@@ -66,7 +67,6 @@ public class Hungergames extends JavaPlugin {
     private PlayerListener playerListener;
     private PlayerManager pm;
     public World world;
-    public boolean chunksGenerating = true;
 
     public void cannon() {
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);

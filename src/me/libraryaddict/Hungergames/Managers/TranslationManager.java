@@ -115,6 +115,12 @@ public class TranslationManager {
     private String commandReplyReceiverLeft = ChatColor.GREEN + "Cannot find %s!";
     private String commandReplySendReply = ChatColor.GRAY + "[me -> %s" + ChatColor.RESET + ChatColor.GRAY + "] "
             + ChatColor.RESET + "%s";
+    private String commandRespawnGameHasntStarted = ChatColor.RED + "The game hasn't started yet!";
+    private String commandRespawnNoPermission = ChatColor.RED + "You don't have permission!";
+    private String commandRespawnPlayerDoesntExist = ChatColor.RED + "Player doesn't exist!";
+    private String commandRespawnPlayerIsAlive = ChatColor.RED + "The player is still alive!";
+    private String commandRespawnRespawnedPlayer = ChatColor.RED + "Successfully respawned %s!";
+    private String commandRespawnYouHaveBeenRespawned = ChatColor.RED + "You have been respawned!";
     private String commandRideNameOfRideall = "rideall";
     private String commandRideRideAll = ChatColor.GREEN + "Giddy up horsie!";
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
@@ -705,6 +711,30 @@ public class TranslationManager {
 
     public String getCommandReplySendReply() {
         return commandReplySendReply;
+    }
+
+    public String getCommandRespawnGameHasntStarted() {
+        return commandRespawnGameHasntStarted;
+    }
+
+    public String getCommandRespawnNoPermission() {
+        return commandRespawnNoPermission;
+    }
+
+    public String getCommandRespawnPlayerDoesntExist() {
+        return commandRespawnPlayerDoesntExist;
+    }
+
+    public String getCommandRespawnPlayerIsAlive() {
+        return commandRespawnPlayerIsAlive;
+    }
+
+    public String getCommandRespawnRespawnedPlayer() {
+        return commandRespawnRespawnedPlayer;
+    }
+
+    public String getCommandRespawnYouHaveBeenRespawned() {
+        return commandRespawnYouHaveBeenRespawned;
     }
 
     public String getCommandRideNameOfRideall() {
