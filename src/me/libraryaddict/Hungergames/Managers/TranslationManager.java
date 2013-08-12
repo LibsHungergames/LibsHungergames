@@ -225,6 +225,7 @@ public class TranslationManager {
     private String loggerWaitingForLoadGamerToComplete = "[Hungergames] Waiting for load gamer to complete, %s left!";
     private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
+    private String messagePlayerChunksGenerating = ChatColor.YELLOW + "Chunks are currently generating!\n\nCheck back soon!";
     private String messagePlayerHasHealthAndHunger = ChatColor.DARK_RED + "%1$2s has" + ChatColor.RED + " %2$2s/20 health"
             + ChatColor.DARK_RED + "\n%1$2s has" + ChatColor.RED + " %3$2s/20 hunger" + ChatColor.DARK_RED
             + "\n%1$2s is using kit:" + ChatColor.RED + " %4$2s";
@@ -272,7 +273,6 @@ public class TranslationManager {
     private String scoreboardStagePreFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pre-Feast";
     private String scoreboardStagePreGame = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pregame";
     private String selectKitInventoryTitle = ChatColor.DARK_RED + "Select Kit";
-    private boolean shouldIMessagePlayersWhosePlugin = true;
     private String spectatorHeadKills = ChatColor.GREEN + "Kills: " + ChatColor.BLUE + "%s";
     private String spectatorHeadKit = ChatColor.GREEN + "Kit: " + ChatColor.BLUE + "%s";
     private String spectatorInventoryFeastDescription = ChatColor.GREEN + "Click this to be teleported\n" + ChatColor.GREEN
@@ -311,27 +311,18 @@ public class TranslationManager {
                      * this. By changing the creatorMessage to something which doesn't refer players to the plugin itself. You are
                      * going against my wishes.
                      */
-                    boolean foundMe = false;
-                    for (String message : new String[] {
-                            String.format(getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO").toLowerCase(),
-                            getKickMessageWon().toLowerCase(),
-                            getShouldIMessagePlayersWhosePlugin() ? getMessagePlayerWhosePlugin().toLowerCase() : "" })
-                        if (message.contains("libraryaddict") || message.contains("ow.ly/kwbpo")
-                                || message.contains("spigotmc.org/resources/libs-hungergames.55")) {
-                            foundMe = true;
-                            break;
-                        }
-                    if (!foundMe) {
-                        shouldIMessagePlayersWhosePlugin = true;
+
+                    /**
+                     * I reserve the right to issue a DMCA if you remove this but use at least 30% of this code.
+                     */
+                    String message = ChatColor.stripColor(String
+                            .format(messagePlayerWhosePlugin, "libraryaddict",
+                                    HungergamesApi.getConfigManager().getCurrentVersion()).toLowerCase().replace(" ", ""));
+                    if (!(message.contains("libraryaddict") || message.contains("ow.ly/kwbpo") || message
+                            .contains("libshungergames"))) {
                         messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
                                 + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN
                                 + "libraryaddict";
-                        /*Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
-                            public void run() {
-                                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
-                                        + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
-                            }
-                        }, 20 * 60 * 10, 20 * 60 * 10);*/
                     }
                 }
             });
@@ -1088,6 +1079,10 @@ public class TranslationManager {
         return messagePlayerApproachingBorder;
     }
 
+    public String getMessagePlayerChunksGenerating() {
+        return messagePlayerChunksGenerating;
+    }
+
     public String getMessagePlayerHasHealthAndHunger() {
         return messagePlayerHasHealthAndHunger;
     }
@@ -1242,10 +1237,6 @@ public class TranslationManager {
 
     public String getSelectKitInventoryTitle() {
         return selectKitInventoryTitle;
-    }
-
-    public boolean getShouldIMessagePlayersWhosePlugin() {
-        return shouldIMessagePlayersWhosePlugin;
     }
 
     public String getSpectatorHeadKills() {
