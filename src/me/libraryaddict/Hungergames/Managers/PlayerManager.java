@@ -38,14 +38,15 @@ public class PlayerManager {
         return start + (int) (Math.random() * ((end - start) + 1));
     }
 
-    TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
-    Hungergames hg = HungergamesApi.getHungergames();
-    KitManager kits = HungergamesApi.getKitManager();
+    private Hungergames hg = HungergamesApi.getHungergames();
+    private KitManager kits = HungergamesApi.getKitManager();
     public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
     public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
-
     private ArrayList<Integer> nonSolid = new ArrayList<Integer>();
+    private Iterator<Location> spawnItel;
+    private HashMap<Location, Integer[]> spawns = new HashMap<Location, Integer[]>();
 
     public PlayerManager() {
         nonSolid.add(0);
@@ -65,6 +66,10 @@ public class PlayerManager {
         nonSolid.add(Material.REDSTONE_TORCH_OFF.getId());
         nonSolid.add(Material.REDSTONE_TORCH_ON.getId());
         nonSolid.add(Material.VINE.getId());
+    }
+
+    public void addSpawnPoint(Location loc, int radius, int height) {
+        spawns.put(loc, new Integer[] { radius, height });
     }
 
     private String formatDeathMessage(String deathMessage, Player p) {
@@ -203,13 +208,21 @@ public class PlayerManager {
 
     public void sendToSpawn(Gamer gamer) {
         final Player p = gamer.getPlayer();
-        Location spawn = p.getWorld().getSpawnLocation().clone();
+        Location originalSpawn = p.getWorld().getSpawnLocation();
+        int spawnRadius = 8;
+        int spawnHeight = 5;
+        if (spawns.size() > 0) {
+            if (spawnItel == null || !spawnItel.hasNext())
+                spawnItel = spawns.keySet().iterator();
+            originalSpawn = spawnItel.next();
+            spawnRadius = spawns.get(originalSpawn)[0];
+            spawnHeight = spawns.get(originalSpawn)[1];
+        }
+        Location spawn = originalSpawn.clone();
         int chances = 0;
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        int spawnRadius = 8;
-        int spawnHeight = 5;
         while (chances < 100) {
             chances++;
             Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
@@ -225,7 +238,7 @@ public class PlayerManager {
                 break;
             }
         }
-        if (spawn.equals(p.getWorld().getSpawnLocation())) {
+        if (spawn.equals(originalSpawn)) {
             spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
                     + returnChance(-spawnRadius, spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));

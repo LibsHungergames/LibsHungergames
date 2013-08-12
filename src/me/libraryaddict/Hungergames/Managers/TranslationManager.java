@@ -191,13 +191,17 @@ public class TranslationManager {
     private String loggerErrorWhileRegisteringPlayerForAbility = "[Hungergames] Tried to register %s for the %s ability but it does not exist";
     private String loggerFailedToChangIDisguiseConfig = "[Hungergames] Failed to change iDisguise config";
     private String loggerFailedToCheckUpdate = "[Hungergames] Error while checking for a update - %s";
-    private String loggerFoundAbilityInPackage = "[HungerGames] Found ability %s";
-    private String loggerFoundCommandInPackage = "[HungerGames] Found command %s";
+    private String loggerFoundAbilityInPackage = "[Hungergames] Found ability %s";
+    private String loggerFoundCommandInPackage = "[Hungergames] Found command %s";
     private String loggerGeneratingChunks = "[Hungergames] Generating chunks... %s";
     private String loggerKitAlreadyExists = "[Hungergames] Error while registering kit! Kit %s already exists!";
-    private String loggerLoadAbilitiesInPackage = "[HungerGames] Initializing all abilities found in %s in the %s package";
-    private String loggerLoadCommandsInPackage = "[HungerGames] Initializing all commands found in %s in the %s package";
-    private String loggerLoadTranslationConfig = "[HungerGames] Loading the translation config";
+    private String loggerLoadAbilitiesInPackage = "[Hungergames] Initializing all abilities found in %s in the %s package";
+    private String loggerLoadCommandsInPackage = "[Hungergames] Initializing all commands found in %s in the %s package";
+    private String loggerLoadedSpawnsConfig = "[Hungergames] Loaded %s spawns";
+    private String loggerLoadSpawnsConfig = "[Hungergames] Loading the spawns";
+    private String loggerloadSpawnsConfigError = "[Hungergames] Error while loading spawns, spawn %s is missing configuration %s";
+    private String loggerLoadSpawnsConfigNotFound = "[Hungergames] Spawns config not found";
+    private String loggerLoadTranslationConfig = "[Hungergames] Loading the translation config";
     private String loggerMapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String loggerMapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
     private String loggerMapConfigChangedRoundedBorder = "[Hungergames] Map config - Changed rounded border to %s";
@@ -970,6 +974,22 @@ public class TranslationManager {
 
     public String getLoggerLoadCommandsInPackage() {
         return loggerLoadCommandsInPackage;
+    }
+
+    public String getLoggerLoadedSpawnsConfig() {
+        return loggerLoadedSpawnsConfig;
+    }
+
+    public String getLoggerLoadSpawnsConfig() {
+        return loggerLoadSpawnsConfig;
+    }
+
+    public String getLoggerloadSpawnsConfigError() {
+        return loggerloadSpawnsConfigError;
+    }
+
+    public String getLoggerLoadSpawnsConfigNotFound() {
+        return loggerLoadSpawnsConfigNotFound;
     }
 
     private String getLoggerLoadTranslationConfig() {

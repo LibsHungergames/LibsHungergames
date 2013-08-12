@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.libraryaddict.Hungergames.Hungergames;
@@ -195,6 +197,55 @@ public class MapLoader {
                         .print(String.format(tm.getLoggerMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
             } else
                 configManager.setTimeOfDay(defaultConfig.getInt("TimeOfDayWhenGameStarts"));
+            File spawnsFile = new File(worldConfig.getParentFile(), "spawns.yml");
+            System.out.print(tm.getLoggerLoadSpawnsConfig());
+            if (spawnsFile.exists()) {
+                config = YamlConfiguration.loadConfiguration(spawnsFile);
+                int i = 0;
+                for (String key : config.getKeys(true)) {
+                    try {
+                        ConfigurationSection section = config.getConfigurationSection(key);
+                        int x, y, z, radius, height;
+                        if (section.contains("X"))
+                            x = section.getInt("X");
+                        else {
+                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "X"));
+                            continue;
+                        }
+                        if (section.contains("Y"))
+                            y = section.getInt("Y");
+                        else {
+                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Y"));
+                            continue;
+                        }
+                        if (section.contains("Z"))
+                            z = section.getInt("Z");
+                        else {
+                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Z"));
+                            continue;
+                        }
+                        if (section.contains("Radius"))
+                            radius = section.getInt("Radius");
+                        else {
+                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Radius"));
+                            continue;
+                        }
+                        if (section.contains("Height"))
+                            height = section.getInt("Height");
+                        else {
+                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Height"));
+                            continue;
+                        }
+                        Location loc = new Location(HungergamesApi.getHungergames().world, x, y, z);
+                        HungergamesApi.getPlayerManager().addSpawnPoint(loc, radius, height);
+                        i++;
+                    } catch (Exception ex) {
+                        System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, ex.getMessage()));
+                    }
+                }
+                System.out.print(String.format(tm.getLoggerLoadedSpawnsConfig(), i));
+            } else
+                System.out.print(tm.getLoggerLoadSpawnsConfigNotFound());
             if (config != null)
                 System.out.print(tm.getLoggerMapConfigLoaded());
         } catch (Exception ex) {
