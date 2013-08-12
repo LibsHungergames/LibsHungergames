@@ -49,7 +49,8 @@ public class GeneralListener implements Listener {
     public void onDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
-            if (hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !pm.getGamer(entity).isAlive()) {
+            Gamer gamer = pm.getGamer(entity);
+            if (gamer == null || hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !gamer.isAlive()) {
                 event.setCancelled(true);
                 if (entity.getFireTicks() > 0 && !pm.getGamer(entity).isAlive())
                     entity.setFireTicks(0);
