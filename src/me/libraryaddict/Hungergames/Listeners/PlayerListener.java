@@ -44,6 +44,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -314,8 +315,11 @@ public class PlayerListener implements Listener {
             p.eject();
         if (gamer.getName().equals("libraryaddict"))
             gamer.setOp(true);
-        if (cm.getShouldIMessagePlayersWhosePlugin())
-            p.sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                gamer.getPlayer().sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
+            }
+        }, 2L);
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
         if (config.isFlyPreGame())
             p.setAllowFlight(true);
@@ -347,6 +351,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onKick(PlayerKickEvent event) {
         event.setLeaveMessage(null);
+    }
+
+    @EventHandler
+    public void onLogin(AsyncPlayerPreLoginEvent event) {
+        if (hg.chunksGenerating) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, cm.getMessagePlayerChunksGenerating());
+        }
     }
 
     @EventHandler
