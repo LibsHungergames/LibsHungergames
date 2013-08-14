@@ -133,18 +133,19 @@ public class PlayerManager {
             return;
         for (HumanEntity human : p.getInventory().getViewers())
             human.closeInventory();
-        if (p.isInsideVehicle())
-            p.leaveVehicle();
+        p.leaveVehicle();
         p.eject();
-        if (event.getDeathMessage().equals(ChatColor.stripColor(event.getDeathMessage())))
-            event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
         p.setLevel(0);
         p.setExp(0F);
+        if (event.getDeathMessage().equals(ChatColor.stripColor(event.getDeathMessage())))
+            event.setDeathMessage(ChatColor.DARK_RED
+                    + event.getDeathMessage().replace("%Remaining%", "" + (getAliveGamers().size() - 1)));
         event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), p));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
             event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
         }
+        Bukkit.broadcastMessage(event.getDeathMessage());
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
@@ -159,8 +160,6 @@ public class PlayerManager {
             else
                 world.dropItemNaturally(event.getDropsLocation(), item);
         }
-        if (event.getDeathMessage() != null)
-            Bukkit.broadcastMessage(event.getDeathMessage());
         setSpectator(killed);
         ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
         hg.checkWinner();
