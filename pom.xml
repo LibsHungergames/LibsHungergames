@@ -36,7 +36,7 @@
 		</resources>
 	</build>
 
-	<version>4.7.1</version>
+	<version>4.7.2</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -56,6 +56,10 @@
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
 		</repository>
+		<repository>
+			<id>md_5-repo</id>
+			<url>http://repo.md-5.net/content/groups/public/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -63,11 +67,6 @@
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.26-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>libsdisguises</groupId>
-			<artifactId>libsdisguises</artifactId>
-			<version>v7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
@@ -78,6 +77,11 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
 			<version>1.6.2-R0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>LibsDisguises</groupId>
+			<artifactId>LibsDisguises</artifactId>
+			<version>7.2.4</version>
 		</dependency>
 	</dependencies>
 </project>
