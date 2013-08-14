@@ -18,9 +18,8 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.DisguiseTypes.Disguise;
 import me.libraryaddict.disguise.DisguiseTypes.PlayerDisguise;
-import me.libraryaddict.disguise.Events.DisguisedEvent;
-import me.libraryaddict.disguise.Events.UndisguisedEvent;
-
+import me.libraryaddict.disguise.Events.DisguiseEvent;
+import me.libraryaddict.disguise.Events.UndisguiseEvent;
 public class Skinner extends AbilityListener implements Disableable {
     public int chanceInOneOfSkinning = 3;
     private boolean disable = true;
@@ -65,8 +64,8 @@ public class Skinner extends AbilityListener implements Disableable {
     }
 
     @EventHandler
-    public void onDisguise(DisguisedEvent event) {
-        if (isSkinned(event.getDisguised()))
+    public void onDisguise(DisguiseEvent event) {
+        if (isSkinned(event.getEntity()))
             event.setCancelled(true);
     }
 
@@ -79,10 +78,10 @@ public class Skinner extends AbilityListener implements Disableable {
     }
 
     @EventHandler
-    public void onUnDisguise(UndisguisedEvent event) {
-        Gamer gamer = HungergamesApi.getPlayerManager().getGamer(event.getDisguised());
+    public void onUnDisguise(UndisguiseEvent event) {
+        Gamer gamer = HungergamesApi.getPlayerManager().getGamer(event.getEntity());
         if (gamer != null && gamer.isAlive()) {
-            if (isSkinned(event.getDisguised()))
+            if (isSkinned(event.getEntity()))
                 event.setCancelled(true);
         }
     }
