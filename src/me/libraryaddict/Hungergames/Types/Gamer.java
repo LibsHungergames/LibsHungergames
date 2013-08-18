@@ -202,7 +202,8 @@ public class Gamer {
         }
         if (alive) {
             if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
-                player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
+                if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
+                    player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
             player.setFallDistance(0F);
