@@ -361,6 +361,8 @@ public class LibsFeastManager implements FeastManager {
                             for (Block b : queued.keySet()) {
                                 if (i++ >= 200)
                                     break;
+                                if (b.getTypeId() == queued.get(b).id && b.getData() == queued.get(b).data)
+                                    i--;
                                 toDo.put(b, queued.get(b));
                                 b = b.getRelative(BlockFace.UP);
                                 while (b != null
