@@ -85,11 +85,9 @@ public class GeneralListener implements Listener {
             event.setCancelled(true);
         else {
             if (hg.currentTime < 0) {
-                if (event.getEntity() instanceof Monster) {
+                if (event.getSpawnReason() != SpawnReason.CUSTOM) {
                     event.setCancelled(true);
-                } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
-                    if (event.getSpawnReason() != SpawnReason.CUSTOM) {
-                        event.setCancelled(true);
+                    if (!(event.getEntity() instanceof Monster)) {
                         if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
                             hg.entitys.put(event.getLocation().clone().add(0, new Random().nextDouble(), 0),
                                     event.getEntityType());
