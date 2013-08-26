@@ -23,12 +23,13 @@ public class GoTo implements CommandExecutor {
         if (!gamer.isAlive()) {
             if (args.length > 0) {
                 if (Bukkit.getPlayer(args[0]) != null) {
-                    Bukkit.getPlayerExact(sender.getName()).teleport(
-                            sender.getServer().getPlayer(args[0]).getLocation().add(0, 0.1, 0));
+                    gamer.getPlayer().eject();
+                    gamer.getPlayer().teleport(sender.getServer().getPlayer(args[0]).getLocation().add(0, 0.1, 0));
                     return true;
                 } else if (args[0].equalsIgnoreCase(cm.getCommandGotoNameOfFeast())) {
+                    gamer.getPlayer().eject();
                     if (hg.feastLoc.getBlockY() > 0) {
-                        Bukkit.getPlayerExact(sender.getName()).teleport(
+                        gamer.getPlayer().teleport(
                                 hg.feastLoc.getWorld().getHighestBlockAt(hg.feastLoc).getLocation().clone().add(0.5, 1, 0.5));
                     } else
                         sender.sendMessage(cm.getCommandGotoFeastFailed());
