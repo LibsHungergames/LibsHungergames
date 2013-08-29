@@ -53,21 +53,16 @@
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
 		<repository>
-			<id>vault-repo</id>
-			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-		</repository>
-		<repository>
 			<id>md_5-repo</id>
 			<url>http://repo.md-5.net/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>vault-repo</id>
+			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>Vault</artifactId>
-			<version>1.2.26-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
@@ -82,6 +77,11 @@
 			<groupId>LibsDisguises</groupId>
 			<artifactId>LibsDisguises</artifactId>
 			<version>7.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.2.27</version>
 		</dependency>
 	</dependencies>
 </project>
