@@ -41,7 +41,7 @@ public class MapLoader {
             }
         } else
             for (File f : from.listFiles())
-                copy(f, new File(dest.toString(), from.getName()));
+                copy(f, new File(dest.toString(), f.getName()));
     }
 
     private static void copyFile(File source, File destination) throws IOException {
