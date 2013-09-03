@@ -32,6 +32,15 @@ public class ReflectionManager {
         return commandMap;
     }
 
+    public void removeArrows(Player player) {
+        try {
+            Method handle = player.getClass().getMethod("getHandle");
+            handle.getClass().getMethod("m", int.class).invoke(handle.invoke(player), 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public Object getPropertiesConfig(String name, Object obj) {
         try {
             Properties properties = (Properties) propertyManager.getClass().getDeclaredField("properties").get(propertyManager);

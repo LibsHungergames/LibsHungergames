@@ -11,7 +11,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -202,7 +201,7 @@ public class Gamer {
             }
         }
         // Remove arrows sticking in player..
-        ((CraftPlayer) getPlayer()).getHandle().m(0);
+        HungergamesApi.getReflectionManager().removeArrows(getPlayer());
         if (alive) {
             if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
                 if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
