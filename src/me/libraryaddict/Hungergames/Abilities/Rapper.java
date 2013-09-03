@@ -24,7 +24,8 @@ public class Rapper extends AbilityListener implements Disableable {
             if (event.getAction() != Action.PHYSICAL && event.getClickedBlock() != null) {
                 if (event.getClickedBlock().getType() == Material.NOTE_BLOCK) {
                     for (Entity entity : event.getPlayer().getNearbyEntities(hearingRange, hearingRange, hearingRange)) {
-                        if (!(entity instanceof Player) || HungergamesApi.getPlayerManager().getGamer(entity).isAlive()) {
+                        if (entity instanceof LivingEntity
+                                && (!(entity instanceof Player) || HungergamesApi.getPlayerManager().getGamer(entity).isAlive())) {
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
                                     nauseaLength * 20, 0), true);
                         }
