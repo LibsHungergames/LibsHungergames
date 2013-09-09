@@ -25,7 +25,7 @@ public class Ninja extends AbilityListener implements Disableable {
         return new Runnable() {
             public void run() {
                 for (Player p : getMyPlayers()) {
-                    if (HungergamesApi.getHungergames().world.getTime() > 0
+                    if (HungergamesApi.getHungergames().world.getTime() >= 0
                             && HungergamesApi.getHungergames().world.getTime() <= 12000) {
                         for (String string : potionEffectsDay) {
                             String[] effect = string.split(" ");
