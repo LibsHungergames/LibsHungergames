@@ -35,9 +35,12 @@ public class ReflectionManager {
     public void removeArrows(Player player) {
         try {
             Method handle = player.getClass().getMethod("getHandle");
-            handle.getClass().getMethod("m", int.class).invoke(handle.invoke(player), 0);
+            String methodName = "abcdefg";
+            if (currentVersion.contains("v1_6_R2"))
+                methodName = "m";
+            handle.getClass().getMethod(methodName, int.class).invoke(handle.invoke(player), 0);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            // Obviously it couldn't find the method 'm'
         }
     }
 
