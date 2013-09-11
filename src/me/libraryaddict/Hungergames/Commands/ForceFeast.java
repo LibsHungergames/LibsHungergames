@@ -1,6 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
+import me.libraryaddict.Hungergames.Managers.GenerationManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -20,8 +22,9 @@ public class ForceFeast implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender.hasPermission("hungergames.forcefeast")) {
-            int radius = config.getFeastSize();
-            int chestLayers = config.getChestLayers();
+            LibsFeastManager feast = LibsFeastManager.getFeastManager();
+            int radius = feast.getPlatformSize();
+            int chestLayers = feast.getFeastLayers();
             if (args.length > 0) {
                 if (hg.isNumeric(args[0])) {
                     radius = Integer.parseInt(args[0]);
@@ -46,11 +49,12 @@ public class ForceFeast implements CommandExecutor {
                     }
                 }
             }
+            GenerationManager gen = HungergamesApi.getGenerationManager();
             Location loc = ((Player) sender).getLocation().clone();
-            int height = HungergamesApi.getFeastManager().getSpawnHeight(loc, radius);
+            int height = gen.getSpawnHeight(loc, radius);
             loc.setY(height);
-            HungergamesApi.getFeastManager().generatePlatform(loc, height, radius);
-            HungergamesApi.getFeastManager().generateChests(loc, chestLayers);
+            feast.generatePlatform(loc, height, radius);
+            feast.generateChests(loc, chestLayers);
             Bukkit.broadcastMessage(String.format(cm.getCommandForceFeastGenerated(), loc.getBlockX(), loc.getBlockY(),
                     loc.getBlockZ()));
         } else

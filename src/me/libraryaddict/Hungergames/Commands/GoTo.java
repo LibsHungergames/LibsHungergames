@@ -1,12 +1,14 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,10 +29,11 @@ public class GoTo implements CommandExecutor {
                     gamer.getPlayer().teleport(sender.getServer().getPlayer(args[0]).getLocation().add(0, 0.1, 0));
                     return true;
                 } else if (args[0].equalsIgnoreCase(cm.getCommandGotoNameOfFeast())) {
-                    gamer.getPlayer().eject();
-                    if (hg.feastLoc.getBlockY() > 0) {
+                    Location feastLoc = LibsFeastManager.getFeastManager().getFeastLocation();
+                    if (feastLoc.getBlockY() > 0) {
+                        gamer.getPlayer().eject();
                         gamer.getPlayer().teleport(
-                                hg.feastLoc.getWorld().getHighestBlockAt(hg.feastLoc).getLocation().clone().add(0.5, 1, 0.5));
+                                feastLoc.getWorld().getHighestBlockAt(feastLoc).getLocation().clone().add(0.5, 1, 0.5));
                     } else
                         sender.sendMessage(cm.getCommandGotoFeastFailed());
                     return true;

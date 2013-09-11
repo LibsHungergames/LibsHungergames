@@ -15,7 +15,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class TranslationManager {
     private String broadcastFeastBegun = ChatColor.RED + "The feast has begun!";
     private String broadcastFeastStartingCompassMessage = "\nUse /feast to fix your compass on it!";
-    private String broadcastFeastStartingIn = ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s";
     private String broadcastGameStartedMessage = ChatColor.RED + "The game has started!";
     private String broadcastGameStartingIn = ChatColor.RED + "The game will start in %s";
     private String broadcastInvincibilityWornOff = ChatColor.RED + "Invincibility has worn off!";
@@ -335,18 +334,6 @@ public class TranslationManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public String getBroadcastFeastBegun() {
-        return broadcastFeastBegun;
-    }
-
-    public String getBroadcastFeastStartingCompassMessage() {
-        return broadcastFeastStartingCompassMessage;
-    }
-
-    public String getBroadcastFeastStartingIn() {
-        return broadcastFeastStartingIn;
     }
 
     public String getBroadcastGameStartedMessage() {

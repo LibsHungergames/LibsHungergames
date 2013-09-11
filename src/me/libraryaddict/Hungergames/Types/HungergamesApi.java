@@ -2,7 +2,6 @@ package me.libraryaddict.Hungergames.Types;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Interfaces.ChestManager;
-import me.libraryaddict.Hungergames.Interfaces.FeastManager;
 import me.libraryaddict.Hungergames.Managers.*;
 
 public class HungergamesApi {
@@ -13,7 +12,6 @@ public class HungergamesApi {
     private static ChestManager cm;
     private static CommandManager commands;
     private static ConfigManager config;
-    private static FeastManager fm;
     private static Hungergames hg;
     private static InventoryManager icon;
     private static KitManager kits;
@@ -21,7 +19,14 @@ public class HungergamesApi {
     private static NameManager name;
     private static PlayerManager pm;
     private static ReflectionManager rm;
-    
+    private static GenerationManager gen;
+
+    public static GenerationManager getGenerationManager() {
+        if (gen == null)
+            gen = new GenerationManager();
+        return gen;
+    }
+
     /**
      * @return AbilityConfigManager which is used to load the configs of abilitys
      */
@@ -74,15 +79,6 @@ public class HungergamesApi {
         if (config == null)
             config = new ConfigManager();
         return config;
-    }
-
-    /**
-     * @return FeastManager which generates the feast and the chests as well as getting the best 'Y' of the feast
-     */
-    public static FeastManager getFeastManager() {
-        if (fm == null)
-            fm = new LibsFeastManager();
-        return fm;
     }
 
     /**
@@ -166,14 +162,6 @@ public class HungergamesApi {
      */
     public static void setChestManager(ChestManager manager) {
         cm = manager;
-    }
-
-    /**
-     * @param Sets
-     *            your own feast manager which implements 'FeastManager'
-     */
-    public static void setFeastManager(FeastManager manager) {
-        fm = manager;
     }
 
     /**

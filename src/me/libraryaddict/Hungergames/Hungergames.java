@@ -15,6 +15,7 @@ import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.GeneralListener;
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -62,7 +63,6 @@ public class Hungergames extends JavaPlugin {
      */
     public boolean doSeconds = true;
     public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
-    public Location feastLoc;
     private Metrics metrics;
     private PlayerListener playerListener;
     private PlayerManager pm;
@@ -286,7 +286,7 @@ public class Hungergames extends JavaPlugin {
                 if (config.forceCords())
                     world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
                             config.getSpawnZ());
-                final Location spawn = world.getSpawnLocation();
+                Location spawn = world.getSpawnLocation();
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
                         spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
@@ -295,26 +295,18 @@ public class Hungergames extends JavaPlugin {
                 generateChunks();
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
                     ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
-                    LibsFeastManager feastManager;
-                    if (HungergamesApi.getFeastManager() instanceof LibsFeastManager)
-                        feastManager = (LibsFeastManager) HungergamesApi.getFeastManager();
-                    else
-                        feastManager = new LibsFeastManager();
-                    int platformHeight = HungergamesApi.getFeastManager().getSpawnHeight(world.getSpawnLocation(),
+                    GenerationManager gen = HungergamesApi.getGenerationManager();
+                    int platformHeight = gen.getSpawnHeight(world.getSpawnLocation(),
                             mapConfiguration.getInt("SpawnPlatformSize"));
-                    feastManager.generatePlatform(world.getSpawnLocation(), platformHeight,
-                            mapConfiguration.getInt("SpawnPlatformSize"), 100, spawnGround.getTypeId(),
-                            spawnGround.getDurability());
+                    gen.generatePlatform(world.getSpawnLocation(), platformHeight, mapConfiguration.getInt("SpawnPlatformSize"),
+                            100, spawnGround.getTypeId(), spawnGround.getDurability());
                     world.getSpawnLocation().setY(platformHeight + 2);
                 }
                 world.setDifficulty(Difficulty.HARD);
                 if (world.hasStorm())
                     world.setStorm(false);
                 world.setWeatherDuration(999999999);
-                feastLoc = new Location(world, spawn.getX() + (new Random().nextInt(200) - 100), 0, spawn.getZ()
-                        + (new Random().nextInt(200) - 100));
-                ScoreboardManager.updateStage();
-                HungergamesApi.getFeastManager();
+                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -339,6 +331,8 @@ public class Hungergames extends JavaPlugin {
             perm.setDescription("Used for messages in LibsHungergames");
             Bukkit.getPluginManager().addPermission(perm);
         }
+        ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
+        ScoreboardManager.registerStage(0, cm.getScoreboardStageFighting());
     }
 
     private void onSecond() {
@@ -356,10 +350,9 @@ public class Hungergames extends JavaPlugin {
             if (pm.getGamers().size() < config.getMinPlayers()) {
                 currentTime = -90;
                 Bukkit.broadcastMessage(cm.getBroadcastNotEnoughPlayers());
-                return;
+            } else {
+                startGame();
             }
-            startGame();
-            return;
         } else if (currentTime == config.getTimeFeastStarts()) {
             ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn());
             HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
@@ -386,22 +379,20 @@ public class Hungergames extends JavaPlugin {
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());
         }
-        if (currentTime > config.getTimeFeastStarts() + (5 * 60))
-            ScoreboardManager.updateStage();
         if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
                     config.invincibilityWearsOffIn());
             if (currentTime == config.getInvincibilityTime()) {
                 Bukkit.broadcastMessage(cm.getBroadcastInvincibilityWornOff());
-                ScoreboardManager.updateStage();
+                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
                 ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
                 Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
             } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
                 Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
                         returnTime(config.invincibilityWearsOffIn())));
             }
-
         }
+        ScoreboardManager.doStage();
     }
 
     public String returnTime(Integer i) {
@@ -457,14 +448,16 @@ public class Hungergames extends JavaPlugin {
 
             });
         }
-        ScoreboardManager.updateStage();
         ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
-        if (config.getInvincibilityTime() > 0)
+        if (config.getInvincibilityTime() > 0) {
+            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageInvincibility());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
                     config.getInvincibilityTime());
-        else
+        } else {
+            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
             Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
+        }
         Bukkit.broadcastMessage(cm.getBroadcastGameStartedMessage());
         if (config.getInvincibilityTime() > 0 && config.displayMessages())
             Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),

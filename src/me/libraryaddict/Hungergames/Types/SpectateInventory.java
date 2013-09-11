@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
@@ -45,7 +47,9 @@ public class SpectateInventory extends PageInventory {
                 } else {
                     if (item.getItemMeta().getDisplayName().equals(tm.getSpectatorInventoryFeastName())) {
                         event.getWhoClicked().teleport(
-                                hg.feastLoc.getWorld().getHighestBlockAt(hg.feastLoc).getLocation().clone().add(0.5, 1, 0.5));
+                                LibsFeastManager.getFeastManager().getFeastLocation().getWorld()
+                                        .getHighestBlockAt(LibsFeastManager.getFeastManager().getFeastLocation()).getLocation()
+                                        .clone().add(0.5, 1, 0.5));
                     } else {
                         Gamer toTeleport = pm.getGamer(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                         if (toTeleport != null) {
@@ -63,7 +67,7 @@ public class SpectateInventory extends PageInventory {
             if (gamer.isAlive())
                 names.add(gamer.getName());
         }
-        if (hg.feastLoc.getY() > 0) {
+        if (LibsFeastManager.getFeastManager().getFeastLocation().getY() > 0) {
             names.add("Feast");
         }
         Collections.sort(names, String.CASE_INSENSITIVE_ORDER);

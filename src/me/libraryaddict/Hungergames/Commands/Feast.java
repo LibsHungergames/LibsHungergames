@@ -1,6 +1,6 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.command.Command;
@@ -11,11 +11,10 @@ import org.bukkit.entity.Player;
 public class Feast implements CommandExecutor {
     private TranslationManager cm = HungergamesApi.getTranslationManager();
     public String description = "Point your compass towards the feast";
-    private Hungergames hg = HungergamesApi.getHungergames();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (hg.feastLoc.getY() > 0) {
-            ((Player) sender).setCompassTarget(hg.feastLoc);
+        if (LibsFeastManager.getFeastManager().getFeastLocation().getY() > 0) {
+            ((Player) sender).setCompassTarget(LibsFeastManager.getFeastManager().getFeastLocation());
             sender.sendMessage(cm.getCommandFeastHappened());
         } else {
             sender.sendMessage(cm.getCommandFeastNotHappened());

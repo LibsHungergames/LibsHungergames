@@ -20,24 +20,16 @@ public class ConfigManager {
     private String alivePrefix;
     private double border;
     private double borderClosesIn;
-    private int chestLayers;
     private List<String> commandsToRunBeforeShutdown;
     private String currentVersion;
     private boolean disableMetrics;
     private boolean displayMessages;
     private boolean displayScoreboards;
-    private ItemStack feast;
-    private ArrayList<Integer> feastBroadcastTimes = new ArrayList<Integer>();
-    private ItemStack feastGround;
-    private ItemStack feastInsides;
-    private int feastSize;
-    private boolean feastTnt;
     private boolean fireSpread;
     private boolean flyPreGame;
     private boolean forceCords;
     private int gameShutdownDelay;
     private ArrayList<Integer> gameStartingBroadcastTimes = new ArrayList<Integer>();
-    private boolean generatePillars;
     private Hungergames hg;
     private int invincibility;
     private ArrayList<Integer> invincibilityBroadcastTimes = new ArrayList<Integer>();
@@ -55,8 +47,6 @@ public class ConfigManager {
     private boolean mushroomStew;
     private int mushroomStewRestores;
     private boolean mysqlEnabled;
-    private ItemStack pillarCorner;
-    private ItemStack pillarInsides;
     private boolean roundedBorder;
     private boolean shortenNames;
     private String spectatingPrefix;
@@ -65,7 +55,6 @@ public class ConfigManager {
     private ItemStack spectatorItemForwards;
     private boolean spectators;
     private int timeOfDay = 0;
-    private int timeTillFeast;
     private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
@@ -75,23 +64,6 @@ public class ConfigManager {
     public ConfigManager() {
         hg = HungergamesApi.getHungergames();
         loadConfig();
-    }
-
-    /**
-     * @param Current
-     *            time
-     * @return Should it advertise about the feast?
-     */
-    public boolean advertiseFeast(int time) {
-        time = timeTillFeast - time;
-        if (time % (60 * 5) == 0)
-            return true;
-        if (time <= 180) {
-            if (time % 60 == 0)
-                return true;
-        } else if (time % 180 == 0)
-            return true;
-        return feastBroadcastTimes.contains(time);
     }
 
     /**
@@ -156,25 +128,12 @@ public class ConfigManager {
         return displayScoreboards;
     }
 
-    /**
-     * @return The feast starts in T-Minus <Seconds>
-     */
-    public int feastStartsIn() {
-        return timeTillFeast - hg.currentTime;
-    }
-
+  
     /**
      * @return Should the plugin force the worlds spawn to be here
      */
     public boolean forceCords() {
         return forceCords;
-    }
-
-    /**
-     * @return Should it generate pillars beneath spawn to make it realistic
-     */
-    public boolean generatePillars() {
-        return generatePillars;
     }
 
     public String getAlivePrefix() {
@@ -195,12 +154,7 @@ public class ConfigManager {
         return border;
     }
 
-    /**
-     * @return How many layers high is the feast
-     */
-    public int getChestLayers() {
-        return chestLayers;
-    }
+
 
     /**
      * Get the commands to run before shutdown
@@ -211,34 +165,6 @@ public class ConfigManager {
 
     public String getCurrentVersion() {
         return currentVersion;
-    }
-
-    /**
-     * @return Whats the material used for the outside covering of the feast
-     */
-    public ItemStack getFeast() {
-        return feast;
-    }
-
-    /**
-     * @return Whats the material used for the feast ground
-     */
-    public ItemStack getFeastGround() {
-        return feastGround;
-    }
-
-    /**
-     * @return Whats the material used for the inside of the feast where no one sees
-     */
-    public ItemStack getFeastInsides() {
-        return feastInsides;
-    }
-
-    /**
-     * @return How big is the feast generation
-     */
-    public int getFeastSize() {
-        return feastSize;
     }
 
     /**
@@ -301,19 +227,8 @@ public class ConfigManager {
         return mobSpawnChance;
     }
 
-    /**
-     * @return Whats the material used for the pillars corners
-     */
-    public ItemStack getPillarCorner() {
-        return pillarCorner;
-    }
 
-    /**
-     * @return Whats the material used for the rest of the pillars
-     */
-    public ItemStack getPillarInsides() {
-        return pillarInsides;
-    }
+
 
     /**
      * @return Whats the X its forcing spawn to be
@@ -341,12 +256,6 @@ public class ConfigManager {
         return spectatorItemForwards;
     }
 
-    /**
-     * @return How long until the feast starts?
-     */
-    public int getTimeFeastStarts() {
-        return timeTillFeast;
-    }
 
     public int getTimeOfDay() {
         return timeOfDay;
@@ -364,13 +273,6 @@ public class ConfigManager {
      */
     public int invincibilityWearsOffIn() {
         return invincibility - hg.currentTime;
-    }
-
-    /**
-     * @return Does the topmost tnt hidden under the enchanting table ignite on punch?
-     */
-    public boolean isFeastTntIgnite() {
-        return feastTnt;
     }
 
     /**
@@ -495,10 +397,7 @@ public class ConfigManager {
         fireSpread = hg.getConfig().getBoolean("DisableFireSpread", false);
         wonBroadcastsDelay = hg.getConfig().getInt("WinnerBroadcastingDelay");
         gameShutdownDelay = hg.getConfig().getInt("GameShutdownDelay");
-        feastSize = hg.getConfig().getInt("FeastSize", 20);
         invincibility = hg.getConfig().getInt("Invincibility", 120);
-        chestLayers = hg.getConfig().getInt("ChestLayers", 500);
-        timeTillFeast = hg.getConfig().getInt("TimeTillFeast", 500);
         spectatorChat = !hg.getConfig().getBoolean("SpectatorChat", true);
         shortenNames = hg.getConfig().getBoolean("ShortenNames");
         spectators = hg.getConfig().getBoolean("Spectators", true);
@@ -506,13 +405,6 @@ public class ConfigManager {
         mushroomStew = hg.getConfig().getBoolean("MushroomStew", false);
         mushroomStewRestores = hg.getConfig().getInt("MushroomStewRestores", 5);
         kitSelector = hg.getConfig().getBoolean("EnableKitSelector", true);
-        feastTnt = hg.getConfig().getBoolean("FeastTnt", true);
-        feastGround = parseItem(hg.getConfig().getString("FeastGround"));
-        feast = parseItem(hg.getConfig().getString("Feast"));
-        generatePillars = hg.getConfig().getBoolean("Pillars", true);
-        feastInsides = parseItem(hg.getConfig().getString("FeastInsides"));
-        pillarCorner = parseItem(hg.getConfig().getString("PillarCorner"));
-        pillarInsides = parseItem(hg.getConfig().getString("PillarInsides"));
         forceCords = hg.getConfig().getBoolean("ForceCords", true);
         x = hg.getConfig().getInt("ForceX", 0);
         z = hg.getConfig().getInt("ForceZ", 0);
@@ -547,14 +439,6 @@ public class ConfigManager {
         if (hg.getConfig().getBoolean("ChangeSpectatingPrefix"))
             spectatingPrefix = hg.getConfig().getString("SpectatingPrefix");
         invisSpectators = !hg.getConfig().getBoolean("InvisibleSpectators");
-
-        // Create the times where it broadcasts and advertises the feast
-        feastBroadcastTimes.clear();
-        for (int i = 1; i < 6; i++)
-            feastBroadcastTimes.add(i);
-        feastBroadcastTimes.add(30);
-        feastBroadcastTimes.add(15);
-        feastBroadcastTimes.add(10);
 
         invincibilityBroadcastTimes.clear();
         // Create the times where it advertises invincibility
