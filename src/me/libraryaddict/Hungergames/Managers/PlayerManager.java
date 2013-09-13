@@ -138,9 +138,9 @@ public class PlayerManager {
         p.setLevel(0);
         p.setExp(0F);
         if (event.getDeathMessage().equals(ChatColor.stripColor(event.getDeathMessage())))
-            event.setDeathMessage(ChatColor.DARK_RED
-                    + event.getDeathMessage().replace("%Remaining%", "" + (getAliveGamers().size() - 1)));
-        event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), p));
+            event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
+        event.setDeathMessage(this.formatDeathMessage(
+                event.getDeathMessage().replace("%Remaining%", "" + (getAliveGamers().size() - 1)), p));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
             event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
