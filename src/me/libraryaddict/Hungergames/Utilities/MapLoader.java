@@ -22,10 +22,12 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
 
-    private static void clear(File file) {
-        if (file.isFile())
+    public static void clear(File file) {
+        if (!file.exists())
+            return;
+        if (file.isFile()) {
             file.delete();
-        else {
+        } else {
             for (File f : file.listFiles())
                 clear(f);
             file.delete();
@@ -41,15 +43,15 @@ public class MapLoader {
             }
         } else
             for (File f : from.listFiles())
-                copy(f, new File(dest.toString(), f.getName()));
+                copy(f, new File(dest.toString(), from.getName()));
     }
 
     private static void copyFile(File source, File destination) throws IOException {
-        if (source.getName().equalsIgnoreCase("uid.dat"))
-            return;
         destination.mkdirs();
         if (destination.isDirectory())
             destination = new File(destination, source.getName());
+        if (source.getName().equalsIgnoreCase("uid.dat"))
+            return;
         FileInputStream input = new FileInputStream(source);
         copyFile(input, destination);
     }
