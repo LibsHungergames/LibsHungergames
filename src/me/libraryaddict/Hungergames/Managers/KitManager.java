@@ -145,6 +145,8 @@ public class KitManager {
             return true;
         if (player.hasPermission(kit.getPermission()))
             return true;
+        if (player.hasPermission("hungergames.kit.*"))
+            return true;
         return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
     }
 
