@@ -32,18 +32,6 @@ public class ReflectionManager {
         return commandMap;
     }
 
-    public void removeArrows(Player player) {
-        try {
-            Method handle = player.getClass().getMethod("getHandle");
-            String methodName = "abcdefg";
-            if (currentVersion.contains("v1_6_R2"))
-                methodName = "m";
-            handle.getClass().getMethod(methodName, int.class).invoke(handle.invoke(player), 0);
-        } catch (Exception ex) {
-            // Obviously it couldn't find the method 'm'
-        }
-    }
-
     public Object getPropertiesConfig(String name, Object obj) {
         try {
             Properties properties = (Properties) propertyManager.getClass().getDeclaredField("properties").get(propertyManager);
@@ -65,6 +53,18 @@ public class ReflectionManager {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public void removeArrows(Player player) {
+        try {
+            Method handle = player.getClass().getMethod("getHandle");
+            String methodName = "abcdefg";
+            if (currentVersion.contains("v1_6_R2"))
+                methodName = "m";
+            handle.invoke(player).getClass().getMethod(methodName, int.class).invoke(handle.invoke(player), 0);
+        } catch (Exception ex) {
+            // Obviously it couldn't find the method 'm'
+        }
     }
 
     public void savePropertiesConfig() {
