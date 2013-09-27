@@ -1,13 +1,6 @@
 # Settings
 # Invincibility lasts for so and so seconds
 Invincibility: 120
-# Feast size
-FeastSize: 20
-# When does the feast happen? (20min by default)
-TimeTillFeast: 1200
-# How many layers high are the chests?
-ChestLayers: 3
-# Chest size
 # Can spectators talk to live players, by default OP's can.
 SpectatorChat: false
 # Are there spectators. Permission to bypass is Hungergames.Spectate
@@ -17,6 +10,12 @@ KickOnDeath: false
 # Should mushroom stew be enabled? This is instant eat for hunger or health regains
 MushroomStew: false
 MushroomStewRestores: 6
+
+# Enables the feast..
+Feast: true
+
+# Time to start contracting the border
+ShrinkBorder: 1200
 
 # What command to stop the server?
 StopServerCommand: stop
@@ -95,23 +94,8 @@ SpectatorInventoryBack: SUGAR_CANE_BLOCK 0
 # Try keep it in a multiple of 9. I'll fix it if it isn't however.
 SpectatorSelectorInventorySize: 54
 
-# ID of the feast, Its MATERIAL/ID DATA_VALUE
-FeastGround: QUARTZ_BLOCK 0
-Feast: QUARTZ_BLOCK 1
-FeastInsides: TNT 0
-# If the feast insides is tnt, Then the top block is changed into TNT which ignites when punched
-FeastTnt: true
-
-# Does it generate pillars under it if it can?
-Pillars: true
-
 # What time does the game start at?
 Countdown: 270
-
-# ID of pillars corners
-PillarCorner: QUARTZ_BLOCK 2
-# ID of material inside
-PillarInsides: GLASS 0
 
 # Change the build height limit to 128?
 ChangeHeightLimit: true

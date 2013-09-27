@@ -353,28 +353,6 @@ public class Hungergames extends JavaPlugin {
             } else {
                 startGame();
             }
-        } else if (currentTime == config.getTimeFeastStarts()) {
-            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn());
-            HungergamesApi.getFeastManager().generateChests(feastLoc, config.getChestLayers());
-            Bukkit.broadcastMessage(cm.getBroadcastFeastBegun());
-            ScoreboardManager.updateStage();
-            world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
-            Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
-        } else if (config.feastStartsIn() > 0 && config.feastStartsIn() <= (5 * 60)) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardFeastStartingIn(), config.feastStartsIn());
-            if (config.advertiseFeast(currentTime)) {
-                if (feastLoc.getBlockY() == 0) {
-                    feastLoc.setY(world.getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-                    int feastHeight = HungergamesApi.getFeastManager().getSpawnHeight(feastLoc, config.getFeastSize());
-                    HungergamesApi.getFeastManager().generatePlatform(feastLoc, feastHeight, config.getFeastSize());
-                    ScoreboardManager.updateStage();
-                    HungergamesApi.getInventoryManager().updateSpectatorHeads();
-                    Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
-                }
-                Bukkit.broadcastMessage(String.format(cm.getBroadcastFeastStartingIn(), feastLoc.getBlockX(),
-                        feastLoc.getBlockY(), feastLoc.getBlockZ(), returnTime(config.feastStartsIn()))
-                        + (config.feastStartsIn() > 10 ? cm.getBroadcastFeastStartingCompassMessage() : ""));
-            }
         } else if (config.getBorderCloseInRate() > 0 && currentTime > config.getTimeFeastStarts()) {
             config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());

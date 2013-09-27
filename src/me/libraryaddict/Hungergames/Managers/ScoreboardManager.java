@@ -16,6 +16,12 @@ public class ScoreboardManager {
     private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
     private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
 
+    public static void doStage() {
+        if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
+            setDisplayName("Main", DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
+        }
+    }
+
     public static Objective getObjective(Scoreboard board, DisplaySlot slot) {
         if (board.getObjective(slot.name()) == null) {
             board.registerNewObjective(slot.name(), slot.name());
@@ -51,6 +57,10 @@ public class ScoreboardManager {
         }
     }
 
+    public static void registerStage(int time, String displayName) {
+
+    }
+
     public static void resetScoreboard(String scoreboardName) {
         if (!boards.containsKey(scoreboardName)) {
             boards.put(scoreboardName, Bukkit.getScoreboardManager().getNewScoreboard());
@@ -67,17 +77,7 @@ public class ScoreboardManager {
             getObjective(getScoreboard(scoreboardName), slot).setDisplayName(string);
     }
 
-    public static void registerStage(int time, String displayName) {
-
-    }
-
-    public static void doStage() {
-        if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
-            setDisplayName("Main", DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
-        }
-    }
-
-    public static void updatteStage() {
+  /*  public static void updatteStage() {
         Hungergames hg = HungergamesApi.getHungergames();
         ConfigManager config = HungergamesApi.getConfigManager();
         TranslationManager cm = HungergamesApi.getTranslationManager();
@@ -93,5 +93,5 @@ public class ScoreboardManager {
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFeastHappening());
         else
             setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFeastHappened());
-    }
+    }*/
 }

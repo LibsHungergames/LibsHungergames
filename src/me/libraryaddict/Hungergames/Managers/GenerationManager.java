@@ -33,10 +33,6 @@ public class GenerationManager {
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
     private BukkitRunnable runnable;
 
-    public void addToProcessedBlocks(Block block) {
-        processedBlocks.add(block);
-    }
-
     public GenerationManager() {
         faces.add(BlockFace.UP);
         faces.add(BlockFace.DOWN);
@@ -48,6 +44,10 @@ public class GenerationManager {
         jungleFaces.add(BlockFace.UP);
         jungleFaces.add(BlockFace.SELF);
         jungleFaces.add(BlockFace.DOWN);
+    }
+
+    public void addToProcessedBlocks(Block block) {
+        processedBlocks.add(block);
     }
 
     /**
@@ -81,20 +81,6 @@ public class GenerationManager {
      * @param lowestLevel
      * @param radius
      */
-    public void generatePlatform(Location loc, int lowestLevel, int radius, Material groundType, int groundDurability) {
-        int yHeight = radius;
-        if (yHeight < 4)
-            yHeight = 4;
-        generatePlatform(loc, lowestLevel, radius, yHeight, groundType.getId(), (short) groundDurability);
-    }
-
-    /**
-     * Generates a feast
-     * 
-     * @param loc
-     * @param lowestLevel
-     * @param radius
-     */
     public void generatePlatform(Location loc, int lowestLevel, int radius, int yHeight, int platformGround,
             short platformDurability) {
         loc.setY(lowestLevel + 1);
@@ -118,6 +104,52 @@ public class GenerationManager {
                 }
             }
         }
+    }
+
+    /**
+     * Generates a feast
+     * 
+     * @param loc
+     * @param lowestLevel
+     * @param radius
+     */
+    public void generatePlatform(Location loc, int lowestLevel, int radius, Material groundType, int groundDurability) {
+        int yHeight = radius;
+        if (yHeight < 4)
+            yHeight = 4;
+        generatePlatform(loc, lowestLevel, radius, yHeight, groundType.getId(), (short) groundDurability);
+    }
+
+    public int getHeight(ArrayList<Integer> heights, int radius) {
+        List<List<Integer>> commons = new ArrayList<List<Integer>>();
+        for (int i = 0; i < heights.size(); i++) {
+            List<Integer> numbers = new ArrayList<Integer>();
+            numbers.add(heights.get(i));
+            for (int a = i; a < heights.size(); a++) {
+                if (heights.get(i) - heights.get(a) >= -radius)
+                    numbers.add(heights.get(a));
+                else
+                    break;
+            }
+            commons.add(numbers);
+        }
+        int highest = 0;
+        List<Integer> found = new ArrayList<Integer>();
+        for (List l : commons) {
+            if (l.size() > highest) {
+                highest = l.size();
+                found = l;
+            }
+        }
+        if (found.size() == 0)
+            return -1;
+        return found.get((int) Math.round(found.size() / 3));
+    }
+
+    private Block getHighest(Block b) {
+        while (b.getY() > 1 && !isSolid(b))
+            b = b.getRelative(BlockFace.DOWN);
+        return b;
     }
 
     /**
@@ -157,36 +189,17 @@ public class GenerationManager {
         return y;
     }
 
-    public int getHeight(ArrayList<Integer> heights, int radius) {
-        List<List<Integer>> commons = new ArrayList<List<Integer>>();
-        for (int i = 0; i < heights.size(); i++) {
-            List<Integer> numbers = new ArrayList<Integer>();
-            numbers.add(heights.get(i));
-            for (int a = i; a < heights.size(); a++) {
-                if (heights.get(i) - heights.get(a) >= -radius)
-                    numbers.add(heights.get(a));
-                else
-                    break;
-            }
-            commons.add(numbers);
-        }
-        int highest = 0;
-        List<Integer> found = new ArrayList<Integer>();
-        for (List l : commons) {
-            if (l.size() > highest) {
-                highest = l.size();
-                found = l;
-            }
-        }
-        if (found.size() == 0)
-            return -1;
-        return found.get((int) Math.round(found.size() / 3));
+    private boolean isBlockValid(Block b) {
+        if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
+            return false;
+        return true;
     }
 
-    private Block getHighest(Block b) {
-        while (b.getY() > 1 && !isSolid(b))
-            b = b.getRelative(BlockFace.DOWN);
-        return b;
+    private boolean isSolid(Block b) {
+        return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
+                || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
+                || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
+                .getType().name().contains("MUSHROOM")));
     }
 
     private void removeLeaves(Block b) {
@@ -256,19 +269,6 @@ public class GenerationManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private boolean isBlockValid(Block b) {
-        if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
-            return false;
-        return true;
-    }
-
-    private boolean isSolid(Block b) {
-        return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
-                || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
-                || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
-                .getType().name().contains("MUSHROOM")));
     }
 
 }

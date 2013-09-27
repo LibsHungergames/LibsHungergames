@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Listeners;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -28,6 +29,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -44,17 +46,18 @@ public class LibsFeastManager implements Listener {
 
     protected HashMap<Integer, String> advertisements = new HashMap<Integer, String>();
     protected int chestLayerHeight = 3;
+    protected String feastBlocks = "QUATYZ_BLOCk 1";
     protected int feastGenerateTime = 20 * 60;
-    protected int feastPlatformGenerateTime = 15 * 60;
+    protected String feastGround = "QUARTZ_BLOCK 0";
+    protected String feastInsides = "TNT 0";
     protected Location feastLoc;
+    protected int feastPlatformGenerateTime = 15 * 60;
     protected int feastPlatformSize = 20;
     protected GenerationManager gen;
-    protected String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
-    protected String feastGround = "QUARTZ_BLOCK 0";
-    protected String feastBlocks = "QUATYZ_BLOCk 1";
-    protected String feastInsides = "TNT 0";
-    protected String scoreboardPrefeast;
-    protected String scoreboardDuringFeast;
+    protected boolean isEnabled;
+    protected String scoreboardDuringFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Looting feast";
+    protected String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";;
+    protected String scoreboardPrefeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Prefeast";;
 
     public LibsFeastManager() {
         // Setup the messages and times
@@ -78,6 +81,26 @@ public class LibsFeastManager implements Listener {
                 file.createNewFile();
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             ChestManager chest = HungergamesApi.getChestManager();
+            // Use reflection to set all the fields. Because I'm lazy.
+            for (Field field : getClass().getDeclaredFields()) {
+                Object obj = field.get(this);
+                if (obj != null && (obj instanceof String || obj instanceof Integer)) {
+                    if (!config.contains(field.getName()))
+                        config.set(field.getName(), obj);
+                    else
+                        field.set(this, config.get(field.getName()));
+                }
+            }
+            if (!config.contains("Advertisements")) {
+                for (int time : advertisements.keySet()) {
+                    config.set("Advertisements." + time, advertisements.get(time));
+                }
+            } else {
+                advertisements.clear();
+                for (String key : config.getConfigurationSection("Advertisements").getKeys(false)) {
+                    advertisements.put(Integer.parseInt(key), config.getString("Advertisements." + key));
+                }
+            }
             if (!config.contains("FeastLoot")) {
                 ArrayList<String> strings = new ArrayList<String>();
                 for (RandomItem item : chest.getRandomItems())
@@ -85,8 +108,8 @@ public class LibsFeastManager implements Listener {
                 config.set("How To Use",
                         "Chance in hundred, MinAmount, MaxAmount, ID or Material, Data Value, Addictional data like in kits items such as enchants");
                 config.set("FeastLoot", strings);
-                config.save(file);
             }
+            config.save(file);
             chest.clearRandomItems();
             for (String string : config.getStringList("FeastLoot")) {
                 chest.addRandomItem(new RandomItem(string));
@@ -149,21 +172,21 @@ public class LibsFeastManager implements Listener {
         }
     }
 
-    public Location getFeastLocation() {
-        return this.feastLoc;
-    }
-
-    public int getPlatformSize() {
-        return this.feastPlatformSize;
+    public void generatePlatform(Location loc, int chestLayers, int platformSize) {
+        ItemStack item = HungergamesApi.getConfigManager().parseItem(feastGround);
+        gen.generatePlatform(feastLoc, chestLayers, platformSize, item.getType(), item.getDurability());
     }
 
     public int getFeastLayers() {
         return this.chestLayerHeight;
     }
 
-    public void generatePlatform(Location loc, int chestLayers, int platformSize) {
-        ItemStack item = HungergamesApi.getConfigManager().parseItem(feastGround);
-        gen.generatePlatform(feastLoc, chestLayers, platformSize, item.getType(), item.getDurability());
+    public Location getFeastLocation() {
+        return this.feastLoc;
+    }
+
+    public int getPlatformSize() {
+        return this.feastPlatformSize;
     }
 
     @EventHandler
@@ -189,6 +212,17 @@ public class LibsFeastManager implements Listener {
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
         } else if (currentTime > feastPlatformGenerateTime && currentTime < feastGenerateTime) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, scoreboardFeastStartingIn, feastGenerateTime - currentTime);
+        }
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (enabled != isEnabled) {
+            isEnabled = enabled;
+            if (isEnabled) {
+                Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
+            } else {
+                HandlerList.unregisterAll(this);
+            }
         }
     }
 }

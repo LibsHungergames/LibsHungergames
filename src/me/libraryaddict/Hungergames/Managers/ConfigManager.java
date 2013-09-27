@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 
@@ -58,7 +59,6 @@ public class ConfigManager {
     private UpdateChecker updateChecker;
     private int wonBroadcastsDelay;
     private int x;
-
     private int z;
 
     public ConfigManager() {
@@ -128,7 +128,6 @@ public class ConfigManager {
         return displayScoreboards;
     }
 
-  
     /**
      * @return Should the plugin force the worlds spawn to be here
      */
@@ -153,8 +152,6 @@ public class ConfigManager {
     public double getBorderSize() {
         return border;
     }
-
-
 
     /**
      * Get the commands to run before shutdown
@@ -227,9 +224,6 @@ public class ConfigManager {
         return mobSpawnChance;
     }
 
-
-
-
     /**
      * @return Whats the X its forcing spawn to be
      */
@@ -255,7 +249,6 @@ public class ConfigManager {
     public ItemStack getSpectatorInventoryForwards() {
         return spectatorItemForwards;
     }
-
 
     public int getTimeOfDay() {
         return timeOfDay;
@@ -455,6 +448,8 @@ public class ConfigManager {
         gameStartingBroadcastTimes.add(-30);
         gameStartingBroadcastTimes.add(-15);
         gameStartingBroadcastTimes.add(-10);
+        if (hg.getConfig().getBoolean("Feast"))
+            LibsFeastManager.getFeastManager().setEnabled(true);
     }
 
     /**

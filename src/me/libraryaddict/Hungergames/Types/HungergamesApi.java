@@ -12,6 +12,7 @@ public class HungergamesApi {
     private static ChestManager cm;
     private static CommandManager commands;
     private static ConfigManager config;
+    private static GenerationManager gen;
     private static Hungergames hg;
     private static InventoryManager icon;
     private static KitManager kits;
@@ -19,13 +20,6 @@ public class HungergamesApi {
     private static NameManager name;
     private static PlayerManager pm;
     private static ReflectionManager rm;
-    private static GenerationManager gen;
-
-    public static GenerationManager getGenerationManager() {
-        if (gen == null)
-            gen = new GenerationManager();
-        return gen;
-    }
 
     /**
      * @return AbilityConfigManager which is used to load the configs of abilitys
@@ -79,6 +73,12 @@ public class HungergamesApi {
         if (config == null)
             config = new ConfigManager();
         return config;
+    }
+
+    public static GenerationManager getGenerationManager() {
+        if (gen == null)
+            gen = new GenerationManager();
+        return gen;
     }
 
     /**
