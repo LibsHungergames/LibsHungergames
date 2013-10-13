@@ -215,8 +215,8 @@ public class PlayerManager {
             if (spawnItel == null || !spawnItel.hasNext())
                 spawnItel = spawns.keySet().iterator();
             originalSpawn = spawnItel.next();
-            spawnRadius = spawns.get(originalSpawn)[0];
-            spawnHeight = spawns.get(originalSpawn)[1];
+            spawnRadius = Math.max(1, spawns.get(originalSpawn)[0]);
+            spawnHeight = Math.max(1, spawns.get(originalSpawn)[1]);
         }
         Location spawn = originalSpawn.clone();
         int chances = 0;
