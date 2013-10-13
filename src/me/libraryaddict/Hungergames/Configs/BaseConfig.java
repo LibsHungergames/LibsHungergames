@@ -11,10 +11,12 @@ import java.util.List;
 
 import lombok.Data;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Types.RandomItem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 @Data
@@ -42,19 +44,22 @@ public abstract class BaseConfig {
                 returns[i] = ChatColor.translateAlternateColorCodes('&', array[i]).replace("\\n", "\n");
             }
             return returns;
-        } else if (object instanceof HashMap) {
-            HashMap map = (HashMap) object;
+        } else if (object instanceof MemorySection) {
+            MemorySection map = (MemorySection) object;
             HashMap newMap = new HashMap();
-            for (Object obj : map.keySet()) {
+            for (String obj : map.getKeys(false)) {
                 if (map.get(obj) instanceof String) {
                     String s = ChatColor.translateAlternateColorCodes('&', (String) map.get(obj)).replace("\\n", "\n");
-                    newMap.put(obj, s);
+                    newMap.put(Integer.parseInt(obj), s);
                 } else
                     return object;
             }
             return newMap;
         } else if (object instanceof ArrayList) {
-            return ((ArrayList) object).toArray(new String[((ArrayList) object).size()]);
+            ArrayList array = (ArrayList) object;
+            if (!array.isEmpty() && array.get(0).getClass() == RandomItem.class)
+                return object;
+            return array.toArray(new String[array.size()]);
         }
         return object;
     }

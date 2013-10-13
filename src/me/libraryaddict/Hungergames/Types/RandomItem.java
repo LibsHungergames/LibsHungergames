@@ -1,19 +1,24 @@
 package me.libraryaddict.Hungergames.Types;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
-public class RandomItem implements java.io.Serializable {
-    private static final long serialVersionUID = 3915980470659471731L;
-    private String addictionalData = "";
+public class RandomItem implements ConfigurationSerializable {
     private double chanceOfItemStackAppearing;
     // Chance is out of a hundred..
     // Goes to 0.01
     private short itemData;
     private Material itemType;
     private int minItems, maxItems;
+    static {
+        ConfigurationSerialization.registerClass(RandomItem.class, RandomItem.class.getSimpleName());
+    }
 
     /**
      * @param Chance
@@ -59,9 +64,7 @@ public class RandomItem implements java.io.Serializable {
      * @return Randomized itemstack
      */
     public ItemStack getItemStack() {
-        return HungergamesApi.getKitManager().parseItem(
-                itemType + " " + itemData + " " + (new Random().nextInt((maxItems - minItems) + 1) + minItems) + " "
-                        + addictionalData)[0];
+        return new ItemStack(itemType, new Random().nextInt((maxItems - minItems) + 1));
     }
 
     /**
@@ -72,7 +75,39 @@ public class RandomItem implements java.io.Serializable {
     }
 
     public String toString() {
-        return (chanceOfItemStackAppearing + " " + minItems + " " + maxItems + " " + itemType + " " + itemData + " " + addictionalData)
-                .trim();
+        return (chanceOfItemStackAppearing + " " + minItems + " " + maxItems + " " + itemType + " " + itemData).trim();
+    }
+
+    public static RandomItem deserialize(Map<String, Object> args) {
+        Material type = null;
+        Object obj = args.get("Item Type");
+        if (obj instanceof Integer)
+            type = Material.getMaterial((Integer) obj);
+        else if (obj instanceof String)
+            type = Material.getMaterial((String) obj);
+        else
+            throw new RuntimeException(obj + " is not a valid item type");
+        short itemData = (short) (int) (Integer) args.get("Item Data");
+        double chancesOfItemStackAppearing = (Double) args.get("Chances in 100 of itemstack appearing");
+        int minItems = (Integer) args.get("Min Items");
+        int maxItems = (Integer) args.get("Max Items");
+        return new RandomItem(chancesOfItemStackAppearing, type, itemData, minItems, maxItems);
+    }
+
+    public RandomItem(Map<String, Object> args) {
+        this((Double) args.get("chancesOfItemStackAppearing"), (Material) args.get("itemType"), (Short) args.get("itemData"),
+                (Integer) args.get("minItems"), (Integer) args.get("maxItems"));
+
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map result = new LinkedHashMap();
+        result.put("Item Type", itemType.name());
+        result.put("Item Data", itemData);
+        result.put("Chances in 100 of itemstack appearing", chanceOfItemStackAppearing);
+        result.put("Min Items", minItems);
+        result.put("Max Items", maxItems);
+        return result;
     }
 }

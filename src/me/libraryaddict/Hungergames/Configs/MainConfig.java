@@ -218,6 +218,7 @@ public class MainConfig extends BaseConfig {
 
     public MainConfig() {
         super("config");
+        dontSave("latestVersion", "currentVersion", "updateChecker");
     }
 
     public boolean advertiseInvincibility(int timeToCheck) {

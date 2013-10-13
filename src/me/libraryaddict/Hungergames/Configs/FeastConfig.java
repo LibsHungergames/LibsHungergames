@@ -61,7 +61,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * The loot in the feasts chests
      */
-    private ArrayList<RandomItem> randomItem = HungergamesApi.getChestManager().getRandomItems();
+    private ArrayList<RandomItem> randomItems = HungergamesApi.getChestManager().getRandomItems();
     /**
      * Strings to add to the scoreboard
      */
