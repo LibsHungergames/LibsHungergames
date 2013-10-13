@@ -195,7 +195,7 @@ public class Hungergames extends JavaPlugin {
 
                 public void run() {
                     if (lastPrint + 5000 < System.currentTimeMillis()) {
-                        System.out.print(String.format(config.getTranslationsConfig().getLoggerGeneratingChunks(),
+                        System.out.print(String.format(config.getLoggerConfig().getGeneratingChunks(),
                                 (int) Math.floor(((double) currentChunks / totalChunks) * 100))
                                 + "%");
                         lastPrint = System.currentTimeMillis();
@@ -215,7 +215,7 @@ public class Hungergames extends JavaPlugin {
                     }
                     if (!itel.hasNext()) {
                         chunksGenerating = false;
-                        System.out.print(String.format(config.getTranslationsConfig().getLoggerChunksGenerated(), currentChunks));
+                        System.out.print(String.format(config.getLoggerConfig().getChunksGenerated(), currentChunks));
                         cancel();
                     }
                 }
@@ -269,7 +269,7 @@ public class Hungergames extends JavaPlugin {
         try {
             metrics = new Metrics(this);
             if (metrics.isOptOut())
-                System.out.print(config.getTranslationsConfig().getLoggerMetricsMessage());
+                System.out.print(config.getLoggerConfig().getMetricsMessage());
             metrics.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -404,7 +404,7 @@ public class Hungergames extends JavaPlugin {
     }
 
     public void shutdown(String messageToKickWith) {
-        System.out.print(config.getTranslationsConfig().getLoggerShuttingDown());
+        System.out.print(config.getLoggerConfig().getShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
@@ -415,7 +415,7 @@ public class Hungergames extends JavaPlugin {
             }
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
         } else
-            System.out.print(config.getTranslationsConfig().getLoggerShutdownCancelled());
+            System.out.print(config.getLoggerConfig().getShutdownCancelled());
     }
 
     public void startGame() {

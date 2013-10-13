@@ -16,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.MainConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
@@ -144,8 +145,8 @@ public class MapLoader {
     }
 
     private static void loadMap(File mapDir, File dest, YamlConfiguration config) {
-        TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
-        System.out.print(String.format(tm.getLoggerNowAttemptingToLoadAMap(), mapDir.toString()));
+        LoggerConfig tm = HungergamesApi.getConfigManager().getLoggerConfig();
+        System.out.print(String.format(tm.getNowAttemptingToLoadAMap(), mapDir.toString()));
         List<File> maps = new ArrayList<File>();
         if (mapDir.exists()) {
             for (File file : mapDir.listFiles()) {
@@ -160,49 +161,45 @@ public class MapLoader {
             File toLoad = maps.get(0);
             for (File f : toLoad.listFiles())
                 copy(f, dest);
-            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getSuccessfullyLoadedMap(),
-                    toLoad.getName()));
+            System.out.print(String.format(tm.getSuccessfullyLoadedMap(), toLoad.getName()));
         } else
-            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getNoMapsFound(),
-                    mapDir.toString()));
+            System.out.print(String.format(tm.getNoMapsFound(), mapDir.toString()));
     }
 
     private static void loadMapConfiguration(File worldConfig) {
         MainConfig configManager = HungergamesApi.getConfigManager().getMainConfig();
-        TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
+        LoggerConfig tm = HungergamesApi.getConfigManager().getLoggerConfig();
         try {
-            System.out.print(tm.getLoggerMapConfigNowLoading());
+            System.out.print(tm.getMapConfigNowLoading());
             YamlConfiguration config = null;
             if (!worldConfig.exists()) {
-                System.out.print(tm.getLoggerMapConfigNotFound());
+                System.out.print(tm.getMapConfigNotFound());
             } else
                 config = YamlConfiguration.loadConfiguration(worldConfig);
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new File(HungergamesApi.getHungergames()
                     .getDataFolder(), "map.yml"));
             if (config != null && config.contains("BorderSize")) {
                 configManager.setBorderSize(config.getInt("BorderSize"));
-                System.out.print(String.format(tm.getLoggerMapConfigChangedBorderSize(), config.getInt("BorderSize")));
+                System.out.print(String.format(tm.getMapConfigChangedBorderSize(), config.getInt("BorderSize")));
             } else
                 configManager.setBorderSize(defaultConfig.getInt("BorderSize"));
             if (config != null && config.contains("RoundedBorder")) {
                 configManager.setRoundedBorder(config.getBoolean("RoundedBorder"));
-                System.out.print(String.format(tm.getLoggerMapConfigChangedRoundedBorder(), config.getBoolean("RoundedBorder")));
+                System.out.print(String.format(tm.getMapConfigChangedRoundedBorder(), config.getBoolean("RoundedBorder")));
             } else
                 configManager.setRoundedBorder(defaultConfig.getBoolean("RoundedBorder"));
             if (config != null && config.contains("BorderCloseInRate")) {
                 configManager.setAmountBorderClosesInPerSecond(config.getDouble("BorderCloseInRate"));
-                System.out.print(String.format(tm.getLoggerMapConfigChangedBorderCloseInRate(),
-                        config.getDouble("BorderCloseInRate")));
+                System.out.print(String.format(tm.getMapConfigChangedBorderCloseInRate(), config.getDouble("BorderCloseInRate")));
             } else
                 configManager.setAmountBorderClosesInPerSecond(defaultConfig.getDouble("BorderCloseInRate"));
             if (config != null && config.contains("TimeOfDayWhenGameStarts")) {
                 configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
-                System.out
-                        .print(String.format(tm.getLoggerMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
+                System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
             } else
                 configManager.setTimeOfDay(defaultConfig.getInt("TimeOfDayWhenGameStarts"));
             File spawnsFile = new File(worldConfig.getParentFile(), "spawns.yml");
-            System.out.print(tm.getLoggerLoadSpawnsConfig());
+            System.out.print(tm.getLoadSpawnsConfig());
             if (spawnsFile.exists()) {
                 config = YamlConfiguration.loadConfiguration(spawnsFile);
                 int i = 0;
@@ -213,45 +210,45 @@ public class MapLoader {
                         if (section.contains("X"))
                             x = section.getInt("X");
                         else {
-                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "X"));
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "X"));
                             continue;
                         }
                         if (section.contains("Y"))
                             y = section.getInt("Y");
                         else {
-                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Y"));
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Y"));
                             continue;
                         }
                         if (section.contains("Z"))
                             z = section.getInt("Z");
                         else {
-                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Z"));
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Z"));
                             continue;
                         }
                         if (section.contains("Radius"))
                             radius = section.getInt("Radius");
                         else {
-                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Radius"));
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Radius"));
                             continue;
                         }
                         if (section.contains("Height"))
                             height = section.getInt("Height");
                         else {
-                            System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, "Height"));
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Height"));
                             continue;
                         }
                         Location loc = new Location(HungergamesApi.getHungergames().world, x, y, z);
                         HungergamesApi.getPlayerManager().addSpawnPoint(loc, radius, height);
                         i++;
                     } catch (Exception ex) {
-                        System.out.print(String.format(tm.getLoggerloadSpawnsConfigError(), key, ex.getMessage()));
+                        System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, ex.getMessage()));
                     }
                 }
-                System.out.print(String.format(tm.getLoggerLoadedSpawnsConfig(), i));
+                System.out.print(String.format(tm.getLoadedSpawnsConfig(), i));
             } else
-                System.out.print(tm.getLoggerLoadSpawnsConfigNotFound());
+                System.out.print(tm.getLoadSpawnsConfigNotFound());
             if (config != null)
-                System.out.print(tm.getLoggerMapConfigLoaded());
+                System.out.print(tm.getMapConfigLoaded());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

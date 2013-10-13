@@ -10,13 +10,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
-    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
+    private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
     private Connection con = null;
 
     public void checkTables(String tableName, String query) {
@@ -32,14 +33,14 @@ public class PlayerJoinThread extends Thread {
                 stmt.close();
             }
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName()));
+            System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName()));
         }
     }
 
     public void mySqlConnect() {
         try {
             MySqlManager mysql = HungergamesApi.getMySqlManager();
-            System.out.println(String.format(cm.getLoggerMySqlConnecting(), getClass().getSimpleName()));
+            System.out.println(String.format(cm.getMySqlConnecting(), getClass().getSimpleName()));
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             String conn = "jdbc:mysql://" + mysql.SQL_HOST/*
                                                            * + ":" +
@@ -48,7 +49,7 @@ public class PlayerJoinThread extends Thread {
                     + "/" + mysql.SQL_DATA;
             con = DriverManager.getConnection(conn, mysql.SQL_USER, mysql.SQL_PASS);
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getLoggerMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
+            System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }
         checkTables("HGKits", "CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
                 + "Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL)");
@@ -58,10 +59,10 @@ public class PlayerJoinThread extends Thread {
         if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
             return;
         try {
-            System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
+            System.out.println(String.format(cm.getMySqlClosing(), getClass().getSimpleName()));
             this.con.close();
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getLoggerMySqlClosingError(), getClass().getSimpleName()));
+            System.err.println(String.format(cm.getMySqlClosingError(), getClass().getSimpleName()));
         }
     }
 
@@ -100,7 +101,7 @@ public class PlayerJoinThread extends Thread {
                     r.close();
                     stmt.close();
                 } catch (Exception ex) {
-                    System.out.println(String.format(cm.getLoggerMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));
+                    System.out.println(String.format(cm.getMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));
                 }
             }
             if (pm.loadGamer.peek() == null) {

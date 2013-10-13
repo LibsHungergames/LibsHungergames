@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
@@ -28,7 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class KitManager {
-    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
+    private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
     public String defaultKitName;
     private ConcurrentLinkedQueue<Kit> defaultKits = new ConcurrentLinkedQueue<Kit>();
     private Hungergames hg = HungergamesApi.getHungergames();
@@ -71,7 +72,7 @@ public class KitManager {
 
     public void addKit(final Kit newKit) {
         if (getKitByName(newKit.getName()) != null) {
-            System.out.print(String.format(cm.getLoggerKitAlreadyExists(), newKit.getName()));
+            System.out.print(String.format(cm.getKitAlreadyExists(), newKit.getName()));
             return;
         }
         kits.add(newKit);
@@ -165,7 +166,7 @@ public class KitManager {
                         : (Material.getMaterial(args[0].toUpperCase()) == null ? Material.AIR : Material.getMaterial(args[0]
                                 .toUpperCase())).getId();
                 if (id == 0) {
-                    System.out.print(String.format(cm.getLoggerUnrecognisedItemId(), args[0]));
+                    System.out.print(String.format(cm.getUnrecognisedItemId(), args[0]));
                     return new ItemStack[] { null };
                 }
                 ItemStack item = new ItemStack(id, (int) amount, (short) Integer.parseInt(args[1]));
@@ -229,7 +230,7 @@ public class KitManager {
             String message = ex.getMessage();
             if (ex instanceof ArrayIndexOutOfBoundsException)
                 message = "java.lang.ArrayIndexOutOfBoundsException: " + message;
-            System.out.print(String.format(cm.getLoggerErrorWhileParsingItemStack(), string, message));
+            System.out.print(String.format(cm.getErrorWhileParsingItemStack(), string, message));
             ex.printStackTrace();
         }
         return new ItemStack[] { null };

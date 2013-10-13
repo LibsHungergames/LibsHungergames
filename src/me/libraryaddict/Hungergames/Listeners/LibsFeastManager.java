@@ -2,6 +2,9 @@ package me.libraryaddict.Hungergames.Listeners;
 
 import java.util.Random;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import me.libraryaddict.Hungergames.Configs.FeastConfig;
 import me.libraryaddict.Hungergames.Events.FeastAnnouncedEvent;
 import me.libraryaddict.Hungergames.Events.FeastSpawnedEvent;
@@ -27,14 +30,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class LibsFeastManager implements Listener {
+    @Getter
+    @Setter
     private static LibsFeastManager feastManager;
-    static {
-        feastManager = new LibsFeastManager();
-    }
-
-    public static LibsFeastManager getFeastManager() {
-        return feastManager;
-    }
 
     protected FeastConfig config = HungergamesApi.getConfigManager().getFeastConfig();
     protected Location feastLocation;
