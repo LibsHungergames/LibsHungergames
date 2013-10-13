@@ -206,7 +206,7 @@ public class MainConfig extends BaseConfig {
     /**
      * The delay between 'libraryaddict won!' broadcasts after the game ends, not related to gameshutdown time
      */
-    private int wonBroadcastsDelay;
+    private int wonBroadcastsDelay = 6;
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
