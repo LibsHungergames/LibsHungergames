@@ -183,7 +183,8 @@ public class Gamer {
     }
 
     public void setAlive(boolean alive) {
-        if (HungergamesApi.getHungergames().currentTime >= 0 && HungergamesApi.getConfigManager().isShortenedNames()
+        if (HungergamesApi.getHungergames().currentTime >= 0
+                && HungergamesApi.getConfigManager().getMainConfig().isShortenedNames()
                 && ChatColor.stripColor(player.getPlayerListName()).length() > 12) {
             String listName = player.getPlayerListName().substring(0, 12);
             try {
@@ -203,7 +204,8 @@ public class Gamer {
         // Remove arrows sticking in player..
         HungergamesApi.getReflectionManager().removeArrows(getPlayer());
         if (alive) {
-            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
+            if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()
+                    && HungergamesApi.getConfigManager().getMainConfig().isSpectatorsVisibleToEachOther()) {
                 if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
                     player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -225,8 +227,10 @@ public class Gamer {
             updateSelfToOthers();
             updateOthersToSelf();
         } else if (!alive) {
-            if (HungergamesApi.getConfigManager().displayScoreboards() && HungergamesApi.getConfigManager().isInvisSpectators()) {
-                if (HungergamesApi.getConfigManager().isShortenedNames() && player.getPlayerListName().length() <= 14)
+            if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()
+                    && HungergamesApi.getConfigManager().getMainConfig().isSpectatorsVisibleToEachOther()) {
+                if (HungergamesApi.getConfigManager().getMainConfig().isShortenedNames()
+                        && player.getPlayerListName().length() <= 14)
                     player.setPlayerListName(ChatColor.GRAY + player.getPlayerListName());
                 seeInvis(true);
                 player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());

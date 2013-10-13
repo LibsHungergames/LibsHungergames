@@ -1,7 +1,7 @@
 package me.libraryaddict.Hungergames.Types;
 
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -71,7 +71,7 @@ public abstract class AbilityListener implements Listener {
     }
 
     public boolean load(ConfigurationSection section, boolean isNewFile) {
-        TranslationManager cm = HungergamesApi.getTranslationManager();
+        LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
         boolean modified = false;
         for (Field field : getClass().getDeclaredFields()) {
             if (!Modifier.isTransient(field.getModifiers()) && Modifier.isPublic(field.getModifiers()))
@@ -93,7 +93,7 @@ public abstract class AbilityListener implements Listener {
                         }
                         modified = true;
                         if (!isNewFile)
-                            System.out.print(String.format(cm.getLoggerAbilityMissingValue(), getClass().getSimpleName(),
+                            System.out.print(String.format(cm.getAbilityMissingConfigValue(), getClass().getSimpleName(),
                                     field.getName()));
                     } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                         List<Object> array = (List<Object>) value;
@@ -113,7 +113,7 @@ public abstract class AbilityListener implements Listener {
                     } else
                         field.set(this, value);
                 } catch (Exception e) {
-                    System.out.print(String.format(cm.getLoggerErrorWhileLoadingAbility(), e.getMessage()));
+                    System.out.print(String.format(cm.getErrorWhileLoadingAbility(), getClass().getSimpleName(), e.getMessage()));
                 }
         }
         return modified;

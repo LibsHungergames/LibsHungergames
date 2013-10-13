@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.command.Command;
@@ -9,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class Time implements CommandExecutor {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "View the current game time";
     private Hungergames hg = HungergamesApi.getHungergames();
 

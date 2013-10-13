@@ -1,12 +1,8 @@
 package me.libraryaddict.Hungergames.Listeners;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
-import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.FeastConfig;
 import me.libraryaddict.Hungergames.Events.FeastAnnouncedEvent;
 import me.libraryaddict.Hungergames.Events.FeastSpawnedEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
@@ -15,10 +11,7 @@ import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.GenerationManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
-import me.libraryaddict.Hungergames.Types.RandomItem;
-
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +19,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -44,79 +36,15 @@ public class LibsFeastManager implements Listener {
         return feastManager;
     }
 
-    protected HashMap<Integer, String> advertisements = new HashMap<Integer, String>();
-    protected int chestLayerHeight = 3;
-    protected String feastBlocks = "QUATYZ_BLOCk 1";
-    protected int feastGenerateTime = 20 * 60;
-    protected String feastGround = "QUARTZ_BLOCK 0";
-    protected String feastInsides = "TNT 0";
-    protected Location feastLoc;
-    protected int feastPlatformGenerateTime = 15 * 60;
-    protected int feastPlatformSize = 20;
+    protected FeastConfig config = HungergamesApi.getConfigManager().getFeastConfig();
+    protected Location feastLocation;
     protected GenerationManager gen;
-    protected boolean isEnabled;
-    protected String scoreboardDuringFeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Looting feast";
-    protected String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";;
-    protected String scoreboardPrefeast = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Prefeast";;
+    private boolean isEnabled;
 
     public LibsFeastManager() {
-        // Setup the messages and times
-        for (int i = 0; i < 4; i++) {
-            advertisements.put((60 * 15) + (i * 60), ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-            advertisements.put((60 * 15) + (i * 60), ChatColor.RED + "Use /feast to fix your compass on it!");
-        }
-        advertisements.put((60 * 19) + 30, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-        advertisements.put((60 * 19) + 45, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-        advertisements.put((60 * 19) + 50, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-        for (int i = 1; i <= 5; i++)
-            advertisements.put((60 * 20) - i, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-
         Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
-        feastLoc = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
+        feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
                 + (new Random().nextInt(200) - 100));
-        Hungergames hg = HungergamesApi.getHungergames();
-        File file = new File(hg.getDataFolder().toString() + "/feast.yml");
-        try {
-            if (!file.exists())
-                file.createNewFile();
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-            ChestManager chest = HungergamesApi.getChestManager();
-            // Use reflection to set all the fields. Because I'm lazy.
-            for (Field field : getClass().getDeclaredFields()) {
-                Object obj = field.get(this);
-                if (obj != null && (obj instanceof String || obj instanceof Integer)) {
-                    if (!config.contains(field.getName()))
-                        config.set(field.getName(), obj);
-                    else
-                        field.set(this, config.get(field.getName()));
-                }
-            }
-            if (!config.contains("Advertisements")) {
-                for (int time : advertisements.keySet()) {
-                    config.set("Advertisements." + time, advertisements.get(time));
-                }
-            } else {
-                advertisements.clear();
-                for (String key : config.getConfigurationSection("Advertisements").getKeys(false)) {
-                    advertisements.put(Integer.parseInt(key), config.getString("Advertisements." + key));
-                }
-            }
-            if (!config.contains("FeastLoot")) {
-                ArrayList<String> strings = new ArrayList<String>();
-                for (RandomItem item : chest.getRandomItems())
-                    strings.add(item.toString());
-                config.set("How To Use",
-                        "Chance in hundred, MinAmount, MaxAmount, ID or Material, Data Value, Addictional data like in kits items such as enchants");
-                config.set("FeastLoot", strings);
-            }
-            config.save(file);
-            chest.clearRandomItems();
-            for (String string : config.getStringList("FeastLoot")) {
-                chest.addRandomItem(new RandomItem(string));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     /**
@@ -138,8 +66,8 @@ public class LibsFeastManager implements Listener {
                 p.teleport(l);
             }
         }
-        ItemStack feastInside = config.parseItem(feastInsides);
-        ItemStack feastBlock = config.parseItem(feastBlocks);
+        ItemStack feastInside = config.getFeastConfig().getFeastInsides();
+        ItemStack feastBlock = config.getFeastConfig().getFeastFeastBlock();
         for (int x = -height; x < height + 1; x++) {
             for (int z = -height; z < height + 1; z++) {
                 int y = Math.abs(x);
@@ -173,56 +101,55 @@ public class LibsFeastManager implements Listener {
     }
 
     public void generatePlatform(Location loc, int chestLayers, int platformSize) {
-        ItemStack item = HungergamesApi.getConfigManager().parseItem(feastGround);
-        gen.generatePlatform(feastLoc, chestLayers, platformSize, item.getType(), item.getDurability());
-    }
-
-    public int getFeastLayers() {
-        return this.chestLayerHeight;
+        ItemStack item = HungergamesApi.getConfigManager().getFeastConfig().getFeastGroundBlock();
+        gen.generatePlatform(loc, chestLayers, platformSize, item.getType(), item.getDurability());
     }
 
     public Location getFeastLocation() {
-        return this.feastLoc;
-    }
-
-    public int getPlatformSize() {
-        return this.feastPlatformSize;
+        return feastLocation;
     }
 
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
         int currentTime = HungergamesApi.getHungergames().currentTime;
-        if (advertisements.containsKey(currentTime)) {
-            Bukkit.broadcastMessage(String.format(advertisements.get(currentTime), feastLoc.getX(), feastLoc.getY(),
-                    feastLoc.getZ(), HungergamesApi.getHungergames().returnTime(currentTime)));
+        if (config.getFeastAdvertisements().containsKey(currentTime)) {
+            Bukkit.broadcastMessage(String.format(config.getFeastAdvertisements().get(currentTime), feastLocation.getX(),
+                    feastLocation.getY(), feastLocation.getZ(), HungergamesApi.getHungergames().returnTime(currentTime)));
         }
-        if (currentTime == feastPlatformGenerateTime) {
-            feastLoc.setY(feastLoc.getWorld().getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-            int feastHeight = gen.getSpawnHeight(feastLoc, feastPlatformSize);
-            generatePlatform(feastLoc, chestLayerHeight, feastHeight);
-            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, this.scoreboardPrefeast);
+        if (config.getScoreboardStrings().containsKey(currentTime)) {
+            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, config.getScoreboardStrings().get(currentTime));
+        }
+        if (currentTime == config.getFeastPlatformGenerateTime()) {
+            feastLocation.setY(feastLocation.getWorld().getHighestBlockYAt(feastLocation.getBlockX(), feastLocation.getBlockZ()));
+            int feastHeight = gen.getSpawnHeight(feastLocation, config.getFeastSize());
+            generatePlatform(feastLocation, config.getChestLayersHeight(), feastHeight);
             HungergamesApi.getInventoryManager().updateSpectatorHeads();
             Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
         }
-        if (currentTime == feastGenerateTime) {
-            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, scoreboardFeastStartingIn);
-            generateChests(feastLoc, chestLayerHeight);
+        if (currentTime == config.getFeastGenerateTime()) {
+            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn());
+            generateChests(feastLocation, config.getChestLayersHeight());
             World world = HungergamesApi.getHungergames().world;
             world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
-        } else if (currentTime > feastPlatformGenerateTime && currentTime < feastGenerateTime) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, scoreboardFeastStartingIn, feastGenerateTime - currentTime);
+        } else if (currentTime > config.getFeastPlatformGenerateTime() && currentTime < config.getFeastGenerateTime()) {
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn(),
+                    config.getFeastGenerateTime() - currentTime);
         }
     }
 
     public void setEnabled(boolean enabled) {
         if (enabled != isEnabled) {
             isEnabled = enabled;
-            if (isEnabled) {
+            if (enabled) {
                 Bukkit.getPluginManager().registerEvents(this, HungergamesApi.getHungergames());
             } else {
                 HandlerList.unregisterAll(this);
             }
         }
+    }
+
+    public void setFeastLocation(Location newFeastLocation) {
+        feastLocation = newFeastLocation;
     }
 }

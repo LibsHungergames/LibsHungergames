@@ -63,6 +63,12 @@
 	</repositories>
 
 	<dependencies>
+       <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>0.12.0</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>

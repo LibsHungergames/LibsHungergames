@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -15,7 +16,7 @@ public class Message implements CommandExecutor {
     public String[] aliases = new String[] { "msg", "mail", "tell", "pm", "whisper", "w", "privatemessage" };
     private transient ChatManager chat = HungergamesApi.getChatManager();
     public String description = "Message a player your secret plans";
-    private transient TranslationManager tm = HungergamesApi.getTranslationManager();
+    private transient TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 0)

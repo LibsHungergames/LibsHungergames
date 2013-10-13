@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 
@@ -27,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class KitManager {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String defaultKitName;
     private ConcurrentLinkedQueue<Kit> defaultKits = new ConcurrentLinkedQueue<Kit>();
     private Hungergames hg = HungergamesApi.getHungergames();
@@ -90,7 +91,7 @@ public class KitManager {
     }
 
     public boolean addKitToPlayer(Player player, Kit kit) {
-        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
             return false;
         if (!hisKits.containsKey(player.getName()))
             hisKits.put(player.getName(), new ArrayList<Kit>());

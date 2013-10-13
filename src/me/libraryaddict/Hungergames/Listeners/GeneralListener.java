@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+import me.libraryaddict.Hungergames.Configs.MainConfig;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -32,14 +33,14 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class GeneralListener implements Listener {
 
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
-    private ConfigManager config = HungergamesApi.getConfigManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
+    private MainConfig config = HungergamesApi.getConfigManager().getMainConfig();
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     @EventHandler
     public void ignite(final BlockIgniteEvent event) {
-        if (hg.currentTime < 0 && config.isFireSpreadDisabled()) {
+        if (hg.currentTime < 0 && config.isFireSpreadPreGame()) {
             event.setCancelled(true);
             return;
         }
@@ -50,12 +51,13 @@ public class GeneralListener implements Listener {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Gamer gamer = pm.getGamer(entity);
-            if (gamer == null || hg.currentTime <= config.getInvincibilityTime() || !hg.doSeconds || !gamer.isAlive()) {
+            if (gamer == null || hg.currentTime <= config.getTimeForInvincibility() || !hg.doSeconds || !gamer.isAlive()) {
                 event.setCancelled(true);
                 if (entity.getFireTicks() > 0 && !pm.getGamer(entity).isAlive())
                     entity.setFireTicks(0);
             }
-        } else if (entity instanceof Tameable && ((Tameable) entity).isTamed() && hg.currentTime <= config.getInvincibilityTime())
+        } else if (entity instanceof Tameable && ((Tameable) entity).isTamed()
+                && hg.currentTime <= config.getTimeForInvincibility())
             event.setCancelled(true);
     }
 

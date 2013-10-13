@@ -17,14 +17,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitInventory extends PageInventory {
 
     public KitInventory(Player player) {
-        super(player, HungergamesApi.getConfigManager().isKitSelectorDynamicSize());
-        maxInvSize = HungergamesApi.getConfigManager().getKitSelectorInventorySize();
+        super(player, HungergamesApi.getConfigManager().getMainConfig().isKitSelectorSizeDymanic());
+        maxInvSize = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorInventorySize();
         title = tm.getSelectKitInventoryTitle();
-        ItemStack item = HungergamesApi.getConfigManager().getKitSelectorBack();
+        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
         backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
                 tm.getItemKitSelectorBackName(), tm.getItemKitSelectorBackDescription());
         backAPage.setAmount(0);
-        item = HungergamesApi.getConfigManager().getKitSelectorForward();
+        item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorForward();
         forwardsAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
                 tm.getItemKitSelectorForwardsName(), tm.getItemKitSelectorForwardsDescription());
         forwardsAPage.setAmount(0);

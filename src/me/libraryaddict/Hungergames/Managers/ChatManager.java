@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Managers;
 import java.util.HashMap;
 import java.util.Set;
 
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.PrivateMessageEvent;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
@@ -13,7 +14,7 @@ import org.bukkit.permissions.Permissible;
 public class ChatManager {
 
     private HashMap<String, String> lastMsg = new HashMap<String, String>();
-    private TranslationManager tm = HungergamesApi.getTranslationManager();
+    private TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     public CommandSender getOtherChatter(String player) {
         if (lastMsg.containsKey(player))

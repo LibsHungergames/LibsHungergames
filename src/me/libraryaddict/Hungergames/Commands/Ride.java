@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -12,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Ride implements CommandExecutor {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Toggle the ability to ride on top of mobs and players";
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 

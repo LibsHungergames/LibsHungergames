@@ -20,6 +20,7 @@ import me.libraryaddict.disguise.DisguiseTypes.Disguise;
 import me.libraryaddict.disguise.DisguiseTypes.PlayerDisguise;
 import me.libraryaddict.disguise.Events.DisguiseEvent;
 import me.libraryaddict.disguise.Events.UndisguiseEvent;
+
 public class Skinner extends AbilityListener implements Disableable {
     public int chanceInOneOfSkinning = 3;
     private boolean disable = true;
@@ -30,10 +31,10 @@ public class Skinner extends AbilityListener implements Disableable {
 
     public Skinner() throws Exception {
         if (Bukkit.getPluginManager().getPlugin("LibsDisguises") == null)
-            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+            throw new Exception(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getDependencyNotFound(),
                     "Plugin LibsDisguises"));
         if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
-            throw new Exception(String.format(HungergamesApi.getTranslationManager().getLoggerDependencyNotFound(),
+            throw new Exception(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getDependencyNotFound(),
                     "Plugin ProtocolLib"));
     }
 

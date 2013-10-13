@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.ClassGetter;
@@ -31,7 +32,7 @@ import java.util.Set;
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class CommandManager {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
     private YamlConfiguration config;
     private File configFile;
     private boolean newFile = false;
@@ -110,7 +111,7 @@ public class CommandManager {
 
     private void loadCommands(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
-        System.out.print(String.format(cm.getLoggerLoadCommandsInPackage(), plugin.getName(), packageName));
+        System.out.print(String.format(cm.getLoadCommandsPackage(), plugin.getName(), packageName));
         for (Class commandClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (CommandExecutor.class.isAssignableFrom(commandClass)) {
                 try {
@@ -119,8 +120,8 @@ public class CommandManager {
                     if (modified)
                         saveConfig = true;
                 } catch (Exception e) {
-                    System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), commandClass.getSimpleName(),
-                            e.getMessage()));
+                    System.out
+                            .print(String.format(cm.getErrorWhileLoadingCommand(), commandClass.getSimpleName(), e.getMessage()));
                 }
             }
         }
@@ -160,7 +161,7 @@ public class CommandManager {
                             }
                             modified = true;
                             if (!newFile)
-                                System.out.print(String.format(cm.getLoggerCommandsMissingValue(), field.getName(), commandName));
+                                System.out.print(String.format(cm.getAddedMissingConfigValue(), field.getName(), commandName));
                         } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                             List<Object> array = (List<Object>) value;
                             value = array.toArray(new String[array.size()]);
@@ -196,12 +197,12 @@ public class CommandManager {
                             }
                         }
                     } catch (Exception e) {
-                        System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), e.getMessage()));
+                        System.out.print(String.format(cm.getErrorWhileLoadingConfig(), "commands", e.getMessage()));
                     }
             }
             return modified;
         } catch (Exception e) {
-            System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), e.getMessage()));
+            System.out.print(String.format(cm.getErrorWhileLoadingConfig(), "commands", e.getMessage()));
         }
         return false;
     }
@@ -245,7 +246,7 @@ public class CommandManager {
     public void save() {
         try {
             if (!configFile.exists()) {
-                Bukkit.getLogger().info(cm.getLoggerCreatingCommandsConfig());
+                System.out.print(String.format(cm.getCreatingConfigFile(), "commands"));
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 newFile = true;
@@ -264,8 +265,8 @@ public class CommandManager {
             try {
                 registerCommand(section.getString("CommandName"), exc);
             } catch (Exception ex) {
-                System.out.print(String.format(cm.getLoggerErrorWhileLoadingCommands(), exc.getClass().getSimpleName(),
-                        ex.getMessage()));
+                System.out
+                        .print(String.format(cm.getErrorWhileLoadingCommand(), exc.getClass().getSimpleName(), ex.getMessage()));
             }
         }
         return modified;

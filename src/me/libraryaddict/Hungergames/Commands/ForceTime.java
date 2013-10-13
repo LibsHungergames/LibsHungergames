@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 
 public class ForceTime implements CommandExecutor {
     public String[] aliases = new String[] { "ftime" };
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Change the current internal time of the game";
     private Hungergames hg = HungergamesApi.getHungergames();
 

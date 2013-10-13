@@ -24,11 +24,11 @@ public class SpectateInventory extends PageInventory {
     public SpectateInventory(Player player) {
         super(player, true);
         title = tm.getSpectatorInventoryTitle();
-        ItemStack item = HungergamesApi.getConfigManager().getSpectatorInventoryBack();
+        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
         backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
                 tm.getItemSpectatorInventoryBackName(), tm.getItemSpectatorInventoryBackDescription());
         backAPage.setAmount(0);
-        item = HungergamesApi.getConfigManager().getSpectatorInventoryForwards();
+        item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemForwards();
         forwardsAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
                 tm.getItemSpectatorInventoryForwardsName(), tm.getItemSpectatorInventoryForwardsDescription());
         forwardsAPage.setAmount(0);

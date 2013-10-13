@@ -4,11 +4,12 @@ import java.util.Iterator;
 import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.MainConfig;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
 import me.libraryaddict.Hungergames.Events.PrivateMessageEvent;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.NameManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
@@ -65,13 +66,13 @@ import org.bukkit.scoreboard.DisplaySlot;
 public class PlayerListener implements Listener {
 
     private final ChatManager chat = HungergamesApi.getChatManager();
-    private final TranslationManager cm = HungergamesApi.getTranslationManager();
-    private final ConfigManager config = HungergamesApi.getConfigManager();
+    private final MainConfig config = HungergamesApi.getConfigManager().getMainConfig();
     private final Hungergames hg = HungergamesApi.getHungergames();
     private final InventoryManager icon = HungergamesApi.getInventoryManager();
     private final KitManager kits = HungergamesApi.getKitManager();
     private final NameManager name = HungergamesApi.getNameManager();
     private final PlayerManager pm = HungergamesApi.getPlayerManager();
+    private final TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
@@ -83,11 +84,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Gamer gamer = pm.getGamer(event.getPlayer());
-        String currentKit = cm.getMessagePlayerShowKitsNoKit();
+        String currentKit = tm.getMessagePlayerShowKitsNoKit();
         if (kits.getKitByPlayer(event.getPlayer()) != null)
             currentKit = kits.getKitByPlayer(event.getPlayer()).getName();
         if (!gamer.isAlive() && hg.currentTime >= 0) {
-            if (config.isSpectatorChatHidden() && hg.doSeconds && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
+            if (config.isSpectatorsChatHidden() && hg.doSeconds && !gamer.getPlayer().hasPermission("hungergames.spectatorchat")) {
                 Iterator<Player> players = event.getRecipients().iterator();
                 while (players.hasNext()) {
                     Gamer g = pm.getGamer(players.next());
@@ -95,15 +96,15 @@ public class PlayerListener implements Listener {
                         players.remove();
                 }
             }
-            if (config.getSpectatingPrefix() != null) {
+            if (!config.getSpectatingPrefix().equals("")) {
                 String format = ChatColor.translateAlternateColorCodes('&', config.getSpectatingPrefix());
                 format = format.replace("%Kit%", currentKit);
                 format = format.replace("%Name%", "%1$1s").replace("%Message%", "%2$1s");
                 event.setFormat(format);
             }
         } else {
-            if (config.getAlivePrefix() != null) {
-                String format = ChatColor.translateAlternateColorCodes('&', config.getAlivePrefix());
+            if (!config.getPrefixWhenAlive().equals("")) {
+                String format = ChatColor.translateAlternateColorCodes('&', config.getPrefixWhenAlive());
                 format = format.replace("%Kit%", currentKit);
                 format = format.replace("%Name%", "%1$1s").replace("%Message%", "%2$1s");
                 event.setFormat(format);
@@ -122,7 +123,7 @@ public class PlayerListener implements Listener {
         if (event.getEntity() instanceof Player
                 || (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed())) {
             if ((event.getEntity() instanceof Player && (!hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive()))
-                    || hg.currentTime <= config.getInvincibilityTime())
+                    || hg.currentTime <= config.getTimeForInvincibility())
                 event.setCancelled(true);
         }
     }
@@ -161,12 +162,12 @@ public class PlayerListener implements Listener {
                 EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
                 if (entityEvent.getDamager() instanceof Player) {
                     Player dmg = (Player) entityEvent.getDamager();
-                    deathMessage = cm.getKillMessages()[new Random().nextInt(cm.getKillMessages().length)];
+                    deathMessage = tm.getKillMessages()[new Random().nextInt(tm.getKillMessages().length)];
                     deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
                             .replace("%Weapon%", name.getItemName(dmg.getItemInHand()));
                 }
             } else if (cause.getCause() == DamageCause.FALL)
-                deathMessage = String.format(cm.getKillMessageFellToDeath(), p.getName());
+                deathMessage = String.format(tm.getKillMessageFellToDeath(), p.getName());
         }
         Gamer gamer = pm.getGamer(p);
         pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
@@ -210,7 +211,7 @@ public class PlayerListener implements Listener {
                 }
             }
             PlayerTrackEvent trackEvent = new PlayerTrackEvent(gamer, victim,
-                    (victim == null ? cm.getMessagePlayerTrackNoVictim() : String.format(cm.getMessagePlayerTrack(),
+                    (victim == null ? tm.getMessagePlayerTrackNoVictim() : String.format(tm.getMessagePlayerTrack(),
                             victim.getName())));
             Bukkit.getPluginManager().callEvent(trackEvent);
             if (!trackEvent.isCancelled()) {
@@ -227,9 +228,10 @@ public class PlayerListener implements Listener {
                     icon.openSpectatorInventory(p);
                     event.setCancelled(true);
                 }
-                if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStew() && !item.getItemMeta().hasDisplayName()) {
+                if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStewEnabled()
+                        && !item.getItemMeta().hasDisplayName()) {
                     if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
-                        int restores = config.mushroomStewRestores();
+                        int restores = config.getHeartsMushroomStewHeals();
                         event.setCancelled(true);
                         if (p.getHealth() < 20)
                             if (p.getHealth() + restores <= 20)
@@ -265,14 +267,14 @@ public class PlayerListener implements Listener {
                 Player victim = (Player) event.getRightClicked();
                 if (pm.getGamer(victim).isAlive())
                     p.sendMessage(String.format(
-                            cm.getMessagePlayerHasHealthAndHunger(),
+                            tm.getMessagePlayerHasHealthAndHunger(),
                             victim.getName(),
                             (int) victim.getHealth(),
                             victim.getFoodLevel(),
-                            (kits.getKitByPlayer(victim) == null ? cm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
+                            (kits.getKitByPlayer(victim) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
                                     victim).getName())));
             } else if (event.getRightClicked() instanceof Damageable) {
-                p.sendMessage(String.format(cm.getMessageMobHasHealth(),
+                p.sendMessage(String.format(tm.getMessageMobHasHealth(),
                         this.name.getName(event.getRightClicked().getType().name()),
                         (int) ((Damageable) event.getRightClicked()).getHealth(),
                         (int) ((Damageable) event.getRightClicked()).getMaxHealth()));
@@ -296,7 +298,7 @@ public class PlayerListener implements Listener {
             for (Enchantment enchant : event.getCurrentItem().getEnchantments().keySet())
                 if (!EnchantmentManager.isNatural(enchant)) {
                     event.setCancelled(true);
-                    ((Player) event.getWhoClicked()).sendMessage(cm.getMessagePlayerWarningForgeUnstableEnchants());
+                    ((Player) event.getWhoClicked()).sendMessage(tm.getMessagePlayerWarningForgeUnstableEnchants());
                     break;
                 }
         }
@@ -317,11 +319,11 @@ public class PlayerListener implements Listener {
             gamer.setOp(true);
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
-                gamer.getPlayer().sendMessage(String.format(cm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
+                gamer.getPlayer().sendMessage(String.format(tm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
             }
         }, 2L);
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
-        if (config.isFlyPreGame())
+        if (config.isPlayersFlyPreGame())
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
             p.removePotionEffect(effect.getType());
@@ -333,9 +335,9 @@ public class PlayerListener implements Listener {
                 }
             }, 2L);
         } else {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length);
-            if (config.useKitSelector() && !config.isMySqlEnabled())
+            if (config.isKitSelectorEnabled() && !config.isMysqlEnabled())
                 if (!p.getInventory().contains(icon.getKitSelector()))
                     gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
         }
@@ -344,7 +346,7 @@ public class PlayerListener implements Listener {
         gamer.updateSelfToOthers();
         pm.loadGamer.add(gamer);
         if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)
-            p.sendMessage(String.format(cm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(),
+            p.sendMessage(String.format(tm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(),
                     config.getCurrentVersion()));
     }
 
@@ -356,23 +358,24 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onLogin(AsyncPlayerPreLoginEvent event) {
         if (hg.chunksGenerating) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, cm.getMessagePlayerChunksGenerating());
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, tm.getMessagePlayerChunksGenerating());
         }
     }
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL)
-            event.disallow(Result.KICK_FULL, cm.getKickGameFull());
-        else if (hg.currentTime >= 0 && !config.isSpectatorsEnabled() && !event.getPlayer().hasPermission("hungergames.spectate"))
-            event.disallow(Result.KICK_OTHER, cm.getKickSpectatorsDisabled());
+            event.disallow(Result.KICK_FULL, tm.getKickGameFull());
+        else if (hg.currentTime >= 0 && !config.isSpectatorsAllowedToJoinInProgressGames()
+                && !event.getPlayer().hasPermission("hungergames.spectate"))
+            event.disallow(Result.KICK_OTHER, tm.getKickSpectatorsDisabled());
     }
 
     @EventHandler
     public void onMessage(PrivateMessageEvent event) {
         Gamer gamer = pm.getGamer(event.getSender().getName());
         Gamer receiver = pm.getGamer(event.getReceiver().getName());
-        if (gamer != null && receiver != null && config.isSpectatorChatHidden() && gamer.isAlive() != receiver.isAlive()
+        if (gamer != null && receiver != null && config.isSpectatorsChatHidden() && gamer.isAlive() != receiver.isAlive()
                 && hg.doSeconds && !event.getReceiver().hasPermission("hungergames.spectatorchat")
                 && !event.getSender().hasPermission("hungergames.spectatorchat")) {
             event.setCancelled(true);
@@ -404,7 +407,7 @@ public class PlayerListener implements Listener {
         Gamer gamer = pm.getGamer(event.getPlayer());
         if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
             pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
-                    String.format(cm.getKillMessageLeavingGame(), gamer.getName()));
+                    String.format(tm.getKillMessageLeavingGame(), gamer.getName()));
         }
         Kit kit = kits.getKitByPlayer(event.getPlayer());
         if (kit != null)
@@ -412,7 +415,7 @@ public class PlayerListener implements Listener {
         pm.removeKilled(gamer);
         pm.unregisterGamer(gamer);
         if (hg.currentTime < 0)
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(),
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length - 1);
         if (event.getPlayer().getVehicle() != null)
             event.getPlayer().leaveVehicle();

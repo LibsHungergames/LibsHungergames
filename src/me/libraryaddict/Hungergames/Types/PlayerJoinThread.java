@@ -10,13 +10,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     private Connection con = null;
 
     public void checkTables(String tableName, String query) {
@@ -55,7 +55,7 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void mySqlDisconnect() {
-        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
             return;
         try {
             System.out.println(String.format(cm.getLoggerMySqlClosing(), getClass().getSimpleName()));
@@ -66,7 +66,7 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void run() {
-        if (!HungergamesApi.getConfigManager().isMySqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
             return;
         mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();
@@ -88,7 +88,7 @@ public class PlayerJoinThread extends Thread {
                     }
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
-                            if (HungergamesApi.getConfigManager().useKitSelector()
+                            if (HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled()
                                     && HungergamesApi.getHungergames().currentTime < 0) {
                                 ItemStack item = HungergamesApi.getInventoryManager().getKitSelector();
                                 PlayerInventory pInv = gamer.getPlayer().getInventory();

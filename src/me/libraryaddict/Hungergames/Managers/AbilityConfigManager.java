@@ -14,7 +14,6 @@ import java.io.IOException;
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class AbilityConfigManager {
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
     private boolean newFile = false;
 
     public ConfigurationSection getConfigSection(YamlConfiguration config, String abilityName) {
@@ -55,7 +54,8 @@ public class AbilityConfigManager {
         try {
             File configFile = new File(plugin.getDataFolder(), "abilities.yml");
             if (!configFile.exists()) {
-                Bukkit.getLogger().info(cm.getLoggerCreatingAbilitiesConfig());
+                Bukkit.getLogger().info(
+                        String.format(HungergamesApi.getConfigManager().getLoggerConfig().getCreatingConfigFile(), "abilities"));
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 newFile = true;

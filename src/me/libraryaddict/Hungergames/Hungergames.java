@@ -48,7 +48,6 @@ public class Hungergames extends JavaPlugin {
     }
 
     public boolean chunksGenerating = true;
-    private TranslationManager cm;
     private ConfigManager config;
     /**
      * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
@@ -85,18 +84,19 @@ public class Hungergames extends JavaPlugin {
                 winner.getPlayer().setAllowFlight(true);
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
-                        Bukkit.broadcastMessage(String.format(cm.getBroadcastWinnerWon(), winner.getName()));
+                        Bukkit.broadcastMessage(String.format(config.getTranslationsConfig().getBroadcastWinnerWon(),
+                                winner.getName()));
                     }
-                }, 0, config.getWinnerBroadcastDelay() * 20);
+                }, 0, config.getMainConfig().getWonBroadcastsDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
-                        String kick = String.format(cm.getKickMessageWon(), winner.getName());
+                        String kick = String.format(config.getTranslationsConfig().getKickMessageWon(), winner.getName());
                         shutdown(kick);
                     }
-                }, config.getGameShutdownDelay() * 20);
+                }, config.getMainConfig().getGameShutdownDelay() * 20);
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
-                shutdown(cm.getKickNobodyWonMessage());
+                shutdown(config.getTranslationsConfig().getKickNobodyWonMessage());
             }
         }
     }
@@ -105,13 +105,13 @@ public class Hungergames extends JavaPlugin {
         Player p = gamer.getPlayer();
         Location loc = p.getLocation().clone();
         Location sLoc = world.getSpawnLocation().clone();
-        final double border = config.getBorderSize();
-        if (config.isRoundedBorder()) {
+        double border = config.getMainConfig().getBorderSize();
+        if (config.getMainConfig().isRoundedBorder()) {
             sLoc.setY(loc.getY());
             double fromBorder = loc.distance(sLoc) - border;
             if (fromBorder - 20 > 0) {
                 // Warn
-                p.sendMessage(cm.getMessagePlayerApproachingBorder());
+                p.sendMessage(config.getTranslationsConfig().getMessagePlayerApproachingBorder());
                 if (fromBorder > 0) {
                     // Punish
                     if (gamer.isAlive()) {
@@ -121,7 +121,7 @@ public class Hungergames extends JavaPlugin {
                             p.setHealth(p.getHealth() - 2);
                         } else {
                             pm.killPlayer(gamer, null, loc, gamer.getInventory(),
-                                    String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
+                                    String.format(config.getTranslationsConfig().getKillMessageKilledByBorder(), gamer.getName()));
                         }
                     } else if (border > 10) {
                         // Hmm. Preferably I tp them back inside.
@@ -150,7 +150,7 @@ public class Hungergames extends JavaPlugin {
             if (!hurt)
                 hurt = Math.abs(fromSpawn) >= border;
             if (!loc.equals(tpTo))
-                p.sendMessage(cm.getMessagePlayerApproachingBorder());
+                p.sendMessage(config.getTranslationsConfig().getMessagePlayerApproachingBorder());
             if (hurt) {
                 if (gamer.isAlive()) {
                     // Damage and potentially kill.
@@ -159,7 +159,7 @@ public class Hungergames extends JavaPlugin {
                         p.setHealth(p.getHealth() - 2);
                     } else {
                         pm.killPlayer(gamer, null, loc, gamer.getInventory(),
-                                String.format(cm.getKillMessageKilledByBorder(), gamer.getName()));
+                                String.format(config.getTranslationsConfig().getKillMessageKilledByBorder(), gamer.getName()));
                     }
                 } else if (border > 10)
                     gamer.getPlayer().teleport(tpTo);
@@ -175,7 +175,7 @@ public class Hungergames extends JavaPlugin {
         File mapConfig = new File(getDataFolder() + "/map.yml");
         YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
         if (mapConfiguration.getBoolean("GenerateChunks")) {
-            final double chunks = (int) Math.ceil(config.getBorderSize() / 16) + Bukkit.getViewDistance();
+            final double chunks = (int) Math.ceil(config.getMainConfig().getBorderSize() / 16) + Bukkit.getViewDistance();
             final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
             for (int x = (int) -chunks; x <= chunks; x++) {
                 for (int z = (int) -chunks; z <= chunks; z++) {
@@ -195,7 +195,7 @@ public class Hungergames extends JavaPlugin {
 
                 public void run() {
                     if (lastPrint + 5000 < System.currentTimeMillis()) {
-                        System.out.print(String.format(cm.getLoggerGeneratingChunks(),
+                        System.out.print(String.format(config.getTranslationsConfig().getLoggerGeneratingChunks(),
                                 (int) Math.floor(((double) currentChunks / totalChunks) * 100))
                                 + "%");
                         lastPrint = System.currentTimeMillis();
@@ -215,7 +215,7 @@ public class Hungergames extends JavaPlugin {
                     }
                     if (!itel.hasNext()) {
                         chunksGenerating = false;
-                        System.out.print(String.format(cm.getLoggerChunksGenerated(), currentChunks));
+                        System.out.print(String.format(config.getTranslationsConfig().getLoggerChunksGenerated(), currentChunks));
                         cancel();
                     }
                 }
@@ -246,7 +246,7 @@ public class Hungergames extends JavaPlugin {
 
     public void onDisable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer(cm.getKickGameShutdownUnexpected());
+            p.kickPlayer(config.getTranslationsConfig().getKickGameShutdownUnexpected());
             PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
             playerListener.onQuit(event);
         }
@@ -256,9 +256,9 @@ public class Hungergames extends JavaPlugin {
 
     public void onEnable() {
         HungergamesApi.init(this);
-        cm = HungergamesApi.getTranslationManager();
-        pm = HungergamesApi.getPlayerManager();
         config = HungergamesApi.getConfigManager();
+        config.loadConfigs();
+        pm = HungergamesApi.getPlayerManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
         mysql.SQL_HOST = getConfig().getString("MySqlUrl");
@@ -269,19 +269,21 @@ public class Hungergames extends JavaPlugin {
         try {
             metrics = new Metrics(this);
             if (metrics.isOptOut())
-                System.out.print(cm.getLoggerMetricsMessage());
+                System.out.print(config.getTranslationsConfig().getLoggerMetricsMessage());
             metrics.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
+                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                        .getScoreboardStagePreGame());
                 world = Bukkit.getWorlds().get(0);
                 world.setGameRuleValue("doDaylightCycle", "false");
                 world.setTime(6000);
-                if (config.forceCords())
-                    world.setSpawnLocation(config.getSpawnX(), world.getHighestBlockYAt(config.getSpawnX(), config.getSpawnZ()),
-                            config.getSpawnZ());
+                if (config.getMainConfig().isForcedCords())
+                    world.setSpawnLocation(config.getMainConfig().getX(), world.getHighestBlockYAt(config.getMainConfig().getX(),
+                            config.getMainConfig().getZ()), config.getMainConfig().getZ());
                 Location spawn = world.getSpawnLocation();
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)
@@ -290,7 +292,7 @@ public class Hungergames extends JavaPlugin {
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
                 generateChunks();
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
-                    ItemStack spawnGround = config.parseItem(mapConfiguration.getString("SpawnPlatformIDandData"));
+                    ItemStack spawnGround = config.getFeastConfig().getFeastGroundBlock();
                     GenerationManager gen = HungergamesApi.getGenerationManager();
                     int platformHeight = gen.getSpawnHeight(world.getSpawnLocation(),
                             mapConfiguration.getInt("SpawnPlatformSize"));
@@ -302,7 +304,8 @@ public class Hungergames extends JavaPlugin {
                 if (world.hasStorm())
                     world.setStorm(false);
                 world.setWeatherDuration(999999999);
-                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
+                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                        .getScoreboardStagePreGame());
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -327,8 +330,6 @@ public class Hungergames extends JavaPlugin {
             perm.setDescription("Used for messages in LibsHungergames");
             Bukkit.getPluginManager().addPermission(perm);
         }
-        ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
-        ScoreboardManager.registerStage(0, cm.getScoreboardStageFighting());
     }
 
     private void onSecond() {
@@ -338,32 +339,39 @@ public class Hungergames extends JavaPlugin {
         }
         if (currentTime < 0) {
             world.setTime(0);
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn(), -currentTime);
-            if (config.displayMessages())
-                if (config.advertiseGameStarting(currentTime))
-                    Bukkit.broadcastMessage(String.format(cm.getBroadcastGameStartingIn(), returnTime(currentTime)));
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR,
+                    config.getTranslationsConfig().getScoreBoardGameStartingIn(), -currentTime);
+            if (config.getMainConfig().isGameStarting(currentTime))
+                Bukkit.broadcastMessage(String.format(config.getTranslationsConfig().getBroadcastGameStartingIn(),
+                        returnTime(currentTime)));
         } else if (currentTime == 0) {
-            if (pm.getGamers().size() < config.getMinPlayers()) {
+            if (pm.getGamers().size() < config.getMainConfig().getMinPlayersForGameStart()) {
                 currentTime = -90;
-                Bukkit.broadcastMessage(cm.getBroadcastNotEnoughPlayers());
+                ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                        .getScoreBoardGameStartingIn(), -currentTime);
+                Bukkit.broadcastMessage(config.getTranslationsConfig().getBroadcastNotEnoughPlayers());
             } else {
                 startGame();
             }
-        } else if (config.getBorderCloseInRate() > 0 && currentTime > config.getTimeFeastStarts()) {
-            config.setBorderSize(config.getBorderSize() - config.getBorderCloseInRate());
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardBorderSize(), (int) config.getBorderSize());
+        } else if (config.getMainConfig().getAmountBorderClosesInPerSecond() > 0
+                && currentTime > config.getMainConfig().getBorderStartsClosingIn()) {
+            config.getMainConfig().setBorderSize(
+                    config.getMainConfig().getBorderSize() - config.getMainConfig().getAmountBorderClosesInPerSecond());
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig().getScoreboardBorderSize(),
+                    (int) config.getMainConfig().getBorderSize());
         }
-        if (config.getInvincibilityTime() > 0 && currentTime <= config.getInvincibilityTime() && currentTime >= 0) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
-                    config.invincibilityWearsOffIn());
-            if (currentTime == config.getInvincibilityTime()) {
-                Bukkit.broadcastMessage(cm.getBroadcastInvincibilityWornOff());
-                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
-                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining());
+        if (config.getMainConfig().getTimeForInvincibility() > 0
+                && currentTime <= config.getMainConfig().getTimeForInvincibility() && currentTime >= 0) {
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                    .getScoreboardInvincibleRemaining(), config.getMainConfig().getTimeForInvincibility() - currentTime);
+            if (currentTime == config.getMainConfig().getTimeForInvincibility()) {
+                Bukkit.broadcastMessage(config.getTranslationsConfig().getBroadcastInvincibilityWornOff());
+                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                        .getScoreboardInvincibleRemaining());
                 Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
-            } else if (config.displayMessages() && config.advertiseInvincibility(currentTime)) {
-                Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
-                        returnTime(config.invincibilityWearsOffIn())));
+            } else if (config.getMainConfig().advertiseInvincibility(currentTime)) {
+                Bukkit.broadcastMessage(String.format(config.getTranslationsConfig().getBroadcastInvincibiltyWearsOffIn(),
+                        returnTime(config.getMainConfig().getTimeForInvincibility() - currentTime)));
             }
         }
         ScoreboardManager.doStage();
@@ -373,41 +381,41 @@ public class Hungergames extends JavaPlugin {
         i = Math.abs(i);
         int remainder = i % 3600, minutes = remainder / 60, seconds = remainder % 60;
         if (seconds == 0 && minutes == 0)
-            return cm.getTimeFormatNoTime();
+            return config.getTranslationsConfig().getTimeFormatNoTime();
         if (minutes == 0) {
             if (seconds == 1)
-                return String.format(cm.getTimeFormatSecond(), seconds);
-            return String.format(cm.getTimeFormatSeconds(), seconds);
+                return String.format(config.getTranslationsConfig().getTimeFormatSecond(), seconds);
+            return String.format(config.getTranslationsConfig().getTimeFormatSeconds(), seconds);
         }
         if (seconds == 0) {
             if (minutes == 1)
-                return String.format(cm.getTimeFormatMinute(), minutes);
-            return String.format(cm.getTimeFormatMinutes(), minutes);
+                return String.format(config.getTranslationsConfig().getTimeFormatMinute(), minutes);
+            return String.format(config.getTranslationsConfig().getTimeFormatMinutes(), minutes);
         }
         if (seconds == 1) {
             if (minutes == 1)
-                return String.format(cm.getTimeFormatSecondAndMinute(), minutes, seconds);
-            return String.format(cm.getTimeFormatSecondAndMinutes(), minutes, seconds);
+                return String.format(config.getTranslationsConfig().getTimeFormatSecondAndMinute(), minutes, seconds);
+            return String.format(config.getTranslationsConfig().getTimeFormatSecondAndMinutes(), minutes, seconds);
         }
         if (minutes == 1) {
-            return String.format(cm.getTimeFormatSecondsAndMinute(), minutes, seconds);
+            return String.format(config.getTranslationsConfig().getTimeFormatSecondsAndMinute(), minutes, seconds);
         }
-        return String.format(cm.getTimeFormatSecondsAndMinutes(), minutes, seconds);
+        return String.format(config.getTranslationsConfig().getTimeFormatSecondsAndMinutes(), minutes, seconds);
     }
 
     public void shutdown(String messageToKickWith) {
-        System.out.print(cm.getLoggerShuttingDown());
+        System.out.print(config.getTranslationsConfig().getLoggerShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            for (String command : config.getCommandsToRunBeforeShutdown())
+            for (String command : config.getMainConfig().getCommandsToRunBeforeShutdown())
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.kickPlayer(messageToKickWith);
             }
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
         } else
-            System.out.print(cm.getLoggerShutdownCancelled());
+            System.out.print(config.getTranslationsConfig().getLoggerShutdownCancelled());
     }
 
     public void startGame() {
@@ -425,22 +433,20 @@ public class Hungergames extends JavaPlugin {
 
             });
         }
-        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, cm.getScoreBoardGameStartingIn());
+        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig().getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
-        if (config.getInvincibilityTime() > 0) {
-            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageInvincibility());
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardInvincibleRemaining(),
-                    config.getInvincibilityTime());
+        if (config.getMainConfig().getTimeForInvincibility() > 0) {
+            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig()
+                    .getScoreboardInvincibleRemaining(), config.getMainConfig().getTimeForInvincibility());
         } else {
-            ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageFighting());
             Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
         }
-        Bukkit.broadcastMessage(cm.getBroadcastGameStartedMessage());
-        if (config.getInvincibilityTime() > 0 && config.displayMessages())
-            Bukkit.broadcastMessage(String.format(cm.getBroadcastInvincibiltyWearsOffIn(),
-                    returnTime(config.getInvincibilityTime())));
+        Bukkit.broadcastMessage(config.getTranslationsConfig().getBroadcastGameStartedMessage());
+        if (config.getMainConfig().getTimeForInvincibility() > 0)
+            Bukkit.broadcastMessage(String.format(config.getTranslationsConfig().getBroadcastInvincibiltyWearsOffIn(),
+                    returnTime(config.getMainConfig().getTimeForInvincibility() - currentTime)));
         for (Gamer gamer : pm.getGamers()) {
-            if (config.useKitSelector())
+            if (config.getMainConfig().isKitSelectorEnabled())
                 gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
             gamer.seeInvis(false);
             gamer.setAlive(true);
@@ -449,7 +455,7 @@ public class Hungergames extends JavaPlugin {
         for (Gamer gamer : pm.getGamers())
             gamer.updateSelfToOthers();
         world.setGameRuleValue("doDaylightCycle", "true");
-        world.setTime(config.getTimeOfDay());
+        world.setTime(config.getMainConfig().getTimeOfDay());
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {

@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -18,7 +19,7 @@ import org.bukkit.command.CommandSender;
 
 public class Players implements CommandExecutor {
     public String[] aliases = new String[] { "list", "who", "gamers" };
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "See the gamers and spectators online";
     private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();

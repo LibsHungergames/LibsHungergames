@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
@@ -13,7 +14,7 @@ public class Reply implements CommandExecutor {
     public String[] aliases = new String[] { "r", "respond" };
     private transient ChatManager chat = HungergamesApi.getChatManager();
     public String description = "Reply to a players private message";
-    private transient TranslationManager tm = HungergamesApi.getTranslationManager();
+    private transient TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 0) {

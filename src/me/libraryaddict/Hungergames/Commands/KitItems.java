@@ -3,8 +3,9 @@ package me.libraryaddict.Hungergames.Commands;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.NameManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
@@ -22,7 +23,7 @@ public class KitItems implements CommandExecutor {
     public String description = "View the items given with a kit";
     private final KitManager kits = HungergamesApi.getKitManager();
     private final NameManager name = HungergamesApi.getNameManager();
-    private final TranslationManager tm = HungergamesApi.getTranslationManager();
+    private final TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     private String itemToName(ItemStack item) {
         if (item == null)

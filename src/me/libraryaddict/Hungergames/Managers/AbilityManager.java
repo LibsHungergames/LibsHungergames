@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -21,7 +22,7 @@ public class AbilityManager {
 
     private HashMap<String, AbilityListener> abilities = new HashMap<String, AbilityListener>();
     private AbilityConfigManager abilityConfigManager = HungergamesApi.getAbilityConfigManager();
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
     private HashMap<String, List<String>> playerAbilities = new HashMap<String, List<String>>();
 
     public AbilityManager() {
@@ -36,7 +37,6 @@ public class AbilityManager {
      */
     public void addAbility(String name, AbilityListener abilityListener) {
         abilities.put(name, abilityListener);
-        System.out.print(String.format(cm.getLoggerAddAbility(), name));
     }
 
     public AbilityListener getAbility(String abilityName) {
@@ -58,12 +58,12 @@ public class AbilityManager {
     public void initializeAllAbilitiesInPackage(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
         YamlConfiguration config = abilityConfigManager.load(plugin);
-        System.out.print(String.format(cm.getLoggerLoadAbilitiesInPackage(), plugin.getName(), packageName));
+        System.out.print(String.format(cm.getLoadAbilitiesPackage(), plugin.getName(), packageName));
         for (Class abilityClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (AbilityListener.class.isAssignableFrom(abilityClass)) {
                 try {
                     if (abilities.containsKey(abilityClass.getSimpleName()))
-                        throw new Exception(cm.getLoggerAbilityAlreadyExists());
+                        throw new Exception(cm.getAbilityAlreadyExists());
                     // System.out.print(String.format(cm.getLoggerFoundAbilityInPackage(),
                     // abilityClass.getSimpleName()));
                     AbilityListener abilityListener = (AbilityListener) abilityClass.newInstance();
@@ -78,8 +78,8 @@ public class AbilityManager {
                     }
                     abilities.put(abilityClass.getSimpleName(), abilityListener);
                 } catch (Exception e) {
-                    System.out.print(String.format(cm.getLoggerErrorWhileLoadingAbility(), abilityClass.getSimpleName(),
-                            e.getMessage()));
+                    System.out
+                            .print(String.format(cm.getErrorWhileLoadingConfig(), abilityClass.getSimpleName(), e.getMessage()));
                 }
             }
         }
@@ -103,7 +103,7 @@ public class AbilityManager {
         if (abilityListener != null) {
             abilityListener.registerPlayer(player);
         } else
-            System.out.print(String.format(cm.getLoggerErrorWhileRegisteringPlayerForAbility(), player.getName(), abilityName));
+            System.out.print(String.format(cm.getErrorAbilityDoesntExist(), player.getName(), abilityName));
         getPlayerAbilities(player.getName()).add(abilityName);
     }
 

@@ -5,13 +5,15 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class RandomItem {
-    String addictionalData = "";
-    double chance;
+public class RandomItem implements java.io.Serializable {
+    private static final long serialVersionUID = 3915980470659471731L;
+    private String addictionalData = "";
+    private double chanceOfItemStackAppearing;
     // Chance is out of a hundred..
     // Goes to 0.01
-    short data;
-    int min, max, id;
+    private short itemData;
+    private Material itemType;
+    private int minItems, maxItems;
 
     /**
      * @param Chance
@@ -26,11 +28,11 @@ public class RandomItem {
      *            amount of the item
      */
     public RandomItem(double newChance, int newId, int newData, int newMin, int newMax) {
-        chance = newChance;
-        id = newId;
-        data = (short) newData;
-        min = newMin;
-        max = newMax;
+        chanceOfItemStackAppearing = newChance;
+        itemType = Material.getMaterial(newId);
+        itemData = (short) newData;
+        minItems = newMin;
+        maxItems = newMax;
     }
 
     /**
@@ -46,30 +48,11 @@ public class RandomItem {
      *            amount of the item
      */
     public RandomItem(double newChance, Material mat, int newData, int newMin, int newMax) {
-        chance = newChance;
-        id = mat.getId();
-        data = (short) newData;
-        min = newMin;
-        max = newMax;
-    }
-
-    public RandomItem(String string) {
-        try {
-            String[] split = string.split(" ");
-            chance = Double.parseDouble(split[0]);
-            try {
-                id = Material.getMaterial(split[3].toUpperCase()).getId();
-            } catch (Exception ex) {
-                id = Material.getMaterial(Integer.parseInt(split[3])).getId();
-            }
-            min = Integer.parseInt(split[1]);
-            max = Integer.parseInt(split[2]);
-            data = Short.parseShort(split[4]);
-            addictionalData = string.substring(
-                    split[0].length() + split[1].length() + split[2].length() + split[3].length() + split[4].length() + 4).trim();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        chanceOfItemStackAppearing = newChance;
+        itemType = mat;
+        itemData = (short) newData;
+        minItems = newMin;
+        maxItems = newMax;
     }
 
     /**
@@ -77,17 +60,19 @@ public class RandomItem {
      */
     public ItemStack getItemStack() {
         return HungergamesApi.getKitManager().parseItem(
-                id + " " + data + " " + (new Random().nextInt((max - min) + 1) + min) + " " + addictionalData)[0];
+                itemType + " " + itemData + " " + (new Random().nextInt((maxItems - minItems) + 1) + minItems) + " "
+                        + addictionalData)[0];
     }
 
     /**
      * @return Is the chance of being selected true?
      */
     public boolean hasChance() {
-        return (new Random().nextInt(10000) < chance * 100);
+        return (new Random().nextInt(10000) < chanceOfItemStackAppearing * 100);
     }
 
     public String toString() {
-        return (chance + " " + min + " " + max + " " + Material.getMaterial(id) + " " + data + " " + addictionalData).trim();
+        return (chanceOfItemStackAppearing + " " + minItems + " " + maxItems + " " + itemType + " " + itemData + " " + addictionalData)
+                .trim();
     }
 }

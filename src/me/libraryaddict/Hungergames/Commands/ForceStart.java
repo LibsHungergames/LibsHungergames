@@ -1,7 +1,8 @@
 package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
+
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;
@@ -11,7 +12,7 @@ import org.bukkit.command.CommandSender;
 
 public class ForceStart implements CommandExecutor {
     public String[] aliases = new String[] { "fstart" };
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Change the time until the game starts";
     private Hungergames hg = HungergamesApi.getHungergames();
 

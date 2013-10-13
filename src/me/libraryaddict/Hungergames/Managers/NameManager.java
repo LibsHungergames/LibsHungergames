@@ -15,7 +15,6 @@ public class NameManager {
 
     private YamlConfiguration config;
     private File configFile;
-    private TranslationManager tm = HungergamesApi.getTranslationManager();
 
     public NameManager() {
         configFile = new File(HungergamesApi.getHungergames().getDataFolder(), "names.yml");
@@ -54,7 +53,8 @@ public class NameManager {
     public void save() {
         try {
             if (!configFile.exists()) {
-                Bukkit.getLogger().info(tm.getLoggerCreatingNamesConfig());
+                System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getCreatingConfigFile(),
+                        "names"));
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
                 config.set("Material-ID-or-Name-In-UpperCase", "Name as you want it to display");

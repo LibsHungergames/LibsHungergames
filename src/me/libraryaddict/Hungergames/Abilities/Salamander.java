@@ -26,7 +26,8 @@ public class Salamander extends AbilityListener implements Disableable {
 
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
-        if (HungergamesApi.getHungergames().currentTime >= HungergamesApi.getConfigManager().getInvincibilityTime())
+        if (HungergamesApi.getHungergames().currentTime >= HungergamesApi.getConfigManager().getMainConfig()
+                .getTimeForInvincibility())
             for (Player p : getMyPlayers()) {
                 Material type = p.getLocation().getBlock().getType();
                 if (type == Material.WATER || type == Material.STATIONARY_WATER) {

@@ -51,16 +51,13 @@ public class InventoryManager {
 
     public ItemStack getKitSelector() {
         if (kitSelector == null) {
-            ItemStack item = HungergamesApi.getConfigManager().getKitSelectorIcon();
-            kitSelector = generateItem(item.getType(), item.getDurability(), getKitSelectorName(), HungergamesApi
-                    .getTranslationManager().getItemKitSelectorDescription());
+            ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorIcon();
+            kitSelector = generateItem(item.getType(), item.getDurability(), HungergamesApi.getConfigManager()
+                    .getTranslationsConfig().getItemKitSelectorName(), HungergamesApi.getConfigManager().getTranslationsConfig()
+                    .getItemKitSelectorDescription());
             kitSelector.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
         }
         return kitSelector;
-    }
-
-    public String getKitSelectorName() {
-        return HungergamesApi.getTranslationManager().getItemKitSelectorName();
     }
 
     public void openKitInventory(Player p) {

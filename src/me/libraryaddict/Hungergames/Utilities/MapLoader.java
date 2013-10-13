@@ -16,8 +16,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.MainConfig;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
-import me.libraryaddict.Hungergames.Managers.TranslationManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
@@ -143,7 +144,7 @@ public class MapLoader {
     }
 
     private static void loadMap(File mapDir, File dest, YamlConfiguration config) {
-        TranslationManager tm = HungergamesApi.getTranslationManager();
+        TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
         System.out.print(String.format(tm.getLoggerNowAttemptingToLoadAMap(), mapDir.toString()));
         List<File> maps = new ArrayList<File>();
         if (mapDir.exists()) {
@@ -159,15 +160,16 @@ public class MapLoader {
             File toLoad = maps.get(0);
             for (File f : toLoad.listFiles())
                 copy(f, dest);
-            System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerSucessfullyLoadedMap(),
+            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getSuccessfullyLoadedMap(),
                     toLoad.getName()));
         } else
-            System.out.print(String.format(HungergamesApi.getTranslationManager().getLoggerNoMapsFound(), mapDir.toString()));
+            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getNoMapsFound(),
+                    mapDir.toString()));
     }
 
     private static void loadMapConfiguration(File worldConfig) {
-        ConfigManager configManager = HungergamesApi.getConfigManager();
-        TranslationManager tm = HungergamesApi.getTranslationManager();
+        MainConfig configManager = HungergamesApi.getConfigManager().getMainConfig();
+        TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
         try {
             System.out.print(tm.getLoggerMapConfigNowLoading());
             YamlConfiguration config = null;
@@ -188,11 +190,11 @@ public class MapLoader {
             } else
                 configManager.setRoundedBorder(defaultConfig.getBoolean("RoundedBorder"));
             if (config != null && config.contains("BorderCloseInRate")) {
-                configManager.setBorderCloseInRate(config.getDouble("BorderCloseInRate"));
+                configManager.setAmountBorderClosesInPerSecond(config.getDouble("BorderCloseInRate"));
                 System.out.print(String.format(tm.getLoggerMapConfigChangedBorderCloseInRate(),
                         config.getDouble("BorderCloseInRate")));
             } else
-                configManager.setBorderCloseInRate(defaultConfig.getDouble("BorderCloseInRate"));
+                configManager.setAmountBorderClosesInPerSecond(defaultConfig.getDouble("BorderCloseInRate"));
             if (config != null && config.contains("TimeOfDayWhenGameStarts")) {
                 configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
                 System.out

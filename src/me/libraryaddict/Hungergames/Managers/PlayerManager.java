@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -38,7 +39,7 @@ public class PlayerManager {
         return start + (int) (Math.random() * ((end - start) + 1));
     }
 
-    private TranslationManager cm = HungergamesApi.getTranslationManager();
+    private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     private ConcurrentLinkedQueue<Gamer> gamers = new ConcurrentLinkedQueue<Gamer>();
     private Hungergames hg = HungergamesApi.getHungergames();
     private KitManager kits = HungergamesApi.getKitManager();
@@ -183,8 +184,8 @@ public class PlayerManager {
             if (entity instanceof Creature && ((Creature) entity).getTarget() == p)
                 ((Creature) entity).setTarget(null);
         }
-        if (HungergamesApi.getConfigManager().isKickOnDeath() && !p.hasPermission("hungergames.spectate"))
-            p.kickPlayer(String.format(HungergamesApi.getTranslationManager().getKickDeathMessage(), event.getDeathMessage()));
+        if (HungergamesApi.getConfigManager().getMainConfig().isKickOnDeath() && !p.hasPermission("hungergames.spectate"))
+            p.kickPlayer(String.format(cm.getKickDeathMessage(), event.getDeathMessage()));
         HungergamesApi.getAbilityManager().unregisterPlayer(p);
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
     }
