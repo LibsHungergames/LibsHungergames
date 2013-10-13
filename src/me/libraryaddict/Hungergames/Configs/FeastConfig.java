@@ -63,13 +63,13 @@ public class FeastConfig extends BaseConfig {
      */
     private ArrayList<RandomItem> randomItems = HungergamesApi.getChestManager().getRandomItems();
     /**
-     * Strings to add to the scoreboard
-     */
-    private HashMap<Integer, String> scoreboardStrings = new HashMap<Integer, String>();
-    /**
      * Something something scoreboard countdown feast
      */
     private String scoreboardFeastStartingIn;
+    /**
+     * Strings to add to the scoreboard
+     */
+    private HashMap<Integer, String> scoreboardStrings = new HashMap<Integer, String>();
 
     public FeastConfig() {
         super("feast");

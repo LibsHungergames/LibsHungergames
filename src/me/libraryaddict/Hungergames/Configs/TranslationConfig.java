@@ -265,6 +265,13 @@ public class TranslationConfig extends BaseConfig {
             + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
     private transient boolean newFile = false;
 
+    private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
+    private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
+    private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in:";
+    private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible:";
+    private String scoreboardPlayersLength = ChatColor.GREEN + "Players:";
+    private String scoreboardStagePreGame = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pregame";
+    private HashMap<Integer, String> scoreboardStages = new HashMap<Integer, String>();
     private String selectKitInventoryTitle = ChatColor.DARK_RED + "Select Kit";
     private String spectatorHeadKills = ChatColor.GREEN + "Kills: " + ChatColor.BLUE + "%s";
     private String spectatorHeadKit = ChatColor.GREEN + "Kit: " + ChatColor.BLUE + "%s";
@@ -289,13 +296,6 @@ public class TranslationConfig extends BaseConfig {
     private String timeFormatSeconds = "%s seconds";
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
-    private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
-    private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
-    private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in:";
-    private String scoreboardInvincibleRemaining = ChatColor.GOLD + "Invincible:";
-    private String scoreboardPlayersLength = ChatColor.GREEN + "Players:";
-    private String scoreboardStagePreGame = ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Pregame";
-    private HashMap<Integer, String> scoreboardStages = new HashMap<Integer, String>();
 
     public TranslationConfig() {
         super("translations");

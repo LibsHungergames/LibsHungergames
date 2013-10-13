@@ -16,14 +16,14 @@ public class ScoreboardManager {
     private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
     private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
 
+    public static void addStage(int timeToActivate, String display) {
+        stages.put(timeToActivate, display);
+    }
+
     public static void doStage() {
         if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
             setDisplayName("Main", DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
         }
-    }
-
-    public static void addStage(int timeToActivate, String display) {
-        stages.put(timeToActivate, display);
     }
 
     public static Objective getObjective(Scoreboard board, DisplaySlot slot) {
