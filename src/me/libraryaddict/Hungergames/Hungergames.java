@@ -91,16 +91,12 @@ public class Hungergames extends JavaPlugin {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         String kick = String.format(cm.getKickMessageWon(), winner.getName());
-                        for (Player p : Bukkit.getOnlinePlayers())
-                            p.kickPlayer(kick);
-                        shutdown();
+                        shutdown(kick);
                     }
                 }, config.getGameShutdownDelay() * 20);
             } else if (aliveGamers.size() == 0) {
                 doSeconds = false;
-                for (Player p : Bukkit.getOnlinePlayers())
-                    p.kickPlayer(cm.getKickNobodyWonMessage());
-                shutdown();
+                shutdown(cm.getKickNobodyWonMessage());
             }
         }
     }
@@ -399,13 +395,16 @@ public class Hungergames extends JavaPlugin {
         return String.format(cm.getTimeFormatSecondsAndMinutes(), minutes, seconds);
     }
 
-    public void shutdown() {
+    public void shutdown(String messageToKickWith) {
         System.out.print(cm.getLoggerShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             for (String command : config.getCommandsToRunBeforeShutdown())
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.kickPlayer(messageToKickWith);
+            }
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
         } else
             System.out.print(cm.getLoggerShutdownCancelled());
