@@ -334,9 +334,6 @@ public class Hungergames extends JavaPlugin {
 
     private void onSecond() {
         currentTime++;
-        for (Gamer gamer : pm.getGamers()) {
-            this.doBorder(gamer);
-        }
         if (currentTime < 0) {
             world.setTime(0);
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR,
@@ -359,6 +356,9 @@ public class Hungergames extends JavaPlugin {
                     config.getMainConfig().getBorderSize() - config.getMainConfig().getAmountBorderClosesInPerSecond());
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getTranslationsConfig().getScoreboardBorderSize(),
                     (int) config.getMainConfig().getBorderSize());
+        }
+        for (Gamer gamer : pm.getGamers()) {
+            this.doBorder(gamer);
         }
         if (config.getMainConfig().getTimeForInvincibility() > 0
                 && currentTime <= config.getMainConfig().getTimeForInvincibility() && currentTime >= 0) {

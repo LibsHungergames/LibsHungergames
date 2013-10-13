@@ -2,8 +2,6 @@ package me.libraryaddict.Hungergames.Configs;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,9 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import me.libraryaddict.Hungergames.Hungergames;
-import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Managers.ReflectionManager;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 
