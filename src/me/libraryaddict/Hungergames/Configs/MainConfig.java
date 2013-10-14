@@ -31,7 +31,7 @@ public class MainConfig extends BaseConfig {
     /**
      * The border size
      */
-    private double borderSize = 300;
+    private double borderSize = 500;
     /**
      * What time does the border start closing in
      */

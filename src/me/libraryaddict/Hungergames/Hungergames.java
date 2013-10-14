@@ -161,8 +161,9 @@ public class Hungergames extends JavaPlugin {
                         pm.killPlayer(gamer, null, loc, gamer.getInventory(),
                                 String.format(config.getTranslationsConfig().getKillMessageKilledByBorder(), gamer.getName()));
                     }
-                } else if (border > 10)
+                } else if (border > 10) {
                     gamer.getPlayer().teleport(tpTo);
+                }
             }
         }
     }
@@ -292,7 +293,7 @@ public class Hungergames extends JavaPlugin {
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
                 generateChunks();
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
-                    ItemStack spawnGround = config.getFeastConfig().getFeastGroundBlock();
+                    ItemStack spawnGround = mapConfiguration.getItemStack("SpawnPlatformBlock");
                     GenerationManager gen = HungergamesApi.getGenerationManager();
                     int platformHeight = gen.getSpawnHeight(world.getSpawnLocation(),
                             mapConfiguration.getInt("SpawnPlatformSize"));

@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
@@ -102,24 +104,8 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
-            if (!config.contains("SpawnPlatformIDandData")) {
-                config.set("SpawnPlatformIDandData", "GRASS 0");
-                config.save(mapConfig);
-            }
-            if (!config.contains("RoundedBorder")) {
-                config.set("RoundedBorder", false);
-                config.save(mapConfig);
-            }
-            if (!config.contains("BorderSize")) {
-                config.set("BorderSize", 500);
-                config.save(mapConfig);
-            }
-            if (!config.contains("BorderCloseInRate")) {
-                config.set("BorderCloseInRate", 0.2);
-                config.save(mapConfig);
-            }
-            if (!config.contains("TimeOfDayWhenGameStarts")) {
-                config.set("TimeOfDayWhenGameStarts", 0);
+            if (!config.contains("SpawnPlatformBlock")) {
+                config.set("SpawnPlatformBlock", new ItemStack(Material.GRASS, 1, (short) 0));
                 config.save(mapConfig);
             }
             if (!config.contains("GenerateChunksBackground")) {
@@ -176,28 +162,22 @@ public class MapLoader {
                 System.out.print(tm.getMapConfigNotFound());
             } else
                 config = YamlConfiguration.loadConfiguration(worldConfig);
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new File(HungergamesApi.getHungergames()
-                    .getDataFolder(), "map.yml"));
             if (config != null && config.contains("BorderSize")) {
                 configManager.setBorderSize(config.getInt("BorderSize"));
                 System.out.print(String.format(tm.getMapConfigChangedBorderSize(), config.getInt("BorderSize")));
-            } else
-                configManager.setBorderSize(defaultConfig.getInt("BorderSize"));
+            }
             if (config != null && config.contains("RoundedBorder")) {
                 configManager.setRoundedBorder(config.getBoolean("RoundedBorder"));
                 System.out.print(String.format(tm.getMapConfigChangedRoundedBorder(), config.getBoolean("RoundedBorder")));
-            } else
-                configManager.setRoundedBorder(defaultConfig.getBoolean("RoundedBorder"));
+            }
             if (config != null && config.contains("BorderCloseInRate")) {
                 configManager.setAmountBorderClosesInPerSecond(config.getDouble("BorderCloseInRate"));
                 System.out.print(String.format(tm.getMapConfigChangedBorderCloseInRate(), config.getDouble("BorderCloseInRate")));
-            } else
-                configManager.setAmountBorderClosesInPerSecond(defaultConfig.getDouble("BorderCloseInRate"));
+            }
             if (config != null && config.contains("TimeOfDayWhenGameStarts")) {
                 configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
                 System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
-            } else
-                configManager.setTimeOfDay(defaultConfig.getInt("TimeOfDayWhenGameStarts"));
+            }
             File spawnsFile = new File(worldConfig.getParentFile(), "spawns.yml");
             System.out.print(tm.getLoadSpawnsConfig());
             if (spawnsFile.exists()) {
