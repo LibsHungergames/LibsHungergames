@@ -16,10 +16,10 @@ import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.DisguiseTypes.Disguise;
-import me.libraryaddict.disguise.DisguiseTypes.PlayerDisguise;
-import me.libraryaddict.disguise.Events.DisguiseEvent;
-import me.libraryaddict.disguise.Events.UndisguiseEvent;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import me.libraryaddict.disguise.events.DisguiseEvent;
+import me.libraryaddict.disguise.events.UndisguiseEvent;
 
 public class Skinner extends AbilityListener implements Disableable {
     public int chanceInOneOfSkinning = 3;

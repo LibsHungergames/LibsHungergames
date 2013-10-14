@@ -13,8 +13,8 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.DisguiseTypes.DisguiseType;
-import me.libraryaddict.disguise.DisguiseTypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 
 public class Pussy extends AbilityListener implements Disableable {
     private transient HashMap<Player, Integer> pussys = new HashMap<Player, Integer>();
