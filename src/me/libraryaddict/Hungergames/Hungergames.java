@@ -85,7 +85,7 @@ public class Hungergames extends JavaPlugin {
                     public void run() {
                         Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName()));
                     }
-                }, mainConfig.getWonBroadcastsDelay() * 20, 0);
+                }, 0, mainConfig.getWonBroadcastsDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
                     public void run() {
                         String kick = String.format(translationsConfig.getKickMessageWon(), winner.getName());
