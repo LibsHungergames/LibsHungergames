@@ -15,12 +15,14 @@ public class ScoreboardManager {
     private static HashMap<String, Scoreboard> boards = new HashMap<String, Scoreboard>();
     private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
 
-    public static void addStage(int timeToActivate, String display) {
+    public static void registerStage(int timeToActivate, String display) {
         stages.put(timeToActivate, display);
     }
 
     public static void doStage() {
+        System.out.print("1");
         if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
+            System.out.print("1");
             setDisplayName("Main", DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
         }
     }
@@ -58,10 +60,6 @@ public class ScoreboardManager {
             if (scoreboard.getScore() != score)
                 scoreboard.setScore(score);
         }
-    }
-
-    public static void registerStage(int time, String displayName) {
-
     }
 
     public static void resetScoreboard(String scoreboardName) {

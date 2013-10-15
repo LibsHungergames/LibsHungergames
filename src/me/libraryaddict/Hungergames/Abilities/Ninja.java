@@ -49,16 +49,16 @@ public class Ninja extends AbilityListener implements Disableable {
         };
     }
 
-    private void registerScheduler() {
-        int timeTillNextSwitch = (int) (12000 - (HungergamesApi.getHungergames().world.getTime() % 12000));
-        scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(),
-                timeTillNextSwitch, 12000);
-    }
-
     public void registerPlayer(Player player) {
         super.registerPlayer(player);
         if (scheduler < 0 && HungergamesApi.getHungergames().currentTime >= 0)
             registerScheduler();
+    }
+
+    private void registerScheduler() {
+        int timeTillNextSwitch = (int) (12000 - (HungergamesApi.getHungergames().world.getTime() % 12000));
+        scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), getRunnable(),
+                timeTillNextSwitch, 12000);
     }
 
     public void unregisterPlayer(Player player) {

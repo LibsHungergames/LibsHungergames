@@ -46,8 +46,6 @@ public class Hungergames extends JavaPlugin {
     }
 
     public boolean chunksGenerating = true;
-    private MainConfig mainConfig;
-    private TranslationConfig translationsConfig;
     /**
      * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
      * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
@@ -61,9 +59,11 @@ public class Hungergames extends JavaPlugin {
      */
     public boolean doSeconds = true;
     public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
+    private MainConfig mainConfig;
     private Metrics metrics;
     private PlayerListener playerListener;
     private PlayerManager pm;
+    private TranslationConfig translationsConfig;
     public World world;
 
     public void cannon() {
