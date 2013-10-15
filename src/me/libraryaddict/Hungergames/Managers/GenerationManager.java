@@ -142,12 +142,12 @@ public class GenerationManager {
             }
         }
         if (found.size() == 0)
-            return -1;
+            return 0;
         return found.get((int) Math.round(found.size() / 3));
     }
 
     private Block getHighest(Block b) {
-        while (b.getY() > 1 && !isSolid(b))
+        while (b.getY() > 0 && !isSolid(b))
             b = b.getRelative(BlockFace.DOWN);
         return b;
     }
