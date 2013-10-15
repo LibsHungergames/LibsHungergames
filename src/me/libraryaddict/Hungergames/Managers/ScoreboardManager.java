@@ -1,7 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
 import java.util.HashMap;
-import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.bukkit.Bukkit;

@@ -1,6 +1,5 @@
 package me.libraryaddict.Hungergames.Commands;
 
-import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 
@@ -18,7 +17,6 @@ public class GoTo implements CommandExecutor {
     public String[] aliases = new String[] { "watch" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "A command for spectators to teleport to people";
-    private Hungergames hg = HungergamesApi.getHungergames();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

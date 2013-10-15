@@ -6,7 +6,6 @@ import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Managers.GenerationManager;
 
-import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,7 +17,6 @@ import org.bukkit.entity.Player;
 public class ForceFeast implements CommandExecutor {
     public String[] aliases = new String[] { "ffeast" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
-    private ConfigManager config = HungergamesApi.getConfigManager();
     public String description = "Force a feast to generate at your feet";
     private Hungergames hg = HungergamesApi.getHungergames();
 

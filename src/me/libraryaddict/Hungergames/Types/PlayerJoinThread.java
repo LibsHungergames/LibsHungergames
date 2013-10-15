@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
-import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;

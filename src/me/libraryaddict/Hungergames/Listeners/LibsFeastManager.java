@@ -2,7 +2,6 @@ package me.libraryaddict.Hungergames.Listeners;
 
 import java.util.Random;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import me.libraryaddict.Hungergames.Configs.FeastConfig;

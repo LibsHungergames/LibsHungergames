@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
-import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
 

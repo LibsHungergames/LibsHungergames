@@ -5,7 +5,6 @@ import java.io.IOException;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;

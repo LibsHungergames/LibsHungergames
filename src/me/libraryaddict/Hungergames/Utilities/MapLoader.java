@@ -20,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.MainConfig;
-import me.libraryaddict.Hungergames.Configs.TranslationConfig;
-import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {

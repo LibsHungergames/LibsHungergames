@@ -10,7 +10,6 @@ import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
 import me.libraryaddict.Hungergames.Events.PrivateMessageEvent;
 import me.libraryaddict.Hungergames.Managers.ChatManager;
 import me.libraryaddict.Hungergames.Managers.NameManager;
-import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.InventoryManager;
