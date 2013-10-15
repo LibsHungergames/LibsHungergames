@@ -31,7 +31,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 public class LibsFeastManager implements Listener {
     @Getter
     @Setter
-    private static LibsFeastManager feastManager;
+    private static LibsFeastManager feastManager = new LibsFeastManager();
 
     protected FeastConfig config = HungergamesApi.getConfigManager().getFeastConfig();
     protected Location feastLocation;
