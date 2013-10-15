@@ -9,9 +9,12 @@ public class ConfigManager {
     private LoggerConfig loggerConfig = new LoggerConfig();
     private MainConfig mainConfig = new MainConfig();
     private TranslationConfig translationsConfig = new TranslationConfig();
+    private MySqlConfig mySqlConfig = new MySqlConfig();
+    private WinnersConfig winnersConfig = new WinnersConfig();
 
     public void loadConfigs() {
-        for (BaseConfig config : new BaseConfig[] { mainConfig, translationsConfig, loggerConfig, feastConfig }) {
+        for (BaseConfig config : new BaseConfig[] { mainConfig, translationsConfig, loggerConfig, feastConfig, mySqlConfig,
+                winnersConfig }) {
             try {
                 config.load();
                 config.loadConfig();

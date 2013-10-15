@@ -27,6 +27,8 @@
 */
 package me.libraryaddict.Hungergames;
 
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -528,7 +530,7 @@ public class Metrics {
      */
     public boolean isOptOut() {
         synchronized (optOutLock) {
-            return plugin.getConfig().getBoolean("DisableMetrics", false);
+            return !HungergamesApi.getConfigManager().getMainConfig().isMetricsEnabled();
         }
     }
 

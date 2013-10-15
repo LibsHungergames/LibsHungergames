@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import me.libraryaddict.Hungergames.Configs.MySqlConfig;
+
 public class GiveKitThread extends Thread {
     private Connection con = null;
     private String kitName;
@@ -16,12 +18,11 @@ public class GiveKitThread extends Thread {
     }
 
     public void mySqlConnect() {
+        MySqlConfig config = HungergamesApi.getConfigManager().getMySqlConfig();
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String conn = "jdbc:mysql://" + HungergamesApi.getMySqlManager().SQL_HOST + "/"
-                    + HungergamesApi.getMySqlManager().SQL_DATA;
-            con = DriverManager.getConnection(conn, HungergamesApi.getMySqlManager().SQL_USER,
-                    HungergamesApi.getMySqlManager().SQL_PASS);
+            String conn = "jdbc:mysql://" + config.getMysql_host() + "/" + config.getMysql_database();
+            con = DriverManager.getConnection(conn, config.getMysql_username(), config.getMysql_password());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

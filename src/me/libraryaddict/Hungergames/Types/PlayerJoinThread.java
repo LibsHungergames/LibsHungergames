@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
+import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
@@ -38,15 +39,11 @@ public class PlayerJoinThread extends Thread {
 
     public void mySqlConnect() {
         try {
-            MySqlManager mysql = HungergamesApi.getMySqlManager();
             System.out.println(String.format(cm.getMySqlConnecting(), getClass().getSimpleName()));
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String conn = "jdbc:mysql://" + mysql.SQL_HOST/*
-                                                           * + ":" +
-                                                           * this.SQL_PORT
-                                                           */
-                    + "/" + mysql.SQL_DATA;
-            con = DriverManager.getConnection(conn, mysql.SQL_USER, mysql.SQL_PASS);
+            MySqlConfig config = HungergamesApi.getConfigManager().getMySqlConfig();
+            String conn = "jdbc:mysql://" + config.getMysql_host() + "/" + config.getMysql_database();
+            con = DriverManager.getConnection(conn, config.getMysql_username(), config.getMysql_password());
         } catch (Exception ex) {
             System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }

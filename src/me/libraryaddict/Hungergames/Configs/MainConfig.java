@@ -211,6 +211,14 @@ public class MainConfig extends BaseConfig {
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
     private int z;
+    /**
+     * Does the plugin check for updates..
+     */
+    private boolean checkUpdates = true;
+    /**
+     * Command to stop the server with
+     */
+    private String commandToStopTheServerWith = "stop";
 
     public MainConfig() {
         super("config");
@@ -293,7 +301,7 @@ public class MainConfig extends BaseConfig {
         }
         Hungergames hg = HungergamesApi.getHungergames();
         currentVersion = "v" + hg.getDescription().getVersion();
-        if (hg.getConfig().getBoolean("CheckUpdates"))
+        if (checkUpdates)
             Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
                 public void run() {
                     try {

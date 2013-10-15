@@ -229,8 +229,8 @@ public class Hungergames extends JavaPlugin {
     }
 
     public int getPrize(int pos) {
-        if (getConfig().contains("Winner" + pos))
-            return getConfig().getInt("Winner" + pos, 0);
+        if (HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().containsKey(pos))
+            return HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().get(pos);
         return 0;
     }
 
@@ -261,10 +261,6 @@ public class Hungergames extends JavaPlugin {
         mainConfig = config.getMainConfig();
         pm = HungergamesApi.getPlayerManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
-        mysql.SQL_DATA = getConfig().getString("MySqlDatabase");
-        mysql.SQL_HOST = getConfig().getString("MySqlUrl");
-        mysql.SQL_PASS = getConfig().getString("MySqlPass");
-        mysql.SQL_USER = getConfig().getString("MySqlUser");
         mysql.startJoinThread();
         MapLoader.loadMap();
         try {
@@ -408,7 +404,7 @@ public class Hungergames extends JavaPlugin {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.kickPlayer(messageToKickWith);
             }
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getConfig().getString("StopServerCommand"));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), mainConfig.getCommandToStopTheServerWith());
         } else
             System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getShutdownCancelled());
     }
