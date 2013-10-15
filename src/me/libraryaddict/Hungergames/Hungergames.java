@@ -347,6 +347,7 @@ public class Hungergames extends JavaPlugin {
                 Bukkit.broadcastMessage(translationsConfig.getBroadcastNotEnoughPlayers());
             } else {
                 startGame();
+                return;
             }
         } else if (mainConfig.getAmountBorderClosesInPerSecond() > 0 && currentTime > mainConfig.getBorderStartsClosingIn()) {
             mainConfig.setBorderSize(mainConfig.getBorderSize() - mainConfig.getAmountBorderClosesInPerSecond());
@@ -446,8 +447,6 @@ public class Hungergames extends JavaPlugin {
             gamer.setAlive(true);
             pm.sendToSpawn(gamer);
         }
-        for (Gamer gamer : pm.getGamers())
-            gamer.updateSelfToOthers();
         world.setGameRuleValue("doDaylightCycle", "true");
         world.setTime(mainConfig.getTimeOfDay());
         world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
@@ -466,5 +465,6 @@ public class Hungergames extends JavaPlugin {
         });
         checkWinner();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
+        ScoreboardManager.doStage();
     }
 }
