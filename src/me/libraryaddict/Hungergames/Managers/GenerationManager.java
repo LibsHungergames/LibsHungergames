@@ -19,9 +19,14 @@ public class GenerationManager {
     private class BlockInfo {
         byte data;
 
-        int id;
+        Material id;
 
         public BlockInfo(int id, byte data) {
+            this.id = Material.getMaterial(id);
+            this.data = data;
+        }
+
+        public BlockInfo(Material id, byte data) {
             this.id = id;
             this.data = data;
         }
@@ -224,9 +229,13 @@ public class GenerationManager {
     }
 
     public void setBlockFast(Block b, int typeId, short s) {
+        setBlockFast(b, Material.getMaterial(typeId), s);
+    }
+
+    public void setBlockFast(Block b, Material type, short s) {
         try {
-            if (b.getTypeId() != typeId || b.getData() != s) {
-                queued.put(b, new BlockInfo(typeId, (byte) s));
+            if (b.getType() != type || b.getData() != s) {
+                queued.put(b, new BlockInfo(type, (byte) s));
                 if (runnable == null) {
                     runnable = new BukkitRunnable() {
                         public void run() {
@@ -240,7 +249,7 @@ public class GenerationManager {
                             for (Block b : queued.keySet()) {
                                 if (i++ >= 200)
                                     break;
-                                if (b.getTypeId() == queued.get(b).id && b.getData() == queued.get(b).data)
+                                if (b.getType() == queued.get(b).id && b.getData() == queued.get(b).data)
                                     i--;
                                 toDo.put(b, queued.get(b));
                                 b = b.getRelative(BlockFace.UP);
@@ -257,7 +266,9 @@ public class GenerationManager {
                                     processedBlocks.add(b);
                                 queued.remove(b);
                                 removeLeaves(b);
-                                b.setTypeIdAndData(toDo.get(b).id, toDo.get(b).data, true);
+                                if (!b.getChunk().isLoaded())
+                                    b.getChunk().load();
+                                b.setTypeIdAndData(toDo.get(b).id.getId(), toDo.get(b).data, true);
                             }
                         }
                     };
@@ -270,5 +281,4 @@ public class GenerationManager {
             ex.printStackTrace();
         }
     }
-
 }
