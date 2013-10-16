@@ -233,7 +233,8 @@ public class Gamer {
                         && player.getPlayerListName().length() <= 14)
                     player.setPlayerListName(ChatColor.GRAY + player.getPlayerListName());
                 seeInvis(true);
-                player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
+                if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
+                    player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);

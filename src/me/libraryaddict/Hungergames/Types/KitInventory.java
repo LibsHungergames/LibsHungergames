@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitInventory extends PageInventory {
 
     public KitInventory(Player player) {
-        super(player, HungergamesApi.getConfigManager().getMainConfig().isKitSelectorSizeDymanic());
+        super(player, HungergamesApi.getConfigManager().getMainConfig().isKitSelectorSizeDynamic());
         maxInvSize = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorInventorySize();
         title = tm.getSelectKitInventoryTitle();
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
