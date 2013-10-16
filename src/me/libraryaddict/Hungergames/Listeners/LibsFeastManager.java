@@ -34,7 +34,7 @@ public class LibsFeastManager implements Listener {
     private static LibsFeastManager feastManager = new LibsFeastManager();
     protected FeastConfig config = HungergamesApi.getConfigManager().getFeastConfig();
     protected Location feastLocation;
-    protected GenerationManager gen;
+    protected GenerationManager gen = HungergamesApi.getGenerationManager();
     private boolean isEnabled;
 
     /**
