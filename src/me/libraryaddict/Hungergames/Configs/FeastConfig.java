@@ -29,7 +29,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * Is the feast enabled or not
      */
-    private boolean feastEnabled;
+    private boolean feastEnabled = true;
     /**
      * The blocks that generate along with the chests and the feast insides. This covers the feast insides
      */
@@ -65,7 +65,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * Something something scoreboard countdown feast
      */
-    private String scoreboardFeastStartingIn;
+    private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in";
     /**
      * Strings to add to the scoreboard
      */
