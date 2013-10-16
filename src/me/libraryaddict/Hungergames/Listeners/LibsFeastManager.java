@@ -37,16 +37,6 @@ public class LibsFeastManager implements Listener {
     protected GenerationManager gen;
     private boolean isEnabled;
 
-    public LibsFeastManager() {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-            public void run() {
-                Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
-                feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
-                        + (new Random().nextInt(200) - 100));
-            }
-        }, 3);
-    }
-
     /**
      * Generates the chests. Height is the amount of chests. There will be a enchanting table on top of this putting the total at
      * 4 blocks high.
@@ -106,6 +96,11 @@ public class LibsFeastManager implements Listener {
     }
 
     public Location getFeastLocation() {
+        if (feastLocation == null) {
+            Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
+            feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
+                    + (new Random().nextInt(200) - 100));
+        }
         return feastLocation;
     }
 
