@@ -32,16 +32,19 @@ public class LibsFeastManager implements Listener {
     @Getter
     @Setter
     private static LibsFeastManager feastManager = new LibsFeastManager();
-
     protected FeastConfig config = HungergamesApi.getConfigManager().getFeastConfig();
     protected Location feastLocation;
     protected GenerationManager gen;
     private boolean isEnabled;
 
     public LibsFeastManager() {
-        Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
-        feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
-                + (new Random().nextInt(200) - 100));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+            public void run() {
+                Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
+                feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(200) - 100), -1, spawn.getZ()
+                        + (new Random().nextInt(200) - 100));
+            }
+        }, 3);
     }
 
     /**
