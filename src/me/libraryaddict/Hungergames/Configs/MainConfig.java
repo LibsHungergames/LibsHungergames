@@ -72,7 +72,7 @@ public class MainConfig extends BaseConfig {
     /**
      * Does the kit selector change its size to fit the kits
      */
-    private boolean isKitSelectorSizeDymanic = true;
+    private boolean isKitSelectorSizeDynamic = true;
     /**
      * Is there a kick on death
      */
