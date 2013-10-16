@@ -108,22 +108,25 @@ public class LibsFeastManager implements Listener {
     public void onSecond(TimeSecondEvent event) {
         int currentTime = HungergamesApi.getHungergames().currentTime;
         if (config.getFeastAdvertisements().containsKey(currentTime)) {
-            Bukkit.broadcastMessage(String.format(config.getFeastAdvertisements().get(currentTime), feastLocation.getX(),
-                    feastLocation.getY(), feastLocation.getZ(), HungergamesApi.getHungergames().returnTime(currentTime)));
+            Bukkit.broadcastMessage(String
+                    .format(config.getFeastAdvertisements().get(currentTime), getFeastLocation().getX(), getFeastLocation()
+                            .getY(), getFeastLocation().getZ(), HungergamesApi.getHungergames().returnTime(currentTime)));
         }
         if (config.getScoreboardStrings().containsKey(currentTime)) {
             ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, config.getScoreboardStrings().get(currentTime));
         }
         if (currentTime == config.getFeastPlatformGenerateTime()) {
-            feastLocation.setY(feastLocation.getWorld().getHighestBlockYAt(feastLocation.getBlockX(), feastLocation.getBlockZ()));
-            int feastHeight = gen.getSpawnHeight(feastLocation, config.getFeastSize());
-            generatePlatform(feastLocation, config.getChestLayersHeight(), feastHeight);
+            Location feastLoc = getFeastLocation();
+            feastLoc.setY(feastLoc.getWorld().getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
+            setFeastLocation(feastLoc);
+            int feastHeight = gen.getSpawnHeight(getFeastLocation(), config.getFeastSize());
+            generatePlatform(getFeastLocation(), config.getChestLayersHeight(), feastHeight);
             HungergamesApi.getInventoryManager().updateSpectatorHeads();
             Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
         }
         if (currentTime == config.getFeastGenerateTime()) {
             ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn());
-            generateChests(feastLocation, config.getChestLayersHeight());
+            generateChests(getFeastLocation(), config.getChestLayersHeight());
             World world = HungergamesApi.getHungergames().world;
             world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
