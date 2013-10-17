@@ -8,8 +8,8 @@ public class ConfigManager {
     private FeastConfig feastConfig = new FeastConfig();
     private LoggerConfig loggerConfig = new LoggerConfig();
     private MainConfig mainConfig = new MainConfig();
-    private TranslationConfig translationsConfig = new TranslationConfig();
     private MySqlConfig mySqlConfig = new MySqlConfig();
+    private TranslationConfig translationsConfig = new TranslationConfig();
     private WinnersConfig winnersConfig = new WinnersConfig();
 
     public void loadConfigs() {

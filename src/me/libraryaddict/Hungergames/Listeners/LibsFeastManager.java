@@ -93,6 +93,8 @@ public class LibsFeastManager implements Listener {
     public void generatePlatform(Location loc, int chestLayers, int platformSize) {
         ItemStack item = HungergamesApi.getConfigManager().getFeastConfig().getFeastGroundBlock();
         gen.generatePlatform(loc, chestLayers, platformSize, item.getType(), item.getDurability());
+        gen.generatePillars(loc, platformSize, config.getPillarCorners().getTypeId(), config.getPillarCorners().getDurability(),
+                config.getPillarInsides().getTypeId(), config.getPillarInsides().getDurability());
     }
 
     public Location getFeastLocation() {

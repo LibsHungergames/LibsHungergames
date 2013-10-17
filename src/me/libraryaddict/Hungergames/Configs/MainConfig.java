@@ -37,10 +37,18 @@ public class MainConfig extends BaseConfig {
      */
     private int borderStartsClosingIn = 20 * 60;
     /**
+     * Does the plugin check for updates..
+     */
+    private boolean checkUpdates = true;
+    /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
+    /**
+     * Command to stop the server with
+     */
+    private String commandToStopTheServerWith = "stop";
     /**
      * The current version of the plugin
      */
@@ -80,7 +88,7 @@ public class MainConfig extends BaseConfig {
     /**
      * What item do I use for the kit selectors back button
      */
-    private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);
+    private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);;
     /**
      * Do I give the players a kit selector when they join the game
      */
@@ -88,7 +96,7 @@ public class MainConfig extends BaseConfig {
     /**
      * What item do I use for the kit selectors forward button
      */
-    private ItemStack kitSelectorForward = new ItemStack(Material.SIGN);;
+    private ItemStack kitSelectorForward = new ItemStack(Material.SIGN);
     /**
      * What item opens the kit selector menu
      */
@@ -211,14 +219,6 @@ public class MainConfig extends BaseConfig {
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
     private int z;
-    /**
-     * Does the plugin check for updates..
-     */
-    private boolean checkUpdates = true;
-    /**
-     * Command to stop the server with
-     */
-    private String commandToStopTheServerWith = "stop";
 
     public MainConfig() {
         super("config");

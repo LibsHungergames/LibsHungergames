@@ -59,6 +59,18 @@ public class FeastConfig extends BaseConfig {
      */
     private int feastSize = 20;
     /**
+     * The block the pillar corners should be
+     */
+    private ItemStack pillarCorners = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 1);
+    /**
+     * The block the pillars insides should be
+     */
+    private ItemStack pillarInsides = new ItemStack(Material.GLASS);
+    /**
+     * Are pillars enabled
+     */
+    private boolean pillarsEnabled = true;
+    /**
      * The loot in the feasts chests
      */
     private ArrayList<RandomItem> randomItems = HungergamesApi.getChestManager().getRandomItems();
