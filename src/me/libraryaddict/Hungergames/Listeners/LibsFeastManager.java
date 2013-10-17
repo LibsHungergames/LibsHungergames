@@ -118,10 +118,10 @@ public class LibsFeastManager implements Listener {
         }
         if (currentTime == config.getFeastPlatformGenerateTime()) {
             Location feastLoc = getFeastLocation();
-            feastLoc.setY(feastLoc.getWorld().getHighestBlockYAt(feastLoc.getBlockX(), feastLoc.getBlockZ()));
-            setFeastLocation(feastLoc);
             int feastHeight = gen.getSpawnHeight(getFeastLocation(), config.getFeastSize());
-            generatePlatform(getFeastLocation(), config.getChestLayersHeight(), feastHeight);
+            feastLoc.setY(feastHeight);
+            setFeastLocation(feastLoc);
+            generatePlatform(getFeastLocation(), feastHeight, config.getFeastSize());
             HungergamesApi.getInventoryManager().updateSpectatorHeads();
             Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
         }
