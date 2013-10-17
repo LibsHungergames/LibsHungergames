@@ -75,7 +75,7 @@ public class FeastConfig extends BaseConfig {
         super("feast");
         for (int i = 0; i < 4; i++) {
             getFeastAdvertisements().put((60 * 15) + (i * 60), ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
-            getFeastAdvertisements().put((60 * 15) + (i * 60), ChatColor.RED + "Use /feast to fix your compass on it!");
+            getFeastAdvertisements().put((60 * 15) + (i * 60) + 1, ChatColor.RED + "Use /feast to fix your compass on it!");
         }
         getFeastAdvertisements().put((60 * 19) + 30, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
         getFeastAdvertisements().put((60 * 19) + 45, ChatColor.RED + "The feast will begin at (%s, %s, %s) in %s");
