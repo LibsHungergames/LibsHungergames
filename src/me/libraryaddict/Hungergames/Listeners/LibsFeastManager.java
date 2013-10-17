@@ -108,11 +108,6 @@ public class LibsFeastManager implements Listener {
     @EventHandler
     public void onSecond(TimeSecondEvent event) {
         int currentTime = HungergamesApi.getHungergames().currentTime;
-        if (config.getFeastAdvertisements().containsKey(currentTime)) {
-            Bukkit.broadcastMessage(String.format(config.getFeastAdvertisements().get(currentTime), getFeastLocation().getX(),
-                    getFeastLocation().getY(), getFeastLocation().getZ(),
-                    HungergamesApi.getHungergames().returnTime(currentTime - config.getFeastGenerateTime())));
-        }
         if (currentTime == config.getFeastPlatformGenerateTime()) {
             Location feastLoc = getFeastLocation();
             int feastHeight = gen.getSpawnHeight(getFeastLocation(), config.getFeastSize());
@@ -131,6 +126,11 @@ public class LibsFeastManager implements Listener {
         } else if (currentTime > config.getFeastPlatformGenerateTime() && currentTime < config.getFeastGenerateTime()) {
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn(),
                     config.getFeastGenerateTime() - currentTime);
+        }
+        if (config.getFeastAdvertisements().containsKey(currentTime)) {
+            Bukkit.broadcastMessage(String.format(config.getFeastAdvertisements().get(currentTime), getFeastLocation().getX(),
+                    getFeastLocation().getY(), getFeastLocation().getZ(),
+                    HungergamesApi.getHungergames().returnTime(currentTime - config.getFeastGenerateTime())));
         }
     }
 
