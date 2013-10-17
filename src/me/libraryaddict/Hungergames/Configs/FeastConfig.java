@@ -33,7 +33,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * The blocks that generate along with the chests and the feast insides. This covers the feast insides
      */
-    private ItemStack feastFeastBlock = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 0);
+    private ItemStack feastFeastBlock = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 1);
     /**
      * When does the feast chests generate. This is the 2nd generation
      */
@@ -45,7 +45,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * The block hidden inside the 2nd feast generation
      */
-    private ItemStack feastInsides = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 0);
+    private ItemStack feastInsides = new ItemStack(Material.TNT, 1, (byte) 0);
     /**
      * The max distance the feast will generate from spawn. Will be random from -100 to 100 modifier
      */
