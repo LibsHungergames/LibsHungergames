@@ -47,6 +47,10 @@ public class FeastConfig extends BaseConfig {
      */
     private ItemStack feastInsides = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 0);
     /**
+     * The max distance the feast will generate from spawn. Will be random from -100 to 100 modifier
+     */
+    private int feastMaxDistanceFromSpawn = 100;
+    /**
      * The time the platform generates
      */
     private int feastPlatformGenerateTime = 15 * 20;
