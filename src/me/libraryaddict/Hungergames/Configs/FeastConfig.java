@@ -53,7 +53,7 @@ public class FeastConfig extends BaseConfig {
     /**
      * The time the platform generates
      */
-    private int feastPlatformGenerateTime = 15 * 20;
+    private int feastPlatformGenerateTime = 15 * 60;
     /**
      * The radius of the feast
      */
