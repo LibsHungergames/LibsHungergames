@@ -2,6 +2,7 @@ package me.libraryaddict.Hungergames.Configs;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public abstract class BaseConfig {
         configFile = new File(HungergamesApi.getHungergames().getDataFolder(), configName + ".yml");
     }
 
+    // TODO Give a 'what this should be cast to' to avoid errors
     protected Object deserialize(Object object) {
         if (object instanceof String) {
             return ChatColor.translateAlternateColorCodes('&', (String) object).replace("\\n", "\n");
@@ -47,6 +49,8 @@ public abstract class BaseConfig {
                 if (map.get(obj) instanceof String) {
                     String s = ChatColor.translateAlternateColorCodes('&', (String) map.get(obj)).replace("\\n", "\n");
                     newMap.put(Integer.parseInt(obj), s);
+                } else if (map.get(obj) instanceof Serializable) {
+                    newMap.put(Integer.parseInt(obj), map.get(obj));
                 } else
                     return object;
             }

@@ -47,10 +47,6 @@ public class FeastConfig extends BaseConfig {
      */
     private ItemStack feastInsides = new ItemStack(Material.QUARTZ_BLOCK, 1, (byte) 0);
     /**
-     * This is the location of the feast
-     */
-    private Location feastLocation;
-    /**
      * The time the platform generates
      */
     private int feastPlatformGenerateTime = 15 * 20;
