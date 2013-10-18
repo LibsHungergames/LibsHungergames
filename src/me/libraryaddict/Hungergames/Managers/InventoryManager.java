@@ -61,6 +61,8 @@ public class InventoryManager {
     }
 
     public void openKitInventory(Player p) {
+        if (p.hasMetadata("KitInventory"))
+            return;
         KitInventory inv = new KitInventory(p);
         inv.setKits();
         inv.openInventory();
