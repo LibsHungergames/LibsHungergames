@@ -67,6 +67,8 @@ public class InventoryManager {
     }
 
     public void openSpectatorInventory(Player p) {
+        if (p.hasMetadata("SpectateInventory"))
+            return;
         SpectateInventory specs = new SpectateInventory(p);
         specs.setHeads();
         specs.openInventory();
