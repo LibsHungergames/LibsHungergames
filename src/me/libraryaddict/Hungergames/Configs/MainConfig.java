@@ -300,6 +300,7 @@ public class MainConfig extends BaseConfig {
             System.out.println(String.format(cm.getChangedWorldHeight(), this.getMaxHeightLimit()));
         }
         Hungergames hg = HungergamesApi.getHungergames();
+        hg.currentTime = this.getTimeGameIsSetToWhenEnabled();
         currentVersion = "v" + hg.getDescription().getVersion();
         if (checkUpdates)
             Bukkit.getScheduler().scheduleAsyncDelayedTask(hg, new Runnable() {
