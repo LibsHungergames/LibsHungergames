@@ -91,12 +91,11 @@ public class GenerationManager {
         loc.setY(lowestLevel + 1);
         double radiusSquared = radius * radius;
         // Sets to air and generates to stand on
+        yHeight = Math.min(loc.getBlockY() + yHeight, loc.getWorld().getMaxHeight());
         for (int radiusX = -radius; radiusX <= radius; radiusX++) {
             for (int radiusZ = -radius; radiusZ <= radius; radiusZ++) {
                 if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
-                    for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + yHeight; y++) {
-                        if (y > loc.getWorld().getMaxHeight())
-                            break;
+                    for (int y = yHeight; y >= loc.getBlockY() - 1; y--) {
                         Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
                         removeLeaves(b);
                         if (y >= loc.getBlockY()) {// If its less then 0
@@ -234,7 +233,7 @@ public class GenerationManager {
 
     public void setBlockFast(Block b, Material type, short s) {
         try {
-            if (b.getType() != type || b.getData() != s) {
+            if (b.getType() != type || b.getData() != (byte) s) {
                 queued.put(b, new BlockInfo(type, (byte) s));
                 if (runnable == null) {
                     runnable = new BukkitRunnable() {
