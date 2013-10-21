@@ -40,12 +40,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
-    private class BlockInfo {
-        int x;
-        int z;
-    }
 
-    public boolean chunksGenerating = true;
     /**
      * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
      * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
@@ -58,7 +53,7 @@ public class Hungergames extends JavaPlugin {
      * doSeconds is false when the game has ended
      */
     public boolean doSeconds = true;
-    public HashMap<Location, EntityType> entitys = new HashMap<Location, EntityType>();
+    public HashMap<Location, EntityType> entitysToSpawn = new HashMap<Location, EntityType>();
     private MainConfig mainConfig;
     private Metrics metrics;
     private PlayerListener playerListener;
@@ -166,64 +161,6 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
-    private void generateChunks() {
-        final Location spawn = world.getSpawnLocation();
-        for (int x = -5; x <= 5; x++)
-            for (int z = -5; z <= 5; z++)
-                spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
-        File mapConfig = new File(getDataFolder() + "/map.yml");
-        YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
-        if (mapConfiguration.getBoolean("GenerateChunks")) {
-            final double chunks = (int) Math.ceil(mainConfig.getBorderSize() / 16) + Bukkit.getViewDistance();
-            final ArrayList<BlockInfo> toProcess = new ArrayList<BlockInfo>();
-            for (int x = (int) -chunks; x <= chunks; x++) {
-                for (int z = (int) -chunks; z <= chunks; z++) {
-                    BlockInfo info = new BlockInfo();
-                    info.x = spawn.getBlockX() + (x * 16);
-                    info.z = spawn.getBlockZ() + (z * 16);
-                    toProcess.add(info);
-                }
-            }
-            final double totalChunks = toProcess.size();
-            final boolean background = mapConfiguration.getBoolean("GenerateChunksBackground");
-            if (background)
-                chunksGenerating = false;
-            BukkitRunnable runnable = new BukkitRunnable() {
-                int currentChunks = 0;
-                long lastPrint = 0;
-
-                public void run() {
-                    if (lastPrint + 5000 < System.currentTimeMillis()) {
-                        System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getGeneratingChunks(),
-                                (int) Math.floor(((double) currentChunks / totalChunks) * 100)) + "%");
-                        lastPrint = System.currentTimeMillis();
-                    }
-                    Iterator<BlockInfo> itel = toProcess.iterator();
-                    long started = System.currentTimeMillis();
-
-                    while (itel.hasNext() && started + (background ? 50 : 5000) > System.currentTimeMillis()) {
-                        currentChunks++;
-                        BlockInfo info = itel.next();
-                        itel.remove();
-                        Chunk chunk = world.getChunkAt(info.x, info.z);
-                        if (chunk.isLoaded())
-                            continue;
-                        chunk.load();
-                        chunk.unload(true, false);
-                    }
-                    if (!itel.hasNext()) {
-                        chunksGenerating = false;
-                        System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getChunksGenerated(),
-                                currentChunks));
-                        cancel();
-                    }
-                }
-            };
-            runnable.runTaskTimer(HungergamesApi.getHungergames(), 1, 5);
-        } else
-            chunksGenerating = false;
-    }
-
     public Metrics getMetrics() {
         return metrics;
     }
@@ -286,7 +223,7 @@ public class Hungergames extends JavaPlugin {
                         spawn.clone().add(x * 16, 0, z * 16).getChunk().load();
                 File mapConfig = new File(getDataFolder() + "/map.yml");
                 YamlConfiguration mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
-                generateChunks();
+                HungergamesApi.getGenerationManager().generateChunks();
                 if (mapConfiguration.getBoolean("GenerateSpawnPlatform")) {
                     ItemStack spawnGround = mapConfiguration.getItemStack("SpawnPlatformBlock");
                     GenerationManager gen = HungergamesApi.getGenerationManager();
@@ -454,9 +391,9 @@ public class Hungergames extends JavaPlugin {
                     kit.giveKit();
                 HungergamesApi.getAbilityManager().registerAbilityListeners();
                 Bukkit.getPluginManager().callEvent(new GameStartEvent());
-                for (Location l : entitys.keySet())
-                    l.getWorld().spawnEntity(l, entitys.get(l));
-                entitys.clear();
+                for (Location l : entitysToSpawn.keySet())
+                    l.getWorld().spawnEntity(l, entitysToSpawn.get(l));
+                entitysToSpawn.clear();
             }
         });
         checkWinner();

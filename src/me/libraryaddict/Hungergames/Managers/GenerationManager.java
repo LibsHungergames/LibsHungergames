@@ -1,18 +1,27 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.LoggerConfig;
+import me.libraryaddict.Hungergames.Types.CordPair;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class GenerationManager {
@@ -32,11 +41,14 @@ public class GenerationManager {
         }
     }
 
+    private BukkitRunnable chunkGeneratorRunnable;
+    private ArrayList<CordPair> chunksToGenerate = new ArrayList<CordPair>();
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
+    private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     private LinkedList<Block> processedBlocks = new LinkedList<Block>();
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
-    private BukkitRunnable runnable;
+    private BukkitRunnable setBlocksRunnable;
 
     public GenerationManager() {
         faces.add(BlockFace.UP);
@@ -53,6 +65,63 @@ public class GenerationManager {
 
     public void addToProcessedBlocks(Block block) {
         processedBlocks.add(block);
+    }
+
+    public void generateChunks() {
+        if (!isChunkGeneratorRunning()) {
+            // Get the measurements I need
+            int chunks1 = Bukkit.getViewDistance() + 3;
+            int chunks2 = 0;
+            Hungergames hungergames = HungergamesApi.getHungergames();
+            YamlConfiguration mapConfig = YamlConfiguration.loadConfiguration(new File(hungergames.getDataFolder(), "map.yml"));
+            // Load the map configs to find out generation range
+            if (mapConfig.getBoolean("GenerateChunks")) {
+                chunks2 = (int) Math.ceil(HungergamesApi.getConfigManager().getMainConfig().getBorderSize() / 16)
+                        + Bukkit.getViewDistance();
+            }
+            // Does the chunk generation run while players are online
+            final boolean runInBackground = mapConfig.getBoolean("GenerateChunksBackground");
+            // Get the max chunk distance
+            int chunksDistance = Math.max(chunks1, chunks2);
+            Chunk spawn = hungergames.world.getSpawnLocation().getChunk();
+            for (int x = -chunksDistance; x <= chunksDistance; x++) {
+                for (int z = -chunksDistance; z <= chunksDistance; z++) {
+                    CordPair pair = new CordPair(spawn.getX() + x, spawn.getZ() + z);
+                    chunksToGenerate.add(pair);
+                }
+            }
+            final double totalChunks = chunksToGenerate.size();
+            final World world = hungergames.world;
+            chunkGeneratorRunnable = new BukkitRunnable() {
+                private double chunksGenerated;
+                private long lastLogged;
+
+                public void run() {
+                    if (lastLogged + 5000 < System.currentTimeMillis()) {
+                        System.out.print(String.format(loggerConfig.getGeneratingChunks(),
+                                (int) Math.floor((chunksGenerated / totalChunks) * 100))
+                                + "%");
+                        lastLogged = System.currentTimeMillis();
+                    }
+                    long startedGeneration = System.currentTimeMillis();
+                    Iterator<CordPair> cordsItel = chunksToGenerate.iterator();
+                    while (cordsItel.hasNext() && startedGeneration + (runInBackground ? 50 : 5000) > System.currentTimeMillis()) {
+                        CordPair pair = cordsItel.next();
+                        world.loadChunk(pair.getX(), pair.getZ());
+                        world.unloadChunk(pair.getX(), pair.getZ());
+                        cordsItel.remove();
+                        chunksGenerated++;
+                    }
+                    if (!cordsItel.hasNext()) {
+                        System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getChunksGenerated(),
+                                (int) chunksGenerated));
+                        chunkGeneratorRunnable = null;
+                        cancel();
+                    }
+                }
+            };
+            chunkGeneratorRunnable.runTaskTimer(hungergames, 1, 3);
+        }
     }
 
     /**
@@ -199,6 +268,10 @@ public class GenerationManager {
         return true;
     }
 
+    public boolean isChunkGeneratorRunning() {
+        return chunkGeneratorRunnable != null;
+    }
+
     private boolean isSolid(Block b) {
         return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
                 || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
@@ -235,11 +308,11 @@ public class GenerationManager {
         try {
             if (b.getType() != type || b.getData() != (byte) s) {
                 queued.put(b, new BlockInfo(type, (byte) s));
-                if (runnable == null) {
-                    runnable = new BukkitRunnable() {
+                if (setBlocksRunnable == null) {
+                    setBlocksRunnable = new BukkitRunnable() {
                         public void run() {
                             if (queued.size() == 0) {
-                                runnable = null;
+                                setBlocksRunnable = null;
                                 processedBlocks.clear();
                                 cancel();
                             }
@@ -271,7 +344,7 @@ public class GenerationManager {
                             }
                         }
                     };
-                    runnable.runTaskTimer(HungergamesApi.getHungergames(), 2, 1);
+                    setBlocksRunnable.runTaskTimer(HungergamesApi.getHungergames(), 2, 1);
                 }
                 // return ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15,
                 // b.getY(), b.getZ() & 15, typeId, data);

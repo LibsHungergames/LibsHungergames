@@ -90,7 +90,7 @@ public class GeneralListener implements Listener {
                     event.setCancelled(true);
                     if (!(event.getEntity() instanceof Monster)) {
                         if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
-                            hg.entitys.put(event.getLocation().clone().add(0, new Random().nextDouble(), 0),
+                            hg.entitysToSpawn.put(event.getLocation().clone().add(0, new Random().nextDouble(), 0),
                                     event.getEntityType());
                     }
                 }

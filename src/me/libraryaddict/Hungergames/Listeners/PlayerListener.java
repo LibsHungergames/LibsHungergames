@@ -356,7 +356,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onLogin(AsyncPlayerPreLoginEvent event) {
-        if (hg.chunksGenerating) {
+        if (HungergamesApi.getGenerationManager().isChunkGeneratorRunning()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, tm.getMessagePlayerChunksGenerating());
         }
     }
