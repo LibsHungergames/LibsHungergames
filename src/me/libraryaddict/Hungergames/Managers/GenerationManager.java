@@ -93,12 +93,13 @@ public class GenerationManager {
             }
             final double totalChunks = chunksToGenerate.size();
             final World world = hungergames.world;
+            final boolean doLogging = mapConfig.getBoolean("GenerateChunks");
             chunkGeneratorRunnable = new BukkitRunnable() {
                 private double chunksGenerated;
                 private long lastLogged;
 
                 public void run() {
-                    if (lastLogged + 5000 < System.currentTimeMillis()) {
+                    if (doLogging && lastLogged + 5000 < System.currentTimeMillis()) {
                         System.out.print(String.format(loggerConfig.getGeneratingChunks(),
                                 (int) Math.floor((chunksGenerated / totalChunks) * 100))
                                 + "%");
@@ -114,8 +115,10 @@ public class GenerationManager {
                         chunksGenerated++;
                     }
                     if (!cordsItel.hasNext()) {
-                        System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getChunksGenerated(),
-                                (int) chunksGenerated));
+                        if (doLogging) {
+                            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig()
+                                    .getChunksGenerated(), (int) chunksGenerated));
+                        }
                         chunkGeneratorRunnable = null;
                         cancel();
                     }
