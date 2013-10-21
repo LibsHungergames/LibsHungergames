@@ -30,6 +30,7 @@ public class GenerationManager {
 
         Material id;
 
+        @SuppressWarnings("unused")
         public BlockInfo(int id, byte data) {
             this.id = Material.getMaterial(id);
             this.data = data;

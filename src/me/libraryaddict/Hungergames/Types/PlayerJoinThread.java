@@ -13,7 +13,6 @@ import org.bukkit.inventory.PlayerInventory;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
-import me.libraryaddict.Hungergames.Managers.MySqlManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 
 public class PlayerJoinThread extends Thread {

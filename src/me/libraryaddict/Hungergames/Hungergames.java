@@ -1,9 +1,7 @@
 package me.libraryaddict.Hungergames;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import me.libraryaddict.Hungergames.Configs.MainConfig;
@@ -22,7 +20,6 @@ import me.libraryaddict.Hungergames.Types.Kit;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +33,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
