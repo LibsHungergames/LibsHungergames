@@ -13,6 +13,7 @@ public class RandomItem implements ConfigurationSerializable {
     static {
         ConfigurationSerialization.registerClass(RandomItem.class, RandomItem.class.getSimpleName());
     }
+
     public static RandomItem deserialize(Map<String, Object> args) {
         Material type = null;
         Object obj = args.get("Item Type");
@@ -28,6 +29,7 @@ public class RandomItem implements ConfigurationSerializable {
         int maxItems = (Integer) args.get("Max Items");
         return new RandomItem(chancesOfItemStackAppearing, type, itemData, minItems, maxItems);
     }
+
     private double chanceOfItemStackAppearing;
     // Chance is out of a hundred..
     // Goes to 0.01
@@ -86,7 +88,7 @@ public class RandomItem implements ConfigurationSerializable {
      * @return Randomized itemstack
      */
     public ItemStack getItemStack() {
-        return new ItemStack(itemType, new Random().nextInt((maxItems - minItems) + 1));
+        return new ItemStack(itemType, new Random().nextInt((maxItems - minItems)) + 1);
     }
 
     /**
