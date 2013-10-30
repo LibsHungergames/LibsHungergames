@@ -27,7 +27,6 @@ public class MainConfig extends BaseConfig {
      * The amount the border closes in per second
      */
     private double amountBorderClosesInPerSecond = 0.2;
-
     /**
      * The border size
      */
@@ -40,6 +39,7 @@ public class MainConfig extends BaseConfig {
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
+
     /**
      * Commands to run before the server shuts down
      */
@@ -88,7 +88,7 @@ public class MainConfig extends BaseConfig {
     /**
      * What item do I use for the kit selectors back button
      */
-    private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);;
+    private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);
     /**
      * Do I give the players a kit selector when they join the game
      */
@@ -100,7 +100,7 @@ public class MainConfig extends BaseConfig {
     /**
      * What item opens the kit selector menu
      */
-    private ItemStack kitSelectorIcon = new ItemStack(Material.FEATHER);
+    private ItemStack kitSelectorIcon = new ItemStack(Material.FEATHER);;
     /**
      * What is the max size of the kit selector
      */
@@ -158,9 +158,17 @@ public class MainConfig extends BaseConfig {
      */
     private boolean shortenedNames = true;
     /**
+     * Height to check when spawning players in
+     */
+    private int spawnHeight = 5;
+    /**
      * You have spawn protection? No problemo! I fix!
      */
     private boolean spawnProtectionRemoved = true;
+    /**
+     * The spawn radius
+     */
+    private int spawnRadius = 10;
     /**
      * What is the prefix of spectators in chat
      */
@@ -201,6 +209,10 @@ public class MainConfig extends BaseConfig {
      * When the game starts, what time should the world be
      */
     private int timeOfDay = 0;
+    /**
+     * Times to check for a valid spawn
+     */
+    private int timesToCheckForValidSpawnPerPlayer = 100;
     /**
      * The update checker
      */

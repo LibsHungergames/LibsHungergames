@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
 
 import me.libraryaddict.Hungergames.Hungergames;
+import me.libraryaddict.Hungergames.Configs.MainConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
@@ -209,8 +210,9 @@ public class PlayerManager {
     public void sendToSpawn(Gamer gamer) {
         final Player p = gamer.getPlayer();
         Location originalSpawn = p.getWorld().getSpawnLocation();
-        int spawnRadius = 8;
-        int spawnHeight = 5;
+        MainConfig main = HungergamesApi.getConfigManager().getMainConfig();
+        int spawnRadius = main.getSpawnRadius();
+        int spawnHeight = main.getSpawnHeight();
         if (spawns.size() > 0) {
             if (spawnItel == null || !spawnItel.hasNext())
                 spawnItel = spawns.keySet().iterator();
@@ -223,7 +225,7 @@ public class PlayerManager {
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        while (chances < 100) {
+        while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
             chances++;
             Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
                     + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
