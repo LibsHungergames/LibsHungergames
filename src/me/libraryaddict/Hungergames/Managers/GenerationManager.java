@@ -109,8 +109,10 @@ public class GenerationManager {
                     Iterator<CordPair> cordsItel = chunksToGenerate.iterator();
                     while (cordsItel.hasNext() && startedGeneration + (runInBackground ? 50 : 5000) > System.currentTimeMillis()) {
                         CordPair pair = cordsItel.next();
-                        world.loadChunk(pair.getX(), pair.getZ());
-                        world.unloadChunk(pair.getX(), pair.getZ());
+                        if (!world.isChunkLoaded(pair.getX(), pair.getZ())) {
+                            world.loadChunk(pair.getX(), pair.getZ());
+                            world.unloadChunk(pair.getX(), pair.getZ());
+                        }
                         cordsItel.remove();
                         chunksGenerated++;
                     }
