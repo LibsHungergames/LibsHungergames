@@ -79,11 +79,16 @@ public class LibsFeastManager implements Listener {
                     gen.setBlockFast(block.getRelative(BlockFace.DOWN), feastInside.getTypeId(),
                             (feastInside.getType() == Material.TNT ? 1 : feastInside.getDurability()));
                 } else if (Math.abs(x + z) % 2 == 0) {
-                    block.setTypeIdAndData(Material.CHEST.getId(), (byte) 0, false);
                     gen.addToProcessedBlocks(block);
+                    boolean unload = b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
+                    if (unload)
+                        b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
+                    block.setType(Material.CHEST);
                     Chest chest = (Chest) block.getState();
                     cm.fillChest(chest.getInventory());
                     chest.update();
+                    if (unload)
+                        b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
                 } else
                     gen.setBlockFast(block, feastBlock.getTypeId(), feastBlock.getDurability());
             }

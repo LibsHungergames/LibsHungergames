@@ -344,9 +344,12 @@ public class GenerationManager {
                                     processedBlocks.add(b);
                                 queued.remove(b);
                                 removeLeaves(b);
-                                if (!b.getChunk().isLoaded())
-                                    b.getChunk().load();
+                                boolean unload = b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
+                                if (unload)
+                                    b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
                                 b.setTypeIdAndData(toDo.get(b).id.getId(), toDo.get(b).data, true);
+                                if (unload)
+                                    b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
                             }
                         }
                     };
