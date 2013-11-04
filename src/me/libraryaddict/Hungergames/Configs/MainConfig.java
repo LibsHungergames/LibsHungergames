@@ -2,6 +2,8 @@ package me.libraryaddict.Hungergames.Configs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -334,21 +336,38 @@ public class MainConfig extends BaseConfig {
                  */
 
                 /**
-                 * I reserve the right to issue a DMCA if you remove this but use at least 30% of this code.
+                 * I reserve the right to issue a DMCA if you effectively remove this from your server but use at least 30% of
+                 * this code.
                  */
+                TranslationConfig translation = HungergamesApi.getConfigManager().getTranslationsConfig();
                 String message = ChatColor.stripColor(String
-                        .format(HungergamesApi.getConfigManager().getTranslationsConfig().getMessagePlayerWhosePlugin(),
-                                "libraryaddict", getCurrentVersion()).toLowerCase().replace(" ", ""));
-                if (!(message.contains("libraryaddict") || message.contains("ow.ly/kwbpo") || message.contains("libshungergames"))) {
-                    HungergamesApi
-                            .getConfigManager()
-                            .getTranslationsConfig()
-                            .setMessagePlayerWhosePlugin(
-                                    ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using " + ChatColor.GREEN
-                                            + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN
-                                            + "libraryaddict");
+                        .format(translation.getMessagePlayerWhosePlugin(), "libraryaddict", getCurrentVersion()).toLowerCase()
+                        .replace(" ", ""));
+                String[] toCheck = new String[] { "libraryaddict", "ow.ly/kwbpo", "libshungergames" };
+                for (String check : toCheck) {
+                    if (message.contains(check) && message.length() + 2 > check.length()) {
+                        return;
+                    }
                 }
+                translation.setMessagePlayerWhosePlugin(scatterCodes(ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN
+                        + "You are using " + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by "
+                        + ChatColor.GREEN + "libraryaddict"));
             }
         });
+    }
+
+    private String scatterCodes(String toScatter) {
+        StringBuilder builder = new StringBuilder();
+        char[] chars = toScatter.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (i > 0 && i % 2 == 0) {
+                if (new Random().nextBoolean()) {
+                    String color = ChatColor.getLastColors(builder.toString());
+                    builder.append(color);
+                }
+            }
+            builder.append(chars[i]);
+        }
+        return builder.toString();
     }
 }
