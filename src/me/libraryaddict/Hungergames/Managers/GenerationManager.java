@@ -314,7 +314,7 @@ public class GenerationManager {
 
     public void setBlockFast(Block b, Material type, short s) {
         try {
-            if (processedBlocks.contains(b) && (b.getType() != type || b.getData() != (byte) s)) {
+            if (!processedBlocks.contains(b) && (b.getType() != type || b.getData() != (byte) s)) {
                 queued.put(b, new BlockInfo(type, (byte) s));
                 if (setBlocksRunnable == null) {
                     setBlocksRunnable = new BukkitRunnable() {
