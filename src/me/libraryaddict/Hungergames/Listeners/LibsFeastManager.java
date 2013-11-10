@@ -60,9 +60,12 @@ public class LibsFeastManager implements Listener {
         ItemStack feastBlock = config.getFeastConfig().getFeastFeastBlock();
         for (int x = -height; x < height + 1; x++) {
             for (int z = -height; z < height + 1; z++) {
+                // Get whichever number is higher
                 int y = Math.abs(x);
                 if (Math.abs(z) > y)
                     y = Math.abs(z);
+                // Got the highest..
+                // Now invert it and add on the height to get a pillar thats higher when closer to spanw
                 y = -y + height;
                 Block block = loc.clone().add(x, y, z).getBlock();
                 Block b = block;
