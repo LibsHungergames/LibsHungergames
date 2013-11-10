@@ -50,6 +50,7 @@ public class GenerationManager {
     private LinkedList<Block> processedBlocks = new LinkedList<Block>();
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
     private BukkitRunnable setBlocksRunnable;
+    private boolean background;
 
     public GenerationManager() {
         faces.add(BlockFace.UP);
@@ -69,19 +70,20 @@ public class GenerationManager {
     }
 
     public void generateChunks() {
-        if (!isChunkGeneratorRunning()) {
+        if (chunkGeneratorRunnable == null) {
             // Get the measurements I need
             int chunks1 = Bukkit.getViewDistance() + 3;
             int chunks2 = 0;
             Hungergames hungergames = HungergamesApi.getHungergames();
             YamlConfiguration mapConfig = YamlConfiguration.loadConfiguration(new File(hungergames.getDataFolder(), "map.yml"));
+            // Does the chunk generation run while players are online
+            background = true;
             // Load the map configs to find out generation range
             if (mapConfig.getBoolean("GenerateChunks")) {
                 chunks2 = (int) Math.ceil(HungergamesApi.getConfigManager().getMainConfig().getBorderSize() / 16)
                         + Bukkit.getViewDistance();
+                background = mapConfig.getBoolean("GenerateChunksBackground");
             }
-            // Does the chunk generation run while players are online
-            final boolean runInBackground = mapConfig.getBoolean("GenerateChunksBackground");
             // Get the max chunk distance
             int chunksDistance = Math.max(chunks1, chunks2);
             Chunk spawn = hungergames.world.getSpawnLocation().getChunk();
@@ -107,7 +109,7 @@ public class GenerationManager {
                     }
                     long startedGeneration = System.currentTimeMillis();
                     Iterator<CordPair> cordsItel = chunksToGenerate.iterator();
-                    while (cordsItel.hasNext() && startedGeneration + (runInBackground ? 50 : 5000) > System.currentTimeMillis()) {
+                    while (cordsItel.hasNext() && startedGeneration + (background ? 50 : 5000) > System.currentTimeMillis()) {
                         CordPair pair = cordsItel.next();
                         if (!world.isChunkLoaded(pair.getX(), pair.getZ())) {
                             world.loadChunk(pair.getX(), pair.getZ());
@@ -275,7 +277,7 @@ public class GenerationManager {
     }
 
     public boolean isChunkGeneratorRunning() {
-        return chunkGeneratorRunnable != null;
+        return chunkGeneratorRunnable != null && !background;
     }
 
     private boolean isSolid(Block b) {
