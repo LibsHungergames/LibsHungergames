@@ -340,18 +340,20 @@ public class MainConfig extends BaseConfig {
                  * this code.
                  */
                 TranslationConfig translation = HungergamesApi.getConfigManager().getTranslationsConfig();
-                String message = ChatColor.stripColor(String
-                        .format(translation.getMessagePlayerWhosePlugin(), "libraryaddict", getCurrentVersion()).toLowerCase()
-                        .replace(" ", ""));
+                translation.setMessagePlayerWhosePlugin(String.format(translation.getMessagePlayerWhosePlugin(), "libraryaddict",
+                        getCurrentVersion()));
+                String message = ChatColor.stripColor(translation.getMessagePlayerWhosePlugin().toLowerCase().replace(" ", ""));
                 String[] toCheck = new String[] { "libraryaddict", "ow.ly/kwbpo", "libshungergames" };
                 for (String check : toCheck) {
-                    if (message.contains(check) && message.length() + 2 > check.length()) {
+                    if (!message.contains(check) && message.length() + 2 > check.length()) {
+                        // They changed it.
+                        translation.setMessagePlayerWhosePlugin(scatterCodes(ChatColor.GOLD + "[Hungergames] "
+                                + ChatColor.DARK_GREEN + "You are using " + ChatColor.GREEN + "LibsHungergames "
+                                + getCurrentVersion() + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict"));
                         return;
                     }
                 }
-                translation.setMessagePlayerWhosePlugin(scatterCodes(ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN
-                        + "You are using " + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by "
-                        + ChatColor.GREEN + "libraryaddict"));
+                translation.setMessagePlayerWhosePlugin(scatterCodes(translation.getMessagePlayerWhosePlugin()));
             }
         });
     }
@@ -363,7 +365,7 @@ public class MainConfig extends BaseConfig {
             if (i > 0 && i % 2 == 0) {
                 if (new Random().nextBoolean()) {
                     String color = ChatColor.getLastColors(builder.toString());
-                    builder.append(color);
+                    builder.append(ChatColor.WHITE + color);
                 }
             }
             builder.append(chars[i]);
