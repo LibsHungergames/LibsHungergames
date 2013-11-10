@@ -342,16 +342,19 @@ public class MainConfig extends BaseConfig {
                 TranslationConfig translation = HungergamesApi.getConfigManager().getTranslationsConfig();
                 translation.setMessagePlayerWhosePlugin(String.format(translation.getMessagePlayerWhosePlugin(), "libraryaddict",
                         getCurrentVersion()));
-                String message = ChatColor.stripColor(translation.getMessagePlayerWhosePlugin().toLowerCase().replace(" ", ""));
+                String message = ChatColor.stripColor(translation.getMessagePlayerWhosePlugin()).toLowerCase().replace(" ", "");
                 String[] toCheck = new String[] { "libraryaddict", "ow.ly/kwbpo", "libshungergames" };
+                boolean contains = false;
                 for (String check : toCheck) {
-                    if (!message.contains(check) && message.length() + 2 > check.length()) {
-                        // They changed it.
-                        translation.setMessagePlayerWhosePlugin(scatterCodes(ChatColor.GOLD + "[Hungergames] "
-                                + ChatColor.DARK_GREEN + "You are using " + ChatColor.GREEN + "LibsHungergames "
-                                + getCurrentVersion() + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict"));
-                        return;
+                    if (message.contains(check) && message.length() + 2 > check.length()) {
+                        contains = true;
+                        break;
                     }
+                }
+                if (!contains) {
+                    translation.setMessagePlayerWhosePlugin(ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN
+                            + "You are using " + ChatColor.GREEN + "LibsHungergames " + getCurrentVersion()
+                            + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict");
                 }
                 translation.setMessagePlayerWhosePlugin(scatterCodes(translation.getMessagePlayerWhosePlugin()));
             }
