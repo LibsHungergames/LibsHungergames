@@ -47,7 +47,7 @@ public class GenerationManager {
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
     private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
-    private LinkedList<Block> processedBlocks = new LinkedList<Block>();
+    private LinkedList<Block> dontProcessBlocks = new LinkedList<Block>();
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
     private BukkitRunnable setBlocksRunnable;
     private boolean background;
@@ -66,7 +66,7 @@ public class GenerationManager {
     }
 
     public void addToProcessedBlocks(Block block) {
-        processedBlocks.add(block);
+        dontProcessBlocks.add(block);
     }
 
     public void generateChunks() {
@@ -174,7 +174,6 @@ public class GenerationManager {
                 if ((radiusX * radiusX) + (radiusZ * radiusZ) <= radiusSquared) {
                     for (int y = yHeight; y >= loc.getBlockY() - 1; y--) {
                         Block b = loc.getWorld().getBlockAt(radiusX + loc.getBlockX(), y, radiusZ + loc.getBlockZ());
-                        removeLeaves(b);
                         if (y >= loc.getBlockY()) {// If its less then 0
                             setBlockFast(b, 0, (byte) 0);
                         } else {
@@ -290,18 +289,24 @@ public class GenerationManager {
     private void removeLeaves(Block b) {
         for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS) ? jungleFaces : faces)) {
             Block newB = b.getRelative(face);
-            if ((newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE)) {
-                if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+            // If the blocks are useless decoration
+            if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {
+                // If they are not queued for deletion and are not marked as dont process
+                if (!queued.containsKey(newB) && !dontProcessBlocks.contains(newB)) {
+                    // Set it to air
                     setBlockFast(newB, 0, (byte) 0);
+                    // If the ground under it is dirt cos it was a tree or something
                     if (newB.getRelative(BlockFace.DOWN).getType() == Material.DIRT) {
+                        // Get the block and check if it can turn it to grass
                         newB = newB.getRelative(BlockFace.DOWN);
-                        if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+                        if (!queued.containsKey(newB) && !dontProcessBlocks.contains(newB)) {
                             setBlockFast(newB, Material.GRASS.getId(), (byte) 0);
                         }
                     }
                 }
+                // Else remove floating snow.
             } else if (newB.getType() == Material.SNOW && face == BlockFace.UP) {
-                if (!queued.containsKey(newB) && !processedBlocks.contains(newB)) {
+                if (!queued.containsKey(newB) && !dontProcessBlocks.contains(newB)) {
                     setBlockFast(newB, 0, (byte) 0);
                 }
             }
@@ -314,14 +319,14 @@ public class GenerationManager {
 
     public void setBlockFast(Block b, Material type, short s) {
         try {
-            if (!processedBlocks.contains(b) && (b.getType() != type || b.getData() != (byte) s)) {
+            if (!dontProcessBlocks.contains(b) && (b.getType() != type || b.getData() != (byte) s)) {
                 queued.put(b, new BlockInfo(type, (byte) s));
                 if (setBlocksRunnable == null) {
                     setBlocksRunnable = new BukkitRunnable() {
                         public void run() {
                             if (queued.size() == 0) {
                                 setBlocksRunnable = null;
-                                processedBlocks.clear();
+                                dontProcessBlocks.clear();
                                 cancel();
                             }
                             int i = 0;
@@ -332,6 +337,8 @@ public class GenerationManager {
                                 if (b.getType() == queued.get(b).id && b.getData() == queued.get(b).data)
                                     i--;
                                 toDo.put(b, queued.get(b));
+                                if (dontProcessBlocks.contains(b))
+                                    continue;
                                 b = b.getRelative(BlockFace.UP);
                                 while (b != null
                                         && queued.containsKey(b)
@@ -342,16 +349,17 @@ public class GenerationManager {
                                 }
                             }
                             for (Block b : toDo.keySet()) {
-                                if (!processedBlocks.contains(b))
-                                    processedBlocks.add(b);
                                 queued.remove(b);
-                                removeLeaves(b);
+                                if (b.getType() == toDo.get(b).id && b.getData() == toDo.get(b).data
+                                        || dontProcessBlocks.contains(b))
+                                    continue;
                                 boolean unload = b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
-                                if (unload)
+                                if (!unload)
                                     b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
                                 b.setTypeIdAndData(toDo.get(b).id.getId(), toDo.get(b).data, true);
-                                if (unload)
+                                if (!unload)
                                     b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
+                                removeLeaves(b);
                             }
                         }
                     };
