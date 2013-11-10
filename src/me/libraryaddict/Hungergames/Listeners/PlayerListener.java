@@ -318,7 +318,7 @@ public class PlayerListener implements Listener {
             gamer.setOp(true);
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
-                gamer.getPlayer().sendMessage(String.format(tm.getMessagePlayerWhosePlugin(), config.getCurrentVersion()));
+                gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
             }
         }, 2L);
         p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
