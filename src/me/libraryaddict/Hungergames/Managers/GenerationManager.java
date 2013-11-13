@@ -354,12 +354,12 @@ public class GenerationManager {
                                 if (b.getType() == toDo.get(b).id && b.getData() == toDo.get(b).data
                                         || dontProcessBlocks.contains(b))
                                     continue;
-                                boolean unload = b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
-                                if (!unload)
-                                    b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
+                                // boolean loadChunk = !b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
+                                // if (!loadChunk)
+                                // b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
                                 b.setTypeIdAndData(toDo.get(b).id.getId(), toDo.get(b).data, true);
-                                if (!unload)
-                                    b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
+                                // if (!loadChunk)
+                                // b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
                                 removeLeaves(b);
                             }
                         }
