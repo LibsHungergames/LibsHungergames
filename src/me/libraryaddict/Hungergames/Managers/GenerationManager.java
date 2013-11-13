@@ -42,15 +42,15 @@ public class GenerationManager {
         }
     }
 
+    private boolean background;
     private BukkitRunnable chunkGeneratorRunnable;
     private ArrayList<CordPair> chunksToGenerate = new ArrayList<CordPair>();
+    private LinkedList<Block> dontProcessBlocks = new LinkedList<Block>();
     private List<BlockFace> faces = new ArrayList<BlockFace>();
     private List<BlockFace> jungleFaces = new ArrayList<BlockFace>();
     private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
-    private LinkedList<Block> dontProcessBlocks = new LinkedList<Block>();
     private HashMap<Block, BlockInfo> queued = new HashMap<Block, BlockInfo>();
     private BukkitRunnable setBlocksRunnable;
-    private boolean background;
 
     public GenerationManager() {
         faces.add(BlockFace.UP);
@@ -287,7 +287,8 @@ public class GenerationManager {
     }
 
     private void removeLeaves(Block b) {
-        for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS) ? jungleFaces : faces)) {
+        for (BlockFace face : ((b.getBiome() == Biome.JUNGLE || b.getBiome() == Biome.JUNGLE_HILLS || !HungergamesApi
+                .getConfigManager().getFeastConfig().isRemoveTrees()) ? jungleFaces : faces)) {
             Block newB = b.getRelative(face);
             // If the blocks are useless decoration
             if (newB.getType() == Material.LEAVES || newB.getType() == Material.LOG || newB.getType() == Material.VINE) {

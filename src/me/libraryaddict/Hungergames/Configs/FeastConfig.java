@@ -74,6 +74,10 @@ public class FeastConfig extends BaseConfig {
      */
     private ArrayList<RandomItem> randomItems = HungergamesApi.getChestManager().getRandomItems();
     /**
+     * Should the feast generation remove all nearby trees. Or just trees above it.
+     */
+    private boolean removeTrees = true;
+    /**
      * Something something scoreboard countdown feast
      */
     private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in";
