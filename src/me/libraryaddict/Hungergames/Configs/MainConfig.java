@@ -45,11 +45,11 @@ public class MainConfig extends BaseConfig {
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
-
     /**
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
+
     /**
      * The current version of the plugin
      */
@@ -105,11 +105,11 @@ public class MainConfig extends BaseConfig {
     /**
      * What is the max size of the kit selector
      */
-    private int kitSelectorInventorySize = 54;;
+    private int kitSelectorInventorySize = 54;
     /**
      * Whats the latest version of the plugin.
      */
-    private String latestVersion = null;
+    private String latestVersion = null;;
     /**
      * If there is a height limit. What should I set it to
      */
@@ -158,6 +158,10 @@ public class MainConfig extends BaseConfig {
      * Should I shorten the names of players in the playerlist to prevent their names overlapping kills
      */
     private boolean shortenedNames = true;
+    /**
+     * Does the kit gui sort the kits depending on if they own it.
+     */
+    private boolean sortKitGuiByOwned = false;
     /**
      * Height to check when spawning players in
      */

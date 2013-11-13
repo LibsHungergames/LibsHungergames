@@ -52,8 +52,9 @@ public class KitInventory extends PageInventory {
                             break;
                         }
                     }
-                    if (kit != null)
+                    if (kit != null) {
                         Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());
+                    }
                 }
             }
         }
@@ -61,11 +62,13 @@ public class KitInventory extends PageInventory {
 
     public void setKits() {
         KitManager kits = HungergamesApi.getKitManager();
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> kitItems = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
         ArrayList<Kit> allKits = kits.getKits();
         List<Kit> hisKits = kits.getPlayersKits(user);
         if (hisKits == null)
             hisKits = new ArrayList<Kit>();
+        boolean sortOwned = HungergamesApi.getConfigManager().getMainConfig().isSortKitGuiByOwned();
         for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
             Kit kit = allKits.get(currentKit);
             ItemStack item = kit.getIcon();
@@ -76,9 +79,14 @@ public class KitInventory extends PageInventory {
             item.setItemMeta(meta);
             if (item.getAmount() == 1)
                 item.setAmount(0);
-            items.add(item);
+            if (sortOwned && !kits.ownsKit(getPlayer(), kit)) {
+                nonOwned.add(item);
+            } else {
+                kitItems.add(item);
+            }
         }
-        this.setPages(items);
+        kitItems.addAll(nonOwned);
+        this.setPages(kitItems);
     }
 
     private List<String> wrap(String string) {
