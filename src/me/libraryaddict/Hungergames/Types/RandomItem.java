@@ -88,7 +88,9 @@ public class RandomItem implements ConfigurationSerializable {
      * @return Randomized itemstack
      */
     public ItemStack getItemStack() {
-        return new ItemStack(itemType, new Random().nextInt((Math.max((maxItems - minItems) + 1, 1)) + 1));
+        int amount = Math.max((maxItems - minItems) + 1, 1);
+        amount = new Random().nextInt(amount) + 1;
+        return new ItemStack(itemType, amount, itemData);
     }
 
     /**
