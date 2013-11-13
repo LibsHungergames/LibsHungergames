@@ -223,7 +223,7 @@ public class PlayerListener implements Listener {
                 if (item.equals(icon.getKitSelector())) {
                     icon.openKitInventory(p);
                     event.setCancelled(true);
-                } else if (item.getType() == Material.COMPASS && !gamer.isAlive()) {
+                } else if (config.isSpectatorMenuEnabled() && item.getType() == Material.COMPASS && !gamer.isAlive()) {
                     icon.openSpectatorInventory(p);
                     event.setCancelled(true);
                 }

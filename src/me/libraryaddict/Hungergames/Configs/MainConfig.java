@@ -24,7 +24,6 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
-
     /**
      * The amount the border closes in per second
      */
@@ -41,12 +40,12 @@ public class MainConfig extends BaseConfig {
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
-
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
+
     /**
      * Command to stop the server with
      */
@@ -102,11 +101,11 @@ public class MainConfig extends BaseConfig {
     /**
      * What item opens the kit selector menu
      */
-    private ItemStack kitSelectorIcon = new ItemStack(Material.FEATHER);;
+    private ItemStack kitSelectorIcon = new ItemStack(Material.FEATHER);
     /**
      * What is the max size of the kit selector
      */
-    private int kitSelectorInventorySize = 54;
+    private int kitSelectorInventorySize = 54;;
     /**
      * Whats the latest version of the plugin.
      */
@@ -183,6 +182,10 @@ public class MainConfig extends BaseConfig {
      * Spectators menu forwards item
      */
     private ItemStack spectatorItemForwards = new ItemStack(Material.SIGN);
+    /**
+     * Does the spectator menu work for them to teleport around
+     */
+    private boolean spectatorMenuEnabled = true;
     /**
      * Are players allowed to join a game in progress?
      */
