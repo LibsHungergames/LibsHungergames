@@ -85,6 +85,9 @@ public class KitInventory extends PageInventory {
                 kitItems.add(item);
             }
         }
+        if (!nonOwned.isEmpty()) {
+            kitItems.add(null);
+        }
         kitItems.addAll(nonOwned);
         this.setPages(kitItems);
     }
