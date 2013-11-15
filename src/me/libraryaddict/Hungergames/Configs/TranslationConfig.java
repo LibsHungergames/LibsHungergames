@@ -157,7 +157,7 @@ public class TranslationConfig extends BaseConfig {
     private String kickNobodyWonMessage = "Nobody won..\n\nThat could have been you!";
     private String kickSpectatorsDisabled = "Spectators have been disabled!";
     private String killMessageFellToDeath = "%s fell to their death";
-    private String killMessageFormatPlayerKit = ChatColor.RED + "%s" + ChatColor.DARK_RED + "(" + ChatColor.RED + "%s"
+    private String killMessageFormatPlayerKit = ChatColor.RED + "%Player%" + ChatColor.DARK_RED + "(" + ChatColor.RED + "%Kit%"
             + ChatColor.DARK_RED + ")";
     private String killMessageKilledByBorder = "%s believed the rumors of a better life beyond the border";
     private String killMessageLeavingGame = "%s was slaughtered for leaving the game";

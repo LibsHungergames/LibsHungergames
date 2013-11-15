@@ -75,10 +75,16 @@ public class PlayerManager {
     }
 
     private String formatDeathMessage(String deathMessage, Player p) {
-        String kitName = cm.getKillMessageNoKit();
+        String playerKit = cm.getKillMessageNoKit();
         if (kits.getKitByPlayer(p) != null)
-            kitName = kits.getKitByPlayer(p).getName();
-        return deathMessage.replaceAll(p.getName(), String.format(cm.getKillMessageFormatPlayerKit(), p.getName(), kitName));
+            playerKit = kits.getKitByPlayer(p).getName();
+        String killMessage = cm.getKillMessageFormatPlayerKit();
+        if (killMessage.contains("%Player%") || killMessage.contains("%Kit%")) {
+            playerKit = killMessage.replace("%Player%", p.getName()).replace("%Kit%", playerKit);
+        } else {
+            playerKit = String.format(killMessage, p.getName(), playerKit);
+        }
+        return deathMessage.replaceAll(p.getName(), playerKit);
     }
 
     public List<Gamer> getAliveGamers() {
