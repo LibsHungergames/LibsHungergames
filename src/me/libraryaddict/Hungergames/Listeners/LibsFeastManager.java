@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Listeners;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Getter;
@@ -12,6 +13,7 @@ import me.libraryaddict.Hungergames.Interfaces.ChestManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.GenerationManager;
 import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
+import me.libraryaddict.Hungergames.Types.CordPair;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -58,6 +60,7 @@ public class LibsFeastManager implements Listener {
         }
         ItemStack feastInside = config.getFeastConfig().getFeastInsides();
         ItemStack feastBlock = config.getFeastConfig().getFeastFeastBlock();
+        ArrayList<CordPair> chunksToUnload = new ArrayList<CordPair>();
         for (int x = -height; x < height + 1; x++) {
             for (int z = -height; z < height + 1; z++) {
                 // Get whichever number is higher
@@ -86,16 +89,20 @@ public class LibsFeastManager implements Listener {
                     boolean loadChunk = !b.getWorld().isChunkLoaded(b.getChunk().getX(), b.getChunk().getZ());
                     if (loadChunk) {
                         b.getWorld().loadChunk(b.getChunk().getX(), b.getChunk().getZ());
+                        chunksToUnload.add(new CordPair(b.getChunk().getX(), b.getChunk().getZ()));
                     }
                     block.setType(Material.CHEST);
                     Chest chest = (Chest) block.getState();
                     cm.fillChest(chest.getInventory());
                     chest.update();
-                    if (loadChunk) {
-                        b.getWorld().unloadChunk(b.getChunk().getX(), b.getChunk().getZ());
-                    }
                 } else
                     gen.setBlockFast(block, feastBlock.getTypeId(), feastBlock.getDurability());
+            }
+        }
+        World world = Bukkit.getWorlds().get(0);
+        for (CordPair pair : chunksToUnload) {
+            if (world.isChunkLoaded(pair.getX(), pair.getZ()) && !world.isChunkInUse(pair.getX(), pair.getZ())) {
+                world.unloadChunk(pair.getX(), pair.getZ());
             }
         }
     }
