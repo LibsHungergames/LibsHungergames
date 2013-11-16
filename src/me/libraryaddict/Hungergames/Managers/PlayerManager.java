@@ -84,7 +84,7 @@ public class PlayerManager {
         } else {
             playerKit = String.format(killMessage, p.getName(), playerKit);
         }
-        return deathMessage.replaceAll(p.getName(), playerKit);
+        return deathMessage.replace(p.getName(), playerKit);
     }
 
     public List<Gamer> getAliveGamers() {
