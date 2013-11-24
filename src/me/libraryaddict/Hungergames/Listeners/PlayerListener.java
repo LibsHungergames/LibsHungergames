@@ -70,11 +70,11 @@ public class PlayerListener implements Listener {
     private final InventoryManager icon = HungergamesApi.getInventoryManager();
     private final KitManager kits = HungergamesApi.getKitManager();
     private final NameManager name = HungergamesApi.getNameManager();
-    private final PlayerManager pm = HungergamesApi.getPlayerManager();
-    private final TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
     private String pluginIdentifier = "saebt4Ospv";
     // TODO Change password to a random one!
     private String pluginPassword = "libraryaddict";
+    private final PlayerManager pm = HungergamesApi.getPlayerManager();
+    private final TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {

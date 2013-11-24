@@ -88,6 +88,7 @@ public class TranslationConfig extends BaseConfig {
     private String commandKitKitDoesntExist = ChatColor.AQUA
             + "This kit does not exist!\nType /kit for all the kits you can use!";
     private String commandKitKitsDivider = ChatColor.DARK_GREEN + ", " + ChatColor.RESET;
+    private String commandKitMenuGameInProgress = ChatColor.RED + "The game is already in progress!";
     private String commandKitNoPermission = ChatColor.RED + "You do not have access to this kit!";
     private String commandKitNowUsingKit = ChatColor.AQUA + "Now using kit %s!";
     private String commandMeSpectating = ChatColor.RED + "Spectators may not use this command!";
