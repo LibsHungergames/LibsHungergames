@@ -279,7 +279,10 @@ public class Hungergames extends JavaPlugin {
                 return;
             }
         } else if (mainConfig.getAmountBorderClosesInPerSecond() > 0 && currentTime > mainConfig.getBorderStartsClosingIn()) {
-            mainConfig.setBorderSize(mainConfig.getBorderSize() - mainConfig.getAmountBorderClosesInPerSecond());
+            double borderSize = mainConfig.getBorderSize() - mainConfig.getAmountBorderClosesInPerSecond();
+            if (borderSize < 0)
+                borderSize = 0;
+            mainConfig.setBorderSize(borderSize);
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardBorderSize(),
                     (int) mainConfig.getBorderSize());
         }
