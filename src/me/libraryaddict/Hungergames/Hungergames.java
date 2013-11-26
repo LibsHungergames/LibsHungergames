@@ -97,11 +97,11 @@ public class Hungergames extends JavaPlugin {
         double border = mainConfig.getBorderSize();
         if (mainConfig.isRoundedBorder()) {
             sLoc.setY(loc.getY());
-            double fromBorder = loc.distance(sLoc) - border;
-            if (Math.abs(fromBorder - 20) > 0) {
+            double fromSpawn = loc.distance(sLoc);
+            if (fromSpawn >= border - 20) {
                 // Warn
                 p.sendMessage(translationsConfig.getMessagePlayerApproachingBorder());
-                if (fromBorder > 0) {
+                if (fromSpawn >= border) {
                     // Punish
                     if (gamer.isAlive()) {
                         // Damage and potentially kill.
