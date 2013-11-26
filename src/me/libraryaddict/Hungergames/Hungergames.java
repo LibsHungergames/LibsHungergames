@@ -98,7 +98,7 @@ public class Hungergames extends JavaPlugin {
         if (mainConfig.isRoundedBorder()) {
             sLoc.setY(loc.getY());
             double fromBorder = loc.distance(sLoc) - border;
-            if (fromBorder - 20 > 0) {
+            if (Math.abs(fromBorder - 20) > 0) {
                 // Warn
                 p.sendMessage(translationsConfig.getMessagePlayerApproachingBorder());
                 if (fromBorder > 0) {
