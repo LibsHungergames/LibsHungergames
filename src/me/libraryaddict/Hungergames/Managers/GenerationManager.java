@@ -145,7 +145,7 @@ public class GenerationManager {
                     for (int z = -pillarRadius; z <= pillarRadius; z++) {
                         Block b = loc.getWorld().getBlockAt(x + loc.getBlockX() + cords[px], loc.getBlockY() - 2,
                                 z + loc.getBlockZ() + cords[pz]);
-                        while (!isSolid(b)) {
+                        while (!isSolid(b) || b.isLiquid()) {
                             if (Math.abs(x) == pillarRadius && Math.abs(z) == pillarRadius)
                                 setBlockFast(b, pillarCornerId, (short) pillarCornerData);
                             else
@@ -280,7 +280,7 @@ public class GenerationManager {
     }
 
     private boolean isSolid(Block b) {
-        return (!(b.getType() == Material.AIR || b.isLiquid() || b.getType() == Material.VINE || b.getType() == Material.LOG
+        return (!(b.getType() == Material.AIR || b.getType() == Material.VINE || b.getType() == Material.LOG
                 || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
                 || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
                 .getType().name().contains("MUSHROOM")));
