@@ -201,8 +201,6 @@ public class Gamer {
                 }
             }
         }
-        // Remove arrows sticking in player..
-        HungergamesApi.getReflectionManager().removeArrows(getPlayer());
         if (alive) {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()
                     && HungergamesApi.getConfigManager().getMainConfig().isSpectatorsVisibleToEachOther()) {

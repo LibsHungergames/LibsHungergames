@@ -55,18 +55,6 @@ public class ReflectionManager {
         return obj;
     }
 
-    public void removeArrows(Player player) {
-        try {
-            Method handle = player.getClass().getMethod("getHandle");
-            String methodName = "abcdefg";
-            if (currentVersion.contains("v1_6_R2"))
-                methodName = "m";
-            handle.invoke(player).getClass().getMethod(methodName, int.class).invoke(handle.invoke(player), 0);
-        } catch (Exception ex) {
-            // Obviously it couldn't find the method 'm'
-        }
-    }
-
     public void savePropertiesConfig() {
         try {
             propertyManager.getClass().getMethod("savePropertiesFile").invoke(propertyManager);
