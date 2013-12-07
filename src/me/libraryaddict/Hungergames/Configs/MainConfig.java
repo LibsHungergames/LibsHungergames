@@ -347,8 +347,8 @@ public class MainConfig extends BaseConfig {
                  * this code.
                  */
                 TranslationConfig translation = HungergamesApi.getConfigManager().getTranslationsConfig();
-                translation.setMessagePlayerWhosePlugin(String.format(translation.getMessagePlayerWhosePlugin(), "libraryaddict",
-                        getCurrentVersion()));
+                translation.setMessagePlayerWhosePlugin(String.format(translation.getMessagePlayerWhosePlugin(),
+                        getCurrentVersion(), "libraryaddict"));
                 String message = ChatColor.stripColor(translation.getMessagePlayerWhosePlugin()).toLowerCase().replace(" ", "");
                 String[] toCheck = new String[] { "libraryaddict", "ow.ly/kwbpo", "libshungergames" };
                 boolean contains = false;

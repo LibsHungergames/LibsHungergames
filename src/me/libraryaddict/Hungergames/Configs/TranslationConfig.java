@@ -210,7 +210,7 @@ public class TranslationConfig extends BaseConfig {
     private String messagePlayerWarningForgeUnstableEnchants = ChatColor.RED
             + "Minecraft will crash if you attempt to put this in";
     private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
-            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict";
+            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "%s";
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
     private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
     private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in:";
