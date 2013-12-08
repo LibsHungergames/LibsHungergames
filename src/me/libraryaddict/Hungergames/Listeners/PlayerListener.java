@@ -355,7 +355,9 @@ public class PlayerListener implements Listener {
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
-        pm.loadGamer.add(gamer);
+        if (config.isMysqlEnabled()) {
+            pm.loadGamer.add(gamer);
+        }
         if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)
             p.sendMessage(String.format(tm.getMessagePlayerUpdateAvailable(), config.getLatestVersion(),
                     config.getCurrentVersion()));
