@@ -112,13 +112,6 @@ Kits:
     Icon: ICE 0 1
     Ability:
       - Icicles
-  Zombifier:
-    Description: 'Your father was a human and your mother was a zombie. I don''t care to discuss how your parents got together and the moral ramifications. It happened, lets leave it at that. When you sneak, everyone can agree you take after your mothers side, your armor even seems to disappear! But when standing tall, you look like your father! If you didn''t understand that, you turn into a zombie when sneaking.'
-    Free: true
-    Price: 0
-    Icon: ROTTEN_FLESH 0 1
-    Ability:
-      - Zombifier
   libraryaddict:
     Description: 'Its no secret some people love books. Infact, some people love books to the extent where they turn them into exploding weapons! Using this kit you have 5 exploding books, chuck it like a grenade and RUN'
     Free: true
@@ -148,7 +141,7 @@ Kits:
     Description: 'Players with this kit have a Speed I buff during the day and a night vison buff at night.'
     Free: true
     Price: 0
-    Icon: REDSTONE_WIRE 0 1
+    Icon: NETHER_STAR 0 1
     Ability:
       - Ninja
   NoCheatBypass:
@@ -192,6 +185,13 @@ Kits:
     Description: 'The surprise kit is a randomizer, you are given a random kit when the game starts. Even if you do not own that kit. A great way to try out these kits and get a little variation!'
     Free: true
     Price: 0
-    Icon: CAKE_BLOCK 0 1
+    Icon: CAKE 0 1
     Ability:
       - Surprise
+  Zombifier:
+    Description: 'Your father was a human and your mother was a zombie. I don''t care to discuss how your parents got together and the moral ramifications. It happened, lets leave it at that. When you sneak, everyone can agree you take after your mothers side, your armor even seems to disappear! But when standing tall, you look like your father! If you didn''t understand that, you turn into a zombie when sneaking.'
+    Free: true
+    Price: 0
+    Icon: ROTTEN_FLESH 0 1
+    Ability:
+      - Zombifier
