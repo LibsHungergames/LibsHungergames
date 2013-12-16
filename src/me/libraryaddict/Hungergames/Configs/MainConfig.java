@@ -235,11 +235,11 @@ public class MainConfig extends BaseConfig {
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
-    private int x;
+    private int forceSpawnX;
     /**
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
-    private int z;
+    private int forceSpawnZ;
 
     public MainConfig() {
         super("config");

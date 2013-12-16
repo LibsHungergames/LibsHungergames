@@ -211,8 +211,9 @@ public class Hungergames extends JavaPlugin {
                 world.setGameRuleValue("doDaylightCycle", "false");
                 world.setTime(6000);
                 if (mainConfig.isForcedCords())
-                    world.setSpawnLocation(mainConfig.getX(), world.getHighestBlockYAt(mainConfig.getX(), mainConfig.getZ()),
-                            mainConfig.getZ());
+                    world.setSpawnLocation(mainConfig.getForceSpawnX(),
+                            world.getHighestBlockYAt(mainConfig.getForceSpawnX(), mainConfig.getForceSpawnZ()),
+                            mainConfig.getForceSpawnZ());
                 Location spawn = world.getSpawnLocation();
                 for (int x = -5; x <= 5; x++)
                     for (int z = -5; z <= 5; z++)

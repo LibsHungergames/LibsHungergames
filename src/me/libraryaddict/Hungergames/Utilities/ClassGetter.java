@@ -50,7 +50,7 @@ public class ClassGetter {
         try {
             jarFile = new JarFile(jarPath);
         } catch (IOException e) {
-            throw new RuntimeException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
+            throw new RuntimeException("Unexpected IOException reading JAR File '" + jarPath + "'. Do you have strange characters in your folders? Such as #?", e);
         }
         Enumeration<JarEntry> entries = jarFile.entries();
         while (entries.hasMoreElements()) {
