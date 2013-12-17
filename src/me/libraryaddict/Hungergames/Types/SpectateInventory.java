@@ -74,7 +74,7 @@ public class SpectateInventory extends PageInventory {
         ArrayList<ItemStack> heads = new ArrayList<ItemStack>();
         for (String name : names) {
             if (name.equals("Feast")) {
-                ItemStack head = new ItemStack(Material.CAKE_BLOCK, 0);
+                ItemStack head = new ItemStack(Material.CAKE, 0);
                 ItemMeta meta = head.getItemMeta();
                 meta.setDisplayName(tm.getSpectatorInventoryFeastName());
                 meta.setLore(Arrays.asList(tm.getSpectatorInventoryFeastDescription().split("\n")));
