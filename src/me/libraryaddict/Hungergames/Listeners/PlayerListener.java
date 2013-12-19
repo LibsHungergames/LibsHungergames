@@ -333,7 +333,11 @@ public class PlayerListener implements Listener {
                 gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
             }
         }, 2L);
-        p.setScoreboard(ScoreboardManager.getScoreboard("Main"));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+            public void run() {
+                gamer.getPlayer().setScoreboard(ScoreboardManager.getScoreboard("Main"));
+            }
+        });
         if (config.isPlayersFlyPreGame())
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
