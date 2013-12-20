@@ -219,6 +219,14 @@ public class MapLoader {
                         Location loc = new Location(HungergamesApi.getHungergames().world, x, y, z);
                         loc.setPitch(pitch);
                         loc.setYaw(yaw);
+                        MainConfig mConfig = HungergamesApi.getConfigManager().getMainConfig();
+                        if (mConfig.isForcedCords()) {
+                            Location newLoc = new Location(loc.getWorld(), mConfig.getForceSpawnX(), loc.getY(),
+                                    mConfig.getForceSpawnZ());
+                            if (newLoc.distance(loc) >= mConfig.getBorderSize()) {
+                                System.out.print(String.format(tm.getLoadedSpawnOutsideBorder(), spawnName));
+                            }
+                        }
                         HungergamesApi.getPlayerManager().addSpawnPoint(loc, radius, height);
                         i++;
                     } catch (Exception ex) {

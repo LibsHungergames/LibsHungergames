@@ -28,6 +28,8 @@ public class LoggerConfig extends BaseConfig {
     private String kitAlreadyExists = "[Hungergames] Kit %s already exists!";
     private String loadAbilitiesPackage = "[Hungergames] Adding abilities from plugin %s in package %s";
     private String loadCommandsPackage = "[Hungergames] Adding commands from plugin %s in package %s";
+    private String loadedSpawnOutsideBorder = "[Hungergames] You may be interested to know that the spawn %s is outside the border."
+            + " Try looking at turning 'forcedCords' in the main config off";
     private String loadedSpawns = "[Hungergames] Loaded %s player spawns";
     private String loadedSpawnsConfig = "[Hungergames] Loaded %s spawns";
     private String loadingConfigFile = "[Hungergames] Loading config file %s.yml";
