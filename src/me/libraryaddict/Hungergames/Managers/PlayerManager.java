@@ -223,30 +223,33 @@ public class PlayerManager {
             if (spawnItel == null || !spawnItel.hasNext())
                 spawnItel = spawns.keySet().iterator();
             originalSpawn = spawnItel.next();
-            spawnRadius = Math.max(1, spawns.get(originalSpawn)[0]);
-            spawnHeight = Math.max(1, spawns.get(originalSpawn)[1]);
+            spawnRadius = spawns.get(originalSpawn)[0];
+            spawnHeight = spawns.get(originalSpawn)[1];
         }
         Location spawn = originalSpawn.clone();
         int chances = 0;
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
-        while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
-            chances++;
-            Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
-                    + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
-            if (nonSolid.contains(newLoc.getBlock().getTypeId())
-                    && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
-                while (newLoc.getBlockY() >= 1 && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
-                    newLoc = newLoc.add(0, -1, 0);
+        if (Math.abs(spawnHeight) > 0 || Math.abs(spawnRadius) > 0) {
+            while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
+                chances++;
+                Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
+                        + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
+                if (nonSolid.contains(newLoc.getBlock().getTypeId())
+                        && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
+                    while (newLoc.getBlockY() >= 1
+                            && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.DOWN).getTypeId())) {
+                        newLoc = newLoc.add(0, -1, 0);
+                    }
+                    if (newLoc.getBlockY() <= 1)
+                        continue;
+                    spawn = newLoc;
+                    break;
                 }
-                if (newLoc.getBlockY() <= 1)
-                    continue;
-                spawn = newLoc;
-                break;
             }
         }
-        if (spawn.equals(originalSpawn)) {
+        if (spawn.getBlock().equals(originalSpawn.getBlock())) {
             spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
                     + returnChance(-spawnRadius, spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
@@ -255,7 +258,9 @@ public class PlayerManager {
                 spawn.setY(spawn.getY() + 1);
             }
         }
-        final Location destination = spawn.add(0.5, 0.1, 0.5);
+        final Location destination = spawn.getBlock().getLocation().add(0.5, 0.1, 0.5);
+        destination.setPitch(originalSpawn.getPitch());
+        destination.setYaw(originalSpawn.getYaw());
         p.teleport(destination);
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
