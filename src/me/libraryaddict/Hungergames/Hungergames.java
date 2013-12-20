@@ -33,6 +33,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
@@ -267,6 +269,17 @@ public class Hungergames extends JavaPlugin {
             world.setTime(0);
             ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn(),
                     -currentTime);
+            if (mainConfig.isTeleportToSpawnLocationPregame() && -currentTime == mainConfig.getSecondsToTeleportPlayerToSpawn()) {
+                for (Gamer gamer : HungergamesApi.getPlayerManager().getGamers()) {
+                    HungergamesApi.getPlayerManager().sendToSpawn(gamer);
+                    if (mainConfig.isPreventMovingFromSpawnUsingPotions()) {
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 200), true);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 200), true);
+                        }
+                    }
+                }
+            }
             if (mainConfig.isGameStarting(currentTime))
                 Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastGameStartingIn(), returnTime(currentTime)));
         } else if (currentTime == 0) {
@@ -378,6 +391,10 @@ public class Hungergames extends JavaPlugin {
                 gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
             gamer.seeInvis(false);
             gamer.setAlive(true);
+            if (mainConfig.isTeleportToSpawnLocationPregame() && mainConfig.isPreventMovingFromSpawnUsingPotions()) {
+                gamer.getPlayer().removePotionEffect(PotionEffectType.SLOW);
+                gamer.getPlayer().removePotionEffect(PotionEffectType.JUMP);
+            }
             pm.sendToSpawn(gamer);
         }
         world.setGameRuleValue("doDaylightCycle", "true");

@@ -22,6 +22,7 @@ import me.libraryaddict.Hungergames.Types.Kit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
@@ -52,6 +53,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -60,6 +62,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerListener implements Listener {
@@ -355,6 +358,11 @@ public class PlayerListener implements Listener {
             if (config.isKitSelectorEnabled() && !config.isMysqlEnabled())
                 if (!p.getInventory().contains(icon.getKitSelector()))
                     gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
+            if (config.isTeleportToSpawnLocationPregame() && -config.getSecondsToTeleportPlayerToSpawn() >= hg.currentTime
+                    && config.isPreventMovingFromSpawnUsingPotions()) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 200), true);
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 200), true);
+            }
         }
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
@@ -396,6 +404,20 @@ public class PlayerListener implements Listener {
                 && hg.doSeconds && !event.getReceiver().hasPermission("hungergames.spectatorchat")
                 && !event.getSender().hasPermission("hungergames.spectatorchat")) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        if (config.isTeleportToSpawnLocationPregame() && hg.currentTime >= -config.getSecondsToTeleportPlayerToSpawn()
+                && hg.currentTime < 0) {
+            if (event.getTo().distance(event.getFrom()) != 0) {
+                Location newLoc = event.getFrom().clone();
+                newLoc.setPitch(event.getTo().getPitch());
+                newLoc.setYaw(event.getTo().getYaw());
+                event.setFrom(newLoc);
+                event.setCancelled(true);
+            }
         }
     }
 

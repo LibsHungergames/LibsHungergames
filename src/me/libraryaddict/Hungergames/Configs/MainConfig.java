@@ -36,6 +36,7 @@ public class MainConfig extends BaseConfig {
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
+
     /**
      * Does the plugin check for updates..
      */
@@ -49,7 +50,6 @@ public class MainConfig extends BaseConfig {
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
-
     /**
      * The current version of the plugin
      */
@@ -62,10 +62,19 @@ public class MainConfig extends BaseConfig {
      * Is fire spread enabled pre-game
      */
     private boolean fireSpreadPreGame = false;
+
     /**
      * Do I force the spawns co-ordinates to be at a location
      */
     private boolean forcedCords = true;
+    /**
+     * The 'x' of the worlds spawn if forcing co-ordinates
+     */
+    private int forceSpawnX;
+    /**
+     * The 'z' of the worlds spawn if forcing co-ordinates
+     */
+    private int forceSpawnZ;
     /**
      * How long do I wait before shutting down the game
      */
@@ -109,11 +118,11 @@ public class MainConfig extends BaseConfig {
     /**
      * Whats the latest version of the plugin.
      */
-    private String latestVersion = null;;
+    private String latestVersion = null;
     /**
      * If there is a height limit. What should I set it to
      */
-    private int maxHeightLimit = 128;
+    private int maxHeightLimit = 128;;
     /**
      * Is metrics enabled
      */
@@ -146,6 +155,7 @@ public class MainConfig extends BaseConfig {
      * What is the players prefix while they are alive
      */
     private String prefixWhenAlive = "<%Name%> %Message%";
+    private boolean preventMovingFromSpawnUsingPotions = false;
     /**
      * Is the border round instead of square
      */
@@ -154,6 +164,7 @@ public class MainConfig extends BaseConfig {
      * Is the scoreboard enabled, if false then other plugins can use their scoreboards
      */
     private boolean scoreboardEnabled = true;
+    private int secondsToTeleportPlayerToSpawn = 180;
     /**
      * Should I shorten the names of players in the playerlist to prevent their names overlapping kills
      */
@@ -203,6 +214,10 @@ public class MainConfig extends BaseConfig {
      */
     private boolean spectatorsVisibleToEachOther = true;
     /**
+     * Shall I teleport the player to his location pregame and detain him there?
+     */
+    private boolean teleportToSpawnLocationPregame = false;
+    /**
      * How long does invincibility last
      */
     private int timeForInvincibility = 120;
@@ -232,14 +247,6 @@ public class MainConfig extends BaseConfig {
      * The delay between 'libraryaddict won!' broadcasts after the game ends, not related to gameshutdown time
      */
     private int wonBroadcastsDelay = 6;
-    /**
-     * The 'x' of the worlds spawn if forcing co-ordinates
-     */
-    private int forceSpawnX;
-    /**
-     * The 'z' of the worlds spawn if forcing co-ordinates
-     */
-    private int forceSpawnZ;
 
     public MainConfig() {
         super("config");
