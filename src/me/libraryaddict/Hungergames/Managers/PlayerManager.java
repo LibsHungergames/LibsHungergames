@@ -231,7 +231,9 @@ public class PlayerManager {
         if (p.isInsideVehicle())
             p.leaveVehicle();
         p.eject();
+        boolean foundSpawn = true;
         if (Math.abs(spawnHeight) > 0 || Math.abs(spawnRadius) > 0) {
+            foundSpawn = false;
             while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
                 chances++;
                 Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
@@ -245,11 +247,13 @@ public class PlayerManager {
                     if (newLoc.getBlockY() <= 1)
                         continue;
                     spawn = newLoc;
+                    foundSpawn = true;
                     break;
                 }
             }
         }
-        if (spawn.getX() == originalSpawn.getX() && spawn.getY() == originalSpawn.getY() && spawn.getZ() == originalSpawn.getZ()) {
+        if (!foundSpawn && spawn.getX() == originalSpawn.getX() && spawn.getY() == originalSpawn.getY()
+                && spawn.getZ() == originalSpawn.getZ()) {
             spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
                     + returnChance(-spawnRadius, spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
