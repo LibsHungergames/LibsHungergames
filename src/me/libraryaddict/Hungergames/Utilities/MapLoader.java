@@ -181,45 +181,48 @@ public class MapLoader {
             if (spawnsFile.exists()) {
                 config = YamlConfiguration.loadConfiguration(spawnsFile);
                 int i = 0;
-                for (String key : config.getKeys(true)) {
+                for (String spawnName : config.getKeys(false)) {
                     try {
-                        ConfigurationSection section = config.getConfigurationSection(key);
-                        int x, y, z, radius, height;
-                        if (section.contains("X"))
-                            x = section.getInt("X");
-                        else {
-                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "X"));
+                        ConfigurationSection section = config.getConfigurationSection(spawnName);
+                        int radius = 0, height = 0;
+                        double x = Integer.MAX_VALUE, y = Integer.MAX_VALUE, z = Integer.MAX_VALUE;
+                        float pitch = 0, yaw = 0;
+                        for (String key : section.getKeys(false)) {
+                            if (key.equalsIgnoreCase("x")) {
+                                x = section.getDouble(key);
+                            } else if (key.equalsIgnoreCase("y")) {
+                                y = section.getDouble(key);
+                            } else if (key.equalsIgnoreCase("z")) {
+                                z = section.getDouble(key);
+                            } else if (key.equalsIgnoreCase("radius")) {
+                                radius = section.getInt(key);
+                            } else if (key.equalsIgnoreCase("height")) {
+                                height = section.getInt(key);
+                            } else if (key.equalsIgnoreCase("pitch")) {
+                                pitch = (float) section.getDouble(key);
+                            } else if (key.equalsIgnoreCase("yaw")) {
+                                yaw = (float) section.getDouble(key);
+                            }
+                        }
+                        if (x == Integer.MAX_VALUE) {
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), spawnName, "X"));
                             continue;
                         }
-                        if (section.contains("Y"))
-                            y = section.getInt("Y");
-                        else {
-                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Y"));
+                        if (y == Integer.MAX_VALUE) {
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), spawnName, "Y"));
                             continue;
                         }
-                        if (section.contains("Z"))
-                            z = section.getInt("Z");
-                        else {
-                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Z"));
-                            continue;
-                        }
-                        if (section.contains("Radius"))
-                            radius = section.getInt("Radius");
-                        else {
-                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Radius"));
-                            continue;
-                        }
-                        if (section.contains("Height"))
-                            height = section.getInt("Height");
-                        else {
-                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, "Height"));
+                        if (z == Integer.MAX_VALUE) {
+                            System.out.print(String.format(tm.getLoadSpawnsConfigError(), spawnName, "Y"));
                             continue;
                         }
                         Location loc = new Location(HungergamesApi.getHungergames().world, x, y, z);
+                        loc.setPitch(pitch);
+                        loc.setYaw(yaw);
                         HungergamesApi.getPlayerManager().addSpawnPoint(loc, radius, height);
                         i++;
                     } catch (Exception ex) {
-                        System.out.print(String.format(tm.getLoadSpawnsConfigError(), key, ex.getMessage()));
+                        System.out.print(String.format(tm.getLoadSpawnsConfigError(), spawnName, ex.getMessage()));
                     }
                 }
                 System.out.print(String.format(tm.getLoadedSpawnsConfig(), i));
