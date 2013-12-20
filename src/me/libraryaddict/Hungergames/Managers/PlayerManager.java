@@ -249,7 +249,7 @@ public class PlayerManager {
                 }
             }
         }
-        if (spawn.getBlock().equals(originalSpawn.getBlock())) {
+        if (spawn.getX() == originalSpawn.getX() && spawn.getY() == originalSpawn.getY() && spawn.getZ() == originalSpawn.getZ()) {
             spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
                     + returnChance(-spawnRadius, spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
@@ -258,7 +258,9 @@ public class PlayerManager {
                 spawn.setY(spawn.getY() + 1);
             }
         }
-        final Location destination = spawn.getBlock().getLocation().add(0.5, 0.1, 0.5);
+        final Location destination = spawn;
+        if (spawn.getX() % 1 == 0 && spawn.getY() % 1 == 0 && spawn.getZ() % 1 == 0)
+            spawn.add(0.5, 0.1, 0.5);
         destination.setPitch(originalSpawn.getPitch());
         destination.setYaw(originalSpawn.getYaw());
         p.teleport(destination);
