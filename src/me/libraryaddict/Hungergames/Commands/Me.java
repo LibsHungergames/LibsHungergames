@@ -25,7 +25,11 @@ public class Me implements CommandExecutor {
             sender.sendMessage(tm.getCommandMeSpectating());
             return true;
         }
-        Bukkit.broadcastMessage("* " + ((Player) sender).getDisplayName() + ChatColor.RESET + " " + StringUtils.join(args, " "));
-        return true;
+        if (args.length == 0) {
+            return false;
+        } else {
+            Bukkit.broadcastMessage("* " + ((Player) sender).getDisplayName() + ChatColor.RESET + " " + StringUtils.join(args, " "));
+            return true;
+        }
     }
 }
