@@ -178,6 +178,7 @@ public class Hungergames extends JavaPlugin {
         return true;
     }
 
+    @Override
     public void onDisable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(translationsConfig.getKickGameShutdownUnexpected());
@@ -188,6 +189,7 @@ public class Hungergames extends JavaPlugin {
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
     }
 
+    @Override
     public void onEnable() {
         HungergamesApi.init(this);
         ConfigManager config = HungergamesApi.getConfigManager();
