@@ -71,7 +71,7 @@ public class PlayerManager {
     }
 
     public void addSpawnPoint(Location loc, int radius, int height) {
-        spawns.put(loc, new Integer[] { radius, height });
+        spawns.put(loc.add(0.000001, 0, 0.000001), new Integer[] { radius, height });
     }
 
     private String formatDeathMessage(String deathMessage, Player p) {
@@ -267,6 +267,7 @@ public class PlayerManager {
             spawn.add(0.5, 0.1, 0.5);
         destination.setPitch(originalSpawn.getPitch());
         destination.setYaw(originalSpawn.getYaw());
+        destination.setWorld(p.getWorld());
         p.teleport(destination);
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
