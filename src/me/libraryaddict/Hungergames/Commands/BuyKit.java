@@ -27,7 +27,7 @@ public class BuyKit implements CommandExecutor {
                     sender.sendMessage(cm.getCommandBuyKitCantAfford());
                     return true;
                 }
-                if (kit.getPrice() < 0 || kit.isFree()) {
+                if (kit.getPrice() <= 0 || kit.isFree()) {
                     sender.sendMessage(cm.getCommandBuyKitCantBuyKit());
                     return true;
                 }
