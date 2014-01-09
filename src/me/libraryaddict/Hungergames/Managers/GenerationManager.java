@@ -227,9 +227,12 @@ public class GenerationManager {
     }
 
     private Block getHighest(Block b) {
-        while (b.getY() > 0 && !isSolid(b))
+        if (isSolid(b)) {
+            return b;
+        }
+        while (b.getY() > 0 && !isSolid(b.getRelative(BlockFace.DOWN)))
             b = b.getRelative(BlockFace.DOWN);
-        return b;
+        return b.getRelative(BlockFace.DOWN);
     }
 
     /**
@@ -280,10 +283,25 @@ public class GenerationManager {
     }
 
     private boolean isSolid(Block b) {
-        return (!(b.getType() == Material.AIR || b.getType() == Material.VINE || b.getType() == Material.LOG
-                || b.getType() == Material.LEAVES || b.getType() == Material.SNOW || b.getType() == Material.LONG_GRASS
-                || b.getType() == Material.WOOD || b.getType() == Material.COBBLESTONE || b.getType().name().contains("FLOWER") || b
-                .getType().name().contains("MUSHROOM")));
+        switch (b.getType()) {
+        case AIR:
+        case VINE:
+        case LOG:
+        case LEAVES:
+        case SNOW:
+        case LONG_GRASS:
+        case WOOD:
+        case COBBLESTONE:
+        case RED_ROSE:
+        case YELLOW_FLOWER:
+        case BROWN_MUSHROOM:
+        case RED_MUSHROOM:
+        case HUGE_MUSHROOM_1:
+        case HUGE_MUSHROOM_2:
+            return false;
+        default:
+            return true;
+        }
     }
 
     private void removeLeaves(Block b) {
