@@ -60,6 +60,10 @@ public class LibsChestManager implements ChestManager {
         randomItems.add(item);
     }
 
+    public void setRandomItems(ArrayList<RandomItem> items) {
+        this.randomItems = items;
+    }
+
     public void clearRandomItems() {
         randomItems.clear();
     }

@@ -194,6 +194,7 @@ public class Hungergames extends JavaPlugin {
         HungergamesApi.init(this);
         ConfigManager config = HungergamesApi.getConfigManager();
         config.loadConfigs();
+        HungergamesApi.getChestManager().setRandomItems(config.getFeastConfig().getRandomItems());
         translationsConfig = config.getTranslationsConfig();
         mainConfig = config.getMainConfig();
         pm = HungergamesApi.getPlayerManager();
