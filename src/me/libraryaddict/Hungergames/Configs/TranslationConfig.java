@@ -75,8 +75,8 @@ public class TranslationConfig extends BaseConfig {
     private String commandInvisShowPlayerNoArgs = ChatColor.BLUE + "You must give a playername";
     private String commandInvisShowPlayerSuccess = ChatColor.BLUE + "Revealed %s";
     private String commandKillMurderMessage = "%1$2s was killed by a command.";
-    private String commandKillNotAlive = ChatColor.RED + "He is not alive";
-    private String commandKillPlayerNotFound = ChatColor.RED + "He doesn't exist";
+    private String commandKillNotAlive = ChatColor.RED + "The player is not alive";
+    private String commandKillPlayerNotFound = ChatColor.RED + "The player doesn't exist";
     private String commandKillSomeoneNoPermission = ChatColor.RED + "You may not kill someone..";
     private String commandKillUseSuicide = ChatColor.RED + "Please use /suicide";
     private String commandKitAlreadyUsing = ChatColor.RED + "Already using kit %s!";
@@ -124,7 +124,7 @@ public class TranslationConfig extends BaseConfig {
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
     private String commandSpawnPointingToSpawn = ChatColor.YELLOW + "Compass is now pointing to spawn";
     private String commandSuicideAssistedDeathMessage = "%s was helped on the path to suicide";
-    private String commandSuicideDoesntExist = ChatColor.RED + "He doesn't exist";
+    private String commandSuicideDoesntExist = ChatColor.RED + "The player requested cannot be found";
     private String commandSuicideKillMessage = "%s commited suicide.";
     private String commandSuicideNoPermission = ChatColor.RED + "You may not kill someone..";
     private String commandSuicideNotAlive = ChatColor.RED + "Dead men can't die";
@@ -164,13 +164,13 @@ public class TranslationConfig extends BaseConfig {
     private String killMessageLeavingGame = "%s was slaughtered for leaving the game";
     private String killMessageNoKit = "None";
     private String[] killMessages = new String[] { "%Killer% dual wielded a %Weapon% and laid waste upon %Killed%",
-            "%Killer% slid a %Weapon% into %Killed% when he wasn't looking",
+            "%Killer% slid a %Weapon% into %Killed% when their back was turned",
             "%Killed% was murdered in cold blood by %Killer% with a %Weapon%",
-            "%Killed% gasped his last breath as %Killer% savagely stabbed him with a %Weapon%",
-            "%Killed% screamed in agony as he was bludgeoned over the head with a %Weapon% by %Killer%",
+            "%Killed% gasped their last breath as %Killer% savagely stabbed him with a %Weapon%",
+            "%Killed% screamed in agony as they were bludgeoned over the head with a %Weapon% by %Killer%",
             "%Killed% was killed by %Killer% with a %Weapon%",
-            "%Killer% gave %Killed% a helping hand into death's sweet embrace with his trusty %Weapon%",
-            "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and his trusty %Weapon% slew %Killed%",
+            "%Killer% gave %Killed% a helping hand into death's sweet embrace with their trusty %Weapon%",
+            "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and their trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
 

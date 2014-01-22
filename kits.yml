@@ -145,7 +145,7 @@ Kits:
     Ability:
       - Ninja
   NoCheatBypass:
-    Description: 'This is a kit merely meant to display how to use the ability Permissive, Permissive gives the perms to the player while he is still alive. You need to setup the kit name and permisions in the abilities.yml. This kit is NOT meant to be used. It will let anyone who uses it bypass nocheat.'
+    Description: 'This is a kit merely meant to display how to use the ability Permissive, Permissive gives the perms to the player while they is still alive. You need to setup the kit name and permisions in the abilities.yml. This kit is NOT meant to be used. It will let anyone who uses it bypass nocheat.'
     Free: true
     Price: 0
     Icon: DIAMOND 0 1
