@@ -249,8 +249,9 @@ public class GenerationManager {
             int x = (int) (loc.getX() + .5 + radius * Math.cos(angle));
             int z = (int) (loc.getZ() + radius * Math.sin(angle));
             Block b = getHighest(loc.getWorld().getHighestBlockAt(x, z));
-            if (isBlockValid(b))
+            if (isBlockValid(b)) {
                 heightLevels.add(b.getY());
+            }
             /*
              * // Do it again but at 2/3 the radius angle = degree * Math.PI /
              * 180; x = (int) (loc.getX() + .5 + ((radius / 3) * 2) *
@@ -262,8 +263,9 @@ public class GenerationManager {
              */
         }
         Block b = getHighest(loc.getBlock());
-        if (isBlockValid(b))
+        if (isBlockValid(b)) {
             heightLevels.add(b.getY());
+        }
         Collections.sort(heightLevels);
         int y = getHeight(heightLevels, 5);
         if (y == -1)
@@ -273,8 +275,8 @@ public class GenerationManager {
     }
 
     private boolean isBlockValid(Block b) {
-        if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
-            return false;
+       // if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
+       //     return false;
         return true;
     }
 
