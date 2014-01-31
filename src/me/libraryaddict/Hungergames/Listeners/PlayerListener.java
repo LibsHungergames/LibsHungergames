@@ -128,7 +128,7 @@ public class PlayerListener implements Listener {
         if (event.getEntity() instanceof Player
                 || (event.getEntity() instanceof Tameable && ((Tameable) event.getEntity()).isTamed())) {
             if ((event.getEntity() instanceof Player && (!hg.doSeconds || !pm.getGamer(event.getEntity()).isAlive()))
-                    || hg.currentTime <= config.getTimeForInvincibility())
+                    || (event.getCause() != DamageCause.VOID && hg.currentTime <= config.getTimeForInvincibility()))
                 event.setCancelled(true);
         }
     }
