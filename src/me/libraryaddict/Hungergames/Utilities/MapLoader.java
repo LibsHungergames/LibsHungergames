@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -128,23 +127,34 @@ public class MapLoader {
         }
     }
 
-    private static void loadMap(File mapDir, File dest, YamlConfiguration config) {
+    private static void loadMap(File mapDir, File dest, YamlConfiguration config) throws IOException {
         LoggerConfig tm = HungergamesApi.getConfigManager().getLoggerConfig();
         System.out.print(String.format(tm.getNowAttemptingToLoadAMap(), mapDir.toString()));
         List<File> maps = new ArrayList<File>();
+        String dontLoad = config.getString("LastMapUsed", null);
+        File toRemove = null;
         if (mapDir.exists()) {
             for (File file : mapDir.listFiles()) {
                 if (file.isDirectory()) {
-                    if (new File(file.toString() + "/level.dat").exists())
+                    if (new File(file, "level.dat").exists()) {
                         maps.add(file);
+                        if (dontLoad != null && dontLoad.equals(file.getName())) {
+                            toRemove = file;
+                        }
+                    }
                 }
             }
         }
         if (maps.size() > 0) {
-            Collections.shuffle(maps, new Random());
-            File toLoad = maps.get(0);
-            for (File f : toLoad.listFiles())
+            if (maps.size() > 1 && toRemove != null) {
+                maps.remove(toRemove);
+            }
+            File toLoad = maps.get(new Random().nextInt(maps.size()));
+            config.set("LastMapUsed", toLoad.getName());
+            config.save(new File(HungergamesApi.getHungergames().getDataFolder(), "map.yml"));
+            for (File f : toLoad.listFiles()) {
                 copy(f, dest);
+            }
             System.out.print(String.format(tm.getSuccessfullyLoadedMap(), toLoad.getName()));
         } else
             System.out.print(String.format(tm.getNoMapsFound(), mapDir.toString()));
