@@ -94,12 +94,12 @@ public class Hungergames extends JavaPlugin {
 
     private void doBorder(Gamer gamer) {
         Player p = gamer.getPlayer();
-        Location loc = p.getLocation().clone();
+        Location pLoc = p.getLocation().clone();
         Location sLoc = world.getSpawnLocation().clone();
         double border = mainConfig.getBorderSize();
         if (mainConfig.isRoundedBorder()) {
-            sLoc.setY(loc.getY());
-            double fromSpawn = loc.distance(sLoc);
+            sLoc.setY(pLoc.getY());
+            double fromSpawn = pLoc.distance(sLoc);
             if (fromSpawn >= border - 20) {
                 // Warn
                 p.sendMessage(translationsConfig.getMessagePlayerApproachingBorder());
@@ -111,7 +111,7 @@ public class Hungergames extends JavaPlugin {
                             p.damage(0);
                             p.setHealth(p.getHealth() - 2);
                         } else {
-                            pm.killPlayer(gamer, null, loc, gamer.getInventory(),
+                            pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
                                     String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
                         }
                     } else if (border > 10) {
@@ -122,34 +122,33 @@ public class Hungergames extends JavaPlugin {
                 }
             }
         } else {
-            Location tpTo = loc.clone();
-            int fromSpawn = loc.getBlockX() - sLoc.getBlockX();
-            if (fromSpawn > border - 20) {
-                tpTo.setX(((border - 2) + sLoc.getBlockX()));
+            Location tpTo = pLoc.clone();
+            int xDist = pLoc.getBlockX() - sLoc.getBlockX();
+            if (Math.abs(xDist) > border - 20) {
+                if (xDist > 0) {
+                    tpTo.setX(border - 2 + sLoc.getBlockX());
+                } else {
+                    tpTo.setX(border + 2 + sLoc.getBlockX());
+                }
             }
-            if (fromSpawn < -(border - 20)) {
-                tpTo.setX((-(border - 2) + sLoc.getBlockX()));
+            int zDist = pLoc.getBlockZ() - sLoc.getBlockZ();
+            if (Math.abs(zDist) > border - 20) {
+                if (zDist > 0) {
+                    tpTo.setZ(border - 2 + sLoc.getBlockZ());
+                } else {
+                    tpTo.setZ(border + 2 + sLoc.getBlockZ());
+                }
             }
-            boolean hurt = Math.abs(fromSpawn) >= border;
-            fromSpawn = loc.getBlockZ() - sLoc.getBlockZ();
-            if (fromSpawn > (border - 20)) {
-                tpTo.setZ(((border - 2) + sLoc.getBlockZ()));
-            }
-            if (fromSpawn < -(border - 20)) {
-                tpTo.setZ((-(border - 2) + sLoc.getBlockZ()));
-            }
-            if (!hurt)
-                hurt = Math.abs(fromSpawn) >= border;
-            if (!loc.equals(tpTo))
+            if (!pLoc.equals(tpTo))
                 p.sendMessage(translationsConfig.getMessagePlayerApproachingBorder());
-            if (hurt) {
+            if (tpTo.getBlockX() != pLoc.getBlockX() || tpTo.getBlockZ() != pLoc.getBlockZ()) {
                 if (gamer.isAlive()) {
                     // Damage and potentially kill.
                     if (p.getHealth() - 2 > 0) {
                         p.damage(0);
                         p.setHealth(p.getHealth() - 2);
                     } else {
-                        pm.killPlayer(gamer, null, loc, gamer.getInventory(),
+                        pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
                                 String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
                     }
                 } else if (border > 10) {
