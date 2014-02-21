@@ -346,17 +346,21 @@ public class Hungergames extends JavaPlugin {
         return String.format(translationsConfig.getTimeFormatSecondsAndMinutes(), minutes, seconds);
     }
 
-    public void shutdown(String messageToKickWith) {
+    public void shutdown(final String messageToKickWith) {
         System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getShuttingDown());
         ServerShutdownEvent event = new ServerShutdownEvent();
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             for (String command : mainConfig.getCommandsToRunBeforeShutdown())
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.kickPlayer(messageToKickWith);
-            }
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), mainConfig.getCommandToStopTheServerWith());
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+                public void run() {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.kickPlayer(messageToKickWith);
+                    }
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), mainConfig.getCommandToStopTheServerWith());
+                }
+            }, 60);
         } else
             System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getShutdownCancelled());
     }
