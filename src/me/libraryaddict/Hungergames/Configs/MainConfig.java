@@ -36,11 +36,11 @@ public class MainConfig extends BaseConfig {
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
-
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
+
     /**
      * Commands to run before the server shuts down
      */
@@ -54,6 +54,10 @@ public class MainConfig extends BaseConfig {
      * The current version of the plugin
      */
     private String currentVersion = null;
+    /**
+     * The amount of damage the border deals
+     */
+    private double damageBorderDeals = 1;
     /**
      * Is the end disabled? I will change it in the servers config :3
      */

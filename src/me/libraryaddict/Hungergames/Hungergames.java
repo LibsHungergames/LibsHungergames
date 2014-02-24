@@ -107,9 +107,10 @@ public class Hungergames extends JavaPlugin {
                     // Punish
                     if (gamer.isAlive()) {
                         // Damage and potentially kill.
-                        if (p.getHealth() - 2 > 0) {
+                        double dmg = HungergamesApi.getConfigManager().getMainConfig().getDamageBorderDeals();
+                        if (p.getHealth() - dmg > 0) {
                             p.damage(0);
-                            p.setHealth(p.getHealth() - 2);
+                            p.setHealth(p.getHealth() - dmg);
                         } else {
                             pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
                                     String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
@@ -144,9 +145,10 @@ public class Hungergames extends JavaPlugin {
             if (tpTo.getBlockX() != pLoc.getBlockX() || tpTo.getBlockZ() != pLoc.getBlockZ()) {
                 if (gamer.isAlive()) {
                     // Damage and potentially kill.
-                    if (p.getHealth() - 2 > 0) {
+                    double dmg = HungergamesApi.getConfigManager().getMainConfig().getDamageBorderDeals();
+                    if (p.getHealth() - dmg > 0) {
                         p.damage(0);
-                        p.setHealth(p.getHealth() - 2);
+                        p.setHealth(p.getHealth() - dmg);
                     } else {
                         pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
                                 String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
