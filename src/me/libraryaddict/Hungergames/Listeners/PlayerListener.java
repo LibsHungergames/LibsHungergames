@@ -235,14 +235,14 @@ public class PlayerListener implements Listener {
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStewEnabled()
                         && !item.getItemMeta().hasDisplayName()) {
-                    if (p.getHealth() < 20 || p.getFoodLevel() < 19) {
+                    if (p.getHealth() < p.getMaxHealth() || p.getFoodLevel() < 19) {
                         int restores = config.getHeartsMushroomStewHeals();
                         event.setCancelled(true);
-                        if (p.getHealth() < 20)
-                            if (p.getHealth() + restores <= 20)
+                        if (p.getHealth() < p.getMaxHealth())
+                            if (p.getHealth() + restores <= p.getMaxHealth())
                                 p.setHealth(p.getHealth() + restores);
                             else
-                                p.setHealth(20);
+                                p.setHealth(p.getMaxHealth());
                         else if (p.getFoodLevel() < 20)
                             if (p.getFoodLevel() + restores <= 20)
                                 p.setFoodLevel(p.getFoodLevel() + restores);
@@ -272,9 +272,9 @@ public class PlayerListener implements Listener {
                 Player victim = (Player) event.getRightClicked();
                 if (pm.getGamer(victim).isAlive())
                     p.sendMessage(String.format(
-                            tm.getMessagePlayerHasHealthAndHunger(),
+                            tm.getMessagePlayerHasHealthAndHunger().replace("%maxhp%", "" + (int) victim.getMaxHealth()),
                             victim.getName(),
-                            (int) victim.getHealth(),
+                            (int) Math.ceil(victim.getHealth()),
                             victim.getFoodLevel(),
                             (kits.getKitByPlayer(victim) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
                                     victim).getName())));

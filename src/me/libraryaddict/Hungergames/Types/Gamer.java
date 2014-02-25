@@ -211,7 +211,7 @@ public class Gamer {
             player.setFallDistance(0F);
             player.setAllowFlight(false);
             player.setFireTicks(0);
-            player.setHealth(20);
+            player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             player.setSaturation(5.0F);
             player.setExhaustion(0F);
@@ -246,7 +246,7 @@ public class Gamer {
             player.setAllowFlight(true);
             player.setFlying(true);
             player.setFoodLevel(20);
-            player.setHealth(20);
+            player.setHealth(player.getMaxHealth());
             player.setFireTicks(0);
             updateSelfToOthers();
             updateOthersToSelf();

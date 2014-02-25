@@ -177,7 +177,7 @@ public class TranslationConfig extends BaseConfig {
     private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
     private String messagePlayerChunksGenerating = ChatColor.YELLOW + "Chunks are currently generating!\n\nCheck back soon!";
-    private String messagePlayerHasHealthAndHunger = ChatColor.DARK_RED + "%1$2s has" + ChatColor.RED + " %2$2s/20 health"
+    private String messagePlayerHasHealthAndHunger = ChatColor.DARK_RED + "%1$2s has" + ChatColor.RED + " %2$2s/%maxhp% health"
             + ChatColor.DARK_RED + "\n%1$2s has" + ChatColor.RED + " %3$2s/20 hunger" + ChatColor.DARK_RED
             + "\n%1$2s is using kit:" + ChatColor.RED + " %4$2s";
     private String messagePlayerKitDesciprionPrice = ChatColor.DARK_AQUA + "Price:" + ChatColor.AQUA + " $%s";

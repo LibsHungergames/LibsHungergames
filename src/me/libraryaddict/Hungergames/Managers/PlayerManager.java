@@ -136,7 +136,7 @@ public class PlayerManager {
     public void manageDeath(PlayerKilledEvent event) {
         Gamer killed = event.getKilled();
         final Player p = killed.getPlayer();
-        p.setHealth(20);
+        p.setHealth(p.getMaxHealth());
         if (event.isCancelled())
             return;
         for (HumanEntity human : p.getInventory().getViewers())
