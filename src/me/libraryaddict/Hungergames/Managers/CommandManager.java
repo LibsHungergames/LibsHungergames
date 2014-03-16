@@ -7,31 +7,28 @@ import me.libraryaddict.Hungergames.Utilities.ClassGetter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class CommandManager {
+    private Map<String, Map<String, Object>> commandsMap = new HashMap<String, Map<String, Object>>();
     private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
     private YamlConfiguration config;
     private File configFile;
@@ -112,6 +109,13 @@ public class CommandManager {
     private void loadCommands(JavaPlugin plugin, String packageName) {
         boolean saveConfig = false;
         System.out.print(String.format(cm.getLoadCommandsPackage(), plugin.getName(), packageName));
+        try {
+            Field commands = plugin.getDescription().getClass().getDeclaredField("commands");
+            commands.setAccessible(true);
+            commands.set(plugin.getDescription(), commandsMap);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         for (Class commandClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (CommandExecutor.class.isAssignableFrom(commandClass)) {
                 try {
@@ -125,6 +129,8 @@ public class CommandManager {
                 }
             }
         }
+        HungergamesApi.getReflectionManager().getCommandMap()
+                .registerAll(plugin.getDescription().getName(), PluginCommandYamlParser.parse(plugin));
         if (saveConfig)
             save();
     }
@@ -207,40 +213,40 @@ public class CommandManager {
         return false;
     }
 
-    private void registerCommand(String name, CommandExecutor exc) throws Exception {
-        PluginCommand command = Bukkit.getServer().getPluginCommand(name.toLowerCase());
-        if (command == null) {
-            Constructor<?> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            constructor.setAccessible(true);
-            command = (PluginCommand) constructor.newInstance(name, HungergamesApi.getHungergames());
-        }
-        command.setExecutor(exc);
-        try {
-            Field field = exc.getClass().getDeclaredField("aliases");
-            if (field.get(exc) instanceof String[]) {
-                List<String> list = Arrays.asList((String[]) field.get(exc));
-                if (exc.getClass().getSimpleName().equals("Creator"))
-                    addCreatorAliases(list, name);
-                command.setAliases(list);
+    private void registerCommand(final String name, final CommandExecutor exc, final JavaPlugin plugin, boolean isAlias)
+            throws Exception {
+        String desc = null;
+        if (!isAlias) {
+            List<String> aliases = new ArrayList<String>();
+            try {
+                Field field = exc.getClass().getDeclaredField("aliases");
+                if (field.get(exc) instanceof String[]) {
+                    aliases = Arrays.asList((String[]) field.get(exc));
+                }
+            } catch (Exception ex) {
             }
-        } catch (Exception ex) {
-            if (exc.getClass().getSimpleName().equals("Creator")) {
-                List<String> list = new ArrayList<String>();
-                addCreatorAliases(list, name);
-                command.setAliases(list);
+            if (exc.getClass().getSimpleName().equalsIgnoreCase("Creator")) {
+                addCreatorAliases(aliases, name);
             }
-        }
-        if (command.getAliases() != null) {
-            for (String alias : command.getAliases())
-                unregisterCommand(alias);
+            for (String alias : aliases) {
+                registerCommand(alias, exc, plugin, true);
+            }
         }
         try {
             Field field = exc.getClass().getDeclaredField("description");
-            if (field != null && field.get(exc) instanceof String)
-                command.setDescription(ChatColor.translateAlternateColorCodes('&', (String) field.get(exc)));
+            desc = ChatColor.translateAlternateColorCodes('&', (String) field.get(exc));
         } catch (Exception ex) {
         }
-        HungergamesApi.getReflectionManager().getCommandMap().register(name, command);
+        HashMap<String, Object> newMap = new HashMap<String, Object>();
+        if (desc != null) {
+            newMap.put("description", desc);
+        }
+        commandsMap.put(name.toLowerCase(), newMap);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            public void run() {
+                plugin.getCommand(name.toLowerCase()).setExecutor(exc);
+            }
+        });
     }
 
     public void save() {
@@ -263,28 +269,12 @@ public class CommandManager {
         boolean modified = loadConfig(section, exc, commandName);
         if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
             try {
-                registerCommand(section.getString("CommandName"), exc);
+                registerCommand(section.getString("CommandName"), exc, HungergamesApi.getHungergames(), false);
             } catch (Exception ex) {
                 System.out
                         .print(String.format(cm.getErrorWhileLoadingCommand(), exc.getClass().getSimpleName(), ex.getMessage()));
             }
         }
         return modified;
-    }
-
-    private void unregisterCommand(String name) {
-        try {
-            Field known = SimpleCommandMap.class.getDeclaredField("knownCommands");
-            Field alias = SimpleCommandMap.class.getDeclaredField("aliases");
-            known.setAccessible(true);
-            alias.setAccessible(true);
-            Map<String, Command> knownCommands = (Map<String, Command>) known.get(HungergamesApi.getReflectionManager()
-                    .getCommandMap());
-            Set<String> aliases = (Set<String>) alias.get(HungergamesApi.getReflectionManager().getCommandMap());
-            knownCommands.remove(name.toLowerCase());
-            aliases.remove(name.toLowerCase());
-        } catch (Exception ex) {
-
-        }
     }
 }
