@@ -214,6 +214,7 @@ public class Hungergames extends JavaPlugin {
             public void run() {
                 ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
                 world = Bukkit.getWorlds().get(0);
+                world.setAutoSave(false);
                 world.setGameRuleValue("doDaylightCycle", "false");
                 world.setTime(6000);
                 if (mainConfig.isForcedCords())

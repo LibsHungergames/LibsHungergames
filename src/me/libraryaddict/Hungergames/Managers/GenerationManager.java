@@ -124,6 +124,7 @@ public class GenerationManager {
                                     .getChunksGenerated(), (int) chunksGenerated));
                         }
                         chunkGeneratorRunnable = null;
+                        world.save();
                         cancel();
                     }
                 }
@@ -275,8 +276,8 @@ public class GenerationManager {
     }
 
     private boolean isBlockValid(Block b) {
-       // if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
-       //     return false;
+        // if (b.isLiquid() || b.getRelative(BlockFace.UP).isLiquid())
+        // return false;
         return true;
     }
 
