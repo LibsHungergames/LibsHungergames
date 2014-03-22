@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -109,9 +110,17 @@ public class MapLoader {
                 config.set("GenerateChunksBackground", true);
                 config.save(mapConfig);
             }
-            String worldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
-            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
-                    + worldName);
+            final String oldWorldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
+            HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", "LibsHungergamesWorld");
+            HungergamesApi.getReflectionManager().savePropertiesConfig();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                public void run() {
+                    HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", oldWorldName);
+                    HungergamesApi.getReflectionManager().savePropertiesConfig();
+                }
+            }, 2);
+            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString()
+                    + "/LibsHungergamesWorld");
             if (!worldFolder.exists())
                 worldFolder.mkdirs();
             if (config.getBoolean("DeleteMap") || config.getBoolean("UseMaps")) {
