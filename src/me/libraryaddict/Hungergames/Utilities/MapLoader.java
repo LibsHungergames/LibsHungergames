@@ -110,17 +110,22 @@ public class MapLoader {
                 config.set("GenerateChunksBackground", true);
                 config.save(mapConfig);
             }
-            final String oldWorldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
-            HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", "LibsHungergamesWorld");
-            HungergamesApi.getReflectionManager().savePropertiesConfig();
-            Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-                public void run() {
-                    HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", oldWorldName);
-                    HungergamesApi.getReflectionManager().savePropertiesConfig();
-                }
-            }, 2);
-            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString()
-                    + "/LibsHungergamesWorld");
+            String worldToUse = "world";
+            if (HungergamesApi.getConfigManager().getMainConfig().isUseOwnWorld()) {
+                worldToUse = "LibsHungergamesWorld";
+                final String oldWorldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name",
+                        "world");
+                HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", "LibsHungergamesWorld");
+                HungergamesApi.getReflectionManager().savePropertiesConfig();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
+                    public void run() {
+                        HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", oldWorldName);
+                        HungergamesApi.getReflectionManager().savePropertiesConfig();
+                    }
+                }, 2);
+            }
+            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
+                    + worldToUse);
             if (!worldFolder.exists())
                 worldFolder.mkdirs();
             if (config.getBoolean("DeleteMap") || config.getBoolean("UseMaps")) {

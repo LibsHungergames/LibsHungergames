@@ -50,6 +50,7 @@ public class MainConfig extends BaseConfig {
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
+
     /**
      * The current version of the plugin
      */
@@ -66,11 +67,11 @@ public class MainConfig extends BaseConfig {
      * Is fire spread enabled pre-game
      */
     private boolean fireSpreadPreGame = false;
-
     /**
      * Do I force the spawns co-ordinates to be at a location
      */
     private boolean forcedCords = true;
+
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
@@ -126,11 +127,11 @@ public class MainConfig extends BaseConfig {
     /**
      * If there is a height limit. What should I set it to
      */
-    private int maxHeightLimit = 128;;
+    private int maxHeightLimit = 128;
     /**
      * Is metrics enabled
      */
-    private boolean metricsEnabled = true;
+    private boolean metricsEnabled = true;;
     /**
      * Whats the minimal players required to start the game
      */
@@ -247,6 +248,10 @@ public class MainConfig extends BaseConfig {
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private UpdateChecker updateChecker;
+    /**
+     * Should the plugin make its own world to prevent deleting your world?
+     */
+    private boolean useOwnWorld = true;
     /**
      * The delay between 'libraryaddict won!' broadcasts after the game ends, not related to gameshutdown time
      */
