@@ -8,6 +8,7 @@ import me.libraryaddict.Hungergames.Utilities.ClassGetter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -244,7 +245,13 @@ public class CommandManager {
         commandsMap.put(name.toLowerCase(), newMap);
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             public void run() {
-                plugin.getCommand(name.toLowerCase()).setExecutor(exc);
+                PluginCommand command = plugin.getCommand(name.toLowerCase());
+                if (command != null) {
+                    command.setExecutor(exc);
+                } else {
+                    System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig()
+                            .getErrorWhileLoadingCommand(), name, "Can't register command"));
+                }
             }
         });
     }
