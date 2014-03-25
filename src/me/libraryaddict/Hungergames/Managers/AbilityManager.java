@@ -5,8 +5,10 @@ import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Utilities.ClassGetter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -83,6 +85,8 @@ public class AbilityManager {
                 }
             }
         }
+        HungergamesApi.getReflectionManager().getCommandMap()
+                .registerAll(plugin.getDescription().getName(), PluginCommandYamlParser.parse(plugin));
         if (saveConfig)
             abilityConfigManager.save(plugin, config);
     }
