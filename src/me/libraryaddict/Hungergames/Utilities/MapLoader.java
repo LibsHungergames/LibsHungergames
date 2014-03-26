@@ -124,8 +124,7 @@ public class MapLoader {
                     }
                 }, 2);
             }
-            File worldFolder = new File(hg.getDataFolder().getAbsoluteFile().getParentFile().getParent().toString() + "/"
-                    + worldToUse);
+            File worldFolder = new File(worldToUse);
             if (!worldFolder.exists())
                 worldFolder.mkdirs();
             if (config.getBoolean("DeleteMap") || config.getBoolean("UseMaps")) {
