@@ -27,15 +27,10 @@ public class ScoreboardManager {
             board.getObjective(slot.name()).setDisplaySlot(slot);
         }
         return board.getObjective(slot.name());
+
     }
 
-    public static Scoreboard getScoreboard(String scoreboardName) {
-        if (!boards.containsKey(scoreboardName))
-            resetScoreboard(scoreboardName);
-        return boards.get(scoreboardName);
-    }
-
-    public static void hideScore(String scoreboardName, DisplaySlot slot, String name) {
+    public static void hideScore(String DisplaySlot slot, String name) {
         if (name.length() > 16)
             name = name.substring(0, 16);
         if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
@@ -46,7 +41,7 @@ public class ScoreboardManager {
         }
     }
 
-    public static void makeScore(String scoreboardName, DisplaySlot slot, String name, int score) {
+    public static void makeScore(String DisplaySlot slot, String name, int score) {
         if (name.length() > 16)
             name = name.substring(0, 16);
         if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
@@ -71,7 +66,7 @@ public class ScoreboardManager {
             }
     }
 
-    public static void setDisplayName(String scoreboardName, DisplaySlot slot, String string) {
+    public static void setDisplayName(String DisplaySlot slot, String string) {
         if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
             getObjective(getScoreboard(scoreboardName), slot).setDisplayName(string);
         }
@@ -81,8 +76,6 @@ public class ScoreboardManager {
           Hungergames hg = HungergamesApi.getHungergames();
           ConfigManager config = HungergamesApi.getConfigManager();
           TranslationManager cm = HungergamesApi.getTranslationManager();
-          if (hg.currentTime < 0)
-              setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStagePreGame());
           else if (hg.currentTime < config.getInvincibilityTime())
               setDisplayName("Main", DisplaySlot.SIDEBAR, cm.getScoreboardStageInvincibility());
           else if (hg.currentTime < config.getTimeFeastStarts() - (5 * 60))
