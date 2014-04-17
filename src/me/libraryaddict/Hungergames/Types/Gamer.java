@@ -5,7 +5,7 @@ import java.util.List;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
+import me.libraryaddict.scoreboard.ScoreboardManager;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -55,7 +55,7 @@ public class Gamer {
 
     public void addKill() {
         kills++;
-        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
+        ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
     }
 
     /**

@@ -18,6 +18,7 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
+import me.libraryaddict.scoreboard.ScoreboardManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -52,6 +53,7 @@ public class Hungergames extends JavaPlugin {
      */
     public boolean doSeconds = true;
     public HashMap<Location, EntityType> entitysToSpawn = new HashMap<Location, EntityType>();
+    private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
     private MainConfig mainConfig;
     private Metrics metrics;
     private PlayerListener playerListener;
@@ -212,7 +214,7 @@ public class Hungergames extends JavaPlugin {
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
-                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
+                ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
                 world = Bukkit.getWorlds().get(0);
                 world.setAutoSave(false);
                 world.setGameRuleValue("doDaylightCycle", "false");
@@ -241,7 +243,7 @@ public class Hungergames extends JavaPlugin {
                 if (world.hasStorm())
                     world.setStorm(false);
                 world.setWeatherDuration(999999999);
-                ScoreboardManager.setDisplayName("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
+                ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -272,8 +274,7 @@ public class Hungergames extends JavaPlugin {
         currentTime++;
         if (currentTime < 0) {
             world.setTime(0);
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn(),
-                    -currentTime);
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn(), -currentTime);
             if (mainConfig.isTeleportToSpawnLocationPregame() && -currentTime == mainConfig.getSecondsToTeleportPlayerToSpawn()) {
                 for (Gamer gamer : HungergamesApi.getPlayerManager().getGamers()) {
                     HungergamesApi.getPlayerManager().sendToSpawn(gamer);
@@ -290,8 +291,7 @@ public class Hungergames extends JavaPlugin {
         } else if (currentTime == 0) {
             if (pm.getGamers().size() < mainConfig.getMinPlayersForGameStart()) {
                 currentTime = -90;
-                ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn(),
-                        -currentTime);
+                ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn(), -currentTime);
                 Bukkit.broadcastMessage(translationsConfig.getBroadcastNotEnoughPlayers());
             } else {
                 startGame();
@@ -302,25 +302,25 @@ public class Hungergames extends JavaPlugin {
             if (borderSize < 0)
                 borderSize = 0;
             mainConfig.setBorderSize(borderSize);
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardBorderSize(),
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardBorderSize(),
                     (int) mainConfig.getBorderSize());
         }
         for (Gamer gamer : pm.getGamers()) {
             this.doBorder(gamer);
         }
         if (mainConfig.getTimeForInvincibility() > 0 && currentTime <= mainConfig.getTimeForInvincibility() && currentTime >= 0) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining(),
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining(),
                     mainConfig.getTimeForInvincibility() - currentTime);
             if (currentTime == mainConfig.getTimeForInvincibility()) {
                 Bukkit.broadcastMessage(translationsConfig.getBroadcastInvincibilityWornOff());
-                ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining());
+                ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining());
                 Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
             } else if (mainConfig.advertiseInvincibility(currentTime)) {
                 Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastInvincibiltyWearsOffIn(),
                         returnTime(mainConfig.getTimeForInvincibility() - currentTime)));
             }
         }
-        ScoreboardManager.doStage();
+        doStage();
     }
 
     public String returnTime(Integer i) {
@@ -383,10 +383,10 @@ public class Hungergames extends JavaPlugin {
 
             });
         }
-        ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn());
-        ScoreboardManager.makeScore("Main", DisplaySlot.PLAYER_LIST, "", 0);
+        ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn());
+        ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, "libraryaddict", 0);
         if (mainConfig.getTimeForInvincibility() > 0) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining(),
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardInvincibleRemaining(),
                     mainConfig.getTimeForInvincibility());
         } else {
             Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
@@ -424,6 +424,16 @@ public class Hungergames extends JavaPlugin {
         });
         checkWinner();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
-        ScoreboardManager.doStage();
+        doStage();
+    }
+
+    public static void registerStage(int timeToActivate, String display) {
+        stages.put(timeToActivate, display);
+    }
+
+    public static void doStage() {
+        if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
+            ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
+        }
     }
 }

@@ -12,9 +12,10 @@ import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Interfaces.ChestManager;
 import me.libraryaddict.Hungergames.Managers.ConfigManager;
 import me.libraryaddict.Hungergames.Managers.GenerationManager;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.CordPair;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.scoreboard.ScoreboardManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -138,14 +139,14 @@ public class LibsFeastManager implements Listener {
             Bukkit.getPluginManager().callEvent(new FeastAnnouncedEvent());
         }
         if (currentTime == config.getFeastGenerateTime()) {
-            ScoreboardManager.hideScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn());
+            ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn());
             generateChests(getFeastLocation(), config.getChestLayersHeight());
             World world = HungergamesApi.getHungergames().world;
             world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
         } else if (currentTime > config.getFeastPlatformGenerateTime() && currentTime < config.getFeastGenerateTime()) {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn(),
-                    config.getFeastGenerateTime() - currentTime);
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, config.getScoreboardFeastStartingIn(), config.getFeastGenerateTime()
+                    - currentTime);
         }
         if (config.getFeastAdvertisements().containsKey(currentTime)) {
             Bukkit.broadcastMessage(String.format(config.getFeastAdvertisements().get(currentTime), getFeastLocation().getX(),

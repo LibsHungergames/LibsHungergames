@@ -14,11 +14,11 @@ import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.InventoryManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
+import me.libraryaddict.scoreboard.ScoreboardManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
@@ -143,8 +144,8 @@ public class PlayerListener implements Listener {
             Gamer damager = null;
             if (event.getDamager() instanceof Player)
                 damager = pm.getGamer(event.getDamager());
-            else if (event.getDamager() instanceof Projectile)
-                damager = pm.getGamer(((Projectile) event.getDamager()).getShooter());
+            else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Entity)
+                damager = pm.getGamer((Entity) ((Projectile) event.getDamager()).getShooter());
             else if (event.getDamager() instanceof Tameable) {
                 if (((Tameable) event.getDamager()).getOwner() != null)
                     damager = pm.getGamer(((Tameable) event.getDamager()).getOwner().getName());
@@ -336,11 +337,7 @@ public class PlayerListener implements Listener {
                 gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
             }
         }, 2L);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                gamer.getPlayer().setScoreboard(ScoreboardManager.getScoreboard("Main"));
-            }
-        });
+        ScoreboardManager.registerScoreboard(p);
         if (config.isPlayersFlyPreGame())
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
@@ -353,8 +350,7 @@ public class PlayerListener implements Listener {
                 }
             }, 2L);
         } else {
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
-                    Bukkit.getOnlinePlayers().length);
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(), Bukkit.getOnlinePlayers().length);
             if (config.isKitSelectorEnabled() && !config.isMysqlEnabled())
                 if (!p.getInventory().contains(icon.getKitSelector()))
                     gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
@@ -454,7 +450,7 @@ public class PlayerListener implements Listener {
         pm.removeKilled(gamer);
         pm.unregisterGamer(gamer);
         if (hg.currentTime < 0)
-            ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
                     Bukkit.getOnlinePlayers().length - 1);
         if (event.getPlayer().getVehicle() != null)
             event.getPlayer().leaveVehicle();

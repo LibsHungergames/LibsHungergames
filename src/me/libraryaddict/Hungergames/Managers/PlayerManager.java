@@ -33,6 +33,7 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.scoreboard.ScoreboardManager;
 
 public class PlayerManager {
 
@@ -169,7 +170,7 @@ public class PlayerManager {
                 world.dropItemNaturally(event.getDropsLocation(), item);
         }
         setSpectator(killed);
-        ScoreboardManager.makeScore("Main", DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
+        ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
         hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())

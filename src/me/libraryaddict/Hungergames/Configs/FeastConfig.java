@@ -9,10 +9,11 @@ import org.bukkit.inventory.ItemStack;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.RandomItem;
+import me.libraryaddict.scoreboard.ScoreboardManager;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -107,7 +108,7 @@ public class FeastConfig extends BaseConfig {
         super.loadConfig();
         if (this.isFeastEnabled()) {
             for (int i : getScoreboardStrings().keySet()) {
-                ScoreboardManager.registerStage(i, getScoreboardStrings().get(i));
+                Hungergames.registerStage(i, getScoreboardStrings().get(i));
             }
             LibsFeastManager.getFeastManager().setEnabled(true);
         }

@@ -18,9 +18,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerKilledEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
+
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
     private boolean cancelled = false;
     private String deathMessage;
     private Location dropItems;
@@ -38,8 +40,8 @@ public class PlayerKilledEvent extends Event implements Cancellable {
         this.deathMessage = deathMessage;
         this.dropItems = itemsDrop;
         this.items = itemsToDrop;
-        if (killer instanceof Projectile) {
-            killerGamer = pm.getGamer(((Projectile) killer).getShooter());
+        if (killer instanceof Projectile && ((Projectile) killer).getShooter() instanceof Entity) {
+            killerGamer = pm.getGamer((Entity) ((Projectile) killer).getShooter());
             if (killerGamer == killed)
                 killerGamer = null;
         } else if (killer instanceof Tameable) {

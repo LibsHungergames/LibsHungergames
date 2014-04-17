@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import me.libraryaddict.Hungergames.Managers.ScoreboardManager;
+import me.libraryaddict.Hungergames.Hungergames;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -254,7 +254,7 @@ public class TranslationConfig extends BaseConfig {
     public void loadConfig() {
         super.loadConfig();
         for (int i : this.getScoreboardStages().keySet()) {
-            ScoreboardManager.registerStage(i, getScoreboardStages().get(i));
+            Hungergames.registerStage(i, getScoreboardStages().get(i));
         }
     }
 }
