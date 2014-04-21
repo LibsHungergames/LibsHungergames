@@ -55,7 +55,6 @@ public class Hungergames extends JavaPlugin {
     public HashMap<Location, EntityType> entitysToSpawn = new HashMap<Location, EntityType>();
     private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
     private MainConfig mainConfig;
-    private Metrics metrics;
     private PlayerListener playerListener;
     private PlayerManager pm;
     private TranslationConfig translationsConfig;
@@ -162,10 +161,6 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
-    public Metrics getMetrics() {
-        return metrics;
-    }
-
     public int getPrize(int pos) {
         if (HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().containsKey(pos))
             return HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().get(pos);
@@ -204,14 +199,6 @@ public class Hungergames extends JavaPlugin {
         MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.startJoinThread();
         MapLoader.loadMap();
-        try {
-            metrics = new Metrics(this);
-            if (metrics.isOptOut())
-                System.out.print(config.getLoggerConfig().getMetricsMessage());
-            metrics.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
@@ -370,19 +357,6 @@ public class Hungergames extends JavaPlugin {
 
     public void startGame() {
         currentTime = 0;
-        for (Kit kit : HungergamesApi.getKitManager().getKits()) {
-            final int amount = kit.getPlayerSize();
-            if (amount <= 0)
-                continue;
-            metrics.getKitsUsed().addPlotter(new Metrics.Plotter(kit.getName()) {
-
-                @Override
-                public int getValue() {
-                    return amount;
-                }
-
-            });
-        }
         ScoreboardManager.hideScore(DisplaySlot.SIDEBAR, translationsConfig.getScoreBoardGameStartingIn());
         ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, "libraryaddict", 0);
         if (mainConfig.getTimeForInvincibility() > 0) {
