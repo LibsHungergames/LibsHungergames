@@ -7,6 +7,7 @@ import me.libraryaddict.Hungergames.Managers.KitManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,8 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitInventory extends PageInventory {
 
     public KitInventory(Player player) {
-        super(player, HungergamesApi.getConfigManager().getMainConfig().isKitSelectorSizeDynamic());
-        maxInvSize = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorInventorySize();
+        super(player, HungergamesApi.getConfigManager().getMainConfig().isKitSelectorSizeDynamic(), HungergamesApi
+                .getConfigManager().getMainConfig().getKitSelectorInventorySize());
         title = tm.getSelectKitInventoryTitle();
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
         backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
@@ -32,21 +33,25 @@ public class KitInventory extends PageInventory {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
-            event.setCancelled(true);
+        if (event.getWhoClicked() == getPlayer()) {
             ItemStack item = event.getCurrentItem();
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                if (item.equals(getBackPage())) {
-                    setPage(currentPage - 1);
-                } else if (item.equals(getForwardsPage())) {
-                    setPage(currentPage + 1);
-                } else {
+            if (event.getRawSlot() < currentInventory.getSize()) {
+                if (item != null) {
+                    if (item.equals(getBackPage())) {
+                        setPage(getCurrentPage() - 1);
+                        event.setCancelled(true);
+                        return;
+                    } else if (item.equals(getForwardsPage())) {
+                        setPage(getCurrentPage() + 1);
+                        event.setCancelled(true);
+                        return;
+                    }
                     String name = item.getItemMeta().getDisplayName();
                     Kit kit = null;
                     KitManager kits = HungergamesApi.getKitManager();
                     for (Kit k : kits.getKits()) {
                         String kitName = ChatColor.WHITE + k.getName()
-                                + (kits.ownsKit(user, k) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit());
+                                + (kits.ownsKit(getPlayer(), k) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit());
                         if (kitName.equals(name)) {
                             kit = k;
                             break;
@@ -54,6 +59,18 @@ public class KitInventory extends PageInventory {
                     }
                     if (kit != null) {
                         Bukkit.dispatchCommand((CommandSender) event.getWhoClicked(), "kit " + kit.getName());
+                    }
+                }
+                if (!isModifiable()) {
+                    event.setCancelled(true);
+                }
+            } else if (!this.isModifiable() && event.isShiftClick() && item != null && item.getType() != Material.AIR) {
+                for (int slot = 0; slot < currentInventory.getSize(); slot++) {
+                    ItemStack invItem = currentInventory.getItem(slot);
+                    if (invItem == null || invItem.getType() == Material.AIR
+                            || (invItem.isSimilar(item) && item.getAmount() < item.getMaxStackSize())) {
+                        event.setCancelled(true);
+                        break;
                     }
                 }
             }
@@ -65,7 +82,7 @@ public class KitInventory extends PageInventory {
         ArrayList<ItemStack> kitItems = new ArrayList<ItemStack>();
         ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
         ArrayList<Kit> allKits = kits.getKits();
-        List<Kit> hisKits = kits.getPlayersKits(user);
+        List<Kit> hisKits = kits.getPlayersKits(getPlayer());
         if (hisKits == null)
             hisKits = new ArrayList<Kit>();
         boolean sortOwned = HungergamesApi.getConfigManager().getMainConfig().isSortKitGuiByOwned();
@@ -74,7 +91,7 @@ public class KitInventory extends PageInventory {
             ItemStack item = kit.getIcon();
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + kit.getName()
-                    + (kits.ownsKit(user, kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
+                    + (kits.ownsKit(getPlayer(), kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
             meta.setLore(wrap(kit.getDescription()));
             item.setItemMeta(meta);
             if (item.getAmount() == 1)

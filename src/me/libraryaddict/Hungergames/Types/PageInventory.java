@@ -1,214 +1,277 @@
 package me.libraryaddict.Hungergames.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import me.libraryaddict.Hungergames.Hungergames;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
-public abstract class PageInventory extends ClickInventory {
+public class PageInventory extends ClickInventory {
 
-    protected ItemStack backAPage = null;
-    protected int currentPage = 0;
-    protected boolean dynamicInventorySize;
-    protected ItemStack forwardsAPage = null;
-    protected Hungergames hg;
-    protected boolean listenForClose = true;
-    protected int maxInvSize = 54;
+    protected ItemStack backAPage;
+    protected int currentPage;
+    protected boolean dynamicInventorySize = true;
+    protected ItemStack forwardsAPage;
+    protected boolean pageDisplayedInTitle;
     protected HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
-    protected Player user;
+    protected String title = "Inventory";
+    private String titleFormat = "%Title% - Page %Page%";
+    private int invSize = 54;
 
-    public PageInventory(Player player, boolean dymanicInventory) {
+    public PageInventory(Player player) {
+        super(player);
+    }
+
+    public PageInventory(Player player, boolean dymanicInventory, int invSize) {
+        super(player);
         dynamicInventorySize = dymanicInventory;
-        hg = HungergamesApi.getHungergames();
-        user = player;
-        user.setMetadata(getClass().getSimpleName(), new FixedMetadataValue(hg, this));
+        this.invSize = invSize;
     }
 
-    public ItemStack[] generatePage(int itemsSize) {
-        if (itemsSize > maxInvSize)
-            itemsSize = maxInvSize;
-        itemsSize = (int) (Math.ceil((double) itemsSize / 9)) * 9;
-        return new ItemStack[itemsSize];
-    }
-
+    /**
+     * Get the itemstack which is the backpage
+     */
     public ItemStack getBackPage() {
         if (backAPage == null) {
-            ItemStack item = new ItemStack(Material.SUGAR_CANE_BLOCK);
-            backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                    ChatColor.RED + "Back", new String[] { ChatColor.BLUE + "Click this to move back" });
-            backAPage.setAmount(0);
+            backAPage = HungergamesApi.getInventoryManager().generateItem(Material.SIGN, 0, ChatColor.RED + "Back",
+                    new String[] { ChatColor.BLUE + "Click this to move back" });
         }
         return backAPage;
     }
 
+    /**
+     * Get the current page number
+     */
     public int getCurrentPage() {
         return currentPage;
     }
 
+    /**
+     * Get the itemstack which is the next page
+     */
     public ItemStack getForwardsPage() {
         if (forwardsAPage == null) {
-            ItemStack item = new ItemStack(Material.SUGAR_CANE_BLOCK);
-            forwardsAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                    ChatColor.RED + "Forward", new String[] { ChatColor.BLUE + "Click this to move forward" });
-            forwardsAPage.setAmount(0);
+            forwardsAPage = HungergamesApi.getInventoryManager().generateItem(Material.SIGN, 1, ChatColor.RED + "Forward",
+                    new String[] { ChatColor.BLUE + "Click this to move forward" });
         }
         return forwardsAPage;
     }
 
+    /**
+     * Get the items in a page
+     */
     public ItemStack[] getPage(int pageNumber) {
-        return pages.get(pageNumber);
+        if (pages.containsKey(pageNumber))
+            return pages.get(pageNumber);
+        return null;
     }
 
+    /**
+     * Get pages
+     */
     public HashMap<Integer, ItemStack[]> getPages() {
         return pages;
     }
 
-    public Player getPlayer() {
-        return user;
+    protected String getPageTitle() {
+        return (this.isPageDisplayedInTitle() ? titleFormat.replace("%Title%", getTitle()).replace("%Page%",
+                (getCurrentPage() + 1) + "") : getTitle());
+    }
+
+    /**
+     * Get page title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isPageDisplayedInTitle() {
+        return this.pageDisplayedInTitle;
     }
 
     @EventHandler
-    public void onClose(InventoryCloseEvent event) {
-        if (listenForClose && event.getPlayer() == user) {
-            HandlerList.unregisterAll(this);
-            if (user.hasMetadata(getClass().getSimpleName())
-                    && user.getMetadata(getClass().getSimpleName()).get(0).value() == this)
-                user.removeMetadata(getClass().getSimpleName(), hg);
-        }
-    }
-    
-    //@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
-            event.setCancelled(true);
+        if (event.getWhoClicked() == getPlayer()) {
             ItemStack item = event.getCurrentItem();
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                if (item.equals(getBackPage())) {
-                    setPage(currentPage - 1);
-                } else if (item.equals(getForwardsPage())) {
-                    setPage(currentPage + 1);
-                } else {
-                    // Do whatever
+            if (event.getRawSlot() < currentInventory.getSize()) {
+                if (item != null) {
+                    if (item.equals(getBackPage())) {
+                        setPage(getCurrentPage() - 1);
+                        event.setCancelled(true);
+                        return;
+                    } else if (item.equals(getForwardsPage())) {
+                        setPage(getCurrentPage() + 1);
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+                if (!isModifiable()) {
+                    event.setCancelled(true);
+                }
+            } else if (!this.isModifiable() && event.isShiftClick() && item != null && item.getType() != Material.AIR) {
+                for (int slot = 0; slot < currentInventory.getSize(); slot++) {
+                    ItemStack invItem = currentInventory.getItem(slot);
+                    if (invItem == null || invItem.getType() == Material.AIR
+                            || (invItem.isSimilar(item) && item.getAmount() < item.getMaxStackSize())) {
+                        event.setCancelled(true);
+                        break;
+                    }
                 }
             }
         }
     }
 
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        if (event.getPlayer() == user) {
-            HandlerList.unregisterAll(this);
-            if (user.hasMetadata(getClass().getSimpleName())
-                    && user.getMetadata(getClass().getSimpleName()).get(0).value() == this)
-                user.removeMetadata(getClass().getSimpleName(), hg);
-        }
-    }
-
+    /**
+     * Opens the inventory for use
+     */
     public void openInventory() {
-        if (inv == null) {
-            int size = maxInvSize;
-            if (pages.size() > 0) {
-                size = pages.values().iterator().next().length;
-            }
-            inv = Bukkit.createInventory(null, size, getTitle());
-            setPage(currentPage);
+        if (isInventoryInUse())
+            return;
+        if (currentInventory == null) {
+            ItemStack[] pageItems = pages.get(Math.max(getCurrentPage(), 0));
+            currentInventory = Bukkit.createInventory(null, pageItems.length, getPageTitle());
+            currentInventory.setContents(pageItems);
         }
-        user.openInventory(inv);
+        openInv();
     }
 
+    /**
+     * Sets the itemstack which is the back page
+     */
     public void setBackPage(ItemStack newBack) {
         backAPage = newBack;
     }
 
+    /**
+     * Sets the itemstack which is the forwards page
+     */
     public void setForwardsPage(ItemStack newForwards) {
         forwardsAPage = newForwards;
     }
 
+    /**
+     * Moves the inventory to a page
+     */
     public void setPage(int newPage) {
-        if (inv == null) {
-            int size = maxInvSize;
-            if (pages.size() > 0) {
-                size = pages.values().iterator().next().length;
-            }
-            inv = Bukkit.createInventory(null, size, getTitle());
-        }
         if (pages.containsKey(newPage)) {
             currentPage = newPage;
-            ItemStack[] pageItems = pages.get(currentPage);
-            if (pageItems.length != inv.getSize()) {
-                listenForClose = false;
-                inv = Bukkit.createInventory(null, pageItems.length, getTitle());
-                inv.setContents(pageItems);
-                user.closeInventory();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                    public void run() {
-                        user.openInventory(inv);
-                        listenForClose = true;
-                    }
-                });
-            } else
-                inv.setContents(pageItems);
-            // TODO Potentially display title for page no
+            if (isInventoryInUse()) {
+                ItemStack[] pageItems = pages.get(getCurrentPage());
+                if (pageItems.length != currentInventory.getSize()
+                        || !currentInventory.getTitle().equalsIgnoreCase(getPageTitle())) {
+                    currentInventory = Bukkit.createInventory(null, pageItems.length, getPageTitle());
+                    currentInventory.setContents(pageItems);
+                    openInv();
+                } else {
+                    currentInventory.setContents(pageItems);
+                }
+            }
         }
     }
 
-    public void setPage(int pageNo, ItemStack[] items) {
-        if (items.length % 9 == 0)
-            pages.put(pageNo, items);
+    /**
+     * Sets the items in a page
+     */
+    public void setPage(int pageNo, ItemStack... items) {
+        if (items.length % 9 != 0) {
+            items = Arrays.copyOf(items, (int) (Math.ceil((double) items.length / 9D) * 9D));
+        }
+        if (items.length > invSize) {
+            throw new RuntimeException("A inventory size of " + items.length + " was passed when the max is " + invSize);
+        }
+        pages.put(pageNo, items);
     }
 
+    public void setPageDisplayedInTitle(boolean displayPage) {
+        if (this.isPageDisplayedInTitle() != displayPage) {
+            this.pageDisplayedInTitle = displayPage;
+            if (isInventoryInUse()) {
+                setPage(getCurrentPage());
+            }
+        }
+    }
+
+    /**
+     * @Title = %Title%
+     * @Page = %Page%
+     */
+    public void setPageDisplayTitleFormat(String titleFormat) {
+        this.titleFormat = titleFormat;
+        if (isInventoryInUse()) {
+            setPage(getCurrentPage());
+        }
+    }
+
+    /**
+     * Auto fills out the pages with these items
+     */
     public void setPages(ArrayList<ItemStack> allItems) {
         setPages(allItems.toArray(new ItemStack[allItems.size()]));
     }
 
-    public void setPages(ItemStack[] allItems) {
+    /**
+     * Auto fills out the pages with these items
+     */
+    public void setPages(ItemStack... allItems) {
         pages.clear();
-        int oldPage = currentPage;
-        currentPage = 0;
-        boolean usePages = allItems.length > maxInvSize;
+        int invPage = 0;
+        boolean usePages = allItems.length > invSize;
         ItemStack[] items = null;
         int currentSlot = 0;
         for (int currentItem = 0; currentItem < allItems.length; currentItem++) {
             if (items == null) {
-                int size = maxInvSize;
+                int size = invSize;
                 if (dynamicInventorySize) {
                     size = allItems.length - currentItem;
                     if (usePages)
                         size += 9;
                 }
                 if (!dynamicInventorySize)
-                    size = maxInvSize;
-                items = generatePage(size);
+                    size = invSize;
+                size = (int) (Math.ceil((double) size / 9)) * 9;
+                items = new ItemStack[Math.min(invSize, size)];
             }
             ItemStack item = allItems[currentItem];
             items[currentSlot++] = item;
             if (currentSlot == items.length - (usePages ? 9 : 0) || currentItem + 1 == allItems.length) {
                 if (usePages) {
-                    if (currentPage != 0)
+                    if (invPage != 0) {
                         items[items.length - 9] = getBackPage();
-                    if (currentItem + 1 < allItems.length)
+                    }
+                    if (currentItem + 1 < allItems.length) {
                         items[items.length - 1] = getForwardsPage();
+                    }
                 }
-                pages.put(currentPage, items);
-                currentPage++;
+                pages.put(invPage, items);
+                invPage++;
                 currentSlot = 0;
                 items = null;
             }
         }
-        currentPage = oldPage;
-        if (pages.keySet().size() < oldPage)
+        if (pages.keySet().size() < getCurrentPage())
             currentPage = pages.keySet().size() - 1;
-        setPage(currentPage);
+        if (allItems.length == 0) {
+            pages.put(0, new ItemStack[0]);
+        }
+        setPage(getCurrentPage());
+    }
+
+    /**
+     * Sets the title of the next page opened
+     */
+    public void setTitle(String newTitle) {
+        if (!getTitle().equals(newTitle)) {
+            title = newTitle;
+            if (isInventoryInUse()) {
+                setPage(getCurrentPage());
+            }
+        }
     }
 
 }

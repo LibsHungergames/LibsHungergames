@@ -22,7 +22,7 @@ public class SpectateInventory extends PageInventory {
     private PlayerManager pm = HungergamesApi.getPlayerManager();
 
     public SpectateInventory(Player player) {
-        super(player, true);
+        super(player, true, 54);
         title = tm.getSpectatorInventoryTitle();
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
         backAPage = HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
@@ -36,15 +36,19 @@ public class SpectateInventory extends PageInventory {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getViewers().equals(inv.getViewers())) {
-            event.setCancelled(true);
+        if (event.getWhoClicked() == getPlayer()) {
             ItemStack item = event.getCurrentItem();
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                if (item.equals(getBackPage())) {
-                    setPage(currentPage - 1);
-                } else if (item.equals(getForwardsPage())) {
-                    setPage(currentPage + 1);
-                } else {
+            if (event.getRawSlot() < currentInventory.getSize()) {
+                if (item != null) {
+                    if (item.equals(getBackPage())) {
+                        setPage(getCurrentPage() - 1);
+                        event.setCancelled(true);
+                        return;
+                    } else if (item.equals(getForwardsPage())) {
+                        setPage(getCurrentPage() + 1);
+                        event.setCancelled(true);
+                        return;
+                    }
                     if (item.getItemMeta().getDisplayName().equals(tm.getSpectatorInventoryFeastName())) {
                         event.getWhoClicked().teleport(
                                 LibsFeastManager.getFeastManager().getFeastLocation().getWorld()
@@ -55,6 +59,18 @@ public class SpectateInventory extends PageInventory {
                         if (toTeleport != null) {
                             event.getWhoClicked().teleport(toTeleport.getPlayer());
                         }
+                    }
+                }
+                if (!isModifiable()) {
+                    event.setCancelled(true);
+                }
+            } else if (!this.isModifiable() && event.isShiftClick() && item != null && item.getType() != Material.AIR) {
+                for (int slot = 0; slot < currentInventory.getSize(); slot++) {
+                    ItemStack invItem = currentInventory.getItem(slot);
+                    if (invItem == null || invItem.getType() == Material.AIR
+                            || (invItem.isSimilar(item) && item.getAmount() < item.getMaxStackSize())) {
+                        event.setCancelled(true);
+                        break;
                     }
                 }
             }
