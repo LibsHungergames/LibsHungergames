@@ -36,7 +36,7 @@ public class KitInventory extends PageInventory {
         if (event.getWhoClicked() == getPlayer()) {
             ItemStack item = event.getCurrentItem();
             if (event.getRawSlot() < currentInventory.getSize()) {
-                if (item != null) {
+                if (item != null && item.hasItemMeta()) {
                     if (item.equals(getBackPage())) {
                         setPage(getCurrentPage() - 1);
                         event.setCancelled(true);
