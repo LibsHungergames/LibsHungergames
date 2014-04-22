@@ -44,13 +44,14 @@
 						<option>-keep class
 							me.libraryaddict.Hungergames.Commands.* {
 							}</option>
-						<option>-keepclassmembers class
-							me.libraryaddict.Hungergames.Listeners.* { public *; }</option>
-						<option>-keep class
-							me.libraryaddict.Hungergames.Listeners.* {
-							}</option>
 						<option>-keepattributes *Annotation*</option>
 						<option>-keep class
+							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
+							*;
+							}</option>
+						<option>-keep class
+							me.libraryaddict.Hungergames.Listeners.* { public *; }</option>
+						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
 							*;
 							}</option>
