@@ -33,9 +33,11 @@
 				</executions>
 				<configuration>
 					<options>
+						<option>-overloadaggressively</option>
 						<option>-allowaccessmodification</option>
-						<option>-keep public class
-							me.libraryaddict.Hungergames.Abilities.* { public *; }</option>
+						<option>-keep class
+							me.libraryaddict.Hungergames.Abilities.* {
+							public *; }</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Hungergames { public *; }</option>
 						<option>-keep class
@@ -50,7 +52,8 @@
 							*;
 							}</option>
 						<option>-keep class
-							me.libraryaddict.Hungergames.Listeners.* { public *; }</option>
+							me.libraryaddict.Hungergames.Listeners.* {
+							public *; }</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
 							*;
@@ -70,6 +73,8 @@
 						<option>-keep class me.libraryaddict.Hungergames.Managers.* {
 							public *; }</option>
 						<option>-keep class me.libraryaddict.Hungergames.Types.Kit {
+							public *; }</option>
+						<option>-keep class me.libraryaddict.Hungergames.Types.Gamer {
 							public *; }</option>
 						<option>-keep class me.libraryaddict.Hungergames.Events.* { *; }</option>
 						<option>-keepclassmembers class
