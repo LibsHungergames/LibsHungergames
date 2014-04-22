@@ -54,6 +54,15 @@
 						<option>-keep class
 							me.libraryaddict.Hungergames.Listeners.* {
 							public *; }</option>
+						<option>-keep class
+							me.libraryaddict.Hungergames.Types.ClickInventory {
+							public *; }</option>
+						<option>-keep class
+							me.libraryaddict.Hungergames.Types.PageInventory {
+							public *; }</option>
+						<option>-keep class
+							me.libraryaddict.Hungergames.Types.KitInventory {
+							public *; }</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
 							*;
