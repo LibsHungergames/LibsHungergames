@@ -104,6 +104,11 @@ public class CommandManager {
         // commandName));
         if (save && modified)
             save();
+        HungergamesApi
+                .getReflectionManager()
+                .getCommandMap()
+                .registerAll(HungergamesApi.getHungergames().getDescription().getName(),
+                        PluginCommandYamlParser.parse(HungergamesApi.getHungergames()));
         return modified;
     }
 
@@ -130,8 +135,6 @@ public class CommandManager {
                 }
             }
         }
-        HungergamesApi.getReflectionManager().getCommandMap()
-                .registerAll(plugin.getDescription().getName(), PluginCommandYamlParser.parse(plugin));
         if (saveConfig)
             save();
     }
