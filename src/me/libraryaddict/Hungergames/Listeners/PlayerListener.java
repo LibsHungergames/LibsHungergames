@@ -312,11 +312,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
-        if (kits.getKitByPlayer(event.getPlayer()) == null)
-            kits.setKit(event.getPlayer(), kits.defaultKitName);
+        Player p = event.getPlayer();
+        final Gamer gamer = pm.registerGamer(p);
+        ScoreboardManager.registerScoreboard(p);
+        if (kits.getKitByPlayer(p) == null)
+            kits.setKit(p, kits.defaultKitName);
         event.setJoinMessage(null);
-        final Gamer gamer = pm.registerGamer(event.getPlayer());
-        Player p = gamer.getPlayer();
         if (p.getVehicle() != null)
             p.leaveVehicle();
         if (p.getPassenger() != null)
@@ -337,7 +338,6 @@ public class PlayerListener implements Listener {
                 gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
             }
         }, 2L);
-        ScoreboardManager.registerScoreboard(p);
         if (config.isPlayersFlyPreGame())
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())

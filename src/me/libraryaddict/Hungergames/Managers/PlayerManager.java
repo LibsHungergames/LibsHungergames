@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creature;
@@ -158,7 +159,8 @@ public class PlayerManager {
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
-        hg.cannon();
+        killed.getPlayer().getWorld()
+                .playSound(killed.getPlayer().getWorld().getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
         killed.clearInventory();
         World world = p.getWorld();
         for (ItemStack item : event.getDrops()) {

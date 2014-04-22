@@ -29,8 +29,8 @@ import java.util.Map;
  * User: Austin Date: 11/7/12 Time: 12:04 PM
  */
 public class CommandManager {
-    private Map<String, Map<String, Object>> commandsMap = new HashMap<String, Map<String, Object>>();
     private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
+    private Map<String, Map<String, Object>> commandsMap = new HashMap<String, Map<String, Object>>();
     private YamlConfiguration config;
     private File configFile;
     private boolean newFile = false;
@@ -45,7 +45,7 @@ public class CommandManager {
                 list.add(string);
     }
 
-    public ConfigurationSection getConfigSection(String commandName) {
+    private ConfigurationSection getConfigSection(String commandName) {
         ConfigurationSection section = config.getConfigurationSection(commandName);
         if (section == null) {
             section = config.createSection(commandName);
@@ -53,7 +53,7 @@ public class CommandManager {
         return section;
     }
 
-    public void load(File file) {
+    private void load(File file) {
         configFile = file;
         try {
             config = new YamlConfiguration();
@@ -136,7 +136,7 @@ public class CommandManager {
             save();
     }
 
-    public boolean loadConfig(ConfigurationSection section, CommandExecutor exc, String commandName) {
+    private boolean loadConfig(ConfigurationSection section, CommandExecutor exc, String commandName) {
         try {
             boolean modified = false;
             if (!section.contains("CommandName")) {
@@ -256,7 +256,7 @@ public class CommandManager {
         });
     }
 
-    public void save() {
+    private void save() {
         try {
             if (!configFile.exists()) {
                 System.out.print(String.format(cm.getCreatingConfigFile(), "commands"));

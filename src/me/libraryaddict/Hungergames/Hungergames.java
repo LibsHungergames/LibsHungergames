@@ -40,6 +40,10 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class Hungergames extends JavaPlugin {
 
+    private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
+    public static void registerStage(int timeToActivate, String display) {
+        stages.put(timeToActivate, display);
+    }
     /**
      * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
      * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
@@ -53,16 +57,12 @@ public class Hungergames extends JavaPlugin {
      */
     public boolean doSeconds = true;
     public HashMap<Location, EntityType> entitysToSpawn = new HashMap<Location, EntityType>();
-    private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
     private MainConfig mainConfig;
     private PlayerListener playerListener;
     private PlayerManager pm;
     private TranslationConfig translationsConfig;
-    public World world;
 
-    public void cannon() {
-        world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
-    }
+    public World world;
 
     public void checkWinner() {
         if (doSeconds) {
@@ -161,6 +161,12 @@ public class Hungergames extends JavaPlugin {
         }
     }
 
+    private void doStage() {
+        if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
+            ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
+        }
+    }
+
     public int getPrize(int pos) {
         if (HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().containsKey(pos))
             return HungergamesApi.getConfigManager().getWinnersConfig().getPrizesForPlacing().get(pos);
@@ -199,9 +205,9 @@ public class Hungergames extends JavaPlugin {
         MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.startJoinThread();
         MapLoader.loadMap();
+        ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
-                ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
                 world = Bukkit.getWorlds().get(0);
                 world.setAutoSave(false);
                 world.setGameRuleValue("doDaylightCycle", "false");
@@ -230,7 +236,6 @@ public class Hungergames extends JavaPlugin {
                 if (world.hasStorm())
                     world.setStorm(false);
                 world.setWeatherDuration(999999999);
-                ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
             }
         });
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -399,15 +404,5 @@ public class Hungergames extends JavaPlugin {
         checkWinner();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
         doStage();
-    }
-
-    public static void registerStage(int timeToActivate, String display) {
-        stages.put(timeToActivate, display);
-    }
-
-    public static void doStage() {
-        if (stages.containsKey(HungergamesApi.getHungergames().currentTime)) {
-            ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, stages.get(HungergamesApi.getHungergames().currentTime));
-        }
     }
 }
