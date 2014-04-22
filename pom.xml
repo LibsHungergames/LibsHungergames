@@ -34,7 +34,9 @@
 				<configuration>
 					<options>
 						<option>-overloadaggressively</option>
+						<option>-repackageclasses</option>
 						<option>-allowaccessmodification</option>
+						<option>-dontnote</option>
 						<option>-keep class
 							me.libraryaddict.Hungergames.Abilities.* {
 							public *; }</option>
@@ -51,21 +53,20 @@
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
 							*;
 							}</option>
-						<option>-keep class
+						<option>-keep,allowobfuscation class
 							me.libraryaddict.Hungergames.Listeners.* {
 							public *; }</option>
 						<option>-keep class
-							me.libraryaddict.Hungergames.Types.ClickInventory {
-							public *; }</option>
-						<option>-keep class
-							me.libraryaddict.Hungergames.Types.PageInventory {
-							public *; }</option>
-						<option>-keep class
-							me.libraryaddict.Hungergames.Types.KitInventory {
-							public *; }</option>
+							me.libraryaddict.Hungergames.Types.ClickInventory { public *; }</option>
+						<option>-keep,allowobfuscation class
+							me.libraryaddict.Hungergames.Types.PageInventory { public *; }</option>
+						<option>-keep,allowobfuscation class
+							me.libraryaddict.Hungergames.Types.KitInventory { public *; }</option>
+						<option>-keep,allowobfuscation class
+							me.libraryaddict.Hungergames.Types.SpectateInventory { public *; }</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
-							*;
+							protected *; public *;
 							}</option>
 						<option>-keep class
 							me.libraryaddict.Hungergames.Commands.* {
@@ -173,11 +174,6 @@
 			<artifactId>lombok</artifactId>
 			<version>0.12.0</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
-			<version>1.6.4-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>LibsDisguises</groupId>
