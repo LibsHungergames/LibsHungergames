@@ -11,6 +11,7 @@ public class MySqlConfig extends BaseConfig {
     private String mysql_host = "localhost";
     private String mysql_password = "password";
     private String mysql_username = "root";
+    private boolean useUUIDs = true;
 
     public MySqlConfig() {
         super("mysql");

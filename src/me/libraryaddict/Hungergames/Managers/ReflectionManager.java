@@ -6,6 +6,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
+import me.libraryaddict.Hungergames.Types.LibsProfileLookupCaller;
+import net.minecraft.util.com.mojang.authlib.Agent;
+import net.minecraft.util.com.mojang.authlib.GameProfile;
+import net.minecraft.util.com.mojang.authlib.GameProfileRepository;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.joptsimple.OptionSet;
@@ -32,6 +37,15 @@ public class ReflectionManager {
         return commandMap;
     }
 
+    public Class getNmsClass(String className) {
+        try {
+            return Class.forName(currentVersion + "." + className);
+        } catch (Exception e) {
+            // e.printStackTrace();
+        }
+        return null;
+    }
+
     public Object getPropertiesConfig(String name, Object obj) {
         try {
             Properties properties = (Properties) propertyManager.getClass().getDeclaredField("properties").get(propertyManager);
@@ -53,6 +67,23 @@ public class ReflectionManager {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public GameProfile grabProfileAddUUID(String playername) {
+        try {
+            Object minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(null);
+            for (Method method : getNmsClass("MinecraftServer").getMethods()) {
+                if (method.getReturnType().getSimpleName().equals("GameProfileRepository")) {
+                    GameProfileRepository profileRepo = (GameProfileRepository) method.invoke(minecraftServer);
+                    LibsProfileLookupCaller callback = new LibsProfileLookupCaller();
+                    profileRepo.findProfilesByNames(new String[] { playername }, Agent.MINECRAFT, callback);
+                    return callback.getGameProfile();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public void savePropertiesConfig() {

@@ -43,7 +43,7 @@ public class BuyKit implements CommandExecutor {
                     sender.sendMessage(cm.getCommandBuyKitKitsNotLoaded());
                 } else {
                     gamer.addBalance(-kit.getPrice());
-                    new GiveKitThread(gamer.getName(), kit.getName()).start();
+                    new GiveKitThread(gamer.getName(), gamer.getPlayer().getUniqueId().toString(), kit.getName()).start();
                     sender.sendMessage(String.format(cm.getCommandBuyKitPurchasedKit(), kit.getName()));
                 }
                 return true;

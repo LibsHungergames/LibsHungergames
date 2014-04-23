@@ -196,5 +196,10 @@
 			<version>2.0.7</version>
 			<type>maven-plugin</type>
 		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.7.8-R0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -1,5 +1,6 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.PlayerJoinThread;
 
 /**
@@ -13,7 +14,7 @@ public class MySqlManager {
     }
 
     public void startJoinThread() {
-        joinThread = new PlayerJoinThread();
+        joinThread = new PlayerJoinThread(HungergamesApi.getConfigManager().getMySqlConfig().isUseUUIDs());
         joinThread.start();
     }
 

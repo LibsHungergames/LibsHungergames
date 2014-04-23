@@ -11,8 +11,10 @@ public class GiveKitThread extends Thread {
     private Connection con = null;
     private String kitName;
     private String playerName;
+    private String uuid;
 
-    public GiveKitThread(String player, String kit) {
+    public GiveKitThread(String player, String uuid, String kit) {
+        this.uuid = uuid;
         kitName = kit;
         playerName = player;
     }
@@ -42,7 +44,7 @@ public class GiveKitThread extends Thread {
         mySqlConnect();
         try {
             Statement stmt = con.createStatement();
-            stmt.execute("INSERT INTO HGKits (Name, KitName) VALUES ('" + playerName + "', '" + kitName + "')");
+            stmt.execute("INSERT INTO HGKits (uuid, Name, KitName) VALUES ('" + uuid + "', '" + playerName + "', '" + kitName + "')");
             stmt.close();
         } catch (Exception ex) {
             ex.printStackTrace();
