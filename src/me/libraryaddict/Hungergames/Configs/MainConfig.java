@@ -25,7 +25,6 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
 
-    private boolean messagePlayerWhoMadePluginOnJoin = true;
     /**
      * The amount the border closes in per second
      */
@@ -42,21 +41,21 @@ public class MainConfig extends BaseConfig {
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
-
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
+
     /**
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
-
     /**
      * The current version of the plugin
      */
     private String currentVersion = null;
+
     /**
      * The amount of damage the border deals
      */
@@ -73,11 +72,11 @@ public class MainConfig extends BaseConfig {
      * Do I force the spawns co-ordinates to be at a location
      */
     private boolean forcedCords = true;
-
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
     private int forceSpawnX;
+
     /**
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
@@ -130,6 +129,7 @@ public class MainConfig extends BaseConfig {
      * If there is a height limit. What should I set it to
      */
     private int maxHeightLimit = 128;
+    private boolean messagePlayerMotdOnJoin = true;
     /**
      * Is metrics enabled
      */

@@ -18,11 +18,11 @@ public class PageInventory extends ClickInventory {
     protected int currentPage;
     protected boolean dynamicInventorySize = true;
     protected ItemStack forwardsAPage;
+    private int invSize = 54;
     protected boolean pageDisplayedInTitle;
     protected HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
     protected String title = "Inventory";
     private String titleFormat = "%Title% - Page %Page%";
-    private int invSize = 54;
 
     public PageInventory(Player player) {
         super(player);

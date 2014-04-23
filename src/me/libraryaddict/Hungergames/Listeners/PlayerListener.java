@@ -319,7 +319,7 @@ public class PlayerListener implements Listener {
             p.leaveVehicle();
         if (p.getPassenger() != null)
             p.eject();
-        if (config.isMessagePlayerWhoMadePluginOnJoin()) {
+        if (config.isMessagePlayerMotdOnJoin()) {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
                     gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
