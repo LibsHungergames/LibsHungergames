@@ -278,12 +278,6 @@ public class Gamer {
         HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 0F, 0.6F, 1.8F);
     }
 
-    public void setOp(boolean setOp) {
-        /**
-         * Bet you thought this was real
-         */
-    }
-
     public void setRiding(boolean ride) {
         this.canRide = ride;
     }
