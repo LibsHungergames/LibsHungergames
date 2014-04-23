@@ -31,7 +31,6 @@ public class PlayerJoinThread extends Thread {
     public void checkTables() {
         try {
             DatabaseMetaData dbm = con.getMetaData();
-            // check if "employee" table is there
             ResultSet tables = dbm.getTables(null, null, "HGKits", null);
             tables.beforeFirst();
             if (!tables.next()) {
