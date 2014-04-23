@@ -319,11 +319,13 @@ public class PlayerListener implements Listener {
             p.leaveVehicle();
         if (p.getPassenger() != null)
             p.eject();
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
-            }
-        }, 2L);
+        if (config.isMessagePlayerWhoMadePluginOnJoin()) {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
+                public void run() {
+                    gamer.getPlayer().sendMessage(tm.getMessagePlayerWhosePlugin());
+                }
+            }, 2L);
+        }
         if (config.isPlayersFlyPreGame())
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
