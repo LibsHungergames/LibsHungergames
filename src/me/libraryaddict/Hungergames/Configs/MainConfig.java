@@ -24,6 +24,8 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
+
+    private boolean messagePlayerWhoMadePluginOnJoin = true;
     /**
      * The amount the border closes in per second
      */
@@ -349,53 +351,5 @@ public class MainConfig extends BaseConfig {
                     }
                 }
             });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
-            public void run() {
-
-                /**
-                 * Touch this and you better leave this entire plugin alone because I didn't give you permission to modify this.
-                 * By changing the creatorMessage to something which doesn't refer players to the plugin itself. You are going
-                 * against my wishes.
-                 */
-
-                /**
-                 * I reserve the right to issue a DMCA if you effectively remove this from your server but use at least 30% of
-                 * this code.
-                 */
-                TranslationConfig translation = HungergamesApi.getConfigManager().getTranslationsConfig();
-                translation.setMessagePlayerWhosePlugin(String.format(translation.getMessagePlayerWhosePlugin(),
-                        getCurrentVersion(), "libraryaddict"));
-                String message = ChatColor.stripColor(translation.getMessagePlayerWhosePlugin()).toLowerCase().replace(" ", "");
-                String[] toCheck = new String[] { "libraryaddict", "ow.ly/kwbpo", "libshungergames" };
-                boolean contains = false;
-                for (String check : toCheck) {
-                    if (message.contains(check) && message.length() + 2 > check.length()) {
-                        contains = true;
-                        break;
-                    }
-                }
-                if (!contains) {
-                    translation.setMessagePlayerWhosePlugin(ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN
-                            + "You are using " + ChatColor.GREEN + "LibsHungergames " + getCurrentVersion()
-                            + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "libraryaddict");
-                }
-                translation.setMessagePlayerWhosePlugin(scatterCodes(translation.getMessagePlayerWhosePlugin()));
-            }
-        });
-    }
-
-    private String scatterCodes(String toScatter) {
-        StringBuilder builder = new StringBuilder();
-        char[] chars = toScatter.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (i > 0 && i % 2 == 0) {
-                if (new Random().nextBoolean()) {
-                    String color = ChatColor.getLastColors(builder.toString());
-                    builder.append(ChatColor.WHITE + color);
-                }
-            }
-            builder.append(chars[i]);
-        }
-        return builder.toString();
     }
 }
