@@ -16,7 +16,6 @@ import me.libraryaddict.Hungergames.Listeners.PlayerListener;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
-import me.libraryaddict.Hungergames.Types.Kit;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
