@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Properties;
 
 import me.libraryaddict.Hungergames.Types.LibsProfileLookupCaller;
-import net.minecraft.util.com.mojang.authlib.Agent;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.GameProfileRepository;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.joptsimple.OptionSet;
@@ -19,6 +15,7 @@ import org.bukkit.entity.Player;
 public class ReflectionManager {
     private SimpleCommandMap commandMap;
     private String currentVersion;
+    private boolean gameProfile = false;
     private Object propertyManager;
 
     public ReflectionManager() {
@@ -30,6 +27,11 @@ public class ReflectionManager {
             currentVersion = propertyManager.getClass().getPackage().getName();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        try {
+            Class.forName("net.minecraft.util.com.mojang.authlib.GameProfile");
+            gameProfile = true;
+        } catch (Exception ex) {
         }
     }
 
@@ -69,14 +71,19 @@ public class ReflectionManager {
         return obj;
     }
 
-    public GameProfile grabProfileAddUUID(String playername) {
+    public Object grabProfileAddUUID(String playername) {
         try {
             Object minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(null);
             for (Method method : getNmsClass("MinecraftServer").getMethods()) {
                 if (method.getReturnType().getSimpleName().equals("GameProfileRepository")) {
-                    GameProfileRepository profileRepo = (GameProfileRepository) method.invoke(minecraftServer);
+                    Object profileRepo = method.invoke(minecraftServer);
+                    Object agent = Class.forName("net.minecraft.util.com.mojang.authlib.Agent").getField("MINECRAFT").get(null);
                     LibsProfileLookupCaller callback = new LibsProfileLookupCaller();
-                    profileRepo.findProfilesByNames(new String[] { playername }, Agent.MINECRAFT, callback);
+                    profileRepo
+                            .getClass()
+                            .getMethod("findProfilesByNames", String[].class, agent.getClass(),
+                                    Class.forName("net.minecraft.util.com.mojang.authlib.ProfileLookupCallback"))
+                            .invoke(profileRepo, new String[] { playername }, agent, callback);
                     return callback.getGameProfile();
                 }
             }
@@ -84,6 +91,10 @@ public class ReflectionManager {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public boolean hasGameProfiles() {
+        return gameProfile;
     }
 
     public void savePropertiesConfig() {

@@ -6,8 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashSet;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +41,8 @@ public class PlayerJoinThread extends Thread {
             } else {
                 tables = dbm.getColumns(null, null, "HGKits", "uuid");
                 tables.beforeFirst();
-                if (!tables.next()) {
+                ReflectionManager manager = HungergamesApi.getReflectionManager();
+                if (manager.hasGameProfiles() && !tables.next()) {
                     System.out.println("[LibsHungergames] Updating mysql to support UUID's");
                     Statement stmt = con.createStatement();
                     stmt.execute("ALTER TABLE `HGKits` ADD `uuid` VARCHAR(40) NOT NULL DEFAULT '' AFTER `ID`;");
@@ -53,14 +53,19 @@ public class PlayerJoinThread extends Thread {
                         namesToConvert.add(rs.getString("Name"));
                     }
                     rs.close();
-                    ReflectionManager manager = HungergamesApi.getReflectionManager();
                     for (String name : namesToConvert) {
-                        GameProfile profile = manager.grabProfileAddUUID(name);
-                        if (profile != null && profile.getId() != null) {
-                            stmt.execute("UPDATE `HGKits` SET uuid = '" + profile.getId().toString() + "' WHERE Name='"
-                                    + profile.getName() + "'");
-                            System.out.print("[LibsHungergames] Converted " + name + " and added uuid "
-                                    + profile.getId().toString());
+                        Object profile = manager.grabProfileAddUUID(name);
+                        UUID uuid = null;
+                        if (profile != null) {
+                            try {
+                                uuid = (UUID) profile.getClass().getMethod("getId").invoke(profile);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        if (uuid != null) {
+                            stmt.execute("UPDATE `HGKits` SET uuid = '" + uuid.toString() + "' WHERE Name='" + name + "'");
+                            System.out.print("[LibsHungergames] Converted " + name + " and added uuid " + uuid.toString());
                         } else {
                             System.out.print("[LibsHungergames] Failed to find a UUID for " + name);
                         }
@@ -103,6 +108,7 @@ public class PlayerJoinThread extends Thread {
         mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();
         PlayerManager pm = HungergamesApi.getPlayerManager();
+        uuids = uuids && HungergamesApi.getReflectionManager().hasGameProfiles();
         while (true) {
             if (pm.loadGamer.peek() != null) {
                 final Gamer gamer = pm.loadGamer.poll();
