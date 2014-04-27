@@ -3,8 +3,6 @@ package me.libraryaddict.Hungergames.Types;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 
 public class GiveKitThread extends Thread {
@@ -43,8 +41,10 @@ public class GiveKitThread extends Thread {
             return;
         mySqlConnect();
         try {
-            Statement stmt = con.createStatement();
-            stmt.execute("INSERT INTO HGKits (uuid, Name, KitName) VALUES ('" + uuid + "', '" + playerName + "', '" + kitName + "')");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO HGKits (uuid, Name, KitName) VALUES (?, ?, ?)");
+            stmt.setString(1, uuid);
+            stmt.setString(2, playerName);
+            stmt.setString(3, kitName);
             stmt.close();
         } catch (Exception ex) {
             ex.printStackTrace();
