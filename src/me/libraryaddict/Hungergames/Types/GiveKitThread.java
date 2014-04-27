@@ -2,7 +2,9 @@ package me.libraryaddict.Hungergames.Types;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 
 public class GiveKitThread extends Thread {

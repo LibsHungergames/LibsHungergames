@@ -70,6 +70,9 @@ public class Hungergames extends JavaPlugin {
             if (aliveGamers.size() == 1) {
                 doSeconds = false;
                 final Gamer winner = aliveGamers.get(0);
+                if (winner.getStats() != null) {
+                    winner.getStats().addWin();
+                }
                 Bukkit.getPluginManager().callEvent(new PlayerWinEvent(winner));
                 int reward = getPrize(1);
                 if (reward > 0)

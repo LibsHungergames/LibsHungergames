@@ -50,6 +50,7 @@ public class LoggerConfig extends BaseConfig {
     private String mySqlConnecting = "[%s] Connecting to MySQL database..";
     private String mySqlConnectingError = "[%s] Error while connecting to MySQL. %s";
     private String mySqlErrorLoadPlayer = "[PlayerJoinThread] Error while loading player %s - %s";
+    private String mySqlErrorSaveStats = "[Hungergames] Error while saving stats for player %s - %s";
     private String noMapsFound = "[Hungergames] No maps found in %s";
     private String NowAttemptingToLoadAMap = "[Hungergames] Now attempting to load a map from the path %s";
     private String restoredCommandsMissingConfigValue = "[Hungergames] Restored missing config '%s' for command '%s'";

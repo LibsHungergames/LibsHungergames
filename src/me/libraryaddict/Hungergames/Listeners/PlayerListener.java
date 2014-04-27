@@ -453,6 +453,9 @@ public class PlayerListener implements Listener {
             event.getPlayer().leaveVehicle();
         if (event.getPlayer().getPassenger() != null)
             event.getPlayer().eject();
+        if (gamer.getStats() != null && gamer.getStats().hasChanged()) {
+            pm.saveGamer.add(gamer.getStats());
+        }
     }
 
     @EventHandler

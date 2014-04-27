@@ -73,6 +73,16 @@ public class PlayerJoinThread extends Thread {
                     stmt.close();
                 }
             }
+            tables = dbm.getTables(null, null, "HGStats", null);
+            tables.beforeFirst();
+            if (!tables.next()) {
+                tables.close();
+                Statement stmt = con.createStatement();
+                stmt.execute("CREATE TABLE HGStats (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+                        + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, Killstreak int(20) NOT NULL,"
+                        + " Kills int(20) NOT NULL, Wins int(20) NOT NULL, Losses int(20) NOT NULL");
+                stmt.close();
+            }
         } catch (Exception ex) {
             System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName()));
         }
@@ -113,6 +123,8 @@ public class PlayerJoinThread extends Thread {
             if (pm.loadGamer.peek() != null) {
                 final Gamer gamer = pm.loadGamer.poll();
                 try {
+                    UUID uuid = gamer.getPlayer().getUniqueId();
+                    String name = gamer.getName();
                     try {
                         con.createStatement().execute("DO 1");
                     } catch (Exception ex) {
@@ -121,17 +133,31 @@ public class PlayerJoinThread extends Thread {
                     Statement stmt = con.createStatement();
                     ResultSet r;
                     if (uuids) {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `uuid` = '"
-                                + gamer.getPlayer().getUniqueId().toString() + "' ;");
+                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `uuid` = '" + uuid.toString() + "' ;");
                     } else {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `Name` = '" + gamer.getName() + "' ;");
+                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `Name` = '" + name + "' ;");
                     }
                     r.beforeFirst();
                     while (r.next()) {
                         kits.addKitToPlayer(gamer.getPlayer(), kits.getKitByName(r.getString("KitName")));
                     }
+                    r.close();
+                    if (uuids) {
+                        r = stmt.executeQuery("SELECT KitName FROM `HGStats` WHERE `uuid` = '" + uuid.toString() + "' ;");
+                    } else {
+                        r = stmt.executeQuery("SELECT KitName FROM `HGStats` WHERE `Name` = '" + name + "' ;");
+                    }
+                    r.beforeFirst();
+                    final Stats stats;
+                    if (r.next()) {
+                        stats = new Stats(uuid, name, r.getInt("Kills"), r.getInt("Killstreak"), r.getInt("Wins"),
+                                r.getInt("Losses"));
+                    } else {
+                        stats = new Stats(uuid, name);
+                    }
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
+                            gamer.setStats(stats);
                             if (HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled()
                                     && HungergamesApi.getHungergames().currentTime < 0) {
                                 ItemStack item = HungergamesApi.getInventoryManager().getKitSelector();
@@ -144,7 +170,6 @@ public class PlayerJoinThread extends Thread {
                             }
                         }
                     });
-                    r.close();
                     stmt.close();
                 } catch (Exception ex) {
                     System.out.println(String.format(cm.getMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));

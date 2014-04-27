@@ -34,6 +34,7 @@ public class Gamer {
      */
     private boolean seeInvis = true;
     private boolean spectating = false;
+    private Stats stats;
 
     public Gamer(Player player) {
         this.player = player;
@@ -55,6 +56,9 @@ public class Gamer {
 
     public void addKill() {
         kills++;
+        if (getStats() != null) {
+            getStats().addKill();
+        }
         ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
     }
 
@@ -120,7 +124,7 @@ public class Gamer {
     }
 
     public int getKills() {
-        return kills;
+        return getStats() == null ? kills : getStats().getKillsCurrent();
     }
 
     /**
@@ -135,6 +139,10 @@ public class Gamer {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 
     /**
@@ -287,6 +295,10 @@ public class Gamer {
      */
     public void setSpectating(boolean spectating) {
         this.spectating = spectating;
+    }
+
+    public void setStats(Stats stats2) {
+        this.stats = stats2;
     }
 
     private void setupEconomy() {

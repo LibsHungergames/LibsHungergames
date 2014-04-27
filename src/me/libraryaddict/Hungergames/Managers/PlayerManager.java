@@ -34,6 +34,7 @@ import me.libraryaddict.Hungergames.Events.PlayerKilledEvent;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Types.Stats;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
 public class PlayerManager {
@@ -49,6 +50,7 @@ public class PlayerManager {
     public HashMap<Gamer, Damage> lastDamager = new HashMap<Gamer, Damage>();
     public ConcurrentLinkedQueue<Gamer> loadGamer = new ConcurrentLinkedQueue<Gamer>();
     private ArrayList<Integer> nonSolid = new ArrayList<Integer>();
+    public ConcurrentLinkedQueue<Stats> saveGamer = new ConcurrentLinkedQueue<Stats>();
     private Iterator<Location> spawnItel;
     private HashMap<Location, Integer[]> spawns = new HashMap<Location, Integer[]>();
 
@@ -159,6 +161,9 @@ public class PlayerManager {
         int reward = hg.getPrize(getAliveGamers().size());
         if (reward > 0)
             killed.addBalance(reward);
+        if (killed.getStats() != null) {
+            killed.getStats().addLoss();
+        }
         killed.getPlayer().getWorld()
                 .playSound(killed.getPlayer().getWorld().getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
         killed.clearInventory();
