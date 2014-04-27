@@ -42,8 +42,8 @@ public class BuyKit implements CommandExecutor {
                 if (!kits.addKitToPlayer(gamer.getPlayer(), kit)) {
                     sender.sendMessage(cm.getCommandBuyKitKitsNotLoaded());
                 } else {
-                    gamer.addBalance(-kit.getPrice());
                     new GiveKitThread(gamer.getName(), gamer.getPlayer().getUniqueId().toString(), kit.getName()).start();
+                    gamer.addBalance(-kit.getPrice());
                     sender.sendMessage(String.format(cm.getCommandBuyKitPurchasedKit(), kit.getName()));
                 }
                 return true;
