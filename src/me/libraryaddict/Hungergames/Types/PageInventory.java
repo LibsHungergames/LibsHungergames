@@ -7,7 +7,6 @@ import java.util.HashMap;
 import me.libraryaddict.Hungergames.Events.PagesClickEvent;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,19 +18,20 @@ public class PageInventory extends ClickInventory {
         BUYKIT, KIT, SPECTATOR, STATS;
     }
 
-    protected ItemStack backAPage;
-    protected int currentPage;
-    protected boolean dynamicInventorySize = true;
-    protected ItemStack forwardsAPage;
+    private ItemStack backAPage;
+    private int currentPage;
+    private boolean dynamicInventorySize = true;
+    private ItemStack forwardsAPage;
     private int invSize = 54;
-    protected boolean pageDisplayedInTitle;
-    protected HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
-    protected String title = "Inventory";
+    private boolean pageDisplayedInTitle;
+    private HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
+    private String title = "Inventory";
     private String titleFormat = "%Title% - Page %Page%";
     private InventoryType type;
 
     public PageInventory(InventoryType inventoryType, Player player, boolean dymanicInventory, int invSize) {
         super(player);
+        this.type = inventoryType;
         dynamicInventorySize = dymanicInventory;
         this.invSize = invSize;
     }
@@ -40,10 +40,6 @@ public class PageInventory extends ClickInventory {
      * Get the itemstack which is the backpage
      */
     public ItemStack getBackPage() {
-        if (backAPage == null) {
-            backAPage = HungergamesApi.getInventoryManager().generateItem(Material.SIGN, 0, ChatColor.RED + "Back",
-                    new String[] { ChatColor.BLUE + "Click this to move back" });
-        }
         return backAPage;
     }
 
@@ -58,10 +54,6 @@ public class PageInventory extends ClickInventory {
      * Get the itemstack which is the next page
      */
     public ItemStack getForwardsPage() {
-        if (forwardsAPage == null) {
-            forwardsAPage = HungergamesApi.getInventoryManager().generateItem(Material.SIGN, 1, ChatColor.RED + "Forward",
-                    new String[] { ChatColor.BLUE + "Click this to move forward" });
-        }
         return forwardsAPage;
     }
 

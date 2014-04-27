@@ -21,6 +21,7 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
+    private boolean displayUnusableKitsInSelector = true;
     /**
      * The amount the border closes in per second
      */

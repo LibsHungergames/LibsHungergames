@@ -85,6 +85,13 @@ public class InventoryManager {
         }
         PageInventory inv = new PageInventory(InventoryType.BUYKIT, p, config.isBuyKitMenuDymanic(),
                 config.getBuyKitInventorySize());
+        inv.setTitle(tm.getBuyKitMenuTitle());
+        ItemStack kItem = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemBack();
+        inv.setBackPage(generateItem(kItem.getType(), kItem.getDurability(), tm.getItemBuyKitInventoryBackName(),
+                tm.getItemBuyKitBackDescription()));
+        kItem = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemForwards();
+        inv.setForwardsPage(generateItem(kItem.getType(), kItem.getDurability(), tm.getItemBuyKitInventoryForwardsName(),
+                tm.getItemBuyKitForwardsDescription()));
         {
             ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
             ArrayList<Kit> allKits = kits.getKits();
@@ -113,13 +120,6 @@ public class InventoryManager {
             }
             inv.setPages(nonOwned);
         }
-        inv.setTitle(tm.getBuyKitMenuTitle());
-        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemBack();
-        inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemBuyKitInventoryBackName(),
-                tm.getItemBuyKitBackDescription()));
-        item = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemForwards();
-        inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemBuyKitInventoryForwardsName(),
-                tm.getItemBuyKitForwardsDescription()));
         inv.openInventory();
     }
 
@@ -128,16 +128,22 @@ public class InventoryManager {
             return;
         PageInventory inv = new PageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
                 config.getKitSelectorInventorySize());
+        inv.setTitle(tm.getSelectKitInventoryTitle());
+        ItemStack kItem = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
+        inv.setBackPage(generateItem(kItem.getType(), kItem.getDurability(), tm.getItemKitSelectorBackName(),
+                tm.getItemKitSelectorBackDescription()));
+        kItem = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorForward();
+        inv.setForwardsPage(generateItem(kItem.getType(), kItem.getDurability(), tm.getItemKitSelectorForwardsName(),
+                tm.getItemKitSelectorForwardsDescription()));
         {
             ArrayList<ItemStack> kitItems = new ArrayList<ItemStack>();
-            ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
             ArrayList<Kit> allKits = kits.getKits();
             List<Kit> hisKits = kits.getPlayersKits(p);
             if (hisKits == null)
                 hisKits = new ArrayList<Kit>();
             for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
                 Kit kit = allKits.get(currentKit);
-                if (kits.ownsKit(p, kit)) {
+                if (kits.ownsKit(p, kit) || config.isDisplayUnusableKitsInSelector()) {
                     ItemStack item = kit.getIcon();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + kit.getName()
@@ -149,16 +155,8 @@ public class InventoryManager {
                     kitItems.add(item);
                 }
             }
-            kitItems.addAll(nonOwned);
             inv.setPages(kitItems);
         }
-        inv.setTitle(tm.getSelectKitInventoryTitle());
-        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
-        inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemKitSelectorBackName(),
-                tm.getItemKitSelectorBackDescription()));
-        item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorForward();
-        inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemKitSelectorForwardsName(),
-                tm.getItemKitSelectorForwardsDescription()));
         inv.openInventory();
     }
 
@@ -166,14 +164,14 @@ public class InventoryManager {
         if (p.hasMetadata("PageInventory"))
             return;
         PageInventory inv = new PageInventory(InventoryType.SPECTATOR, p, true, 54);
-        inv.setPages(specHeads);
-        inv.setTitle(tm.getSpectatorInventoryTitle());
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
         inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemSpectatorInventoryBackName(),
                 tm.getItemSpectatorInventoryBackDescription()));
         item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemForwards();
         inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemSpectatorInventoryForwardsName(),
                 tm.getItemSpectatorInventoryForwardsDescription()));
+        inv.setPages(specHeads);
+        inv.setTitle(tm.getSpectatorInventoryTitle());
         inv.openInventory();
     }
 
@@ -183,7 +181,8 @@ public class InventoryManager {
             if (gamer.isAlive())
                 names.add(gamer.getName());
         }
-        if (LibsFeastManager.getFeastManager().getFeastLocation().getY() > 0) {
+        if (LibsFeastManager.getFeastManager().getFeastLocation() != null
+                && LibsFeastManager.getFeastManager().getFeastLocation().getY() > 0) {
             names.add("Feast");
         }
         Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
