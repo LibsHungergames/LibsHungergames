@@ -11,8 +11,7 @@ import me.libraryaddict.Hungergames.Events.InvincibilityWearOffEvent;
 import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
-import me.libraryaddict.Hungergames.Listeners.GeneralListener;
-import me.libraryaddict.Hungergames.Listeners.PlayerListener;
+import me.libraryaddict.Hungergames.Listeners.*;
 import me.libraryaddict.Hungergames.Managers.*;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -40,9 +39,11 @@ import org.bukkit.scoreboard.DisplaySlot;
 public class Hungergames extends JavaPlugin {
 
     private static HashMap<Integer, String> stages = new HashMap<Integer, String>();
+
     public static void registerStage(int timeToActivate, String display) {
         stages.put(timeToActivate, display);
     }
+
     /**
      * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
      * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
@@ -252,6 +253,7 @@ public class Hungergames extends JavaPlugin {
         playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         HungergamesApi.getAbilityManager();
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
         if (Bukkit.getPluginManager().getPermission("ThisIsUsedForMessaging") == null) {

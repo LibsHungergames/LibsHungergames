@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import me.libraryaddict.Hungergames.Events.PagesClickEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +15,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PageInventory extends ClickInventory {
+    public enum InventoryType {
+        KIT, STATS, BUYKIT, SPECTATOR;
+    }
 
     protected ItemStack backAPage;
     protected int currentPage;
@@ -23,12 +28,13 @@ public class PageInventory extends ClickInventory {
     protected HashMap<Integer, ItemStack[]> pages = new HashMap<Integer, ItemStack[]>();
     protected String title = "Inventory";
     private String titleFormat = "%Title% - Page %Page%";
+    private InventoryType type;
 
-    public PageInventory(Player player) {
-        super(player);
+    public InventoryType getType() {
+        return type;
     }
 
-    public PageInventory(Player player, boolean dymanicInventory, int invSize) {
+    public PageInventory(InventoryType inventoryType, Player player, boolean dymanicInventory, int invSize) {
         super(player);
         dynamicInventorySize = dymanicInventory;
         this.invSize = invSize;
@@ -111,7 +117,12 @@ public class PageInventory extends ClickInventory {
                         return;
                     }
                 }
+                PagesClickEvent itemClickEvent = new PagesClickEvent(this, event.getRawSlot(), event);
                 if (!isModifiable()) {
+                    itemClickEvent.setCancelled(true);
+                }
+                Bukkit.getPluginManager().callEvent(itemClickEvent);
+                if (itemClickEvent.isCancelled()) {
                     event.setCancelled(true);
                 }
             } else if (!this.isModifiable() && event.isShiftClick() && item != null && item.getType() != Material.AIR) {
@@ -146,6 +157,7 @@ public class PageInventory extends ClickInventory {
      */
     public void setBackPage(ItemStack newBack) {
         backAPage = newBack;
+        backAPage.setAmount(0);
     }
 
     /**
@@ -153,6 +165,7 @@ public class PageInventory extends ClickInventory {
      */
     public void setForwardsPage(ItemStack newForwards) {
         forwardsAPage = newForwards;
+        forwardsAPage.setAmount(0);
     }
 
     /**
