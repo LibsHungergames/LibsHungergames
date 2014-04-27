@@ -192,6 +192,16 @@ public class Hungergames extends JavaPlugin {
             PlayerQuitEvent event = new PlayerQuitEvent(p, "He came, he saw, he conquered");
             playerListener.onQuit(event);
         }
+        int slept = 0;
+        while (HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled()
+                && !HungergamesApi.getPlayerManager().saveGamer.isEmpty() && slept++ < 15) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
         HungergamesApi.getMySqlManager().getPlayerQuitThread().mySqlDisconnect();
