@@ -21,7 +21,6 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
-
     /**
      * The amount the border closes in per second
      */
@@ -30,20 +29,27 @@ public class MainConfig extends BaseConfig {
      * The border size
      */
     private double borderSize = 500;
+
     /**
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
+    private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
+    private int buyKitInventorySize = 54;
+    private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
+    private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
+
+    private boolean buyKitMenuEnabled = true;
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
+
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
-
     /**
      * Command to stop the server with
      */
@@ -52,7 +58,6 @@ public class MainConfig extends BaseConfig {
      * The current version of the plugin
      */
     private String currentVersion = null;
-
     /**
      * The amount of damage the border deals
      */
@@ -61,6 +66,7 @@ public class MainConfig extends BaseConfig {
      * Is the end disabled? I will change it in the servers config :3
      */
     private boolean endDisabled = true;
+
     /**
      * Is fire spread enabled pre-game
      */
@@ -73,7 +79,6 @@ public class MainConfig extends BaseConfig {
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
     private int forceSpawnX;
-
     /**
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
@@ -90,6 +95,7 @@ public class MainConfig extends BaseConfig {
      * Is there a height limit? I will change it!
      */
     private boolean heightLimitChanged = true;
+    private boolean isBuyKitMenuDymanic = true;
     /**
      * Does the kit selector change its size to fit the kits
      */
@@ -98,10 +104,12 @@ public class MainConfig extends BaseConfig {
      * Is there a kick on death
      */
     private boolean kickOnDeath = false;
+
     /**
      * What item do I use for the kit selectors back button
      */
     private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);
+
     /**
      * Do I give the players a kit selector when they join the game
      */
@@ -125,12 +133,12 @@ public class MainConfig extends BaseConfig {
     /**
      * If there is a height limit. What should I set it to
      */
-    private int maxHeightLimit = 128;
+    private int maxHeightLimit = 128;;
     private boolean messagePlayerMotdOnJoin = true;
     /**
      * Is metrics enabled
      */
-    private boolean metricsEnabled = true;;
+    private boolean metricsEnabled = true;
     /**
      * Whats the minimal players required to start the game
      */
@@ -174,10 +182,6 @@ public class MainConfig extends BaseConfig {
      */
     private boolean shortenedNames = true;
     /**
-     * Does the kit gui sort the kits depending on if they own it.
-     */
-    private boolean sortKitGuiByOwned = false;
-    /**
      * Height to check when spawning players in
      */
     private int spawnHeight = 5;
@@ -189,6 +193,7 @@ public class MainConfig extends BaseConfig {
      * The spawn radius
      */
     private int spawnRadius = 10;
+
     /**
      * What is the prefix of spectators in chat
      */

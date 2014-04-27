@@ -230,6 +230,9 @@ public class PlayerListener implements Listener {
                 } else if (config.isSpectatorMenuEnabled() && item.getType() == Material.COMPASS && !gamer.isAlive()) {
                     icon.openSpectatorInventory(p);
                     event.setCancelled(true);
+                } else if (item.equals(icon.getBuyKit())) {
+                    icon.openBuyKitInventory(p);
+                    event.setCancelled(true);
                 }
                 if (item.getType() == Material.MUSHROOM_SOUP && config.isMushroomStewEnabled()
                         && !item.getItemMeta().hasDisplayName()) {
@@ -340,9 +343,14 @@ public class PlayerListener implements Listener {
             }, 2L);
         } else {
             ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(), Bukkit.getOnlinePlayers().length);
-            if (config.isKitSelectorEnabled() && !config.isMysqlEnabled())
-                if (!p.getInventory().contains(icon.getKitSelector()))
+            if (!config.isMysqlEnabled()) {
+                if (config.isKitSelectorEnabled() && !p.getInventory().contains(icon.getKitSelector())) {
                     gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
+                }
+                if (config.isBuyKitMenuEnabled() && !p.getInventory().contains(icon.getBuyKit())) {
+                    gamer.getPlayer().getInventory().addItem(icon.getBuyKit());
+                }
+            }
             if (config.isTeleportToSpawnLocationPregame() && -config.getSecondsToTeleportPlayerToSpawn() >= hg.currentTime
                     && config.isPreventMovingFromSpawnUsingPotions()) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 200), true);

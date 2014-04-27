@@ -135,9 +135,12 @@ public class PlayerJoinThread extends Thread {
                             if (HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled()
                                     && HungergamesApi.getHungergames().currentTime < 0) {
                                 ItemStack item = HungergamesApi.getInventoryManager().getKitSelector();
+                                ItemStack item1 = HungergamesApi.getInventoryManager().getBuyKit();
                                 PlayerInventory pInv = gamer.getPlayer().getInventory();
                                 if (!pInv.contains(item))
                                     pInv.addItem(item);
+                                if (!pInv.contains(item1))
+                                    pInv.addItem(item1);
                             }
                         }
                     });

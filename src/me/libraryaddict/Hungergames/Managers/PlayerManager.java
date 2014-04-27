@@ -282,6 +282,7 @@ public class PlayerManager {
     public void setSpectator(final Gamer gamer) {
         gamer.setAlive(false);
         gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
+        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getBuyKit());
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
                 ItemStack compass = new ItemStack(Material.COMPASS);

@@ -17,8 +17,8 @@ public class PagesClickEvent extends Event implements Cancellable {
     }
 
     private boolean cancelled;
-    private InventoryClickEvent invEvent;
     private PageInventory inv;
+    private InventoryClickEvent invEvent;
     protected int slot;
 
     public PagesClickEvent(PageInventory inventory, int slot, InventoryClickEvent invEvent) {
@@ -35,18 +35,6 @@ public class PagesClickEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public int getSlot() {
-        return slot;
-    }
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
-
     public PageInventory getInventory() {
         return inv;
     }
@@ -59,5 +47,17 @@ public class PagesClickEvent extends Event implements Cancellable {
 
     public Player getPlayer() {
         return inv.getPlayer();
+    }
+
+    public int getSlot() {
+        return slot;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancel) {
+        cancelled = cancel;
     }
 }

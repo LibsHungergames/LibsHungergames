@@ -19,6 +19,9 @@ public class TranslationConfig extends BaseConfig {
     private String broadcastInvincibiltyWearsOffIn = ChatColor.RED + "Invincibility wears off in %s!";
     private String broadcastNotEnoughPlayers = ChatColor.RED + "You need more people!";
     private String broadcastWinnerWon = ChatColor.RED + "%s won!";
+    private String buyKitMenuItemPrice = ChatColor.DARK_AQUA + "Price: " + ChatColor.AQUA + "$%s";
+    private String buyKitMenuOwnAllKits = ChatColor.RED + "You already own all the kits!";
+    private String buyKitMenuTitle = "Buy Kits";
     private String commandBuildChangedOwnBuild = ChatColor.YELLOW + "Changed own build mode to %s";
     private String commandBuildNoPermission = ChatColor.RED + "You do not have permission to use this command.";
     private String commandBuildPlayerDoesntExist = ChatColor.RED + "Player doesn't exist";
@@ -135,6 +138,15 @@ public class TranslationConfig extends BaseConfig {
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";
     private String inventoryDontOwnKit = "";
     private String inventoryOwnKit = "";
+    private String[] itemBuyKitBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "back a page" };
+    private String[] itemBuyKitDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this",
+            ChatColor.LIGHT_PURPLE + "to open a menu to buy kits at a click!" };
+    private String[] itemBuyKitForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
+            ChatColor.LIGHT_PURPLE + "forwards a page" };
+    private String itemBuyKitInventoryBackName = ChatColor.RED + "Back";
+    private String itemBuyKitInventoryForwardsName = ChatColor.RED + "Back";
+    private String itemBuyKitName = ChatColor.WHITE + "Buy a kit";
     private String[] itemKitSelectorBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "back a page" };
     private String itemKitSelectorBackName = ChatColor.RED + "Back";

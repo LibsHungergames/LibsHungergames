@@ -23,12 +23,159 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class InventoryManager {
 
-    private ItemStack kitSelector = null;
-    private ItemStack[] specHeads = new ItemStack[0];
-    private PlayerManager pm = HungergamesApi.getPlayerManager();
-    private TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
-    private KitManager kits = HungergamesApi.getKitManager();
+    private ItemStack buyKitIcon;
     private MainConfig config = HungergamesApi.getConfigManager().getMainConfig();
+    private KitManager kits = HungergamesApi.getKitManager();
+    private ItemStack kitSelector = null;
+    private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private ItemStack[] specHeads = new ItemStack[0];
+
+    private TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
+
+    public ItemStack generateItem(int id, int dataValue, String name, List<String> lore) {
+        ItemStack item = new ItemStack(id, 1, (short) dataValue);
+        ItemMeta meta = item.getItemMeta();
+        if (name != null) {
+            meta.setDisplayName(ChatColor.WHITE + name);
+        }
+        if (lore != null && lore.size() > 0) {
+            meta.setLore(lore);
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack generateItem(int type, int dataValue, String name, String[] lore) {
+        return generateItem(type, dataValue, name, Arrays.asList(lore));
+    }
+
+    public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
+        return generateItem(type.getId(), dataValue, name, lore);
+    }
+
+    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
+        return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
+    }
+
+    public ItemStack getBuyKit() {
+        if (buyKitIcon == null) {
+            ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getBuyKitIcon();
+            buyKitIcon = generateItem(item.getType(), item.getDurability(), HungergamesApi.getConfigManager()
+                    .getTranslationsConfig().getItemBuyKitName(), HungergamesApi.getConfigManager().getTranslationsConfig()
+                    .getItemBuyKitDescription());
+            buyKitIcon.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
+        }
+        return buyKitIcon;
+    }
+
+    public ItemStack getKitSelector() {
+        if (kitSelector == null) {
+            ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorIcon();
+            kitSelector = generateItem(item.getType(), item.getDurability(), HungergamesApi.getConfigManager()
+                    .getTranslationsConfig().getItemKitSelectorName(), HungergamesApi.getConfigManager().getTranslationsConfig()
+                    .getItemKitSelectorDescription());
+            kitSelector.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
+        }
+        return kitSelector;
+    }
+
+    public void openBuyKitInventory(Player p) {
+        if (p.hasMetadata("PageInventory")) {
+            ((PageInventory) p.getMetadata("PageInventory").get(0).value()).closeInventory();
+        }
+        PageInventory inv = new PageInventory(InventoryType.BUYKIT, p, config.isBuyKitMenuDymanic(),
+                config.getBuyKitInventorySize());
+        {
+            ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
+            ArrayList<Kit> allKits = kits.getKits();
+            List<Kit> hisKits = kits.getPlayersKits(p);
+            if (hisKits == null)
+                hisKits = new ArrayList<Kit>();
+            for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
+                Kit kit = allKits.get(currentKit);
+                if (kit.isFree() || kit.getPrice() <= 0 || kits.ownsKit(p, kit)) {
+                    continue;
+                }
+                ItemStack item = kit.getIcon();
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(ChatColor.WHITE + kit.getName());
+                List<String> lore = wrap(kit.getDescription());
+                lore.add(0, String.format(tm.getBuyKitMenuItemPrice(), kit.getPrice()));
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+                if (item.getAmount() == 1)
+                    item.setAmount(0);
+                nonOwned.add(item);
+            }
+            if (nonOwned.isEmpty()) {
+                p.sendMessage(tm.getBuyKitMenuOwnAllKits());
+                return;
+            }
+            inv.setPages(nonOwned);
+        }
+        inv.setTitle(tm.getBuyKitMenuTitle());
+        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemBack();
+        inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemBuyKitInventoryBackName(),
+                tm.getItemBuyKitBackDescription()));
+        item = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemForwards();
+        inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemBuyKitInventoryForwardsName(),
+                tm.getItemBuyKitForwardsDescription()));
+        inv.openInventory();
+    }
+
+    public void openKitInventory(Player p) {
+        if (p.hasMetadata("PageInventory"))
+            return;
+        PageInventory inv = new PageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
+                config.getKitSelectorInventorySize());
+        {
+            ArrayList<ItemStack> kitItems = new ArrayList<ItemStack>();
+            ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
+            ArrayList<Kit> allKits = kits.getKits();
+            List<Kit> hisKits = kits.getPlayersKits(p);
+            if (hisKits == null)
+                hisKits = new ArrayList<Kit>();
+            for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
+                Kit kit = allKits.get(currentKit);
+                if (kits.ownsKit(p, kit)) {
+                    ItemStack item = kit.getIcon();
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + kit.getName()
+                            + (kits.ownsKit(p, kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
+                    meta.setLore(wrap(kit.getDescription()));
+                    item.setItemMeta(meta);
+                    if (item.getAmount() == 1)
+                        item.setAmount(0);
+                    kitItems.add(item);
+                }
+            }
+            kitItems.addAll(nonOwned);
+            inv.setPages(kitItems);
+        }
+        inv.setTitle(tm.getSelectKitInventoryTitle());
+        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
+        inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemKitSelectorBackName(),
+                tm.getItemKitSelectorBackDescription()));
+        item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorForward();
+        inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemKitSelectorForwardsName(),
+                tm.getItemKitSelectorForwardsDescription()));
+        inv.openInventory();
+    }
+
+    public void openSpectatorInventory(Player p) {
+        if (p.hasMetadata("PageInventory"))
+            return;
+        PageInventory inv = new PageInventory(InventoryType.SPECTATOR, p, true, 54);
+        inv.setPages(specHeads);
+        inv.setTitle(tm.getSpectatorInventoryTitle());
+        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
+        inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemSpectatorInventoryBackName(),
+                tm.getItemSpectatorInventoryBackDescription()));
+        item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemForwards();
+        inv.setForwardsPage(generateItem(item.getType(), item.getDurability(), tm.getItemSpectatorInventoryForwardsName(),
+                tm.getItemSpectatorInventoryForwardsDescription()));
+        inv.openInventory();
+    }
 
     public void setHeads() {
         ArrayList<String> names = new ArrayList<String>();
@@ -70,85 +217,15 @@ public class InventoryManager {
         specHeads = heads.toArray(new ItemStack[heads.size()]);
     }
 
-    public ItemStack generateItem(int id, int dataValue, String name, List<String> lore) {
-        ItemStack item = new ItemStack(id, 1, (short) dataValue);
-        ItemMeta meta = item.getItemMeta();
-        if (name != null) {
-            meta.setDisplayName(ChatColor.WHITE + name);
-        }
-        if (lore != null && lore.size() > 0) {
-            meta.setLore(lore);
-        }
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    public ItemStack generateItem(int type, int dataValue, String name, String[] lore) {
-        return generateItem(type, dataValue, name, Arrays.asList(lore));
-    }
-
-    public ItemStack generateItem(Material type, int dataValue, String name, List<String> lore) {
-        return generateItem(type.getId(), dataValue, name, lore);
-    }
-
-    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
-        return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
-    }
-
-    public ItemStack getKitSelector() {
-        if (kitSelector == null) {
-            ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorIcon();
-            kitSelector = generateItem(item.getType(), item.getDurability(), HungergamesApi.getConfigManager()
-                    .getTranslationsConfig().getItemKitSelectorName(), HungergamesApi.getConfigManager().getTranslationsConfig()
-                    .getItemKitSelectorDescription());
-            kitSelector.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
-        }
-        return kitSelector;
-    }
-
-    public void openKitInventory(Player p) {
-        if (p.hasMetadata("PageInventory"))
-            return;
-        PageInventory inv = new PageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
-                config.getKitSelectorInventorySize());
-        {
-            ArrayList<ItemStack> kitItems = new ArrayList<ItemStack>();
-            ArrayList<ItemStack> nonOwned = new ArrayList<ItemStack>();
-            ArrayList<Kit> allKits = kits.getKits();
-            List<Kit> hisKits = kits.getPlayersKits(p);
-            if (hisKits == null)
-                hisKits = new ArrayList<Kit>();
-            boolean sortOwned = HungergamesApi.getConfigManager().getMainConfig().isSortKitGuiByOwned();
-            for (int currentKit = 0; currentKit < allKits.size(); currentKit++) {
-                Kit kit = allKits.get(currentKit);
-                ItemStack item = kit.getIcon();
-                ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(ChatColor.WHITE + kit.getName()
-                        + (kits.ownsKit(p, kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
-                meta.setLore(wrap(kit.getDescription()));
-                item.setItemMeta(meta);
-                if (item.getAmount() == 1)
-                    item.setAmount(0);
-                if (sortOwned && !kits.ownsKit(p, kit)) {
-                    nonOwned.add(item);
-                } else {
-                    kitItems.add(item);
+    public void updateSpectatorHeads() {
+        setHeads();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.hasMetadata("PageInventory")) {
+                PageInventory inv = (PageInventory) p.getMetadata("PageInventory").get(0).value();
+                if (inv.getType() == InventoryType.SPECTATOR) {
                 }
             }
-            if (!nonOwned.isEmpty()) {
-                kitItems.add(null);
-            }
-            kitItems.addAll(nonOwned);
-            inv.setPages(kitItems);
         }
-        inv.setTitle(tm.getSelectKitInventoryTitle());
-        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
-        inv.setBackPage(HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                tm.getItemKitSelectorBackName(), tm.getItemKitSelectorBackDescription()));
-        item = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorForward();
-        inv.setForwardsPage(HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                tm.getItemKitSelectorForwardsName(), tm.getItemKitSelectorForwardsDescription()));
-        inv.openInventory();
     }
 
     private List<String> wrap(String string) {
@@ -167,31 +244,5 @@ public class InventoryManager {
         }
         newString.add(color + string);
         return newString;
-    }
-
-    public void openSpectatorInventory(Player p) {
-        if (p.hasMetadata("PageInventory"))
-            return;
-        PageInventory inv = new PageInventory(InventoryType.SPECTATOR, p, true, 54);
-        inv.setPages(specHeads);
-        inv.setTitle(tm.getSpectatorInventoryTitle());
-        ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
-        inv.setBackPage(HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                tm.getItemSpectatorInventoryBackName(), tm.getItemSpectatorInventoryBackDescription()));
-        item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemForwards();
-        inv.setForwardsPage(HungergamesApi.getInventoryManager().generateItem(item.getType(), item.getDurability(),
-                tm.getItemSpectatorInventoryForwardsName(), tm.getItemSpectatorInventoryForwardsDescription()));
-        inv.openInventory();
-    }
-
-    public void updateSpectatorHeads() {
-        setHeads();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.hasMetadata("PageInventory")) {
-                PageInventory inv = (PageInventory) p.getMetadata("PageInventory").get(0).value();
-                if (inv.getType() == InventoryType.SPECTATOR) {
-                }
-            }
-        }
     }
 }

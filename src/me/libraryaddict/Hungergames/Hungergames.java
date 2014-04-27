@@ -376,8 +376,12 @@ public class Hungergames extends JavaPlugin {
             Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastInvincibiltyWearsOffIn(),
                     returnTime(mainConfig.getTimeForInvincibility() - currentTime)));
         for (Gamer gamer : pm.getGamers()) {
-            if (mainConfig.isKitSelectorEnabled())
+            if (mainConfig.isKitSelectorEnabled()) {
                 gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
+            }
+            if (mainConfig.isBuyKitMenuEnabled()) {
+                gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getBuyKit());
+            }
             gamer.seeInvis(false);
             gamer.setAlive(true);
             if (mainConfig.isTeleportToSpawnLocationPregame() && mainConfig.isPreventMovingFromSpawnUsingPotions()) {

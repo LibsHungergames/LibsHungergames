@@ -17,8 +17,9 @@ import me.libraryaddict.Hungergames.Types.Kit;
 import me.libraryaddict.Hungergames.Types.PageInventory.InventoryType;
 
 public class InventoryListener implements Listener {
-    private TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
+    private KitManager kits = HungergamesApi.getKitManager();
     private PlayerManager pm = HungergamesApi.getPlayerManager();
+    private TranslationConfig tm = HungergamesApi.getConfigManager().getTranslationsConfig();
 
     @EventHandler
     public void onClick(PagesClickEvent event) {
@@ -29,7 +30,6 @@ public class InventoryListener implements Listener {
             if (type == InventoryType.KIT) {
                 String name = item.getItemMeta().getDisplayName();
                 Kit kit = null;
-                KitManager kits = HungergamesApi.getKitManager();
                 for (Kit k : kits.getKits()) {
                     String kitName = ChatColor.WHITE + k.getName()
                             + (kits.ownsKit(p, k) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit());
@@ -42,8 +42,7 @@ public class InventoryListener implements Listener {
                     Bukkit.dispatchCommand(p, "kit " + kit.getName());
                 }
             } else if (type == InventoryType.SPECTATOR) {
-                if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()
-                        && item.getItemMeta().getDisplayName().equals(tm.getSpectatorInventoryFeastName())) {
+                if (item.getItemMeta().getDisplayName().equals(tm.getSpectatorInventoryFeastName())) {
                     p.teleport(LibsFeastManager.getFeastManager().getFeastLocation().getWorld()
                             .getHighestBlockAt(LibsFeastManager.getFeastManager().getFeastLocation()).getLocation().clone()
                             .add(0.5, 1, 0.5));
@@ -53,8 +52,13 @@ public class InventoryListener implements Listener {
                         p.teleport(toTeleport.getPlayer());
                     }
                 }
+            } else if (type == InventoryType.BUYKIT) {
+                Kit kit = kits.getKitByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                if (kit != null) {
+                    Bukkit.dispatchCommand(p, "buykit " + kit.getName());
+                    HungergamesApi.getInventoryManager().openBuyKitInventory(p);
+                }
             }
         }
     }
-
 }

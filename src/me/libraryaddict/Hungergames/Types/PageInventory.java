@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class PageInventory extends ClickInventory {
     public enum InventoryType {
-        KIT, STATS, BUYKIT, SPECTATOR;
+        BUYKIT, KIT, SPECTATOR, STATS;
     }
 
     protected ItemStack backAPage;
@@ -29,10 +29,6 @@ public class PageInventory extends ClickInventory {
     protected String title = "Inventory";
     private String titleFormat = "%Title% - Page %Page%";
     private InventoryType type;
-
-    public InventoryType getType() {
-        return type;
-    }
 
     public PageInventory(InventoryType inventoryType, Player player, boolean dymanicInventory, int invSize) {
         super(player);
@@ -95,6 +91,10 @@ public class PageInventory extends ClickInventory {
      */
     public String getTitle() {
         return title;
+    }
+
+    public InventoryType getType() {
+        return type;
     }
 
     public boolean isPageDisplayedInTitle() {
