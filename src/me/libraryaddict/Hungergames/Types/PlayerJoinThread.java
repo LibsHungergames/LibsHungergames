@@ -158,14 +158,15 @@ public class PlayerJoinThread extends Thread {
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
                             gamer.setStats(stats);
-                            if (HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled()
-                                    && HungergamesApi.getHungergames().currentTime < 0) {
+                            if (HungergamesApi.getHungergames().currentTime < 0) {
                                 ItemStack item = HungergamesApi.getInventoryManager().getKitSelector();
                                 ItemStack item1 = HungergamesApi.getInventoryManager().getBuyKit();
                                 PlayerInventory pInv = gamer.getPlayer().getInventory();
-                                if (!pInv.contains(item))
+                                if (!pInv.contains(item)
+                                        && HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled())
                                     pInv.addItem(item);
-                                if (!pInv.contains(item1))
+                                if (!pInv.contains(item1)
+                                        && HungergamesApi.getConfigManager().getMainConfig().isBuyKitMenuEnabled())
                                     pInv.addItem(item1);
                             }
                         }
