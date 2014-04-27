@@ -40,6 +40,7 @@
 						<option>-keep class
 							me.libraryaddict.Hungergames.Abilities.* {
 							public *; }</option>
+						<option>-keepattributes SourceFile,LineNumberTable</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Hungergames { public *; }</option>
 						<option>-keep class
@@ -60,10 +61,6 @@
 							me.libraryaddict.Hungergames.Types.ClickInventory { public *; }</option>
 						<option>-keep,allowobfuscation class
 							me.libraryaddict.Hungergames.Types.PageInventory { public *; }</option>
-						<option>-keep,allowobfuscation class
-							me.libraryaddict.Hungergames.Types.KitInventory { public *; }</option>
-						<option>-keep,allowobfuscation class
-							me.libraryaddict.Hungergames.Types.SpectateInventory { public *; }</option>
 						<option>-keepclassmembers class
 							me.libraryaddict.Hungergames.Listeners.LibsFeastManager {
 							protected *; public *;
