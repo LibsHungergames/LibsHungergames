@@ -194,6 +194,8 @@ public class Hungergames extends JavaPlugin {
         }
         HungergamesApi.getMySqlManager().getPlayerJoinThread().mySqlDisconnect();
         HungergamesApi.getMySqlManager().getPlayerJoinThread().stop();
+        HungergamesApi.getMySqlManager().getPlayerQuitThread().mySqlDisconnect();
+        HungergamesApi.getMySqlManager().getPlayerQuitThread().stop();
     }
 
     @Override
@@ -207,6 +209,7 @@ public class Hungergames extends JavaPlugin {
         pm = HungergamesApi.getPlayerManager();
         MySqlManager mysql = HungergamesApi.getMySqlManager();
         mysql.startJoinThread();
+        mysql.startQuitThread();
         MapLoader.loadMap();
         ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {

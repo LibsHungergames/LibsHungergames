@@ -185,6 +185,7 @@ public class TranslationConfig extends BaseConfig {
             "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and their trusty %Weapon% slew %Killed%",
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
+    private String kitSelectorNoKitsToShow = ChatColor.RED + "You don't own any kits!";
 
     private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";

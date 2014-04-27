@@ -21,7 +21,6 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
-    private boolean displayUnusableKitsInSelector = true;
     /**
      * The amount the border closes in per second
      */
@@ -30,27 +29,27 @@ public class MainConfig extends BaseConfig {
      * The border size
      */
     private double borderSize = 500;
-
     /**
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
+
     private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
     private int buyKitInventorySize = 54;
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
-
     private boolean buyKitMenuEnabled = true;
+
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
-
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
+
     /**
      * Command to stop the server with
      */
@@ -63,6 +62,7 @@ public class MainConfig extends BaseConfig {
      * The amount of damage the border deals
      */
     private double damageBorderDeals = 1;
+    private boolean displayUnusableKitsInSelector;
     /**
      * Is the end disabled? I will change it in the servers config :3
      */

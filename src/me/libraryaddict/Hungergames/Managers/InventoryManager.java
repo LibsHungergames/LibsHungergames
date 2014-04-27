@@ -155,6 +155,10 @@ public class InventoryManager {
                     kitItems.add(item);
                 }
             }
+            if (kitItems.isEmpty()) {
+                p.sendMessage(tm.getKitSelectorNoKitsToShow());
+                return;
+            }
             inv.setPages(kitItems);
         }
         inv.openInventory();

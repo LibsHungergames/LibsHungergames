@@ -31,8 +31,8 @@ public class PlayerJoinThread extends Thread {
         try {
             DatabaseMetaData dbm = con.getMetaData();
             ResultSet tables = dbm.getTables(null, null, "HGKits", null);
-            tables.beforeFirst();
-            if (!tables.next()) {
+            tables.last();
+            if (tables.getRow() == 0) {
                 tables.close();
                 Statement stmt = con.createStatement();
                 stmt.execute("CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
@@ -74,13 +74,13 @@ public class PlayerJoinThread extends Thread {
                 }
             }
             tables = dbm.getTables(null, null, "HGStats", null);
-            tables.beforeFirst();
-            if (!tables.next()) {
+            tables.last();
+            if (tables.getRow() == 0) {
                 tables.close();
                 Statement stmt = con.createStatement();
                 stmt.execute("CREATE TABLE HGStats (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
                         + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, Killstreak int(20) NOT NULL,"
-                        + " Kills int(20) NOT NULL, Wins int(20) NOT NULL, Losses int(20) NOT NULL");
+                        + " Kills int(20) NOT NULL, Wins int(20) NOT NULL, Losses int(20) NOT NULL)");
                 stmt.close();
             }
         } catch (Exception ex) {
@@ -143,9 +143,9 @@ public class PlayerJoinThread extends Thread {
                     }
                     r.close();
                     if (uuids) {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGStats` WHERE `uuid` = '" + uuid.toString() + "' ;");
+                        r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `uuid` = '" + uuid.toString() + "' ;");
                     } else {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGStats` WHERE `Name` = '" + name + "' ;");
+                        r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `Name` = '" + name + "' ;");
                     }
                     r.beforeFirst();
                     final Stats stats;
