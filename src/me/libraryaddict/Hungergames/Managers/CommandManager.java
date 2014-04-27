@@ -225,7 +225,7 @@ public class CommandManager {
             try {
                 Field field = exc.getClass().getDeclaredField("aliases");
                 if (field.get(exc) instanceof String[]) {
-                    aliases = Arrays.asList((String[]) field.get(exc));
+                    aliases = new ArrayList<String>(Arrays.asList((String[]) field.get(exc)));
                 }
             } catch (Exception ex) {
             }
