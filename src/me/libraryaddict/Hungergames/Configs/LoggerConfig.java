@@ -58,6 +58,7 @@ public class LoggerConfig extends BaseConfig {
     private String shuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
     private String successfullyLoadedMap = "[Hungergames] Successfully loaded map %s";
     private String unrecognisedItemId = "[Hungergames] Failed to recognise item ID %s";
+    private String waitingForStatsToSave = "[Hungergames] Waiting for stats to save. %s stats left. %s seconds before I give up";
 
     public LoggerConfig() {
         super("errors");
