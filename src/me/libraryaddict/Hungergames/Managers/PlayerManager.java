@@ -40,7 +40,10 @@ import me.libraryaddict.scoreboard.ScoreboardManager;
 public class PlayerManager {
 
     public static int returnChance(int start, int end) {
-        return start + (int) (Math.random() * ((end - start) + 1));
+        if (start + end <= 0) {
+            return 0;
+        }
+        return new Random().nextInt(start + end) - end;
     }
 
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
@@ -187,8 +190,7 @@ public class PlayerManager {
         p.sendBlockChange(p.getLocation(), Material.PORTAL.getId(), (byte) 0);
         p.sendBlockChange(p.getLocation(), Material.AIR.getId(), (byte) 0);
         for (Entity entity : p.getWorld().getEntities()) {
-            if (entity instanceof Tameable && ((Tameable) entity).isTamed()
-                    && ((Tameable) entity).getOwner().getName().equals(p.getName())) {
+            if (entity instanceof Tameable && ((Tameable) entity).getOwner() == p) {
                 if (entity instanceof Wolf)
                     ((Wolf) entity).setSitting(true);
                 else if (entity instanceof Ocelot)
@@ -245,7 +247,7 @@ public class PlayerManager {
             while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
                 chances++;
                 Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
-                        + new Random().nextInt(spawnHeight), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
+                        + new Random().nextInt(Math.max(1, spawnHeight)), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
                 if (nonSolid.contains(newLoc.getBlock().getTypeId())
                         && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
                     while (newLoc.getBlockY() >= 1
