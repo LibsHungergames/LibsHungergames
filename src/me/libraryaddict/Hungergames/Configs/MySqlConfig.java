@@ -16,18 +16,19 @@ public class MySqlConfig extends BaseConfig {
     private String mysql_host = "localhost";
     private String mysql_password = "password";
     private String mysql_username = "root";
-    private boolean useUUIDs = true;
     private boolean mysqlEnabled = false;
+    private boolean useUUIDs = true;
 
     public MySqlConfig() {
         super("mysql");
-        if (new File("plugins/LibsHungergames/config.yml").exists()) {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/LibsHungergames/config.yml"));
+        File file = new File("plugins/LibsHungergames/config.yml");
+        if (file.exists()) {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             if (config.contains("mysqlEnabled")) {
                 mysqlEnabled = config.getBoolean("mysqlEnabled");
                 config.set("mysqlEnabled", null);
                 try {
-                    config.save(new File("plugins/LibsHungergames/config.yml"));
+                    config.save(file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
