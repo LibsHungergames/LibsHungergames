@@ -29,7 +29,7 @@ public class PlayerQuitThread extends Thread {
     }
 
     public void mySqlDisconnect() {
-        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
             return;
         try {
             System.out.println(String.format(cm.getMySqlClosing(), getClass().getSimpleName()));
@@ -40,7 +40,7 @@ public class PlayerQuitThread extends Thread {
     }
 
     public void run() {
-        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
             return;
         mySqlConnect();
         PlayerManager pm = HungergamesApi.getPlayerManager();

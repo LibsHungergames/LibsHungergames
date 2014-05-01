@@ -35,7 +35,7 @@ public class BuyKit implements CommandExecutor {
                     sender.sendMessage(cm.getCommandBuyKitAlreadyOwn());
                     return true;
                 }
-                if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled()) {
+                if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled()) {
                     sender.sendMessage(cm.getCommandBuyKitMysqlNotEnabled());
                     return true;
                 }

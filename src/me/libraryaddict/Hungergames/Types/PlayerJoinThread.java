@@ -102,7 +102,7 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void mySqlDisconnect() {
-        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
             return;
         try {
             System.out.println(String.format(cm.getMySqlClosing(), getClass().getSimpleName()));
@@ -113,7 +113,7 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void run() {
-        if (!HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
             return;
         mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();

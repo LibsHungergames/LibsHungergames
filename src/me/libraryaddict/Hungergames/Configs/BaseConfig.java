@@ -18,11 +18,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 @Data
 public abstract class BaseConfig {
-    private YamlConfiguration config;
+    protected YamlConfiguration config;
     private File configFile;
-    private String configName;
+    protected String configName;
     protected HashSet<String> dontSave = new HashSet<String>();
-    private boolean newFile;
+    protected boolean newFile;
 
     public BaseConfig(String configName) {
         this.configName = configName;

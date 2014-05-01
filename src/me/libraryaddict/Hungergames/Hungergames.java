@@ -193,7 +193,7 @@ public class Hungergames extends JavaPlugin {
             playerListener.onQuit(event);
         }
         int slept = (HungergamesApi.getPlayerManager().saveGamer.size() * 2) + 5;
-        while (HungergamesApi.getConfigManager().getMainConfig().isMysqlEnabled()
+        while (HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled()
                 && !HungergamesApi.getPlayerManager().saveGamer.isEmpty() && slept-- >= 0) {
             try {
                 System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getWaitingForStatsToSave(),

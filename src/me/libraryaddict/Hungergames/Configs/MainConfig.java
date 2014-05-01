@@ -21,6 +21,7 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
+
     /**
      * The amount the border closes in per second
      */
@@ -153,10 +154,6 @@ public class MainConfig extends BaseConfig {
      */
     private boolean mushroomStewEnabled = false;
     /**
-     * Is mysql enabled, if true, this will enable mysql for kit purchases
-     */
-    private boolean mysqlEnabled = false;
-    /**
      * Is the nether disabled? I will change it in the servers config :3
      */
     private boolean netherDisabled = true;
@@ -264,7 +261,7 @@ public class MainConfig extends BaseConfig {
 
     public MainConfig() {
         super("config");
-        dontSave("latestVersion", "currentVersion", "updateChecker");
+        dontSave("latestVersion", "currentVersion", "updateChecker", "mysqlEnabled");
     }
 
     public boolean advertiseInvincibility(int timeToCheck) {
