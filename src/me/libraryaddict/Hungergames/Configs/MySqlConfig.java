@@ -12,11 +12,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class MySqlConfig extends BaseConfig {
 
+    private boolean kitsEnabled;
     private String mysql_database = "database";
     private String mysql_host = "localhost";
     private String mysql_password = "password";
     private String mysql_username = "root";
-    private boolean mysqlEnabled = false;
+    private boolean statsEnabled;
     private boolean useUUIDs = true;
 
     public MySqlConfig() {
@@ -25,7 +26,8 @@ public class MySqlConfig extends BaseConfig {
         if (file.exists()) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             if (config.contains("mysqlEnabled")) {
-                mysqlEnabled = config.getBoolean("mysqlEnabled");
+                kitsEnabled = config.getBoolean("mysqlEnabled");
+                statsEnabled = config.getBoolean("mysqlEnabled");
                 config.set("mysqlEnabled", null);
                 try {
                     config.save(file);
@@ -34,5 +36,10 @@ public class MySqlConfig extends BaseConfig {
                 }
             }
         }
+    }
+
+    @Deprecated
+    public boolean isMysqlEnabled() {
+        return statsEnabled || kitsEnabled;
     }
 }

@@ -91,7 +91,7 @@ public class KitManager {
     }
 
     public boolean addKitToPlayer(Player player, Kit kit) {
-        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isKitsEnabled())
             return false;
         if (!hisKits.containsKey(player.getName()))
             hisKits.put(player.getName(), new ArrayList<Kit>());

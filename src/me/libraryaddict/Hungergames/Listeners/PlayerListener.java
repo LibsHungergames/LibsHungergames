@@ -5,6 +5,7 @@ import java.util.Random;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.MainConfig;
+import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.PlayerTrackEvent;
 import me.libraryaddict.Hungergames.Events.PrivateMessageEvent;
@@ -334,6 +335,7 @@ public class PlayerListener implements Listener {
             p.setAllowFlight(true);
         for (PotionEffect effect : p.getActivePotionEffects())
             p.removePotionEffect(effect.getType());
+        MySqlConfig mysqlConfig = HungergamesApi.getConfigManager().getMySqlConfig();
         if (hg.currentTime >= 0) {
             pm.setSpectator(gamer);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
@@ -343,13 +345,12 @@ public class PlayerListener implements Listener {
             }, 2L);
         } else {
             ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(), Bukkit.getOnlinePlayers().length);
-            if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled()) {
-                if (config.isKitSelectorEnabled() && !p.getInventory().contains(icon.getKitSelector())) {
-                    gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
-                }
-                if (config.isBuyKitMenuEnabled() && !p.getInventory().contains(icon.getBuyKit())) {
-                    gamer.getPlayer().getInventory().addItem(icon.getBuyKit());
-                }
+            if (!mysqlConfig.isKitsEnabled() && config.isKitSelectorEnabled()
+                    && !p.getInventory().contains(icon.getKitSelector())) {
+                gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
+            }
+            if (!mysqlConfig.isKitsEnabled() && config.isBuyKitMenuEnabled() && !p.getInventory().contains(icon.getBuyKit())) {
+                gamer.getPlayer().getInventory().addItem(icon.getBuyKit());
             }
             if (config.isTeleportToSpawnLocationPregame() && -config.getSecondsToTeleportPlayerToSpawn() >= hg.currentTime
                     && config.isPreventMovingFromSpawnUsingPotions()) {
@@ -360,7 +361,7 @@ public class PlayerListener implements Listener {
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
-        if (HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled()) {
+        if (mysqlConfig.isKitsEnabled() || mysqlConfig.isStatsEnabled()) {
             pm.loadGamer.add(gamer);
         }
         if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)

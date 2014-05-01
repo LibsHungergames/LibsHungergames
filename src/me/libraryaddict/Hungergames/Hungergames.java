@@ -44,13 +44,6 @@ public class Hungergames extends JavaPlugin {
         stages.put(timeToActivate, display);
     }
 
-    /**
-     * This plugin is licensed under http://creativecommons.org/licenses/by-nc/3.0/ Namely. No code may be taken from this for
-     * commercial use and the plugin may not be adapted for commercial use. Keep the /creator command in, leave my name in as the
-     * author. Do not attempt to change the author, such as 'Notch made this plugin specially for hungergames.com!' No seriously.
-     * I had idiots approaching me for a previous plugin "How do I remove your name and add mine instead?" This is something I've
-     * invested time, effort and knowledge in. Creator being: libraryaddict
-     */
     public int currentTime = -270;
     /**
      * doSeconds is false when the game has ended
@@ -193,7 +186,7 @@ public class Hungergames extends JavaPlugin {
             playerListener.onQuit(event);
         }
         int slept = (HungergamesApi.getPlayerManager().saveGamer.size() * 2) + 5;
-        while (HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled()
+        while (HungergamesApi.getConfigManager().getMySqlConfig().isStatsEnabled()
                 && !HungergamesApi.getPlayerManager().saveGamer.isEmpty() && slept-- >= 0) {
             try {
                 System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig().getWaitingForStatsToSave(),
@@ -218,9 +211,7 @@ public class Hungergames extends JavaPlugin {
         translationsConfig = config.getTranslationsConfig();
         mainConfig = config.getMainConfig();
         pm = HungergamesApi.getPlayerManager();
-        MySqlManager mysql = HungergamesApi.getMySqlManager();
-        mysql.startJoinThread();
-        mysql.startQuitThread();
+        HungergamesApi.getMySqlManager();
         MapLoader.loadMap();
         ScoreboardManager.setDisplayName(DisplaySlot.SIDEBAR, translationsConfig.getScoreboardStagePreGame());
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {

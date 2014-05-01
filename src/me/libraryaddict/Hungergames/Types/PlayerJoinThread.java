@@ -113,8 +113,11 @@ public class PlayerJoinThread extends Thread {
     }
 
     public void run() {
-        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
+        MySqlConfig mysqlConfig = HungergamesApi.getConfigManager().getMySqlConfig();
+        if (!mysqlConfig.isMysqlEnabled())
             return;
+        boolean isKits = mysqlConfig.isKitsEnabled();
+        boolean isStats = mysqlConfig.isStatsEnabled();
         mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();
         PlayerManager pm = HungergamesApi.getPlayerManager();
@@ -132,28 +135,34 @@ public class PlayerJoinThread extends Thread {
                     }
                     Statement stmt = con.createStatement();
                     ResultSet r;
-                    if (uuids) {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `uuid` = '" + uuid.toString() + "' ;");
-                    } else {
-                        r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `Name` = '" + name + "' ;");
+                    if (isKits) {
+                        if (uuids) {
+                            r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `uuid` = '" + uuid.toString() + "' ;");
+                        } else {
+                            r = stmt.executeQuery("SELECT KitName FROM `HGKits` WHERE `Name` = '" + name + "' ;");
+                        }
+                        r.beforeFirst();
+                        while (r.next()) {
+                            kits.addKitToPlayer(gamer.getPlayer(), kits.getKitByName(r.getString("KitName")));
+                        }
+                        r.close();
                     }
-                    r.beforeFirst();
-                    while (r.next()) {
-                        kits.addKitToPlayer(gamer.getPlayer(), kits.getKitByName(r.getString("KitName")));
-                    }
-                    r.close();
-                    if (uuids) {
-                        r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `uuid` = '" + uuid.toString() + "' ;");
-                    } else {
-                        r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `Name` = '" + name + "' ;");
-                    }
-                    r.beforeFirst();
                     final Stats stats;
-                    if (r.next()) {
-                        stats = new Stats(uuid, name, r.getInt("Kills"), r.getInt("Killstreak"), r.getInt("Wins"),
-                                r.getInt("Losses"));
+                    if (isStats) {
+                        if (uuids) {
+                            r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `uuid` = '" + uuid.toString() + "' ;");
+                        } else {
+                            r = stmt.executeQuery("SELECT * FROM `HGStats` WHERE `Name` = '" + name + "' ;");
+                        }
+                        r.beforeFirst();
+                        if (r.next()) {
+                            stats = new Stats(uuid, name, r.getInt("Kills"), r.getInt("Killstreak"), r.getInt("Wins"),
+                                    r.getInt("Losses"));
+                        } else {
+                            stats = new Stats(uuid, name);
+                        }
                     } else {
-                        stats = new Stats(uuid, name);
+                        stats = null;
                     }
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {

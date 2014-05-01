@@ -11,6 +11,11 @@ public class MySqlManager {
     private PlayerJoinThread joinThread;
     private PlayerQuitThread quitThread;
 
+    public MySqlManager() {
+        startJoinThread();
+        startQuitThread();
+    }
+
     public PlayerJoinThread getPlayerJoinThread() {
         return joinThread;
     }
