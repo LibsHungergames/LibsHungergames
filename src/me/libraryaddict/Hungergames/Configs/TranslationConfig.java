@@ -140,8 +140,8 @@ public class TranslationConfig extends BaseConfig {
     private String inventoryOwnKit = "";
     private String[] itemBuyKitBackDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "back a page" };
-    private String[] itemBuyKitDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this",
-            ChatColor.LIGHT_PURPLE + "to open a menu to buy kits at a click!" };
+    private String[] itemBuyKitDescription = new String[] { ChatColor.LIGHT_PURPLE + "Right click with this to open a",
+            ChatColor.LIGHT_PURPLE + "menu to buy kits at a click!" };
     private String[] itemBuyKitForwardsDescription = new String[] { ChatColor.LIGHT_PURPLE + "Click this to move",
             ChatColor.LIGHT_PURPLE + "forwards a page" };
     private String itemBuyKitInventoryBackName = ChatColor.RED + "Back";
