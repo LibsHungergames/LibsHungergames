@@ -7,15 +7,18 @@ import java.util.List;
 import java.util.Properties;
 
 import me.libraryaddict.Hungergames.Types.LibsProfileLookupCaller;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.joptsimple.OptionSet;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class ReflectionManager {
     private SimpleCommandMap commandMap;
     private String currentVersion;
     private boolean gameProfile = false;
+    private Class itemClass;
     private Object propertyManager;
 
     public ReflectionManager() {
@@ -25,6 +28,7 @@ public class ReflectionManager {
             Object obj = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
             propertyManager = obj.getClass().getDeclaredMethod("getPropertyManager").invoke(obj);
             currentVersion = propertyManager.getClass().getPackage().getName();
+            itemClass = getCraftClass("inventory.CraftItemStack");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -35,8 +39,26 @@ public class ReflectionManager {
         }
     }
 
+    public ItemStack getBukkitItem(Object nmsItem) {
+        try {
+            return (ItemStack) itemClass.getMethod("asCraftMirror", getNmsClass("ItemStack")).invoke(null, nmsItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public SimpleCommandMap getCommandMap() {
         return commandMap;
+    }
+
+    public Class getCraftClass(String className) {
+        try {
+            return Class.forName("org.bukkit.craftbukkit." + currentVersion + "." + className);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Class getNmsClass(String className) {
@@ -44,6 +66,15 @@ public class ReflectionManager {
             return Class.forName(currentVersion + "." + className);
         } catch (Exception e) {
             // e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Object getNmsItem(ItemStack itemstack) {
+        try {
+            return itemClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, itemstack);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

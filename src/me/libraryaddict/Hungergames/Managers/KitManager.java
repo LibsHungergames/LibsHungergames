@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Managers;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +14,6 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -169,6 +169,7 @@ public class KitManager {
                     return new ItemStack[] { null };
                 }
                 ItemStack item = new ItemStack(id, (int) amount, (short) Integer.parseInt(args[1]));
+                boolean setUnbreakable = false;
                 String[] newArgs = Arrays.copyOfRange(args, 3, args.length);
                 for (String argString : newArgs) {
                     if (argString.contains("Name=")) {
@@ -196,6 +197,8 @@ public class KitManager {
                             previous = "";
                         meta.setDisplayName(previous + "UniqueIdentifier");
                         item.setItemMeta(meta);
+                    } else if (argString.equalsIgnoreCase("Unbreakable")) {
+                        setUnbreakable = true;
                     }
                     if (argString.contains("Lore=")) {
                         String name = ChatColor.translateAlternateColorCodes('&', argString.substring(5)).replaceAll("_", " ");
@@ -221,6 +224,9 @@ public class KitManager {
                     n++;
                 }
                 item = EnchantmentManager.updateEnchants(item);
+                if (setUnbreakable) {
+                    item = this.setUnbreakable(item);
+                }
                 amount = amount - 64;
                 items[i] = item;
             }
@@ -295,5 +301,27 @@ public class KitManager {
             kita.removePlayer(p);
         kit.addPlayer(p);
         return true;
+    }
+
+    public ItemStack setUnbreakable(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR || item.getType().getMaxDurability() <= (short) 16) {
+            return item;
+        }
+        ReflectionManager reflection = HungergamesApi.getReflectionManager();
+        try {
+            Object nmsItem = reflection.getNmsItem(item);
+            Method getTag = reflection.getNmsClass("ItemStack").getMethod("getTag");
+            if (getTag.invoke(nmsItem) == null) {
+                reflection.getNmsClass("ItemStack").getMethod("setTag", reflection.getNmsClass("NBTTagCompound"))
+                        .invoke(nmsItem, reflection.getNmsClass("NBTTagCompound").newInstance());
+            }
+            reflection.getNmsClass("NBTTagCompound").getMethod("setBoolean", String.class, boolean.class)
+                    .invoke(getTag.invoke(nmsItem), "Unbreakable", true);
+            item = reflection.getBukkitItem(nmsItem);
+            item.setDurability((short) 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return item;
     }
 }
