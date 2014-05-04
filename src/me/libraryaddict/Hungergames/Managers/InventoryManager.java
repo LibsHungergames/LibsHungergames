@@ -80,7 +80,7 @@ public class InventoryManager {
     }
 
     public void openBuyKitInventory(Player p) {
-        if (p.hasMetadata("PageInventory")) {
+        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory) {
             ((PageInventory) p.getMetadata("PageInventory").get(0).value()).closeInventory();
         }
         PageInventory inv = new PageInventory(InventoryType.BUYKIT, p, config.isBuyKitMenuDymanic(),
@@ -124,7 +124,7 @@ public class InventoryManager {
     }
 
     public void openKitInventory(Player p) {
-        if (p.hasMetadata("PageInventory"))
+        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory)
             return;
         PageInventory inv = new PageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
                 config.getKitSelectorInventorySize());
@@ -165,7 +165,7 @@ public class InventoryManager {
     }
 
     public void openSpectatorInventory(Player p) {
-        if (p.hasMetadata("PageInventory"))
+        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory)
             return;
         PageInventory inv = new PageInventory(InventoryType.SPECTATOR, p, true, 54);
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
@@ -223,9 +223,10 @@ public class InventoryManager {
     public void updateSpectatorHeads() {
         setHeads();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.hasMetadata("PageInventory")) {
+            if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory) {
                 PageInventory inv = (PageInventory) p.getMetadata("PageInventory").get(0).value();
                 if (inv.getType() == InventoryType.SPECTATOR) {
+                    inv.setPages(specHeads);
                 }
             }
         }
