@@ -146,7 +146,7 @@ public class PlayerManager {
         p.setHealth(p.getMaxHealth());
         if (event.isCancelled())
             return;
-        for (HumanEntity human : p.getInventory().getViewers())
+        for (HumanEntity human : new ArrayList<HumanEntity>(p.getInventory().getViewers()))
             human.closeInventory();
         p.leaveVehicle();
         p.eject();
