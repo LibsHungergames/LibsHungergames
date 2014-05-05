@@ -1,6 +1,6 @@
 package me.libraryaddict.Hungergames.Events;
 
-import me.libraryaddict.Hungergames.Types.PageInventory;
+import me.libraryaddict.Hungergames.Types.HGPageInventory;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -17,11 +17,11 @@ public class PagesClickEvent extends Event implements Cancellable {
     }
 
     private boolean cancelled;
-    private PageInventory inv;
+    private HGPageInventory inv;
     private InventoryClickEvent invEvent;
     protected int slot;
 
-    public PagesClickEvent(PageInventory inventory, int slot, InventoryClickEvent invEvent) {
+    public PagesClickEvent(HGPageInventory inventory, int slot, InventoryClickEvent invEvent) {
         this.slot = slot;
         this.invEvent = invEvent;
         this.inv = inventory;
@@ -35,7 +35,7 @@ public class PagesClickEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public PageInventory getInventory() {
+    public HGPageInventory getInventory() {
         return inv;
     }
 

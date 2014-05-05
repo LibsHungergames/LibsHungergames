@@ -11,8 +11,8 @@ import me.libraryaddict.Hungergames.Listeners.LibsFeastManager;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
-import me.libraryaddict.Hungergames.Types.PageInventory;
-import me.libraryaddict.Hungergames.Types.PageInventory.InventoryType;
+import me.libraryaddict.Hungergames.Types.HGPageInventory;
+import me.libraryaddict.Hungergames.Types.HGPageInventory.InventoryType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -80,10 +80,10 @@ public class InventoryManager {
     }
 
     public void openBuyKitInventory(Player p) {
-        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory) {
-            ((PageInventory) p.getMetadata("PageInventory").get(0).value()).closeInventory();
+        if (p.hasMetadata("HGPageInventory")) {
+            ((HGPageInventory) p.getMetadata("HGPageInventory").get(0).value()).closeInventory();
         }
-        PageInventory inv = new PageInventory(InventoryType.BUYKIT, p, config.isBuyKitMenuDymanic(),
+        HGPageInventory inv = new HGPageInventory(InventoryType.BUYKIT, p, config.isBuyKitMenuDymanic(),
                 config.getBuyKitInventorySize());
         inv.setTitle(tm.getBuyKitMenuTitle());
         ItemStack kItem = HungergamesApi.getConfigManager().getMainConfig().getBuyKitItemBack();
@@ -124,9 +124,9 @@ public class InventoryManager {
     }
 
     public void openKitInventory(Player p) {
-        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory)
+        if (p.hasMetadata("HGPageInventory"))
             return;
-        PageInventory inv = new PageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
+        HGPageInventory inv = new HGPageInventory(InventoryType.KIT, p, config.isKitSelectorSizeDynamic(),
                 config.getKitSelectorInventorySize());
         inv.setTitle(tm.getSelectKitInventoryTitle());
         ItemStack kItem = HungergamesApi.getConfigManager().getMainConfig().getKitSelectorBack();
@@ -165,9 +165,9 @@ public class InventoryManager {
     }
 
     public void openSpectatorInventory(Player p) {
-        if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory)
+        if (p.hasMetadata("HGPageInventory"))
             return;
-        PageInventory inv = new PageInventory(InventoryType.SPECTATOR, p, true, 54);
+        HGPageInventory inv = new HGPageInventory(InventoryType.SPECTATOR, p, true, 54);
         ItemStack item = HungergamesApi.getConfigManager().getMainConfig().getSpectatorItemBack();
         inv.setBackPage(generateItem(item.getType(), item.getDurability(), tm.getItemSpectatorInventoryBackName(),
                 tm.getItemSpectatorInventoryBackDescription()));
@@ -223,8 +223,8 @@ public class InventoryManager {
     public void updateSpectatorHeads() {
         setHeads();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.hasMetadata("PageInventory") && p.getMetadata("PageInventory").get(0).value() instanceof PageInventory) {
-                PageInventory inv = (PageInventory) p.getMetadata("PageInventory").get(0).value();
+            if (p.hasMetadata("HGPageInventory")) {
+                HGPageInventory inv = (HGPageInventory) p.getMetadata("HGPageInventory").get(0).value();
                 if (inv.getType() == InventoryType.SPECTATOR) {
                     inv.setPages(specHeads);
                 }

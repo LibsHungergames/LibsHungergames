@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PageInventory extends ClickInventory {
+public class HGPageInventory extends ClickInventory {
     public enum InventoryType {
         BUYKIT, KIT, SPECTATOR, STATS;
     }
@@ -29,7 +29,7 @@ public class PageInventory extends ClickInventory {
     private String titleFormat = "%Title% - Page %Page%";
     private InventoryType type;
 
-    public PageInventory(InventoryType inventoryType, Player player, boolean dymanicInventory, int invSize) {
+    public HGPageInventory(InventoryType inventoryType, Player player, boolean dymanicInventory, int invSize) {
         super(player);
         this.type = inventoryType;
         dynamicInventorySize = dymanicInventory;

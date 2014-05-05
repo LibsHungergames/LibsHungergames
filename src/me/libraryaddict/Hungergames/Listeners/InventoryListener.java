@@ -14,7 +14,7 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
-import me.libraryaddict.Hungergames.Types.PageInventory.InventoryType;
+import me.libraryaddict.Hungergames.Types.HGPageInventory.InventoryType;
 
 public class InventoryListener implements Listener {
     private KitManager kits = HungergamesApi.getKitManager();
