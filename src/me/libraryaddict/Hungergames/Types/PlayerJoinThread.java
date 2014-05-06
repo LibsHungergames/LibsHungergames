@@ -19,8 +19,8 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ReflectionManager;
 
 public class PlayerJoinThread extends Thread {
-    private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     private Connection con = null;
+    private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     private boolean uuids;
 
     public PlayerJoinThread(boolean useUuids) {
