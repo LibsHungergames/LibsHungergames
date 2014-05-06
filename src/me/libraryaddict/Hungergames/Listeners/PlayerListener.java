@@ -350,9 +350,6 @@ public class PlayerListener implements Listener {
                     && !p.getInventory().contains(icon.getKitSelector())) {
                 gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
             }
-            if (!mysqlConfig.isKitsEnabled() && config.isBuyKitMenuEnabled() && !p.getInventory().contains(icon.getBuyKit())) {
-                gamer.getPlayer().getInventory().addItem(icon.getBuyKit());
-            }
             if (config.isTeleportToSpawnLocationPregame() && -config.getSecondsToTeleportPlayerToSpawn() >= hg.currentTime
                     && config.isPreventMovingFromSpawnUsingPotions()) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 200), true);

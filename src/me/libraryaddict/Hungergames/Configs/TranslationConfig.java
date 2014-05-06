@@ -133,7 +133,7 @@ public class TranslationConfig extends BaseConfig {
     private String commandSuicideNotAlive = ChatColor.RED + "Dead men can't die";
     private String commandTimeStatusStarted = ChatColor.DARK_GRAY + "The game has been going for %s.";
     private String commandTimeStatusStarting = ChatColor.DARK_GRAY + "The game is starting in %s.";
-    private String commandTopStatsMysqlNotEnabled = ChatColor.RED + "This server doesn't support top stats!";
+    private String commandTopStatsMysqlNotEnabled = ChatColor.RED + "The server doesn't support this!";
     private transient YamlConfiguration config;
     private transient File configFile;
     private String gameStartedMotd = ChatColor.DARK_RED + "Game in progress.";

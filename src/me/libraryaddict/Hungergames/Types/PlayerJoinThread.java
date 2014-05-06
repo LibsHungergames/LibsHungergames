@@ -175,7 +175,7 @@ public class PlayerJoinThread extends Thread {
                                         && HungergamesApi.getConfigManager().getMainConfig().isKitSelectorEnabled())
                                     pInv.addItem(item);
                                 if (!pInv.contains(item1)
-                                        && HungergamesApi.getConfigManager().getMainConfig().isBuyKitMenuEnabled())
+                                        && HungergamesApi.getConfigManager().getMySqlConfig().isBuyKitMenuEnabled())
                                     pInv.addItem(item1);
                             }
                         }

@@ -39,7 +39,6 @@ public class MainConfig extends BaseConfig {
     private int buyKitInventorySize = 54;
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
-    private boolean buyKitMenuEnabled = true;
 
     /**
      * Does the plugin check for updates..

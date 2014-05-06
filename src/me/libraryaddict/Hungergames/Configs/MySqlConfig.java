@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class MySqlConfig extends BaseConfig {
 
+    private boolean buyKitMenuEnabled;
     private boolean kitsEnabled;
     private String mysql_database = "database";
     private String mysql_host = "localhost";
@@ -24,7 +25,7 @@ public class MySqlConfig extends BaseConfig {
         File file = new File("plugins/LibsHungergames/config.yml");
         if (file.exists()) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-            kitsEnabled = config.getBoolean("mysqlEnabled");
+            buyKitMenuEnabled = config.getBoolean("mysqlEnabled");
             statsEnabled = config.getBoolean("mysqlEnabled");
             mysqlEnabled = config.getBoolean("mysqlEnabled");
             config.set("mysqlEnabled", null);
@@ -38,6 +39,6 @@ public class MySqlConfig extends BaseConfig {
 
     @Deprecated
     public boolean isMysqlEnabled() {
-        return mysqlEnabled && (statsEnabled || kitsEnabled);
+        return mysqlEnabled && (statsEnabled || buyKitMenuEnabled || kitsEnabled);
     }
 }
