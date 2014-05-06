@@ -19,7 +19,7 @@ import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Managers.ReflectionManager;
 
 public class PlayerJoinThread extends Thread {
-    private LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
+    private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     private Connection con = null;
     private boolean uuids;
 
@@ -84,19 +84,19 @@ public class PlayerJoinThread extends Thread {
                 stmt.close();
             }
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName()));
+            System.err.println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName()));
         }
     }
 
     public void mySqlConnect() {
         try {
-            System.out.println(String.format(cm.getMySqlConnecting(), getClass().getSimpleName()));
+            System.out.println(String.format(loggerConfig.getMySqlConnecting(), getClass().getSimpleName()));
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             MySqlConfig config = HungergamesApi.getConfigManager().getMySqlConfig();
             String conn = "jdbc:mysql://" + config.getMysql_host() + "/" + config.getMysql_database();
             con = DriverManager.getConnection(conn, config.getMysql_username(), config.getMysql_password());
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
+            System.err.println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }
         checkTables();
     }
@@ -105,10 +105,10 @@ public class PlayerJoinThread extends Thread {
         if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlEnabled())
             return;
         try {
-            System.out.println(String.format(cm.getMySqlClosing(), getClass().getSimpleName()));
+            System.out.println(String.format(loggerConfig.getMySqlClosing(), getClass().getSimpleName()));
             this.con.close();
         } catch (Exception ex) {
-            System.err.println(String.format(cm.getMySqlClosingError(), getClass().getSimpleName()));
+            System.err.println(String.format(loggerConfig.getMySqlClosingError(), getClass().getSimpleName()));
         }
     }
 
@@ -182,7 +182,7 @@ public class PlayerJoinThread extends Thread {
                     });
                     stmt.close();
                 } catch (Exception ex) {
-                    System.out.println(String.format(cm.getMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));
+                    System.out.println(String.format(loggerConfig.getMySqlErrorLoadPlayer(), gamer.getName(), ex.getMessage()));
                 }
             }
             if (pm.loadGamer.peek() == null) {
