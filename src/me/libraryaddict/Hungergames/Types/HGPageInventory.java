@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class HGPageInventory extends ClickInventory {
     public enum InventoryType {
-        BUYKIT, KIT, SPECTATOR, STATS;
+        BUYKIT, KIT, SPECTATOR, STATS, TOP_STATS;
     }
 
     private ItemStack backAPage;
