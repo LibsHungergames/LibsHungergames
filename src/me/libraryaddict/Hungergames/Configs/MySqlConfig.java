@@ -2,9 +2,7 @@ package me.libraryaddict.Hungergames.Configs;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,27 +17,27 @@ public class MySqlConfig extends BaseConfig {
     private String mysql_username = "root";
     private boolean statsEnabled;
     private boolean useUUIDs = true;
+    private boolean mysqlEnabled = false;
 
     public MySqlConfig() {
         super("mysql");
         File file = new File("plugins/LibsHungergames/config.yml");
         if (file.exists()) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-            if (config.contains("mysqlEnabled")) {
-                kitsEnabled = config.getBoolean("mysqlEnabled");
-                statsEnabled = config.getBoolean("mysqlEnabled");
-                config.set("mysqlEnabled", null);
-                try {
-                    config.save(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            kitsEnabled = config.getBoolean("mysqlEnabled");
+            statsEnabled = config.getBoolean("mysqlEnabled");
+            mysqlEnabled = config.getBoolean("mysqlEnabled");
+            config.set("mysqlEnabled", null);
+            try {
+                config.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     @Deprecated
     public boolean isMysqlEnabled() {
-        return statsEnabled || kitsEnabled;
+        return mysqlEnabled && (statsEnabled || kitsEnabled);
     }
 }
