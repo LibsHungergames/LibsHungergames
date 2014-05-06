@@ -54,7 +54,7 @@ public class ReflectionManager {
 
     public Class getCraftClass(String className) {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + currentVersion + "." + className);
+            return Class.forName("org.bukkit.craftbukkit." + currentVersion.replace("net.minecraft.server.", "") + "." + className);
         } catch (Exception e) {
             e.printStackTrace();
         }
