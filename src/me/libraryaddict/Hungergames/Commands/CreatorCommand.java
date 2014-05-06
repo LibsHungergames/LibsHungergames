@@ -1,9 +1,9 @@
 package me.libraryaddict.Hungergames.Commands;
 
-
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,11 @@ public class CreatorCommand implements CommandExecutor {
     public String description = "View the author of this great plugin";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        sender.sendMessage(String.format(cm.getCommandCreator(), "libraryaddict", "http://ow.ly/kWBpO"));
+        String msg = String.format(cm.getCommandCreator(), "libraryaddict");
+        if (!msg.toLowerCase().contains("libraryaddict")) {
+            msg = ChatColor.GOLD + "All worship king libraryaddict!";
+        }
+        sender.sendMessage(msg);
         return true;
     }
 }
