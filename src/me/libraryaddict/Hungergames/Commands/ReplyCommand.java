@@ -9,7 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Reply implements CommandExecutor {
+public class ReplyCommand implements CommandExecutor {
 
     public String[] aliases = new String[] { "r", "respond" };
     private transient ChatManager chat = HungergamesApi.getChatManager();

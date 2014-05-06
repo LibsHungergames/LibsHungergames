@@ -18,7 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public class KitItems implements CommandExecutor {
+public class KitItemsCommand implements CommandExecutor {
 
     public String description = "View the items given with a kit";
     private final KitManager kits = HungergamesApi.getKitManager();

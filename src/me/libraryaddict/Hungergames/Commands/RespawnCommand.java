@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Respawn implements CommandExecutor {
+public class RespawnCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Respawn a player after they have died";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

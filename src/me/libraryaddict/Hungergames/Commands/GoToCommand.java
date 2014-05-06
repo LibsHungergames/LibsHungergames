@@ -13,7 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class GoTo implements CommandExecutor {
+public class GoToCommand implements CommandExecutor {
     public String[] aliases = new String[] { "watch" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "A command for spectators to teleport to people";

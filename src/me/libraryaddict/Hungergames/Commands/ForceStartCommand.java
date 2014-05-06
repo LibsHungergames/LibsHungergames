@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class ForceStart implements CommandExecutor {
+public class ForceStartCommand implements CommandExecutor {
     public String[] aliases = new String[] { "fstart" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Change the time until the game starts";

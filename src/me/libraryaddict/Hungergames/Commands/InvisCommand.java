@@ -12,7 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Invis implements CommandExecutor {
+public class InvisCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Used for toggling invisibility";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

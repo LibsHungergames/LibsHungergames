@@ -11,7 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Spawn implements CommandExecutor {
+public class SpawnCommand implements CommandExecutor {
     public String[] aliases = new String[] { "hgspawn" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "If spectating you can teleport back to spawn";

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Chunk implements CommandExecutor {
+public class ChunkCommand implements CommandExecutor {
     public String[] aliases = new String[] { "stuck", "refresh" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "This command refreshes the chunk of the command user";

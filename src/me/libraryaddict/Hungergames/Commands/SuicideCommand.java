@@ -11,7 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Suicide implements CommandExecutor {
+public class SuicideCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Commit suicide to this cruel cruel world";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

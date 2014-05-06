@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class KitMenu implements CommandExecutor {
+public class KitMenuCommand implements CommandExecutor {
     public String description = "A command to toggle if the player should be able to build when he normally shouldn't";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

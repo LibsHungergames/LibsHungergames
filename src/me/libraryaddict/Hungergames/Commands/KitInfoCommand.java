@@ -11,7 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class KitInfo implements CommandExecutor {
+public class KitInfoCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "View the information on a kit";
     private KitManager kits = HungergamesApi.getKitManager();

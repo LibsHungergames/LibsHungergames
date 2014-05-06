@@ -98,7 +98,7 @@ public class CommandManager {
             } catch (Exception ex) {
             }
         } else {
-            modified = startRegisteringCommand(exc, exc.getClass().getSimpleName());
+            modified = startRegisteringCommand(exc, exc.getClass().getSimpleName().replace("Command", ""));
         }
         // System.out.print(String.format(cm.getLoggerFoundCommandInPackage(),
         // commandName));
@@ -229,7 +229,7 @@ public class CommandManager {
                 }
             } catch (Exception ex) {
             }
-            if (exc.getClass().getSimpleName().equalsIgnoreCase("Creator")) {
+            if (exc.getClass().getSimpleName().equalsIgnoreCase("CreatorCommand")) {
                 addCreatorAliases(aliases, name);
             }
             for (String alias : aliases) {
@@ -277,7 +277,7 @@ public class CommandManager {
     private boolean startRegisteringCommand(CommandExecutor exc, String commandName) {
         ConfigurationSection section = getConfigSection(commandName);
         boolean modified = loadConfig(section, exc, commandName);
-        if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("Creator")) {
+        if (section.getBoolean("EnableCommand") || exc.getClass().getSimpleName().equals("CreatorCommand")) {
             try {
                 registerCommand(section.getString("CommandName"), exc, HungergamesApi.getHungergames(), false);
             } catch (Exception ex) {

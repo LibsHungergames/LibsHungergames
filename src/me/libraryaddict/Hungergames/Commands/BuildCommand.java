@@ -11,7 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Build implements CommandExecutor {
+public class BuildCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "A command to toggle if the player should be able to build when he normally shouldn't";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

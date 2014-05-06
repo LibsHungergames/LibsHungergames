@@ -12,7 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Kill implements CommandExecutor {
+public class KillCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Use /suicide instead to suicide";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

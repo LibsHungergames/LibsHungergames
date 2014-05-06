@@ -11,7 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Message implements CommandExecutor {
+public class MessageCommand implements CommandExecutor {
 
     public String[] aliases = new String[] { "msg", "mail", "tell", "pm", "whisper", "w", "privatemessage" };
     private transient ChatManager chat = HungergamesApi.getChatManager();

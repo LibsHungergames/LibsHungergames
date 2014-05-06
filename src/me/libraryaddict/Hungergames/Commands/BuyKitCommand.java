@@ -12,7 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class BuyKit implements CommandExecutor {
+public class BuyKitCommand implements CommandExecutor {
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "When mysql is enabled you can use this command to buy kits";
     private KitManager kits = HungergamesApi.getKitManager();

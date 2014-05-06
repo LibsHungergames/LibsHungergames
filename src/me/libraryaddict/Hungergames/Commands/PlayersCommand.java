@@ -17,7 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Players implements CommandExecutor {
+public class PlayersCommand implements CommandExecutor {
     public String[] aliases = new String[] { "list", "who", "gamers" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "See the gamers and spectators online";

@@ -14,7 +14,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ForceFeast implements CommandExecutor {
+public class ForceFeastCommand implements CommandExecutor {
     public String[] aliases = new String[] { "ffeast" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Force a feast to generate at your feet";

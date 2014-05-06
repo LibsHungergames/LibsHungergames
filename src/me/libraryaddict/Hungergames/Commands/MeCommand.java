@@ -14,7 +14,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Me implements CommandExecutor {
+public class MeCommand implements CommandExecutor {
     private ConfigManager config = HungergamesApi.getConfigManager();
     public String description = "Act out a message";
     private PlayerManager pm = HungergamesApi.getPlayerManager();

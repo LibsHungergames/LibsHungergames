@@ -17,7 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Kit implements CommandExecutor {
+public class KitCommand implements CommandExecutor {
     public String[] aliases = new String[] { "kits" };
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
     public String description = "Use this to select your kit or display them";
