@@ -1,5 +1,8 @@
 package me.libraryaddict.Hungergames.Types;
 
+import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -16,10 +19,32 @@ public class Stats {
     private UUID uuid;
     private int wins;
 
+    public Stats clone() {
+        Stats stats = new Stats(getUuid(), getOwningPlayer());
+        try {
+            for (Field field : getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                field.set(stats, field.get(this));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return stats;
+    }
+
     public Stats(UUID uuid, String player) {
         newStats = true;
         this.owningPlayer = player;
         this.uuid = uuid;
+    }
+
+    public Stats(UUID uuid, String player, ResultSet rs) throws SQLException {
+        this.owningPlayer = player;
+        this.uuid = uuid;
+        this.killsTotal = rs.getInt("Kills");
+        this.killsBest = rs.getInt("Killstreak");
+        this.wins = rs.getInt("Wins");
+        this.lossses = rs.getInt("Losses");
     }
 
     public Stats(UUID uuid, String player, int kills, int killstreak, int wins, int losses) {

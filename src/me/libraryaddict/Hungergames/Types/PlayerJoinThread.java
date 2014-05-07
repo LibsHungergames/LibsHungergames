@@ -156,8 +156,7 @@ public class PlayerJoinThread extends Thread {
                         }
                         r.beforeFirst();
                         if (r.next()) {
-                            stats = new Stats(uuid, name, r.getInt("Kills"), r.getInt("Killstreak"), r.getInt("Wins"),
-                                    r.getInt("Losses"));
+                            stats = new Stats(uuid, name, r);
                         } else {
                             stats = new Stats(uuid, name);
                         }
