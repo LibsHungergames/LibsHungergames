@@ -53,7 +53,7 @@ public class InventoryManager {
         return generateItem(type.getId(), dataValue, name, lore);
     }
 
-    public ItemStack generateItem(Material type, int dataValue, String name, String[] lore) {
+    public ItemStack generateItem(Material type, int dataValue, String name, String... lore) {
         return generateItem(type.getId(), dataValue, name, Arrays.asList(lore));
     }
 
