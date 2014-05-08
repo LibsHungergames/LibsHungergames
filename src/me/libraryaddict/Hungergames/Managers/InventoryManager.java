@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class InventoryManager {
 
@@ -40,6 +41,9 @@ public class InventoryManager {
         }
         if (lore != null && lore.size() > 0) {
             meta.setLore(lore);
+        }
+        if (meta instanceof SkullMeta) {
+            ((SkullMeta) meta).setOwner("IgnoreThis");
         }
         item.setItemMeta(meta);
         return item;
