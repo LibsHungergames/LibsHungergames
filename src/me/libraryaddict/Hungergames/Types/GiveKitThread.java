@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 
@@ -43,10 +45,11 @@ public class GiveKitThread extends Thread {
             return;
         mySqlConnect();
         try {
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO HGKits (`uuid`, `Name`, `KitName`) VALUES (?,?,?)");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO HGKits (`uuid`, `Name`, `KitName`, `Date`) VALUES (?,?,?,?)");
             stmt.setString(1, uuid);
             stmt.setString(2, playerName);
             stmt.setString(3, kitName);
+            stmt.setTimestamp(4, new Timestamp(new Date().getTime()));
             stmt.execute();
             stmt.close();
         } catch (Exception ex) {

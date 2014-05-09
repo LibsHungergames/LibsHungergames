@@ -36,7 +36,7 @@ public class PlayerJoinThread extends Thread {
                 tables.close();
                 Statement stmt = con.createStatement();
                 stmt.execute("CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
-                        + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL)");
+                        + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL, Date timestamp NOT NULL)");
                 stmt.close();
             } else {
                 tables = dbm.getColumns(null, null, "HGKits", "uuid");
@@ -72,6 +72,13 @@ public class PlayerJoinThread extends Thread {
                     }
                     stmt.close();
                 }
+                tables = dbm.getColumns(null, null, "HGKits", "Date");
+                tables.beforeFirst();
+                if (!tables.next()) {
+                    System.out.println("[LibsHungergames] Updating mysql to support timestamps for HGKits");
+                    Statement stmt = con.createStatement();
+                    stmt.execute("ALTER TABLE `HGKits` ADD `Date` TIMESTAMP;");
+                }
             }
             tables = dbm.getTables(null, null, "HGStats", null);
             tables.last();
@@ -96,7 +103,8 @@ public class PlayerJoinThread extends Thread {
             String conn = "jdbc:mysql://" + config.getMysql_host() + "/" + config.getMysql_database();
             con = DriverManager.getConnection(conn, config.getMysql_username(), config.getMysql_password());
         } catch (Exception ex) {
-            System.err.println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
+            System.err
+                    .println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }
         checkTables();
     }
