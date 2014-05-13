@@ -17,6 +17,7 @@ public class MySqlConfig extends BaseConfig {
     private String mysql_password = "password";
     private String mysql_username = "root";
     private boolean mysqlEnabled = false;
+    private String rankingFormula = "(((Wins * 5) + (Kills / 10) / (Losses / 10)) + ((Wins + Losses) / 50)) + Killstreak";
     private boolean statsEnabled;
     private boolean useUUIDs = true;
 
