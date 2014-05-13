@@ -3,7 +3,6 @@ package me.libraryaddict.Hungergames.Managers;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +169,6 @@ public class KitManager {
                 }
                 ItemStack item = new ItemStack(id, (int) amount, (short) Integer.parseInt(args[1]));
                 boolean setUnbreakable = false;
-                String[] newArgs = Arrays.copyOfRange(args, 3, args.length);
                 for (int no = 3; no < args.length; no++) {
                     String argString = args[no];
                     if (argString.startsWith("Name=")) {
@@ -218,7 +216,7 @@ public class KitManager {
                             ench = Enchantment.getByName(argString.replace("_", " ").toUpperCase());
                         if (ench == null) {
                             System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig()
-                                    .getErrorWhileParsingItemStack(), string, argString + " is not a valid item option. Will still load item."));
+                                    .getErrorWhileParsingItemStack(), string, argString + " is not a valid option. Item will still load"));
                             continue;
                         }
                         item.addUnsafeEnchantment(ench, Integer.parseInt(args[no + 1]));
