@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -150,9 +151,8 @@ public class CommandManager {
                 modified = true;
                 section.set("EnableCommand", true);
             }
-            for (Field field : exc.getClass().getDeclaredFields()) {
-                if ((field.getName().equals("aliases") || field.getName().equals("description"))
-                        && !Modifier.isTransient(field.getModifiers()) && Modifier.isPublic(field.getModifiers()))
+            for (Field field : exc.getClass().getFields()) {
+                if (!Modifier.isTransient(field.getModifiers())) {
                     try {
                         Object value = section.get(field.getName());
                         if (value == null) {
@@ -164,9 +164,10 @@ public class CommandManager {
                                     newStrings[i] = strings[i].replace("\n", "\\n").replace("§", "&").toLowerCase();
                                 }
                                 section.set(field.getName(), newStrings);
+                            } else if (value instanceof String) {
+                                value = ((String) value).replace("\n", "\\n").replace("§", "&");
+                                section.set(field.getName(), value);
                             } else {
-                                if (value instanceof String)
-                                    value = ((String) value).replace("\n", "\\n").replace("§", "&");
                                 section.set(field.getName(), value);
                             }
                             modified = true;
@@ -174,7 +175,9 @@ public class CommandManager {
                                 System.out.print(String.format(cm.getAddedMissingConfigValue(), field.getName(), commandName));
                         } else if (field.getType().isArray() && value.getClass() == ArrayList.class) {
                             List<Object> array = (List<Object>) value;
-                            value = array.toArray(new String[array.size()]);
+                            Object[] newArray = (Object[]) Array.newInstance(((Object[]) field.get(exc))[0].getClass(),
+                                    array.size());
+                            value = array.toArray(newArray);
                         }
                         if (value instanceof String) {
                             value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
@@ -189,26 +192,12 @@ public class CommandManager {
                             field.set(exc, ((float) (double) (Double) value));
                         } else
                             field.set(exc, value);
-                        if (field.getName().equals("commandCreator")) {
-                            /**
-                             * Touch this and you better leave this entire plugin alone because I didn't give you permission to
-                             * modify this. By changing the creatorMessage to something which doesn't refer players to the plugin
-                             * itself. You are going against my wishes.
-                             */
-                            String message = String.format(((String) value), "libraryaddict", "http://ow.ly/kWBpO").toLowerCase();
-                            if (!message.contains("libraryaddict") && !message.contains("http://ow.ly/kwbpo")
-                                    && !message.contains("spigotmc.org/resources/libs-hungergames.55")) {
-                                Bukkit.getScheduler().scheduleSyncRepeatingTask(HungergamesApi.getHungergames(), new Runnable() {
-                                    public void run() {
-                                        Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "[Hungergames] " + ChatColor.AQUA
-                                                + "This plugin was created by libraryaddict! Download it at http://ow.ly/kWBpO");
-                                    }
-                                }, 20 * 60 * 10, 20 * 60 * 10);
-                            }
-                        }
                     } catch (Exception e) {
-                        System.out.print(String.format(cm.getErrorWhileLoadingConfig(), "commands", e.getMessage()));
+                        System.out.print(String.format(cm.getErrorWhileLoadingConfig(), "commands", exc.getClass()
+                                .getSimpleName() + " - " + e.getMessage()));
+                        e.printStackTrace();
                     }
+                }
             }
             return modified;
         } catch (Exception e) {
