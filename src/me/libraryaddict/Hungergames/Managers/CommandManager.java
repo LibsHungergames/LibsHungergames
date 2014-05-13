@@ -12,6 +12,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -167,6 +169,15 @@ public class CommandManager {
                             } else if (value instanceof String) {
                                 value = ((String) value).replace("\n", "\\n").replace("§", "&");
                                 section.set(field.getName(), value);
+                            } else if (value instanceof ItemStack) {
+                                section.set(field.getName(), translateItemTo((ItemStack) value));
+                            } else if (value instanceof ItemStack[]) {
+                                ItemStack[] items = (ItemStack[]) value;
+                                ItemStack[] newItems = new ItemStack[items.length];
+                                for (int i = 0; i < items.length; i++) {
+                                    newItems[i] = translateItemTo(items[i]);
+                                }
+                                section.set(field.getName(), newItems);
                             } else {
                                 section.set(field.getName(), value);
                             }
@@ -178,6 +189,14 @@ public class CommandManager {
                             Object[] newArray = (Object[]) Array.newInstance(((Object[]) field.get(exc))[0].getClass(),
                                     array.size());
                             value = array.toArray(newArray);
+                        }
+                        if (value instanceof ItemStack) {
+                            value = translateItemFrom((ItemStack) value);
+                        } else if (value instanceof ItemStack[]) {
+                            ItemStack[] items = (ItemStack[]) value;
+                            for (int i = 0; i < items.length; i++) {
+                                items[i] = translateItemFrom(items[i]);
+                            }
                         }
                         if (value instanceof String) {
                             value = ChatColor.translateAlternateColorCodes('&', (String) value).replace("\\n", "\n");
@@ -204,6 +223,45 @@ public class CommandManager {
             System.out.print(String.format(cm.getErrorWhileLoadingConfig(), "commands", e.getMessage()));
         }
         return false;
+    }
+
+    private ItemStack translateItemTo(ItemStack item) {
+        if (item != null && item.hasItemMeta()) {
+            item = item.clone();
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                meta.setDisplayName(meta.getDisplayName().replace("§", "&"));
+            }
+            if (meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                ArrayList<String> newLore = new ArrayList<String>();
+                for (int i = 0; i < lore.size(); i++) {
+                    newLore.add(lore.get(i).replace("§", "&"));
+                }
+                meta.setLore(newLore);
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    private ItemStack translateItemFrom(ItemStack item) {
+        if (item != null && item.hasItemMeta()) {
+            item = item.clone();
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
+            }
+            if (meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                for (int i = 0; i < lore.size(); i++) {
+                    lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
+                }
+                meta.setLore(lore);
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     private void registerCommand(final String name, final CommandExecutor exc, final JavaPlugin plugin, boolean isAlias)
