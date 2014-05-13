@@ -21,16 +21,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class TopStatsCommand implements CommandExecutor {
 
     private Connection con;
     private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     public ItemStack topStatsBackIcon;
-    public String topStatsFormula = "(((Wins * 5) + (Kills / 10) / (Losses / 10)) + ((Wins + Losses) / 50)) + Killstreak";
     public ItemStack topStatsForwardsIcon;
     public ItemStack topStatsHeadItem;
     public String topStatsMenuName = "Top players";
+    public boolean displayPageInTitle = true;
+    public String topStatsTitlePage = "%Title% - Page %Page%";
     public int topStatsPlayerAmount = 135;
 
     public TopStatsCommand() {
@@ -46,6 +48,7 @@ public class TopStatsCommand implements CommandExecutor {
             lore.add(ChatColor.BLUE + "Best Killstreak: " + ChatColor.DARK_AQUA + "%Killstreak%");
             lore.add(ChatColor.BLUE + "Rank worth: " + ChatColor.DARK_AQUA + "%RankWorth%");
             meta.setLore(lore);
+            ((SkullMeta) meta).setOwner("IgnoreThis");
             topStatsHeadItem.setItemMeta(meta);
         }
         {
@@ -103,8 +106,9 @@ public class TopStatsCommand implements CommandExecutor {
                 final ItemStack[] items = new ItemStack[topStatsPlayerAmount];
                 try {
                     PreparedStatement stmt = getConnection().prepareStatement(
-                            "SELECT * FROM (SELECT @ranking:=" + topStatsFormula
-                                    + " AS ranking, Name, Wins, Losses, Killstreak, Kills FROM HGStats,"
+                            "SELECT * FROM (SELECT @ranking:=("
+                                    + HungergamesApi.getConfigManager().getMySqlConfig().getRankingFormula()
+                                    + ") AS ranking, Name, Wins, Losses, Killstreak, Kills FROM HGStats,"
                                     + " (SELECT @ranking := 0) r ORDER BY ranking DESC) t LIMIT 0," + topStatsPlayerAmount);
                     ResultSet rs = stmt.executeQuery();
                     rs.beforeFirst();
@@ -124,7 +128,7 @@ public class TopStatsCommand implements CommandExecutor {
                         ArrayList<String> newLore = new ArrayList<String>();
                         for (int a = 0; a < lore.size(); a++) {
                             String s = lore.get(a);
-                            s = s.replace("%Name%", name).replace("%Rank%", rank).replace("%Ranking%", ranking)
+                            s = s.replace("%Name%", name).replace("%Rank%", rank).replace("%RankWorth%", ranking)
                                     .replace("%Wins%", wins).replace("%Losses%", losses).replace("%Kills%", kills)
                                     .replace("%Killstreak%", killstreak);
                             if (a == 0) {
@@ -140,11 +144,13 @@ public class TopStatsCommand implements CommandExecutor {
                     stmt.close();
                     Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {
-                            HGPageInventory inv = new HGPageInventory(InventoryType.TOP_STATS, (Player) sender, true, 64);
-                            inv.setTitle(topStatsMenuName);
-                            inv.setPages(items);
+                            HGPageInventory inv = new HGPageInventory(InventoryType.TOP_STATS, (Player) sender, true, 54);
                             inv.setBackPage(topStatsBackIcon);
                             inv.setForwardsPage(topStatsForwardsIcon);
+                            inv.setTitle(topStatsMenuName);
+                            inv.setPageDisplayedInTitle(displayPageInTitle);
+                            inv.setPageDisplayTitleFormat(topStatsTitlePage);
+                            inv.setPages(items);
                             inv.openInventory();
                         }
                     });
