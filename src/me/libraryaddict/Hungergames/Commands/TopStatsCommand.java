@@ -103,7 +103,7 @@ public class TopStatsCommand implements CommandExecutor {
         }
         Bukkit.getScheduler().scheduleAsyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
             public void run() {
-                final ItemStack[] items = new ItemStack[topStatsPlayerAmount];
+                final ItemStack[] items;
                 try {
                     PreparedStatement stmt = getConnection().prepareStatement(
                             "SELECT * FROM (SELECT @ranking:=("
@@ -111,8 +111,11 @@ public class TopStatsCommand implements CommandExecutor {
                                     + ") AS ranking, Name, Wins, Losses, Killstreak, Kills FROM HGStats,"
                                     + " (SELECT @ranking := 0) r ORDER BY ranking DESC) t LIMIT 0," + topStatsPlayerAmount);
                     ResultSet rs = stmt.executeQuery();
+                    rs.last();
+                    int maxRows = rs.getRow();
+                    items = new ItemStack[maxRows];
                     rs.beforeFirst();
-                    for (int i = 0; i < topStatsPlayerAmount; i++) {
+                    for (int i = 0; i < maxRows; i++) {
                         rs.next();
                         String name = rs.getString("Name");
                         String rank = "" + (i + 1);
