@@ -11,12 +11,12 @@ import lombok.EqualsAndHashCode;
 public class MySqlConfig extends BaseConfig {
 
     private boolean buyKitMenuEnabled;
-    private boolean kitsEnabled;
     private String mysql_database = "database";
     private String mysql_host = "localhost";
     private String mysql_password = "password";
     private String mysql_username = "root";
     private boolean mysqlEnabled = false;
+    private boolean mysqlKitsEnabled = true;
     private String rankingFormula = "(((Wins * 5) + (Kills / 10) / (Losses / 10)) + ((Wins + Losses) / 50)) + Killstreak";
     private boolean statsEnabled;
     private boolean useUUIDs = true;
@@ -40,6 +40,6 @@ public class MySqlConfig extends BaseConfig {
 
     @Deprecated
     public boolean isMysqlEnabled() {
-        return mysqlEnabled && (statsEnabled || buyKitMenuEnabled || kitsEnabled);
+        return mysqlEnabled && (statsEnabled || buyKitMenuEnabled || mysqlKitsEnabled);
     }
 }

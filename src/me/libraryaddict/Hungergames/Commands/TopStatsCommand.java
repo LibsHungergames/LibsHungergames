@@ -26,14 +26,14 @@ import org.bukkit.inventory.meta.SkullMeta;
 public class TopStatsCommand implements CommandExecutor {
 
     private Connection con;
+    public boolean displayPageInTitle = true;
     private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     public ItemStack topStatsBackIcon;
     public ItemStack topStatsForwardsIcon;
     public ItemStack topStatsHeadItem;
     public String topStatsMenuName = "Top players";
-    public boolean displayPageInTitle = true;
-    public String topStatsTitlePage = "%Title% - Page %Page%";
     public int topStatsPlayerAmount = 135;
+    public String topStatsTitlePage = "%Title% - Page %Page%";
 
     public TopStatsCommand() {
         {

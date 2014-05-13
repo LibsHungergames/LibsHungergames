@@ -50,7 +50,7 @@ public class GiveKitThread extends Thread {
     }
 
     public void run() {
-        if (!HungergamesApi.getConfigManager().getMySqlConfig().isKitsEnabled())
+        if (!HungergamesApi.getConfigManager().getMySqlConfig().isMysqlKitsEnabled())
             return;
         mySqlConnect();
         try {

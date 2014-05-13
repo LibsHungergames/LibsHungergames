@@ -14,7 +14,7 @@ public class CreatorCommand implements CommandExecutor {
     public String description = "View the author of this great plugin";
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        String msg = String.format(cm.getCommandCreator(), "libraryaddict");
+        String msg = cm.getCommandCreator().replace("%s", "libraryaddict");
         if (!msg.toLowerCase().contains("libraryaddict")) {
             msg = ChatColor.GOLD + "All worship king libraryaddict!";
         }

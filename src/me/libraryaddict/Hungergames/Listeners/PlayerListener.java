@@ -346,7 +346,7 @@ public class PlayerListener implements Listener {
             }, 2L);
         } else {
             ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(), Bukkit.getOnlinePlayers().length);
-            if (!mysqlConfig.isKitsEnabled() && config.isKitSelectorEnabled()
+            if (!mysqlConfig.isMysqlKitsEnabled() && config.isKitSelectorEnabled()
                     && !p.getInventory().contains(icon.getKitSelector())) {
                 gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
             }
@@ -359,7 +359,7 @@ public class PlayerListener implements Listener {
         pm.sendToSpawn(gamer);
         gamer.updateOthersToSelf();
         gamer.updateSelfToOthers();
-        if (mysqlConfig.isKitsEnabled() || mysqlConfig.isStatsEnabled()) {
+        if (mysqlConfig.isMysqlKitsEnabled() || mysqlConfig.isStatsEnabled()) {
             pm.loadGamer.add(gamer);
         }
         if (p.hasPermission("hungergames.update") && config.getLatestVersion() != null)

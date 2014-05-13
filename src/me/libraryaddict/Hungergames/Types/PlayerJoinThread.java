@@ -124,7 +124,7 @@ public class PlayerJoinThread extends Thread {
         MySqlConfig mysqlConfig = HungergamesApi.getConfigManager().getMySqlConfig();
         if (!mysqlConfig.isMysqlEnabled())
             return;
-        boolean isKits = mysqlConfig.isKitsEnabled();
+        boolean isKits = mysqlConfig.isMysqlKitsEnabled();
         boolean isStats = mysqlConfig.isStatsEnabled();
         mySqlConnect();
         KitManager kits = HungergamesApi.getKitManager();

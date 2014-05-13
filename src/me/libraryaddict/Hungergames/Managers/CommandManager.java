@@ -225,45 +225,6 @@ public class CommandManager {
         return false;
     }
 
-    private ItemStack translateItemTo(ItemStack item) {
-        if (item != null && item.hasItemMeta()) {
-            item = item.clone();
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasDisplayName()) {
-                meta.setDisplayName(meta.getDisplayName().replace("§", "&"));
-            }
-            if (meta.hasLore()) {
-                List<String> lore = meta.getLore();
-                ArrayList<String> newLore = new ArrayList<String>();
-                for (int i = 0; i < lore.size(); i++) {
-                    newLore.add(lore.get(i).replace("§", "&"));
-                }
-                meta.setLore(newLore);
-            }
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
-    private ItemStack translateItemFrom(ItemStack item) {
-        if (item != null && item.hasItemMeta()) {
-            item = item.clone();
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasDisplayName()) {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
-            }
-            if (meta.hasLore()) {
-                List<String> lore = meta.getLore();
-                for (int i = 0; i < lore.size(); i++) {
-                    lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
-                }
-                meta.setLore(lore);
-            }
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
     private void registerCommand(final String name, final CommandExecutor exc, final JavaPlugin plugin, boolean isAlias)
             throws Exception {
         String desc = null;
@@ -333,5 +294,44 @@ public class CommandManager {
             }
         }
         return modified;
+    }
+
+    private ItemStack translateItemFrom(ItemStack item) {
+        if (item != null && item.hasItemMeta()) {
+            item = item.clone();
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
+            }
+            if (meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                for (int i = 0; i < lore.size(); i++) {
+                    lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
+                }
+                meta.setLore(lore);
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    private ItemStack translateItemTo(ItemStack item) {
+        if (item != null && item.hasItemMeta()) {
+            item = item.clone();
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                meta.setDisplayName(meta.getDisplayName().replace("§", "&"));
+            }
+            if (meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                ArrayList<String> newLore = new ArrayList<String>();
+                for (int i = 0; i < lore.size(); i++) {
+                    newLore.add(lore.get(i).replace("§", "&"));
+                }
+                meta.setLore(newLore);
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 }
