@@ -11,9 +11,9 @@ import me.libraryaddict.Hungergames.Configs.MySqlConfig;
 
 public class GiveKitThread extends Thread {
     private Connection con = null;
-    private Timestamp timestamp;
     private String kitName;
     private String playerName;
+    private Timestamp timestamp;
     private String uuid;
 
     public GiveKitThread(String player, String uuid, String kit) {

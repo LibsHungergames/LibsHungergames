@@ -126,6 +126,7 @@ public class TranslationConfig extends BaseConfig {
     private String commandRideRideAll = ChatColor.GREEN + "Giddy up horsie!";
     private String commandRideToggle = ChatColor.GREEN + "Toggled riding to %s! Yee-haw!";
     private String commandSpawnPointingToSpawn = ChatColor.YELLOW + "Compass is now pointing to spawn";
+    private String commandStatsCantFindPlayer = ChatColor.RED + "Cannot find the player %s";
     private String commandSuicideAssistedDeathMessage = "%s was helped on the path to suicide";
     private String commandSuicideDoesntExist = ChatColor.RED + "The player requested cannot be found";
     private String commandSuicideKillMessage = "%s commited suicide.";
