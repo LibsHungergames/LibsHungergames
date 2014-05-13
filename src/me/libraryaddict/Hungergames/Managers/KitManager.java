@@ -171,8 +171,9 @@ public class KitManager {
                 ItemStack item = new ItemStack(id, (int) amount, (short) Integer.parseInt(args[1]));
                 boolean setUnbreakable = false;
                 String[] newArgs = Arrays.copyOfRange(args, 3, args.length);
-                for (String argString : newArgs) {
-                    if (argString.contains("Name=")) {
+                for (int no = 3; no < args.length; no++) {
+                    String argString = args[no];
+                    if (argString.startsWith("Name=")) {
                         String name = ChatColor.translateAlternateColorCodes('&', argString.substring(5)).replaceAll("_", " ");
                         if (ChatColor.getLastColors(name).equals(""))
                             name = ChatColor.WHITE + name;
@@ -182,7 +183,7 @@ public class KitManager {
                             previous = "";
                         meta.setDisplayName(name + previous);
                         item.setItemMeta(meta);
-                    } else if (argString.contains("Color=") && item.getType().name().contains("LEATHER")) {
+                    } else if (argString.startsWith("Color=") && item.getType().name().contains("LEATHER")) {
                         String[] name = argString.substring(6).split(":");
                         int[] ids = new int[3];
                         for (int o = 0; o < 3; o++)
@@ -199,8 +200,7 @@ public class KitManager {
                         item.setItemMeta(meta);
                     } else if (argString.equalsIgnoreCase("Unbreakable")) {
                         setUnbreakable = true;
-                    }
-                    if (argString.contains("Lore=")) {
+                    } else if (argString.startsWith("Lore=")) {
                         String name = ChatColor.translateAlternateColorCodes('&', argString.substring(5)).replaceAll("_", " ");
                         ItemMeta meta = item.getItemMeta();
                         List<String> lore = meta.getLore();
@@ -210,18 +210,20 @@ public class KitManager {
                             lore.add(a);
                         meta.setLore(lore);
                         item.setItemMeta(meta);
+                    } else {
+                        Enchantment ench = Enchantment.getByName(argString);
+                        if (ench == null)
+                            ench = Enchantment.getByName(argString.replace("_", " "));
+                        if (ench == null)
+                            ench = Enchantment.getByName(argString.replace("_", " ").toUpperCase());
+                        if (ench == null) {
+                            System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig()
+                                    .getErrorWhileParsingItemStack(), string, argString + " is not a valid item option. Will still load item."));
+                            continue;
+                        }
+                        item.addUnsafeEnchantment(ench, Integer.parseInt(args[no + 1]));
+                        no++;
                     }
-                }
-                for (int n = 0; n < newArgs.length; n++) {
-                    Enchantment ench = Enchantment.getByName(newArgs[n]);
-                    if (ench == null)
-                        ench = Enchantment.getByName(newArgs[n].replace("_", " "));
-                    if (ench == null)
-                        ench = Enchantment.getByName(newArgs[n].replace("_", " ").toUpperCase());
-                    if (ench == null)
-                        continue;
-                    item.addUnsafeEnchantment(ench, Integer.parseInt(newArgs[n + 1]));
-                    n++;
                 }
                 item = EnchantmentManager.updateEnchants(item);
                 if (setUnbreakable) {
