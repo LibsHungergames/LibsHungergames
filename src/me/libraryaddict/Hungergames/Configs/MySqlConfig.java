@@ -10,15 +10,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class MySqlConfig extends BaseConfig {
 
-    private boolean buyKitMenuEnabled;
+    private boolean buyKitMenuEnabled = true;
     private String mysql_database = "database";
     private String mysql_host = "localhost";
     private String mysql_password = "password";
     private String mysql_username = "root";
-    private boolean mysqlEnabled = false;
+    private boolean mysqlEnabled;
     private boolean mysqlKitsEnabled = true;
     private String rankingFormula = "(((Wins * 5) + (Kills / 10) / (Losses / 10)) + ((Wins + Losses) / 50)) + Killstreak";
-    private boolean statsEnabled;
+    private boolean statsEnabled = true;
     private boolean useUUIDs = true;
 
     public MySqlConfig() {
@@ -29,6 +29,7 @@ public class MySqlConfig extends BaseConfig {
             buyKitMenuEnabled = config.getBoolean("mysqlEnabled");
             statsEnabled = config.getBoolean("mysqlEnabled");
             mysqlEnabled = config.getBoolean("mysqlEnabled");
+            mysqlKitsEnabled = config.getBoolean("mysqlEnabled");
             config.set("mysqlEnabled", null);
             try {
                 config.save(file);
@@ -36,6 +37,18 @@ public class MySqlConfig extends BaseConfig {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isBuyKitMenuEnabled() {
+        return isMysqlKitsEnabled() && buyKitMenuEnabled;
+    }
+
+    public boolean isMysqlKitsEnabled() {
+        return mysqlEnabled && mysqlKitsEnabled;
+    }
+
+    public boolean isStatsEnabled() {
+        return statsEnabled && mysqlKitsEnabled;
     }
 
     @Deprecated
