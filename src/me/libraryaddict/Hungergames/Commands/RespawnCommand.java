@@ -32,6 +32,7 @@ public class RespawnCommand implements CommandExecutor {
             }
             if (HungergamesApi.getHungergames().currentTime >= 0 && HungergamesApi.getHungergames().doSeconds) {
                 if (!gamer.isAlive()) {
+                    gamer.clearInventory();
                     gamer.setAlive(true);
                     KitManager kits = HungergamesApi.getKitManager();
                     Player p = gamer.getPlayer();
