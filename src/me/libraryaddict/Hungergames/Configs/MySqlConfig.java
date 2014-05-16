@@ -43,16 +43,16 @@ public class MySqlConfig extends BaseConfig {
         return isMysqlKitsEnabled() && buyKitMenuEnabled;
     }
 
+    @Deprecated
+    public boolean isMysqlEnabled() {
+        return mysqlEnabled && (statsEnabled || buyKitMenuEnabled || mysqlKitsEnabled);
+    }
+
     public boolean isMysqlKitsEnabled() {
         return mysqlEnabled && mysqlKitsEnabled;
     }
 
     public boolean isStatsEnabled() {
         return statsEnabled && mysqlKitsEnabled;
-    }
-
-    @Deprecated
-    public boolean isMysqlEnabled() {
-        return mysqlEnabled && (statsEnabled || buyKitMenuEnabled || mysqlKitsEnabled);
     }
 }

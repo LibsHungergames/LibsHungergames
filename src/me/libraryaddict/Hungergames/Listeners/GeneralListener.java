@@ -89,14 +89,14 @@ public class GeneralListener implements Listener {
                 if (event.getSpawnReason() != SpawnReason.CUSTOM) {
                     event.setCancelled(true);
                     if (!(event.getEntity() instanceof Monster)) {
-                        if (config.getMobSpawnChance() <= 0 || new Random().nextInt(config.getMobSpawnChance()) == 0)
+                        if (config.getSpawnChanceMonster() <= 0 || new Random().nextInt(config.getSpawnChanceMonster()) == 0)
                             hg.entitysToSpawn.put(event.getLocation().clone().add(0, new Random().nextDouble(), 0),
                                     event.getEntityType());
                     }
                 }
             } else if (event.getEntity() instanceof Animals || event.getEntity() instanceof NPC) {
                 if (event.getSpawnReason() == SpawnReason.CHUNK_GEN || event.getSpawnReason() == SpawnReason.NATURAL) {
-                    if (config.getMobSpawnChance() > 0 && new Random().nextInt(config.getMobSpawnChance()) != 0)
+                    if (config.getSpawnChanceAnimal() > 0 && new Random().nextInt(config.getSpawnChanceAnimal()) != 0)
                         event.setCancelled(true);
                 }
             }

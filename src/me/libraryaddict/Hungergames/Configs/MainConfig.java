@@ -144,10 +144,7 @@ public class MainConfig extends BaseConfig {
      * Whats the minimal players required to start the game
      */
     private int minPlayersForGameStart = 2;
-    /**
-     * Whats the chance of a passive mob spawning, 1 in <number> chance. Less then 2 for a 100% chance
-     */
-    public int mobSpawnChance = 5;
+
     /**
      * Does mushroom stew instant eat for hearts
      */
@@ -178,6 +175,8 @@ public class MainConfig extends BaseConfig {
      * Should I shorten the names of players in the playerlist to prevent their names overlapping kills
      */
     private boolean shortenedNames = true;
+    public int spawnChanceAnimal = 5;
+    public int spawnChanceMonster = 5;
     /**
      * Height to check when spawning players in
      */
@@ -309,6 +308,21 @@ public class MainConfig extends BaseConfig {
 
     @Override
     public void loadConfig() {
+        File file = new File("plugins/LibsHungergames/config.yml");
+        if (file.exists()) {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            if (config.contains("mobSpawnChance")) {
+                this.spawnChanceAnimal = config.getInt("mobSpawnChance");
+                this.spawnChanceMonster = config.getInt("mobSpawnChance");
+                config.set("mobSpawnChance", null);
+                try {
+                    config.save(file);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
         super.loadConfig();
         final LoggerConfig cm = HungergamesApi.getConfigManager().getLoggerConfig();
         if (Bukkit.getAllowEnd() && this.isEndDisabled()) {
