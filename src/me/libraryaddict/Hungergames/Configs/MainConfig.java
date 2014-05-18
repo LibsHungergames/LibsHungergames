@@ -34,26 +34,26 @@ public class MainConfig extends BaseConfig {
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
-
     private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
+
     private int buyKitInventorySize = 54;
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
-
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
+
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
-
     /**
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
+
     /**
      * The current version of the plugin
      */
@@ -67,11 +67,11 @@ public class MainConfig extends BaseConfig {
      * Is the end disabled? I will change it in the servers config :3
      */
     private boolean endDisabled = true;
-
     /**
      * Is fire spread enabled pre-game
      */
     private boolean fireSpreadPreGame = false;
+
     /**
      * Do I force the spawns co-ordinates to be at a location
      */
@@ -105,7 +105,6 @@ public class MainConfig extends BaseConfig {
      * Is there a kick on death
      */
     private boolean kickOnDeath = false;
-
     /**
      * What item do I use for the kit selectors back button
      */
@@ -115,6 +114,7 @@ public class MainConfig extends BaseConfig {
      * Do I give the players a kit selector when they join the game
      */
     private boolean kitSelectorEnabled = true;
+
     /**
      * What item do I use for the kit selectors forward button
      */
@@ -134,8 +134,8 @@ public class MainConfig extends BaseConfig {
     /**
      * If there is a height limit. What should I set it to
      */
-    private int maxHeightLimit = 128;;
-    private boolean messagePlayerMotdOnJoin = true;
+    private int maxHeightLimit = 128;
+    private boolean messagePlayerMotdOnJoin = true;;
     /**
      * Is metrics enabled
      */
@@ -144,6 +144,7 @@ public class MainConfig extends BaseConfig {
      * Whats the minimal players required to start the game
      */
     private int minPlayersForGameStart = 2;
+    private boolean modifyForTerrainControl = true;
 
     /**
      * Does mushroom stew instant eat for hearts
@@ -334,6 +335,16 @@ public class MainConfig extends BaseConfig {
                 e.printStackTrace();
             }
             System.out.println(cm.getDisabledEnd());
+        }
+        if (this.isModifyForTerrainControl() && Bukkit.getPluginManager().getPlugin("TerrainControl") != null) {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
+            config.set("worlds." + (this.isUseOwnWorld() ? "LibsHungergamesWorld" : "world") + ".generator", "TerrainControl");
+            try {
+                config.save(new File("bukkit.yml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println(cm.getModifiedForTerrainControl());
         }
         ReflectionManager rm = HungergamesApi.getReflectionManager();
         if (Bukkit.getAllowNether() && this.isNetherDisabled()) {

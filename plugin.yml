@@ -4,4 +4,4 @@ author: libraryaddict
 version: ${project.version}
 website: http://www.spigotmc.org/resources/libs-hungergames.55/
 load: startup
-softdepend: [LibsDisguises, Vault]
+softdepend: [LibsDisguises, Vault, TerrainControl]

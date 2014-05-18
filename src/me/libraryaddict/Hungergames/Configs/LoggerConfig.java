@@ -45,6 +45,7 @@ public class LoggerConfig extends BaseConfig {
     private String mapConfigNotFound = "[Hungergames] Map config not found";
     private String mapConfigNowLoading = "[Hungergames] Now loading map config";
     private String metricsMessage = "[Hungergames] Dangit. Think you can opt back into metrics for me? I do want to see how popular my plugin is..";
+    private String modifiedForTerrainControl = "[Hungergames] Modified bukkit.yml to use TerrainControl";
     private String mySqlClosing = "[%s] Disconnecting from MySQL database...";
     private String mySqlClosingError = "[%s] Error while closing the connection...";
     private String mySqlConnecting = "[%s] Connecting to MySQL database..";

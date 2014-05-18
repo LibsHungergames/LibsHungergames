@@ -188,7 +188,6 @@ public class TranslationConfig extends BaseConfig {
             "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
     private String kitSelectorNoKitsToShow = ChatColor.RED + "You don't own any kits!";
-
     private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";
     private String messagePlayerApproachingBorder = ChatColor.YELLOW + "You are approaching the border!";
     private String messagePlayerChunksGenerating = ChatColor.YELLOW + "Chunks are currently generating!\n\nCheck back soon!";
