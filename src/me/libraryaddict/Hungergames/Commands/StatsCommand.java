@@ -122,7 +122,7 @@ public class StatsCommand implements CommandExecutor {
             });
         } else {
             sender.sendMessage(String.format(HungergamesApi.getConfigManager().getTranslationsConfig()
-                    .getCommandStatsCantFindPlayer(), args[0]));
+                    .getCommandStatsCantFindPlayer(), (args.length > 0 ? args[0] : sender.getName())));
         }
         return true;
     }
