@@ -121,6 +121,7 @@ Kits:
       - BOOK 0 5 Unlootable 1 Name=Explosive_Reading
     Ability:
       - libraryaddict
+      - ItemRegen
   Linkage:
     Description: 'You are given two teleporters, place them and you can teleport between them! As can other people! If your teleporter is broken, it respawns back in your inventory!'
     Free: true
