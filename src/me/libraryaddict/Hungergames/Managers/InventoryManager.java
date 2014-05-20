@@ -242,7 +242,8 @@ public class InventoryManager {
         ChatColor color = ChatColor.BLUE;
         ArrayList<String> newString = new ArrayList<String>();
         for (int i = 0; i < split.length; i++) {
-            if (string.length() > 20 || string.endsWith(".") || string.endsWith("!")) {
+            if (string.length() > HungergamesApi.getConfigManager().getMainConfig().getKitDescriptionLettersPerLine()
+                    || string.endsWith(".") || string.endsWith("!")) {
                 newString.add(color + string);
                 if (string.endsWith(".") || string.endsWith("!"))
                     newString.add("");

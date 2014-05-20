@@ -35,29 +35,29 @@ public class MainConfig extends BaseConfig {
      */
     private int borderStartsClosingIn = 20 * 60;
     private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
-
     private int buyKitInventorySize = 54;
+
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
-
     /**
      * Commands to run before the server shuts down
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
+
     /**
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
-
     /**
      * The current version of the plugin
      */
     private String currentVersion = null;
+
     /**
      * The amount of damage the border deals
      */
@@ -71,11 +71,11 @@ public class MainConfig extends BaseConfig {
      * Is fire spread enabled pre-game
      */
     private boolean fireSpreadPreGame = false;
-
     /**
      * Do I force the spawns co-ordinates to be at a location
      */
     private boolean forcedCords = true;
+
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
@@ -105,6 +105,7 @@ public class MainConfig extends BaseConfig {
      * Is there a kick on death
      */
     private boolean kickOnDeath = false;
+    private int kitDescriptionLettersPerLine = 20;
     /**
      * What item do I use for the kit selectors back button
      */
