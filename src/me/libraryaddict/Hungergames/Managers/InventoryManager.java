@@ -248,7 +248,16 @@ public class InventoryManager {
                     newString.add("");
                 string = "";
             }
-            string += (string.length() == 0 ? "" : " ") + split[i];
+            String toAdd = split[i];
+            if (toAdd.contains("\\n")) {
+                toAdd = toAdd.substring(0, toAdd.indexOf("\\n"));
+                split[i] = split[i].substring(toAdd.length() + 2);
+                newString.add(color + string + (string.length() == 0 ? "" : " ") + toAdd);
+                string = "";
+                i--;
+            } else {
+                string += (string.length() == 0 ? "" : " ") + toAdd;
+            }
         }
         newString.add(color + string);
         return newString;
