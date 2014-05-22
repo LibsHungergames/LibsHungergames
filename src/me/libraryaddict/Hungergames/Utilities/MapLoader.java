@@ -78,14 +78,6 @@ public class MapLoader {
             if (!mapConfig.exists())
                 mapConfig.createNewFile();
             YamlConfiguration config = YamlConfiguration.loadConfiguration(mapConfig);
-            if (!config.contains("MapPath")) {
-                config.set("MapPath", hg.getDataFolder().getAbsoluteFile().getParentFile().getParent() + "/Maps/");
-                config.save(mapConfig);
-            }
-            if (!config.contains("UseMaps")) {
-                config.set("UseMaps", false);
-                config.save(mapConfig);
-            }
             if (!config.contains("DeleteMap")) {
                 config.set("DeleteMap", true);
                 config.save(mapConfig);
@@ -94,20 +86,28 @@ public class MapLoader {
                 config.set("GenerateChunks", false);
                 config.save(mapConfig);
             }
+            if (!config.contains("GenerateChunksBackground")) {
+                config.set("GenerateChunksBackground", true);
+                config.save(mapConfig);
+            }
             if (!config.contains("GenerateSpawnPlatform")) {
                 config.set("GenerateSpawnPlatform", false);
                 config.save(mapConfig);
             }
-            if (!config.contains("SpawnPlatformSize")) {
-                config.set("SpawnPlatformSize", 30);
+            if (!config.contains("MapPath")) {
+                config.set("MapPath", hg.getDataFolder().getAbsoluteFile().getParentFile().getParent() + "/Maps/");
+                config.save(mapConfig);
+            }
+            if (!config.contains("UseMaps")) {
+                config.set("UseMaps", false);
                 config.save(mapConfig);
             }
             if (!config.contains("SpawnPlatformBlock")) {
                 config.set("SpawnPlatformBlock", new ItemStack(Material.GRASS, 1, (short) 0));
                 config.save(mapConfig);
             }
-            if (!config.contains("GenerateChunksBackground")) {
-                config.set("GenerateChunksBackground", true);
+            if (!config.contains("SpawnPlatformSize")) {
+                config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
             String worldToUse = "world";
