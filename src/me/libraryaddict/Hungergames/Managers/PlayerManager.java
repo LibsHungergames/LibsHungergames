@@ -39,11 +39,10 @@ import me.libraryaddict.scoreboard.ScoreboardManager;
 
 public class PlayerManager {
 
-    public static int returnChance(int start, int end) {
-        if (start + end <= 0) {
+    public static int returnChance(int start) {
+        if (start <= 0)
             return 0;
-        }
-        return new Random().nextInt(start + end) - end;
+        return new Random().nextInt(start * 2) - start;
     }
 
     private TranslationConfig cm = HungergamesApi.getConfigManager().getTranslationsConfig();
@@ -246,8 +245,8 @@ public class PlayerManager {
             foundSpawn = false;
             while (chances < main.getTimesToCheckForValidSpawnPerPlayer()) {
                 chances++;
-                Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), spawn.getY()
-                        + new Random().nextInt(Math.max(1, spawnHeight)), spawn.getZ() + returnChance(-spawnRadius, spawnRadius));
+                Location newLoc = new Location(p.getWorld(), spawn.getX() + returnChance(spawnRadius), spawn.getY()
+                        + new Random().nextInt(Math.max(1, spawnHeight)), spawn.getZ() + returnChance(spawnRadius));
                 if (nonSolid.contains(newLoc.getBlock().getTypeId())
                         && nonSolid.contains(newLoc.getBlock().getRelative(BlockFace.UP).getTypeId())) {
                     while (newLoc.getBlockY() >= 1
@@ -264,8 +263,8 @@ public class PlayerManager {
         }
         if (!foundSpawn && spawn.getX() == originalSpawn.getX() && spawn.getY() == originalSpawn.getY()
                 && spawn.getZ() == originalSpawn.getZ()) {
-            spawn = new Location(p.getWorld(), spawn.getX() + returnChance(-spawnRadius, spawnRadius), 0, spawn.getZ()
-                    + returnChance(-spawnRadius, spawnRadius));
+            spawn = new Location(p.getWorld(), spawn.getX() + returnChance(spawnRadius), 0, spawn.getZ()
+                    + returnChance(spawnRadius));
             spawn.setY(spawn.getWorld().getHighestBlockYAt(spawn));
             if (gamer.isAlive() && spawn.getY() <= 1) {
                 spawn.getBlock().setType(Material.GLASS);

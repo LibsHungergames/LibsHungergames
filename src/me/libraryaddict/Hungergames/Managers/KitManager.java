@@ -216,7 +216,8 @@ public class KitManager {
                             ench = Enchantment.getByName(argString.replace("_", " ").toUpperCase());
                         if (ench == null) {
                             System.out.print(String.format(HungergamesApi.getConfigManager().getLoggerConfig()
-                                    .getErrorWhileParsingItemStack(), string, argString + " is not a valid option. Item will still load"));
+                                    .getErrorWhileParsingItemStack(), string, argString
+                                    + " is not a valid option. Item will still load"));
                             continue;
                         }
                         item.addUnsafeEnchantment(ench, Integer.parseInt(args[no + 1]));
@@ -279,10 +280,8 @@ public class KitManager {
                 icon = new ItemStack(Material.STONE);
         }
         Kit kit = new Kit(name, icon, armor, items, desc, ability);
-        if (path.getBoolean("Free", false) == true)
-            kit.setFree(true);
-        if (path.getInt("Price", -1) != -1)
-            kit.setPrice(path.getInt("Price"));
+        kit.setFree(path.getBoolean("Free", false));
+        kit.setPrice(path.getInt("Price", -1));
         return kit;
     }
 
