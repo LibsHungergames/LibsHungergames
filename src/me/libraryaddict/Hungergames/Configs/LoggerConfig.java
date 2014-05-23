@@ -39,6 +39,7 @@ public class LoggerConfig extends BaseConfig {
     private String loadSpawnsConfigNotFound = "[Hungergames] Spawns config not found";
     private String mapConfigChangedBorderCloseInRate = "[Hungergames] Map config - Changed border close in rate to %s";
     private String mapConfigChangedBorderSize = "[Hungergames] Map config - Changed border size to %s";
+    private String mapConfigChangedFeastInformation = "[Hungergames] Modified feast to spawn at X: %s and Z: %s";
     private String mapConfigChangedRoundedBorder = "[Hungergames] Map config - Changed rounded border to %s";
     private String mapConfigChangedTimeOfDay = "[Hungergames] Map config - Changed time of day game starts as %s";
     private String mapConfigLoaded = "[Hungergames] Successfully loaded map config";

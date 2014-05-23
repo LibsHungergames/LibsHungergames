@@ -25,6 +25,9 @@ public class FeastConfig extends BaseConfig {
      * Advertisements, by default. Used to display the times till the feast starts
      */
     private HashMap<Integer, String> feastAdvertisements = new HashMap<Integer, String>();
+    private boolean feastCenteredOnSpawn = true;
+    private int feastCenterX;
+    private int feastCenterZ;
     /**
      * Is the feast enabled or not
      */

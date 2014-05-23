@@ -118,10 +118,17 @@ public class LibsFeastManager implements Listener {
 
     public Location getFeastLocation() {
         if (feastLocation == null && HungergamesApi.getHungergames().world != null) {
-            Location spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
+            Location spawn;
+            if (!config.isFeastCenteredOnSpawn()) {
+                spawn = new Location(HungergamesApi.getHungergames().world, config.getFeastCenterX(), -1,
+                        config.getFeastCenterZ());
+            } else {
+                spawn = HungergamesApi.getHungergames().world.getSpawnLocation();
+            }
             int dist = config.getFeastMaxDistanceFromSpawn();
-            feastLocation = new Location(spawn.getWorld(), spawn.getX() + (new Random().nextInt(dist * 2) - dist), -1,
-                    spawn.getZ() + (new Random().nextInt(dist * 2) - dist));
+            feastLocation = new Location(spawn.getWorld(), spawn.getX()
+                    + (dist <= 0 ? 0 : (new Random().nextInt((dist * 2) + 1) - dist)), -1, spawn.getZ()
+                    + (dist <= 0 ? 0 : (new Random().nextInt((dist * 2) + 1) - dist)));
         }
         return feastLocation;
     }

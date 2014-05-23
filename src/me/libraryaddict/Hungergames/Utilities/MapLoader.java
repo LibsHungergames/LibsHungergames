@@ -183,21 +183,28 @@ public class MapLoader {
                 System.out.print(tm.getMapConfigNotFound());
             } else
                 config = YamlConfiguration.loadConfiguration(worldConfig);
-            if (config != null && config.contains("BorderSize")) {
-                configManager.setBorderSize(config.getInt("BorderSize"));
-                System.out.print(String.format(tm.getMapConfigChangedBorderSize(), config.getInt("BorderSize")));
-            }
-            if (config != null && config.contains("RoundedBorder")) {
-                configManager.setRoundedBorder(config.getBoolean("RoundedBorder"));
-                System.out.print(String.format(tm.getMapConfigChangedRoundedBorder(), config.getBoolean("RoundedBorder")));
-            }
-            if (config != null && config.contains("BorderCloseInRate")) {
-                configManager.setAmountBorderClosesInPerSecond(config.getDouble("BorderCloseInRate"));
-                System.out.print(String.format(tm.getMapConfigChangedBorderCloseInRate(), config.getDouble("BorderCloseInRate")));
-            }
-            if (config != null && config.contains("TimeOfDayWhenGameStarts")) {
-                configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
-                System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
+            if (config != null) {
+                if (config.contains("BorderSize")) {
+                    configManager.setBorderSize(config.getInt("BorderSize"));
+                    System.out.print(String.format(tm.getMapConfigChangedBorderSize(), config.getInt("BorderSize")));
+                }
+                if (config.getBoolean("FeastCenteredOnSpawn", false) && config.contains("FeastCenterX")
+                        && config.contains("FeastCenterZ")) {
+                    HungergamesApi.getConfigManager().getFeastConfig().setFeastCenteredOnSpawn(true);
+                    HungergamesApi.getConfigManager().getFeastConfig().setFeastCenterX(config.getInt("FeastCenterX"));
+                    HungergamesApi.getConfigManager().getFeastConfig().setFeastCenterZ(config.getInt("FeastCenterZ"));
+                    System.out.print(String.format(tm.getMapConfigChangedFeastInformation(), config.getInt("FeastCenterX"),
+                            config.getInt("FeastCenterZ")));
+                }
+                if (config.contains("BorderCloseInRate")) {
+                    configManager.setAmountBorderClosesInPerSecond(config.getDouble("BorderCloseInRate"));
+                    System.out.print(String.format(tm.getMapConfigChangedBorderCloseInRate(),
+                            config.getDouble("BorderCloseInRate")));
+                }
+                if (config.contains("TimeOfDayWhenGameStarts")) {
+                    configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
+                    System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
+                }
             }
             File spawnsFile = new File(worldConfig.getParentFile(), "spawns.yml");
             System.out.print(tm.getLoadSpawnsConfig());
