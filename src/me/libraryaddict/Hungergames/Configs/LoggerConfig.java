@@ -23,6 +23,7 @@ public class LoggerConfig extends BaseConfig {
     private String errorWhileLoadingConfig = "[Hungergames] Error while loading config %s.yml - %s";
     private String errorWhileLoadingConfigValue = "[Hungergames] Error while loading config %s.yml, %s threw a error - %s";
     private String errorWhileLoadingSpawns = "[Hungergames] Error while loading spawns, Spawn %s is missing config value %s";
+    private String errorWhileLoadingStatsCommand = "[Hungergames] The command %s will not be loaded because either mysql or stats is disabled";
     private String errorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
     private String generatingChunks = "[Hungergames] Generating chunks.. %s";
     private String kitAlreadyExists = "[Hungergames] Kit %s already exists!";

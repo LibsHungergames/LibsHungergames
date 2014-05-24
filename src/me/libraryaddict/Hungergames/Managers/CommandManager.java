@@ -127,14 +127,19 @@ public class CommandManager {
         }
         for (Class commandClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (CommandExecutor.class.isAssignableFrom(commandClass)) {
-                try {
-                    CommandExecutor commandListener = (CommandExecutor) commandClass.newInstance();
-                    final boolean modified = loadCommand(plugin, commandListener, false);
-                    if (modified)
-                        saveConfig = true;
-                } catch (Exception e) {
-                    System.out
-                            .print(String.format(cm.getErrorWhileLoadingCommand(), commandClass.getSimpleName(), e.getMessage()));
+                if ((!commandClass.getSimpleName().contains("Stats") || HungergamesApi.getConfigManager().getMySqlConfig()
+                        .isStatsEnabled())) {
+                    try {
+                        CommandExecutor commandListener = (CommandExecutor) commandClass.newInstance();
+                        final boolean modified = loadCommand(plugin, commandListener, false);
+                        if (modified)
+                            saveConfig = true;
+                    } catch (Exception e) {
+                        System.out.print(String.format(cm.getErrorWhileLoadingCommand(), commandClass.getSimpleName(),
+                                e.getMessage()));
+                    }
+                } else {
+                    System.out.print(String.format(cm.getErrorWhileLoadingStatsCommand(), commandClass.getSimpleName()));
                 }
             }
         }
