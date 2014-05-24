@@ -1,6 +1,7 @@
 package me.libraryaddict.Hungergames.Configs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import lombok.Data;
@@ -202,6 +203,8 @@ public class TranslationConfig extends BaseConfig {
     private String messagePlayerKitDescriptionName = ChatColor.DARK_AQUA + "Name:" + ChatColor.AQUA + " %s";
     private String messagePlayerKitDescritionMoreInfo = ChatColor.AQUA
             + "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
+    private String messagePlayerMotdOnJoin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
+            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "%s";
     private String messagePlayerSendKitItemsDoesntExist = ChatColor.AQUA + "This kit does not exist!";
     private String messagePlayerSendKitItemsKitBoots = ChatColor.DARK_AQUA + "Kit Boots:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitChestplate = ChatColor.DARK_AQUA + "Kit Chestplate:" + ChatColor.AQUA + " %s";
@@ -223,8 +226,6 @@ public class TranslationConfig extends BaseConfig {
             + " while your current version is " + ChatColor.RED + "%s";
     private String messagePlayerWarningForgeUnstableEnchants = ChatColor.RED
             + "Minecraft will crash if you attempt to put this in";
-    private String messagePlayerWhosePlugin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
-            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "%s";
     private String scoreboardBorderSize = ChatColor.GOLD + "BorderSize:";
     private String scoreboardFeastStartingIn = ChatColor.GOLD + "Feast in:";
     private String scoreBoardGameStartingIn = ChatColor.GOLD + "Starting in:";
@@ -262,6 +263,17 @@ public class TranslationConfig extends BaseConfig {
         scoreboardStages.put(0, ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Invincibility");
         scoreboardStages.put(2 * 60, ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Fighting");
         scoreboardStages.put(25 * 60, ChatColor.DARK_AQUA + "Stage:" + ChatColor.AQUA + " Finishing Up");
+        File file = new File("plugins/LibsHungergames/translations.yml");
+        if (file.exists()) {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            messagePlayerMotdOnJoin = config.getString("messagePlayerWhosePlugin");
+            config.set("messagePlayerWhosePlugin", null);
+            try {
+                config.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

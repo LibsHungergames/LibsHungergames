@@ -328,7 +328,7 @@ public class PlayerListener implements Listener {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
                     gamer.getPlayer().sendMessage(
-                            String.format(tm.getMessagePlayerWhosePlugin(), hg.getDescription().getVersion(), "libraryaddict"));
+                            String.format(tm.getMessagePlayerMotdOnJoin(), hg.getDescription().getVersion(), "libraryaddict"));
                 }
             }, 2L);
         }
