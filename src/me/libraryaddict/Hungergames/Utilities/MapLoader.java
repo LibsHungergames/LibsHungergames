@@ -188,9 +188,7 @@ public class MapLoader {
                     configManager.setBorderSize(config.getInt("BorderSize"));
                     System.out.print(String.format(tm.getMapConfigChangedBorderSize(), config.getInt("BorderSize")));
                 }
-                if (config.getBoolean("FeastCenteredOnSpawn", false) && config.contains("FeastCenterX")
-                        && config.contains("FeastCenterZ")) {
-                    HungergamesApi.getConfigManager().getFeastConfig().setFeastCenteredOnSpawn(true);
+                if (config.contains("FeastCenterX") && config.contains("FeastCenterZ")) {
                     HungergamesApi.getConfigManager().getFeastConfig().setFeastCenterX(config.getInt("FeastCenterX"));
                     HungergamesApi.getConfigManager().getFeastConfig().setFeastCenterZ(config.getInt("FeastCenterZ"));
                     System.out.print(String.format(tm.getMapConfigChangedFeastInformation(), config.getInt("FeastCenterX"),
