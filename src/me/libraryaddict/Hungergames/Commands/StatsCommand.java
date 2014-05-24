@@ -94,7 +94,7 @@ public class StatsCommand implements CommandExecutor {
         }
         if (who != null && who.getStats() != null) {
             openStatsMenu((Player) sender, who.getStats());
-        } else if (allowOfflinePlayersLookup) {
+        } else if (allowOfflinePlayersLookup && args.length > 0) {
             Bukkit.getScheduler().scheduleAsyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                 public void run() {
                     try {
