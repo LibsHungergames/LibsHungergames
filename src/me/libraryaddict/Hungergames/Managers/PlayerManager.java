@@ -179,7 +179,9 @@ public class PlayerManager {
                 world.dropItemNaturally(event.getDropsLocation(), item);
         }
         setSpectator(killed);
-        ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
+        if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
+            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
+        }
         hg.checkWinner();
         p.setVelocity(new Vector());
         for (PotionEffect effect : p.getActivePotionEffects())

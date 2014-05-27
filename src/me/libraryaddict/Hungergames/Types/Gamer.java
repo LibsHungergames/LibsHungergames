@@ -59,7 +59,9 @@ public class Gamer {
         if (getStats() != null) {
             getStats().addKill();
         }
-        ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
+        if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
+            ScoreboardManager.makeScore(DisplaySlot.PLAYER_LIST, getPlayer().getPlayerListName(), getKills());
+        }
     }
 
     /**

@@ -316,7 +316,9 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         final Gamer gamer = pm.registerGamer(p);
-        ScoreboardManager.registerScoreboard(p);
+        if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
+            ScoreboardManager.registerScoreboard(p);
+        }
         if (kits.getKitByPlayer(p) == null)
             kits.setKit(p, kits.defaultKitName);
         event.setJoinMessage(null);
@@ -345,7 +347,10 @@ public class PlayerListener implements Listener {
                 }
             }, 2L);
         } else {
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(), Bukkit.getOnlinePlayers().length);
+            if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
+                ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
+                        Bukkit.getOnlinePlayers().length);
+            }
             if (!mysqlConfig.isMysqlKitsEnabled() && config.isKitSelectorEnabled()
                     && !p.getInventory().contains(icon.getKitSelector())) {
                 gamer.getPlayer().getInventory().addItem(icon.getKitSelector());
@@ -446,8 +451,10 @@ public class PlayerListener implements Listener {
         pm.removeKilled(gamer);
         pm.unregisterGamer(gamer);
         if (hg.currentTime < 0)
-            ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
-                    Bukkit.getOnlinePlayers().length - 1);
+            if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
+                ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
+                        Bukkit.getOnlinePlayers().length - 1);
+            }
         if (event.getPlayer().getVehicle() != null)
             event.getPlayer().leaveVehicle();
         if (event.getPlayer().getPassenger() != null)
