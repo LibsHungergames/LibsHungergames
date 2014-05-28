@@ -53,6 +53,6 @@ public class MySqlConfig extends BaseConfig {
     }
 
     public boolean isStatsEnabled() {
-        return statsEnabled && mysqlKitsEnabled;
+        return mysqlEnabled && statsEnabled;
     }
 }

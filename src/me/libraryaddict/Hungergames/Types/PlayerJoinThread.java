@@ -30,65 +30,78 @@ public class PlayerJoinThread extends Thread {
     public void checkTables() {
         try {
             DatabaseMetaData dbm = con.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, "HGKits", null);
-            tables.last();
-            if (tables.getRow() == 0) {
-                tables.close();
-                Statement stmt = con.createStatement();
-                stmt.execute("CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
-                        + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL, Date timestamp NOT NULL)");
-                stmt.close();
-            } else {
-                tables = dbm.getColumns(null, null, "HGKits", "uuid");
+            ResultSet tables;
+            if (HungergamesApi.getConfigManager().getMySqlConfig().isMysqlKitsEnabled()) {
+                tables = dbm.getTables(null, null, "HGKits", null);
                 tables.beforeFirst();
-                ReflectionManager manager = HungergamesApi.getReflectionManager();
-                if (manager.hasGameProfiles() && !tables.next()) {
-                    System.out.println("[LibsHungergames] Updating mysql to support UUID's");
+                if (tables.next()) {
+                    tables.close();
                     Statement stmt = con.createStatement();
-                    stmt.execute("ALTER TABLE `HGKits` ADD `uuid` VARCHAR(40) NOT NULL DEFAULT '' AFTER `ID`;");
-                    HashSet<String> namesToConvert = new HashSet<String>();
-                    ResultSet rs = stmt.executeQuery("SELECT Name FROM `HGKits` WHERE `uuid` = ''");
-                    rs.beforeFirst();
-                    while (rs.next()) {
-                        namesToConvert.add(rs.getString("Name"));
-                    }
-                    rs.close();
-                    for (String name : namesToConvert) {
-                        Object profile = manager.grabProfileAddUUID(name);
-                        UUID uuid = null;
-                        if (profile != null) {
-                            try {
-                                uuid = (UUID) profile.getClass().getMethod("getId").invoke(profile);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                    stmt.execute("CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+                            + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, KitName varchar(20) NOT NULL, Date timestamp NOT NULL)");
+                    stmt.close();
+                } else {
+                    tables.close();
+                    tables = dbm.getColumns(null, null, "HGKits", "uuid");
+                    tables.beforeFirst();
+                    ReflectionManager manager = HungergamesApi.getReflectionManager();
+                    if (manager.hasGameProfiles() && !tables.next()) {
+                        tables.close();
+                        System.out.println("[LibsHungergames] Updating mysql to support UUID's");
+                        Statement stmt = con.createStatement();
+                        stmt.execute("ALTER TABLE `HGKits` ADD `uuid` VARCHAR(40) NOT NULL DEFAULT '' AFTER `ID`;");
+                        HashSet<String> namesToConvert = new HashSet<String>();
+                        ResultSet rs = stmt.executeQuery("SELECT Name FROM `HGKits` WHERE `uuid` = ''");
+                        rs.beforeFirst();
+                        while (rs.next()) {
+                            namesToConvert.add(rs.getString("Name"));
+                        }
+                        rs.close();
+                        for (String name : namesToConvert) {
+                            Object profile = manager.grabProfileAddUUID(name);
+                            UUID uuid = null;
+                            if (profile != null) {
+                                try {
+                                    uuid = (UUID) profile.getClass().getMethod("getId").invoke(profile);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            if (uuid != null) {
+                                stmt.execute("UPDATE `HGKits` SET uuid = '" + uuid.toString() + "' WHERE Name='" + name + "'");
+                                System.out.print("[LibsHungergames] Converted " + name + " and added uuid " + uuid.toString());
+                            } else {
+                                System.out.print("[LibsHungergames] Failed to find a UUID for " + name);
                             }
                         }
-                        if (uuid != null) {
-                            stmt.execute("UPDATE `HGKits` SET uuid = '" + uuid.toString() + "' WHERE Name='" + name + "'");
-                            System.out.print("[LibsHungergames] Converted " + name + " and added uuid " + uuid.toString());
-                        } else {
-                            System.out.print("[LibsHungergames] Failed to find a UUID for " + name);
-                        }
+                        stmt.close();
                     }
-                    stmt.close();
-                }
-                tables = dbm.getColumns(null, null, "HGKits", "Date");
-                tables.beforeFirst();
-                if (!tables.next()) {
-                    System.out.println("[LibsHungergames] Updating mysql to support timestamps for HGKits");
-                    Statement stmt = con.createStatement();
-                    stmt.execute("ALTER TABLE `HGKits` ADD `Date` TIMESTAMP;");
+                    tables = dbm.getColumns(null, null, "HGKits", "Date");
+                    tables.beforeFirst();
+                    if (!tables.next()) {
+                        tables.close();
+                        System.out.println("[LibsHungergames] Updating mysql to support timestamps for HGKits");
+                        Statement stmt = con.createStatement();
+                        stmt.execute("ALTER TABLE `HGKits` ADD `Date` TIMESTAMP;");
+                    } else {
+                        tables.close();
+                    }
                 }
             }
-            tables = dbm.getTables(null, null, "HGStats", null);
-            tables.last();
-            if (tables.getRow() == 0) {
-                tables.close();
-                Statement stmt = con.createStatement();
-                stmt.execute("CREATE TABLE HGStats (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
-                        + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, Killstreak int(20) NOT NULL,"
-                        + " Kills int(20) NOT NULL, Wins int(20) NOT NULL, Losses int(20) NOT NULL)");
-                stmt.close();
+            if (HungergamesApi.getConfigManager().getMySqlConfig().isStatsEnabled()) {
+                tables = dbm.getTables(null, null, "HGStats", null);
+                tables.beforeFirst();
+                if (!tables.next()) {
+                    tables.close();
+                    tables.close();
+                    Statement stmt = con.createStatement();
+                    stmt.execute("CREATE TABLE HGStats (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+                            + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, Killstreak int(20) NOT NULL,"
+                            + " Kills int(20) NOT NULL, Wins int(20) NOT NULL, Losses int(20) NOT NULL)");
+                    stmt.close();
+                } else {
+                    tables.close();
+                }
             }
         } catch (Exception ex) {
             System.err.println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName()));
@@ -122,7 +135,7 @@ public class PlayerJoinThread extends Thread {
 
     public void run() {
         MySqlConfig mysqlConfig = HungergamesApi.getConfigManager().getMySqlConfig();
-        if (!mysqlConfig.isMysqlKitsEnabled() || !mysqlConfig.isStatsEnabled())
+        if (!mysqlConfig.isMysqlKitsEnabled() && !mysqlConfig.isStatsEnabled())
             return;
         boolean isKits = mysqlConfig.isMysqlKitsEnabled();
         boolean isStats = mysqlConfig.isStatsEnabled();

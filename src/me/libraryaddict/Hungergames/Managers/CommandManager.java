@@ -125,10 +125,10 @@ public class CommandManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        boolean statsEnabled = HungergamesApi.getConfigManager().getMySqlConfig().isStatsEnabled();
         for (Class commandClass : ClassGetter.getClassesForPackage(plugin, packageName)) {
             if (CommandExecutor.class.isAssignableFrom(commandClass)) {
-                if ((!commandClass.getSimpleName().contains("Stats") || HungergamesApi.getConfigManager().getMySqlConfig()
-                        .isStatsEnabled())) {
+                if (!commandClass.getSimpleName().contains("Stats") || statsEnabled) {
                     try {
                         CommandExecutor commandListener = (CommandExecutor) commandClass.newInstance();
                         final boolean modified = loadCommand(plugin, commandListener, false);
