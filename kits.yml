@@ -45,6 +45,8 @@
 # Chestplate: DIAMOND_CHESTPLATE 0 1 - Set their chestplate
 # Leggings: DIAMOND_LEGGINGS 0 1 0 - Set their leggings
 # Boots: DIAMOND_BOOTS 0 1 - Set their boots
+# ID: 4 - If SortKitsByNamesInsteadOfIds is set to false in the config. This is how kits will be sorted in the /kit command, buykits menu, etc.
+# The ID is what position they are.
 #
 # 
 # Kits - Any kits you add can be done normally here.

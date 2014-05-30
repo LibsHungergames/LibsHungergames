@@ -76,17 +76,7 @@ public class KitManager {
         kits.add(newKit);
         if (newKit.isFree())
             defaultKits.add(newKit);
-        List<String> kitNames = new ArrayList<String>();
-        for (Kit kit : kits)
-            kitNames.add(ChatColor.stripColor(kit.getName()));
-        Collections.sort(kitNames, String.CASE_INSENSITIVE_ORDER);
-        ArrayList<Kit> newKits = new ArrayList<Kit>();
-        for (int i = 0; i < kitNames.size(); i++) {
-            Kit kit = getKitByName(kitNames.get(i));
-            kit.setId(i);
-            newKits.add(kit);
-        }
-        kits = newKits;
+        Collections.sort(kits);
     }
 
     public boolean addKitToPlayer(Player player, Kit kit) {
@@ -279,7 +269,12 @@ public class KitManager {
             if (icon == null)
                 icon = new ItemStack(Material.STONE);
         }
-        Kit kit = new Kit(name, icon, armor, items, desc, ability);
+        Kit kit;
+        if (path.contains("ID")) {
+            kit = new Kit(name, icon, armor, items, desc, ability, path.getInt("ID"));
+        } else {
+            kit = new Kit(name, icon, armor, items, desc, ability);
+        }
         kit.setFree(path.getBoolean("Free", false));
         kit.setPrice(path.getInt("Price", -1));
         return kit;

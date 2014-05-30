@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Kit {
+public class Kit implements Comparable<Kit> {
 
     private static int cId = 0;
     private static int identifier = 0;
@@ -27,10 +27,14 @@ public class Kit {
     private HashSet<Player> players = new HashSet<Player>();
     private int price = -1;
 
+    @Deprecated
     public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys) {
-        id = cId;
+        this(name, icon, armour, item, desc, abilitys, cId++);
+    }
+
+    public Kit(String name, ItemStack icon, ItemStack[] armour, ItemStack[] item, String desc, String[] abilitys, int newId) {
+        id = newId;
         this.icon = icon;
-        cId++;
         kitName = name;
         armor = armour;
         items = item;
@@ -46,6 +50,15 @@ public class Kit {
                 HungergamesApi.getAbilityManager().registerPlayerAbility(player, abilityName);
             }
             players.add(player);
+        }
+    }
+
+    @Override
+    public int compareTo(Kit o) {
+        if (HungergamesApi.getConfigManager().getMainConfig().isSortKitsByNamesInsteadOfIds()) {
+            return ChatColor.stripColor(getName()).compareToIgnoreCase(ChatColor.stripColor(o.getName()));
+        } else {
+            return new Integer(id).compareTo(o.id);
         }
     }
 
