@@ -63,10 +63,12 @@ public class StatsCommand implements CommandExecutor {
                         + column + " DESC) t WHERE Name = ?");
         stmt.setString(1, name);
         ResultSet rs = stmt.executeQuery();
-        rs.first();
-        int rank = rs.getInt("rank");
+        rs.beforeFirst();
+        String rank = "N/A";
+        if (rs.next())
+            rank = "" + rs.getInt("rank");
         stmt.close();
-        return "" + rank;
+        return rank;
     }
 
     public void mySqlConnect() {
@@ -140,13 +142,16 @@ public class StatsCommand implements CommandExecutor {
                                     + ") DESC) t WHERE Name = ?");
                     stmt.setString(1, stats.getOwningPlayer());
                     ResultSet rs = stmt.executeQuery();
-                    rs.first();
-                    String rank = rs.getString("rank");
-                    stmt.close();
-                    String killRank = getRank("Kills", stats.getOwningPlayer());
-                    String streakRank = getRank("Killstreak", stats.getOwningPlayer());
-                    String winsRank = getRank("Wins", stats.getOwningPlayer());
-                    String lossesRank = getRank("Losses", stats.getOwningPlayer());
+                    rs.beforeFirst();
+                    String rank = "N/A", killRank = "N/A", streakRank = "N/A", winsRank = "N/A", lossesRank = "N/A";
+                    if (rs.next()) {
+                        rank = rs.getString("rank");
+                        stmt.close();
+                        killRank = getRank("Kills", stats.getOwningPlayer());
+                        streakRank = getRank("Killstreak", stats.getOwningPlayer());
+                        winsRank = getRank("Wins", stats.getOwningPlayer());
+                        lossesRank = getRank("Losses", stats.getOwningPlayer());
+                    }
                     ArrayList<ItemStack> items = new ArrayList<ItemStack>();
                     for (ItemStack item : statsIcons) {
                         items.add(parseItem(item, stats.getOwningPlayer(), "" + stats.getKillsTotal(), "" + stats.getKillsBest(),
