@@ -131,12 +131,15 @@ public class KitManager {
     }
 
     public boolean ownsKit(Player player, Kit kit) {
-        if (defaultKits.contains(kit))
+        if (defaultKits.contains(kit)) {
             return true;
-        if (player.hasPermission(kit.getPermission()))
+        }
+        if (player.hasPermission(kit.getPermission())) {
             return true;
-        if (player.hasPermission("hungergames.kit.*"))
+        }
+        if (player.hasPermission("hungergames.kit.*")) {
             return true;
+        }
         return hisKits.containsKey(player.getName()) && hisKits.get(player.getName()).contains(kit);
     }
 
