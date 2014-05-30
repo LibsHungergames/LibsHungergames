@@ -75,6 +75,8 @@ public class PlayerJoinThread extends Thread {
                             }
                         }
                         stmt.close();
+                    } else {
+                        tables.close();
                     }
                     tables = dbm.getColumns(null, null, "HGKits", "Date");
                     tables.beforeFirst();
@@ -93,7 +95,6 @@ public class PlayerJoinThread extends Thread {
                 tables.beforeFirst();
                 if (!tables.next()) {
                     tables.close();
-                    tables.close();
                     Statement stmt = con.createStatement();
                     stmt.execute("CREATE TABLE HGStats (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
                             + "uuid varchar(40) NOT NULL, Name varchar(20) NOT NULL, Killstreak int(20) NOT NULL,"
@@ -104,7 +105,8 @@ public class PlayerJoinThread extends Thread {
                 }
             }
         } catch (Exception ex) {
-            System.err.println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName()));
+            System.err
+                    .println(String.format(loggerConfig.getMySqlConnectingError(), getClass().getSimpleName(), ex.getMessage()));
         }
     }
 
