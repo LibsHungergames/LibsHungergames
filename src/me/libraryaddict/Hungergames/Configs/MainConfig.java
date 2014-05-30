@@ -21,11 +21,11 @@ import me.libraryaddict.Hungergames.Utilities.UpdateChecker;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class MainConfig extends BaseConfig {
-
     /**
      * The amount the border closes in per second
      */
     private double amountBorderClosesInPerSecond = 0.2;
+
     /**
      * The border size
      */
@@ -36,8 +36,8 @@ public class MainConfig extends BaseConfig {
     private int borderStartsClosingIn = 20 * 60;
     private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
     private int buyKitInventorySize = 54;
-
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
+
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
     /**
      * Does the plugin check for updates..
@@ -48,20 +48,20 @@ public class MainConfig extends BaseConfig {
      */
     private String[] commandsToRunBeforeShutdown = new String[] { "kick Notch get out of here notch!",
             "kick MinecraftChick Yer banned" };
-
     /**
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
+
     /**
      * The current version of the plugin
      */
     private String currentVersion = null;
-
     /**
      * The amount of damage the border deals
      */
     private double damageBorderDeals = 1;
+
     private boolean displayUnusableKitsInSelector;
     /**
      * Is the end disabled? I will change it in the servers config :3
@@ -75,11 +75,11 @@ public class MainConfig extends BaseConfig {
      * Do I force the spawns co-ordinates to be at a location
      */
     private boolean forcedCords = true;
-
     /**
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
     private int forceSpawnX;
+
     /**
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
@@ -110,7 +110,6 @@ public class MainConfig extends BaseConfig {
      * What item do I use for the kit selectors back button
      */
     private ItemStack kitSelectorBack = new ItemStack(Material.SIGN);
-
     /**
      * Do I give the players a kit selector when they join the game
      */
@@ -120,6 +119,7 @@ public class MainConfig extends BaseConfig {
      * What item do I use for the kit selectors forward button
      */
     private ItemStack kitSelectorForward = new ItemStack(Material.SIGN);
+
     /**
      * What item opens the kit selector menu
      */
@@ -136,21 +136,21 @@ public class MainConfig extends BaseConfig {
      * If there is a height limit. What should I set it to
      */
     private int maxHeightLimit = 128;
-    private boolean messagePlayerMotdOnJoin = true;;
+    private boolean messagePlayerMotdOnJoin = true;
     /**
      * Is metrics enabled
      */
-    private boolean metricsEnabled = true;
+    private boolean metricsEnabled = true;;
     /**
      * Whats the minimal players required to start the game
      */
     private int minPlayersForGameStart = 2;
     private boolean modifyForTerrainControl = true;
-
     /**
      * Does mushroom stew instant eat for hearts
      */
     private boolean mushroomStewEnabled = false;
+
     /**
      * Is the nether disabled? I will change it in the servers config :3
      */
@@ -177,6 +177,7 @@ public class MainConfig extends BaseConfig {
      * Should I shorten the names of players in the playerlist to prevent their names overlapping kills
      */
     private boolean shortenedNames = true;
+    private boolean sortKitsByNamesInsteadOfIds = true;
     public int spawnChanceAnimal = 5;
     public int spawnChanceMonster = 5;
     /**
