@@ -34,7 +34,7 @@ public class PlayerJoinThread extends Thread {
             if (HungergamesApi.getConfigManager().getMySqlConfig().isMysqlKitsEnabled()) {
                 tables = dbm.getTables(null, null, "HGKits", null);
                 tables.beforeFirst();
-                if (tables.next()) {
+                if (!tables.next()) {
                     tables.close();
                     Statement stmt = con.createStatement();
                     stmt.execute("CREATE TABLE HGKits (ID int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, "
