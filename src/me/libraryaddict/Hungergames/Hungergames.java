@@ -206,6 +206,7 @@ public class Hungergames extends JavaPlugin {
     @Override
     public void onEnable() {
         HungergamesApi.init(this);
+        new EnchantmentManager();
         ConfigManager config = HungergamesApi.getConfigManager();
         config.loadConfigs();
         HungergamesApi.getChestManager().setRandomItems(config.getFeastConfig().getRandomItems());
