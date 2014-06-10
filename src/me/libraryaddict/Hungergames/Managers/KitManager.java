@@ -13,6 +13,7 @@ import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Kit;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -35,6 +36,7 @@ public class KitManager {
     private ArrayList<Kit> kits = new ArrayList<Kit>();
 
     public KitManager() {
+        new EnchantmentManager();
         File file = new File(hg.getDataFolder().toString() + "/kits.yml");
         ConfigurationSection config;
         if (!file.exists()) {
