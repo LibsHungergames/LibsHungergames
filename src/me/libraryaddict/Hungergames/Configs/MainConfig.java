@@ -350,17 +350,18 @@ public class MainConfig extends BaseConfig {
         }
         ReflectionManager rm = HungergamesApi.getReflectionManager();
         if (Bukkit.getAllowNether() && this.isNetherDisabled()) {
-            rm.setPropertiesConfig("allow-nether", false);
+            rm.setPropertiesConfig("allow-nether", "" + false);
             rm.savePropertiesConfig();
             System.out.println(cm.getDisabledNether());
         }
         if (Bukkit.getSpawnRadius() > 0 && this.isSpawnProtectionRemoved()) {
-            rm.setPropertiesConfig("spawn-protection", 0);
+            rm.setPropertiesConfig("spawn-protection", "" + 0);
             rm.savePropertiesConfig();
             System.out.println(cm.getDisabledSpawnRadius());
         }
-        if ((Integer) rm.getPropertiesConfig("max-build-height", 128) > this.getMaxHeightLimit() && this.isHeightLimitChanged()) {
-            rm.setPropertiesConfig("max-build-height", this.getMaxHeightLimit());
+        if (Integer.parseInt(rm.getPropertiesConfig("max-build-height", "" + 128)) > this.getMaxHeightLimit()
+                && this.isHeightLimitChanged()) {
+            rm.setPropertiesConfig("max-build-height", "" + this.getMaxHeightLimit());
             rm.savePropertiesConfig();
             System.out.println(String.format(cm.getChangedWorldHeight(), this.getMaxHeightLimit()));
         }

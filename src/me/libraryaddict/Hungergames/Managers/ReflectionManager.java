@@ -1,5 +1,8 @@
 package me.libraryaddict.Hungergames.Managers;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -54,7 +57,8 @@ public class ReflectionManager {
 
     public Class getCraftClass(String className) {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + currentVersion.replace("net.minecraft.server.", "") + "." + className);
+            return Class.forName("org.bukkit.craftbukkit." + currentVersion.replace("net.minecraft.server.", "") + "."
+                    + className);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,27 +83,33 @@ public class ReflectionManager {
         return null;
     }
 
-    public Object getPropertiesConfig(String name, Object obj) {
+    public String getPropertiesConfig(String name, String obj) {
+        Properties config = new Properties();
         try {
-            Properties properties = (Properties) propertyManager.getClass().getDeclaredField("properties").get(propertyManager);
-            if (!properties.containsKey(name)) {
-                properties.setProperty(name, "" + obj);
-                savePropertiesConfig();
-            }
-            OptionSet options;
-            Field opt = propertyManager.getClass().getDeclaredField("options");
-            opt.setAccessible(true);
-            options = (OptionSet) opt.get(propertyManager);
-            if ((options != null) && (options.has(name)) && (!name.equals("online-mode"))) {
-                return options.valueOf(name);
-            }
-            if (obj instanceof String)
-                return properties.getProperty(name, (String) obj);
-            return obj;
+            FileInputStream fileInput = new FileInputStream(new File("server.properties"));
+            config.load(fileInput);
+            String value = config.getProperty(name, obj);
+            fileInput.close();
+            return value;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public void setPropertiesConfig(String name, String obj) {
+        Properties config = new Properties();
+        try {
+            FileInputStream fileInput = new FileInputStream(new File("server.properties"));
+            config.load(fileInput);
+            config.setProperty(name, "" + obj);
+            FileOutputStream fileOutput = new FileOutputStream(new File("server.properties"));
+            config.store(fileOutput, null);
+            fileOutput.close();
+            fileInput.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Object grabProfileAddUUID(String playername) {
@@ -145,15 +155,6 @@ public class ReflectionManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public Object setPropertiesConfig(String name, Object obj) {
-        try {
-            return propertyManager.getClass().getMethod("a", String.class, Object.class).invoke(propertyManager, name, obj);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return obj;
     }
 
     public void setWidthHeight(Player p, float height, float width, float length) {
