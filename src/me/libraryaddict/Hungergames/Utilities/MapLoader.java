@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -110,11 +111,10 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
-            String worldToUse = "world";
+            String worldToUse = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             if (HungergamesApi.getConfigManager().getMainConfig().isUseOwnWorld()) {
                 worldToUse = "LibsHungergamesWorld";
-                final String oldWorldName = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name",
-                        "world");
+                final String oldWorldName = worldToUse;
                 HungergamesApi.getReflectionManager().setPropertiesConfig("level-name", "LibsHungergamesWorld");
                 HungergamesApi.getReflectionManager().savePropertiesConfig();
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
@@ -131,7 +131,7 @@ public class MapLoader {
                 clear(worldFolder);
             }
             if (config.getBoolean("UseMaps")) {
-                File mapFolder = new File(config.getString("MapPath"));
+                File mapFolder = new File(config.getString("MapPath")).getAbsoluteFile();
                 loadMap(mapFolder, worldFolder, config);
             }
             loadMapConfiguration(new File(worldFolder, "config.yml"));
@@ -166,7 +166,10 @@ public class MapLoader {
             config.set("LastMapUsed", toLoad.getName());
             config.save(new File(HungergamesApi.getHungergames().getDataFolder(), "map.yml"));
             for (File f : toLoad.listFiles()) {
-                copy(f, dest);
+                String name = f.getName();
+                if (name.equalsIgnoreCase("config.yml") || name.equalsIgnoreCase("region") || name.equalsIgnoreCase("level.dat")
+                        || name.equalsIgnoreCase("data"))
+                    copy(f, dest);
             }
             System.out.print(String.format(tm.getSuccessfullyLoadedMap(), toLoad.getName()));
         } else
