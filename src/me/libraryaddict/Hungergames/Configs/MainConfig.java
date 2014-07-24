@@ -340,7 +340,10 @@ public class MainConfig extends BaseConfig {
         }
         if (this.isModifyForTerrainControl() && Bukkit.getPluginManager().getPlugin("TerrainControl") != null) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
-            config.set("worlds." + (this.isUseOwnWorld() ? "LibsHungergamesWorld" : "world") + ".generator", "TerrainControl");
+            config.set(
+                    "worlds."
+                            + (this.isUseOwnWorld() ? "LibsHungergamesWorld" : HungergamesApi.getReflectionManager()
+                                    .getPropertiesConfig("level-name", "world")) + ".generator", "TerrainControl");
             try {
                 config.save(new File("bukkit.yml"));
             } catch (IOException e) {

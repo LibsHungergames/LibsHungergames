@@ -23,6 +23,7 @@ public class ReflectionManager {
     private boolean gameProfile = false;
     private Class itemClass;
     private Object propertyManager;
+    private Properties properties;
 
     public ReflectionManager() {
         try {
@@ -30,6 +31,7 @@ public class ReflectionManager {
                     .invoke(Bukkit.getServer());
             Object obj = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
             propertyManager = obj.getClass().getDeclaredMethod("getPropertyManager").invoke(obj);
+            properties = (Properties) propertyManager.getClass().getField("properties").get(propertyManager);
             currentVersion = propertyManager.getClass().getPackage().getName();
             itemClass = getCraftClass("inventory.CraftItemStack");
         } catch (Exception ex) {
@@ -84,32 +86,11 @@ public class ReflectionManager {
     }
 
     public String getPropertiesConfig(String name, String obj) {
-        Properties config = new Properties();
-        try {
-            FileInputStream fileInput = new FileInputStream(new File("server.properties"));
-            config.load(fileInput);
-            String value = config.getProperty(name, obj);
-            fileInput.close();
-            return value;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return obj;
+        return properties.getProperty(name, obj);
     }
 
-    public void setPropertiesConfig(String name, String obj) {
-        Properties config = new Properties();
-        try {
-            FileInputStream fileInput = new FileInputStream(new File("server.properties"));
-            config.load(fileInput);
-            config.setProperty(name, "" + obj);
-            FileOutputStream fileOutput = new FileOutputStream(new File("server.properties"));
-            config.store(fileOutput, null);
-            fileOutput.close();
-            fileInput.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setPropertiesConfig(String name, Object obj) {
+        properties.setProperty(name, obj.toString());
     }
 
     public Object grabProfileAddUUID(String playername) {

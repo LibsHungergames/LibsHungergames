@@ -111,7 +111,7 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
-            String worldToUse = (String) HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
+            String worldToUse = HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             if (HungergamesApi.getConfigManager().getMainConfig().isUseOwnWorld()) {
                 worldToUse = "LibsHungergamesWorld";
                 final String oldWorldName = worldToUse;
