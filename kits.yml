@@ -19,7 +19,7 @@
 # PROTECTION_ENVIRONMENTAL - Provides protection against environmental damage
 # PROTECTION_EXPLOSIONS - Provides protection against explosive damage
 # PROTECTION_FALL - Provides protection against fall damage
-# PROTECTION_FIRE - Provides protection againsst fire damage
+# PROTECTION_FIRE - Provides protection against fire damage
 # PROTECTION_PROJECTILE - Provides protection against projectile damage
 # SILK_TOUCH - Allows blocks to drop themselves instead of fragments (for example, stone instead of cobblestone)
 # WATER_WORKER - Increases the speed at which a player may mine underwater
