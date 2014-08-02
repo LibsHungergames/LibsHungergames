@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -168,7 +167,7 @@ public class MapLoader {
             for (File f : toLoad.listFiles()) {
                 String name = f.getName();
                 if (name.equalsIgnoreCase("config.yml") || name.equalsIgnoreCase("region") || name.equalsIgnoreCase("level.dat")
-                        || name.equalsIgnoreCase("data"))
+                        || name.equalsIgnoreCase("data") || name.equalsIgnoreCase("map.yml") || name.equalsIgnoreCase("spawns.yml"))
                     copy(f, dest);
             }
             System.out.print(String.format(tm.getSuccessfullyLoadedMap(), toLoad.getName()));
