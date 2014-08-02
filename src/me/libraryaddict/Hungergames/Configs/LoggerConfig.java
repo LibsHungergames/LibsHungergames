@@ -25,6 +25,8 @@ public class LoggerConfig extends BaseConfig {
     private String errorWhileLoadingSpawns = "[Hungergames] Error while loading spawns, Spawn %s is missing config value %s";
     private String errorWhileLoadingStatsCommand = "[Hungergames] The command %s will not be loaded because either mysql or stats is disabled";
     private String errorWhileParsingItemStack = "[Hungergames] Error while parsing itemstack line %s, %s";
+    private String failedToFindVault = "[Hungergames] Failed to find vault. Vault support not enabled";
+    private String failedToRegisterVault = "[Hungergames] Failed to register vault. No currency plugins found. (Example: Economy, iConomy, BOSEconomy, EssentialsEcon, 3Co, MultiCurrency, MineConomy)";
     private String generatingChunks = "[Hungergames] Generating chunks.. %s";
     private String kitAlreadyExists = "[Hungergames] Kit %s already exists!";
     private String loadAbilitiesPackage = "[Hungergames] Adding abilities from plugin %s in package %s";
@@ -56,6 +58,7 @@ public class LoggerConfig extends BaseConfig {
     private String mySqlErrorSaveStats = "[Hungergames] Error while saving stats for player %s - %s";
     private String noMapsFound = "[Hungergames] No maps found in %s";
     private String NowAttemptingToLoadAMap = "[Hungergames] Now attempting to load a map from the path %s";
+    private String registeredVault = "[Hungergames] Found and registered vault!";
     private String restoredCommandsMissingConfigValue = "[Hungergames] Restored missing config '%s' for command '%s'";
     private String shutdownCancelled = "[Hungergames] Shutdown event was cancelled by some plugin!";
     private String shuttingDown = "[Hungergames] Hungergames is now shutting the server down!";
