@@ -1,8 +1,5 @@
 package me.libraryaddict.Hungergames.Managers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,7 +10,6 @@ import me.libraryaddict.Hungergames.Types.LibsProfileLookupCaller;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.libs.joptsimple.OptionSet;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,8 +18,8 @@ public class ReflectionManager {
     private String currentVersion;
     private boolean gameProfile = false;
     private Class itemClass;
-    private Object propertyManager;
     private Properties properties;
+    private Object propertyManager;
 
     public ReflectionManager() {
         try {
@@ -89,10 +85,6 @@ public class ReflectionManager {
         return properties.getProperty(name, obj);
     }
 
-    public void setPropertiesConfig(String name, Object obj) {
-        properties.setProperty(name, obj.toString());
-    }
-
     public Object grabProfileAddUUID(String playername) {
         try {
             Object minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(null);
@@ -136,6 +128,10 @@ public class ReflectionManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void setPropertiesConfig(String name, Object obj) {
+        properties.setProperty(name, obj.toString());
     }
 
     public void setWidthHeight(Player p, float height, float width, float length) {
