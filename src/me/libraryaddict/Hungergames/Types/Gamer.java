@@ -23,6 +23,20 @@ public class Gamer {
     private static Economy economy = null;
     private static Hungergames hg = HungergamesApi.getHungergames();
     private static PlayerManager pm = HungergamesApi.getPlayerManager();
+    static {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getFailedToFindVault());
+        } else {
+            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
+                    .getRegistration(net.milkbowl.vault.economy.Economy.class);
+            if (economyProvider != null) {
+                economy = economyProvider.getProvider();
+                System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getRegisteredVault());
+            } else {
+                System.out.print(HungergamesApi.getConfigManager().getLoggerConfig().getFailedToRegisterVault());
+            }
+        }
+    }
     private boolean build = false;
     private boolean canRide = false;
     private long cooldown = 0;
@@ -42,7 +56,6 @@ public class Gamer {
             seeInvis = false;
             spectating = true;
         }
-        setupEconomy();
     }
 
     public void addBalance(long newBalance) {
@@ -301,16 +314,6 @@ public class Gamer {
 
     public void setStats(Stats stats2) {
         this.stats = stats2;
-    }
-
-    private void setupEconomy() {
-        if (!(economy == null && Bukkit.getPluginManager().getPlugin("Vault") != null))
-            return;
-        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
-                .getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
     }
 
     /**
