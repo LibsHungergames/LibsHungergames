@@ -51,6 +51,13 @@
 					<include>config.yml</include>
 					<include>kits.yml</include>
 					<include>README.md</include>
+					<include>pom.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.java</include>
 				</includes>
 			</resource>
 		</resources>
@@ -76,10 +83,6 @@
 			<id>md_5-repo</id>
 			<url>http://repo.md-5.net/content/groups/public/</url>
 		</repository>
-		<!--<repository>
-			<id>vault-repo</id>
-			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-		</repository>-->
 	</repositories>
 
 	<dependencies>
