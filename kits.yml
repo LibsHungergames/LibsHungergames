@@ -91,7 +91,7 @@ Kits:
     Icon: YELLOW_FLOWER 0 1
     Ability:
       - Flower
-  Ghost:
+  Ghost: # This kit uses the ability 'PotionLover'. PotionLover is a ability that lets you add your own potions to a kit at the start of the game. For this reason. The potionlover ability has a config you MUST edit if you want to change the values from the default. Or if you rename this kit from ghost. It does NOT automatically modify the config if you change the invincibility time
     Description: 'When the game starts you are invisible until invincibility runs out! As well as a addictional 10 seconds for that surprise attack!'
     Free: true
     Price: 0
