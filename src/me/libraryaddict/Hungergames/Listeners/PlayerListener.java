@@ -1,7 +1,7 @@
 package me.libraryaddict.Hungergames.Listeners;
 
 import java.util.Iterator;
-import java.util.Random;
+import java.util.Map.Entry;
 
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.MainConfig;
@@ -15,16 +15,22 @@ import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.InventoryManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Types.CustomDeathCause;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Kit;
+import me.libraryaddict.Hungergames.Utilities.MapLoader;
+import me.libraryaddict.death.DeathCause;
+import me.libraryaddict.death.DeathHandler;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -160,22 +166,9 @@ public class PlayerListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         event.getDrops().clear();
         Player p = event.getEntity();
-        EntityDamageEvent cause = event.getEntity().getLastDamageCause();
-        String deathMessage = ChatColor.stripColor(event.getDeathMessage());
-        if (cause != null) {
-            if (cause instanceof EntityDamageByEntityEvent) {
-                EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) cause;
-                if (entityEvent.getDamager() instanceof Player) {
-                    Player dmg = (Player) entityEvent.getDamager();
-                    deathMessage = tm.getKillMessages()[new Random().nextInt(tm.getKillMessages().length)];
-                    deathMessage = deathMessage.replace("%Killed%", p.getName()).replace("%Killer%", dmg.getName())
-                            .replace("%Weapon%", name.getItemName(dmg.getItemInHand()));
-                }
-            } else if (cause.getCause() == DamageCause.FALL)
-                deathMessage = String.format(tm.getKillMessageFellToDeath(), p.getName());
-        }
+        DeathCause cause = DeathHandler.getDeathCause(p);
         Gamer gamer = pm.getGamer(p);
-        pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), deathMessage);
+        pm.killPlayer(gamer, null, p.getLocation(), gamer.getInventory(), cause);
         event.setDeathMessage(null);
     }
 
@@ -419,6 +412,56 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
+        System.out.print("1");
+        if (MapLoader.isBorderBlock() || MapLoader.isBorderParticles()) {
+            System.out.print("2");
+            Location loc = event.getTo().clone();
+            loc.subtract(loc.getWorld().getSpawnLocation());
+            loc = loc.getBlock().getLocation().add(0.5, 0.5, 0.5);
+            double bSize = config.getBorderSize();
+            int size = MapLoader.getBorderCheckSize();
+            Entry<Material, Byte> entry = MapLoader.getBorderBlock();
+            if ((bSize - Math.abs(loc.getX())) >= size || (bSize - Math.abs(loc.getZ())) >= size) {
+                System.out.print("3");
+                Location loc1 = event.getTo().getBlock().getLocation().add(0.5, 0.5, 0.5);
+                for (int x = -size; x <= size; x++) {
+                    for (int y = -size; y <= size; y++) {
+                        for (int z = -size; z <= size; z++) {
+                            Location l1 = loc.clone().add(x, 0, z);
+                            boolean borderBlock = false;
+                            if (config.isRoundedBorder()) {
+                                borderBlock = Math.abs(bSize - l1.distance(loc)) <= 0.5;
+                            } else {
+                                System.out.print("4");
+                                l1.add(0, y, 0);
+                                borderBlock = Math.abs(l1.getX() - loc.getX()) <= 0.5 || Math.abs(l1.getZ() - loc.getZ()) <= 0.5;
+                            }
+                            if (borderBlock) {
+                                System.out.print("5");
+                                Location loc2 = loc1.clone().add(x, y, z);
+                                double dist = loc1.distance(loc2);
+                                if (dist <= bSize) {
+                                    System.out.print("6");
+                                    if (MapLoader.isBorderParticles()) {
+                                        if (Math.abs(dist - size) <= 1) {
+                                            event.getPlayer().playEffect(loc2, Effect.MOBSPAWNER_FLAMES, 0);
+                                        }
+                                    }
+                                    if (MapLoader.isBorderBlock()) {
+                                        System.out.print("7");
+                                        Block b = loc2.getBlock();
+                                        if (b.getType() != entry.getKey() || b.getData() != entry.getValue()) {
+                                            System.out.print("8");
+                                            b.setTypeIdAndData(entry.getKey().getId(), entry.getValue(), false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -445,8 +488,7 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
         Gamer gamer = pm.getGamer(event.getPlayer());
         if (gamer.isAlive() && hg.currentTime >= 0 && pm.getAliveGamers().size() > 1) {
-            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(),
-                    String.format(tm.getKillMessageLeavingGame(), gamer.getName()));
+            pm.killPlayer(gamer, null, gamer.getPlayer().getLocation(), gamer.getInventory(), CustomDeathCause.QUIT);
         }
         Kit kit = kits.getKitByPlayer(event.getPlayer());
         if (kit != null)

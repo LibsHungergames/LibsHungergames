@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -17,12 +19,21 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.Getter;
 import me.libraryaddict.Hungergames.Hungergames;
 import me.libraryaddict.Hungergames.Configs.LoggerConfig;
 import me.libraryaddict.Hungergames.Configs.MainConfig;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
+    @Getter
+    private static boolean isBorderBlock;
+    @Getter
+    private static boolean isBorderParticles;
+    @Getter
+    private static Entry<Material, Byte> borderBlock;
+    @Getter
+    private static int borderCheckSize;
 
     public static void clear(File file) {
         if (!file.exists())
@@ -110,6 +121,22 @@ public class MapLoader {
                 config.set("SpawnPlatformSize", 30);
                 config.save(mapConfig);
             }
+            if (!config.contains("Border.Particles")) {
+                config.set("Border.Particles", true);
+                config.save(mapConfig);
+            }
+            if (!config.contains("Border.Blocks")) {
+                config.set("Border.Blocks", true);
+                config.save(mapConfig);
+            }
+            if (!config.contains("Border.Block")) {
+                config.set("Border.Block", "GLASS:0");
+                config.save(mapConfig);
+            }
+            if (!config.contains("Border.CheckSize")) {
+                config.set("Border.CheckSize", 5);
+                config.save(mapConfig);
+            }
             String worldToUse = HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             if (HungergamesApi.getConfigManager().getMainConfig().isUseOwnWorld()) {
                 worldToUse = "LibsHungergamesWorld";
@@ -133,7 +160,7 @@ public class MapLoader {
                 File mapFolder = new File(config.getString("MapPath")).getAbsoluteFile();
                 loadMap(mapFolder, worldFolder, config);
             }
-            loadMapConfiguration(new File(worldFolder, "config.yml"));
+            loadMapConfiguration(new File(worldFolder, "config.yml"), config);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,7 +194,8 @@ public class MapLoader {
             for (File f : toLoad.listFiles()) {
                 String name = f.getName();
                 if (name.equalsIgnoreCase("config.yml") || name.equalsIgnoreCase("region") || name.equalsIgnoreCase("level.dat")
-                        || name.equalsIgnoreCase("data") || name.equalsIgnoreCase("map.yml") || name.equalsIgnoreCase("spawns.yml"))
+                        || name.equalsIgnoreCase("data") || name.equalsIgnoreCase("map.yml")
+                        || name.equalsIgnoreCase("spawns.yml"))
                     copy(f, dest);
             }
             System.out.print(String.format(tm.getSuccessfullyLoadedMap(), toLoad.getName()));
@@ -175,7 +203,7 @@ public class MapLoader {
             System.out.print(String.format(tm.getNoMapsFound(), mapDir.toString()));
     }
 
-    private static void loadMapConfiguration(File worldConfig) {
+    private static void loadMapConfiguration(File worldConfig, YamlConfiguration config2) {
         MainConfig configManager = HungergamesApi.getConfigManager().getMainConfig();
         LoggerConfig tm = HungergamesApi.getConfigManager().getLoggerConfig();
         try {
@@ -205,6 +233,22 @@ public class MapLoader {
                     configManager.setTimeOfDay(config.getInt("TimeOfDayWhenGameStarts"));
                     System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
                 }
+                isBorderParticles = config.getBoolean("Border.Particles", config2.getBoolean("Border.Particles"));
+                isBorderBlock = config.getBoolean("Border.Blocks", config2.getBoolean("Border.Blocks"));
+                borderCheckSize = config.getInt("Border.CheckSize", config2.getInt("Border.CheckSize"));
+                String str = config.getString(config.getString("Border.Block"), config2.getString("Border.Block"));
+                String[] spl = str.split(":");
+                Material mat = Material.GLASS;
+                byte b = (byte) 0;
+                try {
+                    mat = Material.getMaterial(Integer.parseInt(spl[0]));
+                } catch (NumberFormatException ex) {
+                    mat = Material.valueOf(spl[0].toUpperCase());
+                }
+                if (spl.length > 1) {
+                    b = Byte.parseByte(spl[1]);
+                }
+                borderBlock = new HashMap.SimpleEntry(mat, b);
             }
             File spawnsFile = new File(worldConfig.getParentFile(), "spawns.yml");
             System.out.print(tm.getLoadSpawnsConfig());
