@@ -13,9 +13,11 @@ import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.*;
 import me.libraryaddict.Hungergames.Managers.*;
+import me.libraryaddict.Hungergames.Types.CustomDeathCause;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Utilities.MapLoader;
+import me.libraryaddict.death.DeathHandler;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
 import org.bukkit.Bukkit;
@@ -109,8 +111,7 @@ public class Hungergames extends JavaPlugin {
                             p.damage(0);
                             p.setHealth(p.getHealth() - dmg);
                         } else {
-                            pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
-                                    String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
+                            pm.killPlayer(gamer, null, pLoc, gamer.getInventory(), CustomDeathCause.BORDER);
                         }
                     } else if (border > 10) {
                         // Hmm. Preferably I tp them back inside.
@@ -120,24 +121,31 @@ public class Hungergames extends JavaPlugin {
                 }
             }
         } else {
+            boolean message = false;
             Location tpTo = pLoc.clone();
             int xDist = pLoc.getBlockX() - sLoc.getBlockX();
             if (Math.abs(xDist) > border - 20) {
-                if (xDist > 0) {
-                    tpTo.setX(border - 2 + sLoc.getBlockX());
-                } else {
-                    tpTo.setX(border + 2 + sLoc.getBlockX());
+                message = true;
+                if (Math.abs(xDist) > border) {
+                    if (xDist > 0) {
+                        tpTo.setX(border - 2 + sLoc.getBlockX());
+                    } else {
+                        tpTo.setX(border + 2 + sLoc.getBlockX());
+                    }
                 }
             }
             int zDist = pLoc.getBlockZ() - sLoc.getBlockZ();
             if (Math.abs(zDist) > border - 20) {
-                if (zDist > 0) {
-                    tpTo.setZ(border - 2 + sLoc.getBlockZ());
-                } else {
-                    tpTo.setZ(border + 2 + sLoc.getBlockZ());
+                message = true;
+                if (Math.abs(zDist) > border) {
+                    if (zDist > 0) {
+                        tpTo.setZ(border - 2 + sLoc.getBlockZ());
+                    } else {
+                        tpTo.setZ(border + 2 + sLoc.getBlockZ());
+                    }
                 }
             }
-            if (!pLoc.equals(tpTo))
+            if (message)
                 p.sendMessage(translationsConfig.getMessagePlayerApproachingBorder());
             if (tpTo.getBlockX() != pLoc.getBlockX() || tpTo.getBlockZ() != pLoc.getBlockZ()) {
                 if (gamer.isAlive()) {
@@ -147,8 +155,7 @@ public class Hungergames extends JavaPlugin {
                         p.damage(0);
                         p.setHealth(p.getHealth() - dmg);
                     } else {
-                        pm.killPlayer(gamer, null, pLoc, gamer.getInventory(),
-                                String.format(translationsConfig.getKillMessageKilledByBorder(), gamer.getName()));
+                        pm.killPlayer(gamer, null, pLoc, gamer.getInventory(), CustomDeathCause.BORDER);
                     }
                 } else if (border > 10) {
                     gamer.getPlayer().teleport(tpTo);
@@ -272,6 +279,7 @@ public class Hungergames extends JavaPlugin {
             perm.setDescription("Used for messages in LibsHungergames");
             Bukkit.getPluginManager().addPermission(perm);
         }
+        DeathHandler.initialize(this);
     }
 
     private void onSecond() {
