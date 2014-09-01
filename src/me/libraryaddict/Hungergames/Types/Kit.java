@@ -121,17 +121,19 @@ public class Kit implements Comparable<Kit> {
 
     public void giveKit(Player p) {
         PlayerInventory inv = p.getInventory();
+        for (ItemStack item : items) {
+            inv.addItem(prepareToGive(item));
+        }
         ItemStack[] arm = inv.getArmorContents();
         for (int n = 0; n < 4; n++) {
             if (armor[n] == null || armor[n].getType() == Material.AIR)
                 continue;
             if (arm[n] == null || arm[n].getType() == Material.AIR)
                 arm[n] = armor[n].clone();
+            else
+                inv.addItem(armor[n]);
         }
         inv.setArmorContents(arm);
-        for (ItemStack item : items) {
-            inv.addItem(prepareToGive(item));
-        }
     }
 
     public boolean hasAbility(String string) {
