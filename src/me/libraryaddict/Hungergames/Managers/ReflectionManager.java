@@ -40,6 +40,17 @@ public class ReflectionManager {
         }
     }
 
+    private Properties getProperties() {
+        if (properties == null) {
+            try {
+                properties = (Properties) propertyManager.getClass().getField("properties").get(propertyManager);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return properties;
+    }
+
     public ItemStack getBukkitItem(Object nmsItem) {
         try {
             return (ItemStack) itemClass.getMethod("asCraftMirror", getNmsClass("ItemStack")).invoke(null, nmsItem);
@@ -82,7 +93,7 @@ public class ReflectionManager {
     }
 
     public String getPropertiesConfig(String name, String obj) {
-        return properties.getProperty(name, obj);
+        return getProperties().getProperty(name, obj);
     }
 
     public Object grabProfileAddUUID(String playername) {
@@ -131,7 +142,7 @@ public class ReflectionManager {
     }
 
     public void setPropertiesConfig(String name, Object obj) {
-        properties.setProperty(name, obj.toString());
+        getProperties().setProperty(name, obj.toString());
     }
 
     public void setWidthHeight(Player p, float height, float width, float length) {
