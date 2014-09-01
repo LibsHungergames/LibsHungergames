@@ -227,8 +227,7 @@ public class Gamer {
         if (alive) {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()
                     && HungergamesApi.getConfigManager().getMainConfig().isSpectatorsVisibleToEachOther()) {
-                if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
-                    player.getScoreboard().getTeam("Spectators").removePlayer(getPlayer());
+                ScoreboardManager.removeFromTeam(getPlayer(), "Spectators");
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
             player.setFallDistance(0F);
@@ -254,8 +253,7 @@ public class Gamer {
                         && player.getPlayerListName().length() <= 14)
                     player.setPlayerListName(ChatColor.GRAY + player.getPlayerListName());
                 seeInvis(true);
-                if (player.getScoreboard() != null && player.getScoreboard().getTeam("Spectators") != null)
-                    player.getScoreboard().getTeam("Spectators").addPlayer(getPlayer());
+                ScoreboardManager.addToTeam(getPlayer(), "Spectators", ChatColor.GRAY + "", true);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
