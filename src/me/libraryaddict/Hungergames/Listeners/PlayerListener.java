@@ -412,7 +412,7 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        if (MapLoader.isBorderBlock() || MapLoader.isBorderParticles()) {
+        if (MapLoader.isSetBorderBlocks() || MapLoader.isBorderParticles()) {
             Gamer gamer = pm.getGamer(event.getPlayer());
             if (gamer != null && gamer.isAlive()) {
                 Location loc = event.getTo().clone();
@@ -443,7 +443,7 @@ public class PlayerListener implements Listener {
                                     double dist = loc1.distance(loc2);
                                     if (dist <= size) {
                                         boolean particles = MapLoader.isBorderParticles();
-                                        if (MapLoader.isBorderBlock()) {
+                                        if (MapLoader.isSetBorderBlocks()) {
                                             Block b = loc2.getBlock();
                                             if (MapLoader.isRealBlocks() ? (b.getType() != entry.getKey() || b.getData() != entry
                                                     .getValue()) : b.getType() == Material.AIR) {

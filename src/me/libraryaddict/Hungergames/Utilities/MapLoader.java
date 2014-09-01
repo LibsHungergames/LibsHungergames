@@ -31,7 +31,7 @@ public class MapLoader {
     @Getter
     private static int borderCheckSize;
     @Getter
-    private static boolean isBorderBlock;
+    private static boolean setBorderBlocks;
     @Getter
     private static boolean isBorderParticles;
     @Getter
@@ -144,7 +144,7 @@ public class MapLoader {
                 config.save(mapConfig);
             }
             isBorderParticles = config.getBoolean("Border.Particles");
-            isBorderBlock = config.getBoolean("Border.Blocks");
+            setBorderBlocks = config.getBoolean("Border.Blocks");
             borderCheckSize = config.getInt("Border.CheckSize");
             realBlocks = config.getBoolean("Border.RealBlocks");
             String str = config.getString("Border.Block");
@@ -257,7 +257,7 @@ public class MapLoader {
                     System.out.print(String.format(tm.getMapConfigChangedTimeOfDay(), config.getInt("TimeOfDayWhenGameStarts")));
                 }
                 isBorderParticles = config.getBoolean("Border.Particles", config2.getBoolean("Border.Particles"));
-                isBorderBlock = config.getBoolean("Border.Blocks", config2.getBoolean("Border.Blocks"));
+                setBorderBlocks = config.getBoolean("Border.Blocks", config2.getBoolean("Border.Blocks"));
                 borderCheckSize = config.getInt("Border.CheckSize", config2.getInt("Border.CheckSize"));
                 realBlocks = config.getBoolean("Border.RealBlocks", config2.getBoolean("Border.RealBlocks"));
                 String str = config.getString(config.getString("Border.Block"), config2.getString("Border.Block"));
