@@ -5,6 +5,7 @@ import java.util.List;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.death.DeathCause;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -24,17 +25,18 @@ public class PlayerKilledEvent extends Event implements Cancellable {
     }
 
     private boolean cancelled = false;
+    private DeathCause deathCause;
     private String deathMessage;
     private Location dropItems;
     private List<ItemStack> items;
     private Gamer killed;
     private Entity killer;
-
     private Gamer killerGamer;
 
-    public PlayerKilledEvent(Gamer killed, Entity killer, Gamer backupKiller, String deathMessage, Location itemsDrop,
-            List<ItemStack> itemsToDrop) {
+    public PlayerKilledEvent(Gamer killed, Entity killer, Gamer backupKiller, DeathCause cause, String deathMessage,
+            Location itemsDrop, List<ItemStack> itemsToDrop) {
         PlayerManager pm = HungergamesApi.getPlayerManager();
+        this.deathCause = cause;
         this.killed = killed;
         this.killer = killer;
         this.deathMessage = deathMessage;
@@ -55,6 +57,10 @@ public class PlayerKilledEvent extends Event implements Cancellable {
         }
         if (killerGamer == null)
             killerGamer = backupKiller;
+    }
+
+    public DeathCause getDeathCause() {
+        return deathCause;
     }
 
     public String getDeathMessage() {

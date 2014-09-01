@@ -27,13 +27,15 @@ import me.libraryaddict.Hungergames.Types.HungergamesApi;
 
 public class MapLoader {
     @Getter
+    private static Entry<Material, Byte> borderBlock;
+    @Getter
+    private static int borderCheckSize;
+    @Getter
     private static boolean isBorderBlock;
     @Getter
     private static boolean isBorderParticles;
     @Getter
-    private static Entry<Material, Byte> borderBlock;
-    @Getter
-    private static int borderCheckSize;
+    private static boolean realBlocks;
 
     public static void clear(File file) {
         if (!file.exists())
@@ -137,6 +139,27 @@ public class MapLoader {
                 config.set("Border.CheckSize", 5);
                 config.save(mapConfig);
             }
+            if (!config.contains("Border.RealBlocks")) {
+                config.set("Border.RealBlocks", true);
+                config.save(mapConfig);
+            }
+            isBorderParticles = config.getBoolean("Border.Particles");
+            isBorderBlock = config.getBoolean("Border.Blocks");
+            borderCheckSize = config.getInt("Border.CheckSize");
+            realBlocks = config.getBoolean("Border.RealBlocks");
+            String str = config.getString("Border.Block");
+            String[] spl = str.split(":");
+            Material mat = Material.GLASS;
+            byte b = (byte) 0;
+            try {
+                mat = Material.getMaterial(Integer.parseInt(spl[0]));
+            } catch (NumberFormatException ex) {
+                mat = Material.valueOf(spl[0].toUpperCase());
+            }
+            if (spl.length > 1) {
+                b = Byte.parseByte(spl[1]);
+            }
+            borderBlock = new HashMap.SimpleEntry(mat, b);
             String worldToUse = HungergamesApi.getReflectionManager().getPropertiesConfig("level-name", "world");
             if (HungergamesApi.getConfigManager().getMainConfig().isUseOwnWorld()) {
                 worldToUse = "LibsHungergamesWorld";
@@ -236,6 +259,7 @@ public class MapLoader {
                 isBorderParticles = config.getBoolean("Border.Particles", config2.getBoolean("Border.Particles"));
                 isBorderBlock = config.getBoolean("Border.Blocks", config2.getBoolean("Border.Blocks"));
                 borderCheckSize = config.getInt("Border.CheckSize", config2.getInt("Border.CheckSize"));
+                realBlocks = config.getBoolean("Border.RealBlocks", config2.getBoolean("Border.RealBlocks"));
                 String str = config.getString(config.getString("Border.Block"), config2.getString("Border.Block"));
                 String[] spl = str.split(":");
                 Material mat = Material.GLASS;

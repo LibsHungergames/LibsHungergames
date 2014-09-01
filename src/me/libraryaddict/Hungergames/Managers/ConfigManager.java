@@ -14,7 +14,7 @@ public class ConfigManager {
 
     public void loadConfigs() {
         for (BaseConfig config : new BaseConfig[] { mainConfig, translationsConfig, loggerConfig, feastConfig, mySqlConfig,
-                winnersConfig }) {
+                winnersConfig, new DeathConfig() }) {
             try {
                 config.load();
                 config.loadConfig();

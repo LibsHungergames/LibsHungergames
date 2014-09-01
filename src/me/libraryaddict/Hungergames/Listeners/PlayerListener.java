@@ -412,47 +412,57 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        System.out.print("1");
         if (MapLoader.isBorderBlock() || MapLoader.isBorderParticles()) {
-            System.out.print("2");
-            Location loc = event.getTo().clone();
-            loc.subtract(loc.getWorld().getSpawnLocation());
-            loc = loc.getBlock().getLocation().add(0.5, 0.5, 0.5);
-            double bSize = config.getBorderSize();
-            int size = MapLoader.getBorderCheckSize();
-            Entry<Material, Byte> entry = MapLoader.getBorderBlock();
-            if ((bSize - Math.abs(loc.getX())) >= size || (bSize - Math.abs(loc.getZ())) >= size) {
-                System.out.print("3");
-                Location loc1 = event.getTo().getBlock().getLocation().add(0.5, 0.5, 0.5);
-                for (int x = -size; x <= size; x++) {
-                    for (int y = -size; y <= size; y++) {
-                        for (int z = -size; z <= size; z++) {
-                            Location l1 = loc.clone().add(x, 0, z);
-                            boolean borderBlock = false;
-                            if (config.isRoundedBorder()) {
-                                borderBlock = Math.abs(bSize - l1.distance(loc)) <= 0.5;
-                            } else {
-                                System.out.print("4");
-                                l1.add(0, y, 0);
-                                borderBlock = Math.abs(l1.getX() - loc.getX()) <= 0.5 || Math.abs(l1.getZ() - loc.getZ()) <= 0.5;
-                            }
-                            if (borderBlock) {
-                                System.out.print("5");
-                                Location loc2 = loc1.clone().add(x, y, z);
-                                double dist = loc1.distance(loc2);
-                                if (dist <= bSize) {
-                                    System.out.print("6");
-                                    if (MapLoader.isBorderParticles()) {
-                                        if (Math.abs(dist - size) <= 1) {
-                                            event.getPlayer().playEffect(loc2, Effect.MOBSPAWNER_FLAMES, 0);
+            Gamer gamer = pm.getGamer(event.getPlayer());
+            if (gamer != null && gamer.isAlive()) {
+                Location loc = event.getTo().clone();
+                Location spawn = loc.getWorld().getSpawnLocation();
+                loc.subtract(spawn);
+                loc = loc.getBlock().getLocation().add(0.5, 0.5, 0.5);
+                double bSize = config.getBorderSize();
+                int size = MapLoader.getBorderCheckSize();
+                Entry<Material, Byte> entry = MapLoader.getBorderBlock();
+                if (config.isRoundedBorder() ? loc.distance(new Location(loc.getWorld(), 0, loc.getY(), 0)) < bSize
+                        : (bSize - Math.abs(loc.getX())) >= size || (bSize - Math.abs(loc.getZ())) >= size) {
+                    Location loc1 = event.getTo().getBlock().getLocation().add(0.5, 0.5, 0.5);
+                    for (int x = -size; x <= size; x++) {
+                        for (int y = -size; y <= size; y++) {
+                            if (y + loc1.getY() <= 0)
+                                continue;
+                            for (int z = -size; z <= size; z++) {
+                                Location l1 = loc.clone().add(x, 0, z);
+                                boolean borderBlock = false;
+                                if (config.isRoundedBorder()) {
+                                    borderBlock = Math.abs(bSize - l1.distance(spawn)) <= 0.5;
+                                } else {
+                                    borderBlock = Math.abs(bSize - Math.abs(l1.getBlockX() - spawn.getBlockX())) < 0.5
+                                            || Math.abs(bSize - Math.abs(l1.getBlockZ() - spawn.getBlockZ())) < 0.5;
+                                }
+                                if (borderBlock) {
+                                    Location loc2 = loc1.clone().add(x, y, z);
+                                    double dist = loc1.distance(loc2);
+                                    if (dist <= size) {
+                                        boolean particles = MapLoader.isBorderParticles();
+                                        if (MapLoader.isBorderBlock()) {
+                                            Block b = loc2.getBlock();
+                                            if (MapLoader.isRealBlocks() ? (b.getType() != entry.getKey() || b.getData() != entry
+                                                    .getValue()) : b.getType() == Material.AIR) {
+                                                if (MapLoader.isRealBlocks()) {
+                                                    if (particles) {
+                                                        particles = false;
+                                                        loc.getWorld().playEffect(loc2, Effect.MOBSPAWNER_FLAMES, 0);
+                                                    }
+                                                    b.setTypeIdAndData(entry.getKey().getId(), entry.getValue(), false);
+                                                } else {
+                                                    event.getPlayer().sendBlockChange(loc2, entry.getKey().getId(),
+                                                            entry.getValue());
+                                                }
+                                            }
                                         }
-                                    }
-                                    if (MapLoader.isBorderBlock()) {
-                                        System.out.print("7");
-                                        Block b = loc2.getBlock();
-                                        if (b.getType() != entry.getKey() || b.getData() != entry.getValue()) {
-                                            System.out.print("8");
-                                            b.setTypeIdAndData(entry.getKey().getId(), entry.getValue(), false);
+                                        if (particles) {
+                                            if (size - 0.3 <= dist && size + 0.3 >= dist) {
+                                                event.getPlayer().playEffect(loc2, Effect.MOBSPAWNER_FLAMES, 0);
+                                            }
                                         }
                                     }
                                 }

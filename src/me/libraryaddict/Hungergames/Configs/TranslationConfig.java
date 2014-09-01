@@ -175,18 +175,7 @@ public class TranslationConfig extends BaseConfig {
     private String killMessageFellToDeath = "%s fell to their death";
     private String killMessageFormatPlayerKit = ChatColor.RED + "%Player%" + ChatColor.DARK_RED + "(" + ChatColor.RED + "%Kit%"
             + ChatColor.DARK_RED + ")";
-    private String killMessageKilledByBorder = "%s believed the rumors of a better life beyond the border";
-    private String killMessageLeavingGame = "%s was slaughtered for leaving the game";
     private String killMessageNoKit = "None";
-    private String[] killMessages = new String[] { "%Killer% dual wielded a %Weapon% and laid waste upon %Killed%",
-            "%Killer% slid a %Weapon% into %Killed% when their back was turned",
-            "%Killed% was murdered in cold blood by %Killer% with a %Weapon%",
-            "%Killed% gasped their last breath as %Killer% savagely stabbed him with a %Weapon%",
-            "%Killed% screamed in agony as they were bludgeoned over the head with a %Weapon% by %Killer%",
-            "%Killed% was killed by %Killer% with a %Weapon%",
-            "%Killer% gave %Killed% a helping hand into death's sweet embrace with their trusty %Weapon%",
-            "%Killer%'s %Weapon% could not resist killing %Killed%", "%Killer% and their trusty %Weapon% slew %Killed%",
-            "%Killed%'s weapon could not stand up against %Killer%'s %Weapon% of doom!" };
     private String kitDescriptionDefault = "No description was provided for this kit";
     private String kitSelectorNoKitsToShow = ChatColor.RED + "You don't own any kits!";
     private String messageMobHasHealth = ChatColor.RED + "The %s has %s/%s health";

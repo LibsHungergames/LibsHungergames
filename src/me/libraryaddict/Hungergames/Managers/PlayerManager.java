@@ -35,6 +35,7 @@ import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Stats;
+import me.libraryaddict.death.DeathCause;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
 public class PlayerManager {
@@ -76,11 +77,7 @@ public class PlayerManager {
         nonSolid.add(Material.VINE.getId());
     }
 
-    public void addSpawnPoint(Location loc, int radius, int height) {
-        spawns.put(loc.add(0.000001, 0, 0.000001), new Integer[] { radius, height });
-    }
-
-    private String formatDeathMessage(String deathMessage, Player p) {
+    private String addKitToDeathMessage(String deathMessage, Player p) {
         String playerKit = cm.getKillMessageNoKit();
         if (kits.getKitByPlayer(p) != null)
             playerKit = kits.getKitByPlayer(p).getName();
@@ -91,6 +88,10 @@ public class PlayerManager {
             playerKit = String.format(killMessage, p.getName(), playerKit);
         }
         return deathMessage.replace(p.getName(), playerKit);
+    }
+
+    public void addSpawnPoint(Location loc, int radius, int height) {
+        spawns.put(loc.add(0.000001, 0, 0.000001), new Integer[] { radius, height });
     }
 
     public List<Gamer> getAliveGamers() {
@@ -131,12 +132,33 @@ public class PlayerManager {
         return backup;
     }
 
-    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
+    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, DeathCause cause) {
         if (!hg.doSeconds || hg.currentTime < 0)
             return;
-        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), deathMsg, dropLoc, drops);
+        if (killer == null)
+            killer = cause.getKiller(gamer.getPlayer());
+        String deathMessage = cause.getDeathMessage(gamer.getPlayer(), killer);
+        if (killer != null) {
+            if (killer instanceof Player) {
+                Player dmg = (Player) killer;
+                deathMessage = deathMessage.replace("%Weapon%", HungergamesApi.getNameManager().getItemName(dmg.getItemInHand()));
+            }
+        }
+        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), cause, deathMessage, dropLoc, drops);
         Bukkit.getPluginManager().callEvent(event);
         manageDeath(event);
+    }
+
+    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, DeathCause cause, String deathMsg) {
+        if (!hg.doSeconds || hg.currentTime < 0)
+            return;
+        PlayerKilledEvent event = new PlayerKilledEvent(gamer, killer, getKiller(gamer), cause, deathMsg, dropLoc, drops);
+        Bukkit.getPluginManager().callEvent(event);
+        manageDeath(event);
+    }
+
+    public void killPlayer(Gamer gamer, Entity killer, Location dropLoc, List<ItemStack> drops, String deathMsg) {
+        killPlayer(gamer, killer, dropLoc, drops, DeathCause.UNKNOWN, deathMsg);
     }
 
     public void manageDeath(PlayerKilledEvent event) {
@@ -153,11 +175,11 @@ public class PlayerManager {
         p.setExp(0F);
         if (event.getDeathMessage().equals(ChatColor.stripColor(event.getDeathMessage())))
             event.setDeathMessage(ChatColor.DARK_RED + event.getDeathMessage());
-        event.setDeathMessage(this.formatDeathMessage(
+        event.setDeathMessage(this.addKitToDeathMessage(
                 event.getDeathMessage().replace("%Remaining%", "" + (getAliveGamers().size() - 1)), p));
         if (event.getKillerPlayer() != null) {
             event.getKillerPlayer().addKill();
-            event.setDeathMessage(this.formatDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
+            event.setDeathMessage(this.addKitToDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
         }
         Bukkit.broadcastMessage(event.getDeathMessage());
         int reward = hg.getPrize(getAliveGamers().size());

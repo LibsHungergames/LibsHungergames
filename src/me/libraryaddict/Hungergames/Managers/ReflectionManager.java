@@ -40,17 +40,6 @@ public class ReflectionManager {
         }
     }
 
-    private Properties getProperties() {
-        if (properties == null) {
-            try {
-                properties = (Properties) propertyManager.getClass().getField("properties").get(propertyManager);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-        return properties;
-    }
-
     public ItemStack getBukkitItem(Object nmsItem) {
         try {
             return (ItemStack) itemClass.getMethod("asCraftMirror", getNmsClass("ItemStack")).invoke(null, nmsItem);
@@ -90,6 +79,17 @@ public class ReflectionManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Properties getProperties() {
+        if (properties == null) {
+            try {
+                properties = (Properties) propertyManager.getClass().getField("properties").get(propertyManager);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return properties;
     }
 
     public String getPropertiesConfig(String name, String obj) {
