@@ -114,8 +114,6 @@ public class InventoryManager {
                 lore.add(0, String.format(tm.getBuyKitMenuItemPrice(), kit.getPrice()));
                 meta.setLore(lore);
                 item.setItemMeta(meta);
-                if (item.getAmount() == 1)
-                    item.setAmount(0);
                 nonOwned.add(item);
             }
             if (nonOwned.isEmpty()) {
@@ -154,8 +152,6 @@ public class InventoryManager {
                             + (kits.ownsKit(p, kit) ? tm.getInventoryOwnKit() : tm.getInventoryDontOwnKit()));
                     meta.setLore(wrap(kit.getDescription()));
                     item.setItemMeta(meta);
-                    if (item.getAmount() == 1)
-                        item.setAmount(0);
                     kitItems.add(item);
                 }
             }
