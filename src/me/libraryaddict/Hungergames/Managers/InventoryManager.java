@@ -205,7 +205,7 @@ public class InventoryManager {
                 heads.add(head);
             } else {
                 Gamer gamer = pm.getGamer(name);
-                ItemStack head = new ItemStack(Material.SKULL_ITEM, 0, (short) 3);
+                ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
                 Kit kit = kits.getKitByPlayer(gamer.getPlayer());
                 if (kit != null && kit.getIcon() != null)
                     head = kit.getIcon();

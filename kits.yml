@@ -165,7 +165,7 @@ Kits:
     Description: 'The salamander kit is a very nice kit for those who just cannot stop burning! You no longer must fear fire! Swim in lava! Bath in flames! However you seem to be allergic to water..'
     Free: true
     Price: 0
-    Icon: LAVA 0 1
+    Icon: LAVA_BUCKET 0 1
     Ability:
       - Salamander
   Skinner:
