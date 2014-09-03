@@ -205,7 +205,6 @@ public class InventoryManager {
                 Kit kit = kits.getKitByPlayer(gamer.getPlayer());
                 if (kit != null && kit.getIcon() != null)
                     head = kit.getIcon();
-                head.setAmount(0);
                 ItemMeta meta = head.getItemMeta();
                 meta.setDisplayName(ChatColor.GREEN + name);
                 List<String> lore = new ArrayList<String>();

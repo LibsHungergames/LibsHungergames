@@ -149,7 +149,6 @@ public class HGPageInventory extends ClickInventory {
      */
     public void setBackPage(ItemStack newBack) {
         backAPage = newBack;
-        backAPage.setAmount(0);
     }
 
     /**
@@ -157,7 +156,6 @@ public class HGPageInventory extends ClickInventory {
      */
     public void setForwardsPage(ItemStack newForwards) {
         forwardsAPage = newForwards;
-        forwardsAPage.setAmount(0);
     }
 
     /**
