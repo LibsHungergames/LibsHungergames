@@ -68,7 +68,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -266,7 +269,7 @@ public class PlayerListener implements Listener {
             Player p = event.getPlayer();
             if (event.getRightClicked() instanceof Player) {
                 Player victim = (Player) event.getRightClicked();
-                if (pm.getGamer(victim).isAlive())
+                if (pm.getGamer(victim).isAlive()) {
                     p.sendMessage(String.format(
                             tm.getMessagePlayerHasHealthAndHunger().replace("%maxhp%", "" + (int) victim.getMaxHealth()),
                             victim.getName(),
@@ -274,6 +277,29 @@ public class PlayerListener implements Listener {
                             victim.getFoodLevel(),
                             (kits.getKitByPlayer(victim) == null ? tm.getMessagePlayerShowKitsNoKit() : kits.getKitByPlayer(
                                     victim).getName())));
+                    if (config.isSpectatorsViewInventory()) {
+                        Inventory inv = Bukkit.createInventory(null, 54 - (config.isSpectatorsViewArmor() ? 0 : 18), tm
+                                .getTitleOfPlayerInventoryOpenedBySpectator().replace("%Player%", victim.getName()));
+                        PlayerInventory inv2 = victim.getInventory();
+                        inv.setContents(inv2.getContents());
+                        if (config.isSpectatorsViewArmor()) {
+                            inv.setItem(39, inv2.getHelmet());
+                            inv.setItem(48, inv2.getChestplate());
+                            inv.setItem(41, inv2.getLeggings());
+                            inv.setItem(50, inv2.getBoots());
+                            ItemStack portal = new ItemStack(Material.ENDER_PORTAL);
+                            ItemMeta meta = portal.getItemMeta();
+                            meta.setDisplayName("");
+                            portal.setItemMeta(meta);
+                            for (int i = inv2.getSize(); i < inv.getSize(); i++) {
+                                if (inv.getItem(i) == null || inv.getItem(i).getType() == Material.AIR) {
+                                    inv.setItem(i, portal);
+                                }
+                            }
+                        }
+                        p.openInventory(inv);
+                    }
+                }
             } else if (event.getRightClicked() instanceof Damageable) {
                 p.sendMessage(String.format(tm.getMessageMobHasHealth(),
                         this.name.getName(event.getRightClicked().getType().name()),
@@ -305,6 +331,11 @@ public class PlayerListener implements Listener {
                     ((Player) event.getWhoClicked()).sendMessage(tm.getMessagePlayerWarningForgeUnstableEnchants());
                     break;
                 }
+        }
+        if (event.getView().getTopInventory().getTitle() != null
+                && tm.getTitleOfPlayerInventoryOpenedBySpectator().replace("%Player%", event.getWhoClicked().getName())
+                        .equals(event.getView().getTopInventory().getTitle())) {
+            event.setCancelled(true);
         }
     }
 

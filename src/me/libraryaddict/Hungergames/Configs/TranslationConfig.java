@@ -246,6 +246,7 @@ public class TranslationConfig extends BaseConfig {
     private String timeFormatSeconds = "%s seconds";
     private String timeFormatSecondsAndMinute = "%s minute, %s seconds";
     private String timeFormatSecondsAndMinutes = "%s minutes, %s seconds";
+    private String titleOfPlayerInventoryOpenedBySpectator = "%Player%'s inventory";
 
     public TranslationConfig() {
         super("translations");

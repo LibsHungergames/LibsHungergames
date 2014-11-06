@@ -25,7 +25,6 @@ public class MainConfig extends BaseConfig {
      * The amount the border closes in per second
      */
     private double amountBorderClosesInPerSecond = 0.2;
-
     /**
      * The border size
      */
@@ -34,15 +33,16 @@ public class MainConfig extends BaseConfig {
      * What time does the border start closing in
      */
     private int borderStartsClosingIn = 20 * 60;
+
     private ItemStack buyKitIcon = new ItemStack(Material.NETHER_STAR);
     private int buyKitInventorySize = 54;
     private ItemStack buyKitItemBack = new ItemStack(Material.SIGN);
-
     private ItemStack buyKitItemForwards = new ItemStack(Material.SIGN);
     /**
      * Does the plugin check for updates..
      */
     private boolean checkUpdates = true;
+
     /**
      * Commands to run before the server shuts down
      */
@@ -52,7 +52,6 @@ public class MainConfig extends BaseConfig {
      * Command to stop the server with
      */
     private String commandToStopTheServerWith = "stop";
-
     /**
      * The current version of the plugin
      */
@@ -67,6 +66,7 @@ public class MainConfig extends BaseConfig {
      * Is the end disabled? I will change it in the servers config :3
      */
     private boolean endDisabled = true;
+
     /**
      * Is fire spread enabled pre-game
      */
@@ -79,7 +79,6 @@ public class MainConfig extends BaseConfig {
      * The 'x' of the worlds spawn if forcing co-ordinates
      */
     private int forceSpawnX;
-
     /**
      * The 'z' of the worlds spawn if forcing co-ordinates
      */
@@ -88,6 +87,7 @@ public class MainConfig extends BaseConfig {
      * How long do I wait before shutting down the game
      */
     private int gameShutdownDelay = 33;
+
     /**
      * How much hearts does mushroom stew heal
      */
@@ -114,20 +114,20 @@ public class MainConfig extends BaseConfig {
      * Do I give the players a kit selector when they join the game
      */
     private boolean kitSelectorEnabled = true;
-
     /**
      * What item do I use for the kit selectors forward button
      */
     private ItemStack kitSelectorForward = new ItemStack(Material.SIGN);
-
     /**
      * What item opens the kit selector menu
      */
     private ItemStack kitSelectorIcon = new ItemStack(Material.FEATHER);
+
     /**
      * What is the max size of the kit selector
      */
     private int kitSelectorInventorySize = 54;
+
     /**
      * Whats the latest version of the plugin.
      */
@@ -140,17 +140,16 @@ public class MainConfig extends BaseConfig {
     /**
      * Is metrics enabled
      */
-    private boolean metricsEnabled = true;;
+    private boolean metricsEnabled = true;
     /**
      * Whats the minimal players required to start the game
      */
     private int minPlayersForGameStart = 2;
-    private boolean modifyForTerrainControl = true;
+    private boolean modifyForTerrainControl = true;;
     /**
      * Does mushroom stew instant eat for hearts
      */
     private boolean mushroomStewEnabled = false;
-
     /**
      * Is the nether disabled? I will change it in the servers config :3
      */
@@ -159,6 +158,7 @@ public class MainConfig extends BaseConfig {
      * Can players fly pre-game
      */
     private boolean playersFlyPreGame = true;
+
     /**
      * What is the players prefix while they are alive
      */
@@ -192,7 +192,6 @@ public class MainConfig extends BaseConfig {
      * The spawn radius
      */
     private int spawnRadius = 10;
-
     /**
      * What is the prefix of spectators in chat
      */
@@ -201,6 +200,7 @@ public class MainConfig extends BaseConfig {
      * Spectators menu back item
      */
     private ItemStack spectatorItemBack = new ItemStack(Material.SIGN);
+
     /**
      * Spectators menu forwards item
      */
@@ -217,6 +217,8 @@ public class MainConfig extends BaseConfig {
      * Are spectators forbidden from talking to alive players
      */
     private boolean spectatorsChatHidden = true;
+    private boolean spectatorsViewArmor = true;
+    private boolean spectatorsViewInventory = true;
     /**
      * Do spectators see each other as 'ghosts'
      */
