@@ -31,11 +31,11 @@ public class MapLoader {
     @Getter
     private static int borderCheckSize;
     @Getter
-    private static boolean setBorderBlocks;
-    @Getter
     private static boolean isBorderParticles;
     @Getter
     private static boolean realBlocks;
+    @Getter
+    private static boolean setBorderBlocks;
 
     public static void clear(File file) {
         if (!file.exists())
@@ -260,7 +260,7 @@ public class MapLoader {
                 setBorderBlocks = config.getBoolean("Border.Blocks", config2.getBoolean("Border.Blocks"));
                 borderCheckSize = config.getInt("Border.CheckSize", config2.getInt("Border.CheckSize"));
                 realBlocks = config.getBoolean("Border.RealBlocks", config2.getBoolean("Border.RealBlocks"));
-                String str = config.getString(config.getString("Border.Block"), config2.getString("Border.Block"));
+                String str = config.getString("Border.Block", config2.getString("Border.Block"));
                 String[] spl = str.split(":");
                 Material mat = Material.GLASS;
                 byte b = (byte) 0;
