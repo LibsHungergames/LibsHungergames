@@ -321,7 +321,9 @@ public class MapLoader {
                         if (mConfig.isForcedCords()) {
                             Location newLoc = new Location(loc.getWorld(), mConfig.getForceSpawnX(), loc.getY(),
                                     mConfig.getForceSpawnZ());
-                            if (newLoc.distance(loc) >= mConfig.getBorderSize()) {
+                            double dist = Math.sqrt(Math.pow(loc.getX() - newLoc.getX(), 2)
+                                    + Math.pow(loc.getY() - newLoc.getY(), 2) + Math.pow(loc.getZ() - newLoc.getZ(), 2));
+                            if (dist >= mConfig.getBorderSize()) {
                                 System.out.print(String.format(tm.getLoadedSpawnOutsideBorder(), spawnName));
                             }
                         }
