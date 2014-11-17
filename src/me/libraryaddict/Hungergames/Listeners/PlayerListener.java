@@ -72,6 +72,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -280,6 +281,7 @@ public class PlayerListener implements Listener {
                     if (config.isSpectatorsViewInventory()) {
                         Inventory inv = Bukkit.createInventory(null, 54 - (config.isSpectatorsViewArmor() ? 0 : 18), tm
                                 .getTitleOfPlayerInventoryOpenedBySpectator().replace("%Player%", victim.getName()));
+                        p.setMetadata("ViewingSpec", new FixedMetadataValue(HungergamesApi.getHungergames(), victim.getName()));
                         PlayerInventory inv2 = victim.getInventory();
                         inv.setContents(inv2.getContents());
                         if (config.isSpectatorsViewArmor()) {
@@ -333,7 +335,9 @@ public class PlayerListener implements Listener {
                 }
         }
         if (event.getView().getTopInventory().getTitle() != null
-                && tm.getTitleOfPlayerInventoryOpenedBySpectator().replace("%Player%", event.getWhoClicked().getName())
+                && event.getWhoClicked().hasMetadata("ViewingSpec")
+                && tm.getTitleOfPlayerInventoryOpenedBySpectator()
+                        .replace("%Player%", event.getWhoClicked().getMetadata("ViewingSpec").get(0).asString())
                         .equals(event.getView().getTopInventory().getTitle())) {
             event.setCancelled(true);
         }
