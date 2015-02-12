@@ -289,14 +289,14 @@ public class Gamer {
      * Set their width and length to 0, Makes arrows move through them
      */
     public void setGhost() {
-        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 0, 0, 0);
+        HungergamesApi.getReflectionManager().setBoundingBox(getPlayer(), true);
     }
 
     /**
      * Restore their width and length. Makes arrows hit them
      */
     public void setHuman() {
-        HungergamesApi.getReflectionManager().setWidthHeight(getPlayer(), 0F, 0.6F, 1.8F);
+        HungergamesApi.getReflectionManager().setBoundingBox(getPlayer(), false);
     }
 
     public void setRiding(boolean ride) {
