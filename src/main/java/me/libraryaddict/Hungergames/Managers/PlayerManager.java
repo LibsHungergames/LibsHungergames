@@ -200,7 +200,7 @@ public class PlayerManager {
             else
                 world.dropItemNaturally(event.getDropsLocation(), item);
         }
-        setSpectator(killed);
+        SpectatorManager.getInstance().activateSpectating(killed);
         if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
             ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, cm.getScoreboardPlayersLength(), getAliveGamers().size());
         }
@@ -305,21 +305,6 @@ public class PlayerManager {
         Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
             public void run() {
                 p.teleport(destination);
-            }
-        });
-    }
-
-    public void setSpectator(final Gamer gamer) {
-        gamer.setAlive(false);
-        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getKitSelector());
-        gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getBuyKit());
-        Bukkit.getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-            public void run() {
-                ItemStack compass = new ItemStack(Material.COMPASS);
-                compass.addEnchantment(EnchantmentManager.UNDROPPABLE, 1);
-                EnchantmentManager.updateEnchants(compass);
-                if (!gamer.getPlayer().getInventory().contains(compass))
-                    gamer.getPlayer().getInventory().addItem(compass);
             }
         });
     }

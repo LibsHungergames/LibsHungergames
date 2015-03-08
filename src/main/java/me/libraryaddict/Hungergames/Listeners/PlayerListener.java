@@ -15,6 +15,7 @@ import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 import me.libraryaddict.Hungergames.Managers.InventoryManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Managers.SpectatorManager;
 import me.libraryaddict.Hungergames.Types.CustomDeathCause;
 import me.libraryaddict.Hungergames.Types.Damage;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -363,7 +364,7 @@ public class PlayerListener implements Listener {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
                 public void run() {
                     gamer.getPlayer().sendMessage(
-                            String.format(tm.getMessagePlayerMotdOnJoin(), hg.getDescription().getVersion(), "libraryaddict"));
+                            String.format(tm.getMessagePlayerMotdOnJoin(), hg.getDescription().getVersion(), "libraryaddict", "Techcable"));
                 }
             }, 2L);
         }
@@ -373,12 +374,7 @@ public class PlayerListener implements Listener {
             p.removePotionEffect(effect.getType());
         MySqlConfig mysqlConfig = HungergamesApi.getConfigManager().getMySqlConfig();
         if (hg.currentTime >= 0) {
-            pm.setSpectator(gamer);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(hg, new Runnable() {
-                public void run() {
-                    gamer.hide(gamer.getPlayer());
-                }
-            }, 2L);
+            SpectatorManager.getInstance().activateSpectating(gamer);
         } else {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
                 ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
@@ -395,8 +391,6 @@ public class PlayerListener implements Listener {
             }
         }
         pm.sendToSpawn(gamer);
-        gamer.updateOthersToSelf();
-        gamer.updateSelfToOthers();
         if (mysqlConfig.isMysqlKitsEnabled() || mysqlConfig.isStatsEnabled()) {
             pm.loadGamer.add(gamer);
         }

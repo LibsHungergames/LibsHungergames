@@ -4,6 +4,7 @@ import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.KitManager;
 
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Managers.SpectatorManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -33,7 +34,7 @@ public class RespawnCommand implements CommandExecutor {
             if (HungergamesApi.getHungergames().currentTime >= 0 && HungergamesApi.getHungergames().doSeconds) {
                 if (!gamer.isAlive()) {
                     gamer.clearInventory();
-                    gamer.setAlive(true);
+                    SpectatorManager.getInstance().deactiveSpectating(gamer);
                     KitManager kits = HungergamesApi.getKitManager();
                     Player p = gamer.getPlayer();
                     p.setNoDamageTicks(200);

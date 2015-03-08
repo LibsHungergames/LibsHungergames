@@ -3,6 +3,7 @@ package me.libraryaddict.Hungergames.Commands;
 
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Managers.SpectatorManager;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
 
@@ -24,30 +25,29 @@ public class InvisCommand implements CommandExecutor {
             if (args.length > 0) {
                 if (args[0].toLowerCase().equals(cm.getCommandInvisNameOfShow())) {
                     p.sendMessage(cm.getCommandInvisShow());
-                    gamer.seeInvis(true);
-                    gamer.updateOthersToSelf();
+                    gamer.setSeeInvisibleSpectators(true);
+                    SpectatorManager.getInstance().updateCanSeeSpectators(gamer);
                 } else if (args[0].toLowerCase().equals(cm.getCommandInvisNameOfHide())) {
-                    gamer.seeInvis(false);
-                    gamer.updateOthersToSelf();
+                    gamer.setSeeInvisibleSpectators(false);
+                    SpectatorManager.getInstance().updateCanSeeSpectators(gamer);
                     p.sendMessage(cm.getCommandInvisHide());
                 } else if (args[0].toLowerCase().equals(cm.getCommandInvisNameOfShowAll())) {
                     for (Gamer game : pm.getGamers()) {
-                        game.seeInvis(true);
-                        game.updateSelfToOthers();
+                        gamer.setSeeInvisibleSpectators(true);
+                        SpectatorManager.getInstance().updateCanSeeSpectators(gamer);
                     }
                     p.sendMessage(cm.getCommandInvisShowAll());
                 } else if (args[0].toLowerCase().equals(cm.getCommandInvisNameOfHideAll())) {
                     for (Gamer game : pm.getGamers()) {
-                        game.seeInvis(false);
-                        game.updateSelfToOthers();
+                        gamer.setSeeInvisibleSpectators(false);
+                        SpectatorManager.getInstance().updateCanSeeSpectators(gamer);
                     }
                     p.sendMessage(cm.getCommandInvisHideAll());
                 } else if (args[0].toLowerCase().equals(cm.getCommandInvisNameOfHidePlayer())) {
                     if (args.length > 1) {
                         if (Bukkit.getPlayer(args[1]) != null) {
-                            pm.getGamer(Bukkit.getPlayer(args[1])).hide();
-                            p.sendMessage(String.format(cm.getCommandInvisHidePlayerSuccess(), Bukkit.getPlayer(args[1])
-                                    .getName()));
+                            throw new UnsupportedOperationException("Unsupported in 1.8");
+                            //p.sendMessage(String.format(cm.getCommandInvisHidePlayerSuccess(), Bukkit.getPlayer(args[1].getName()));
                         } else
                             p.sendMessage(String.format(cm.getCommandInvisHidePlayerFail(), args[1]));
                     } else
@@ -56,8 +56,8 @@ public class InvisCommand implements CommandExecutor {
                     if (args.length > 1) {
                         Player player = Bukkit.getPlayer(args[1]);
                         if (player != null) {
-                            pm.getGamer(player).show();
-                            p.sendMessage(String.format(cm.getCommandInvisShowPlayerSuccess(), player.getName()));
+                            throw new UnsupportedOperationException("Unsupported in 1.8");
+                            //p.sendMessage(String.format(cm.getCommandInvisShowPlayerSuccess(), player.getName()));
                         } else
                             p.sendMessage(String.format(cm.getCommandInvisShowPlayerFail(), args[1]));
                     } else

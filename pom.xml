@@ -3,13 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>LibsHungergames</groupId>
 	<artifactId>LibsHungergames</artifactId>
-	<name>LibsHungergames ${project.version}</name>
 	<description>A hungergames plugin created by libraryaddict</description>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<defaultGoal>clean package</defaultGoal>
-		<directory>target</directory>
 		<finalName>LibsHungergames</finalName>
 		<plugins>
 			<plugin>
@@ -30,41 +26,13 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<configuration>
-							<artifactSet>
-								<includes>
-									<include>DeathCause:DeathCause</include>
-									<include>ScoreboardManager:ScoreboardManager</include>
-								</includes>
-							</artifactSet>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>true</filtering>
-				<directory>${project.basedir}</directory>
-				<includes>
-					<include>plugin.yml</include>
-					<include>config.yml</include>
-					<include>kits.yml</include>
-					<include>README.md</include>
-					<include>pom.xml</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src</directory>
-				<includes>
-					<include>**/*.java</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 
-	<version>5.6.3</version>
+	<version>5.6.4-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,16 +40,15 @@
 	<url>http://www.spigotmc.org/resources/libs-hungergames.55/</url>
 	<repositories>
 		<repository>
-			<id>project.local</id>
-			<name>local repo</name>
-			<url>file:${project.basedir}/lib</url>
+			<id>techcable-repo</id>
+			<url>http://repo.techcable.net/content/groups/public/</url>
 		</repository>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<id>theyeticave-repo</id>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
 		</repository>
 		<repository>
-			<id>md_5-repo</id>
+			<id>md5-repo</id>
 			<url>http://repo.md-5.net/content/groups/public/</url>
 		</repository>
 	</repositories>
@@ -90,23 +57,26 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.8-R0.1-SNAPSHOT</version>
+			<version>1.7.9-R0.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>0.12.0</version>
+			<version>1.14.8</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>LibsDisguises</groupId>
 			<artifactId>LibsDisguises</artifactId>
-			<version>8.0.8</version>
+			<version>8.2.6-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.27</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ScoreboardManager</groupId>
@@ -114,9 +84,10 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.7.8-R0.1-SNAPSHOT</version>
+			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit</artifactId>
+			<version>1.7.9-R0.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>DeathCause</groupId>
@@ -125,3 +96,4 @@
 		</dependency>
 	</dependencies>
 </project>
+>>>>>>> 8579ded... Use 1.8 spectating

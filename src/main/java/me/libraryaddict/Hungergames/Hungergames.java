@@ -416,8 +416,8 @@ public class Hungergames extends JavaPlugin {
             if (HungergamesApi.getConfigManager().getMySqlConfig().isBuyKitMenuEnabled()) {
                 gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getBuyKit());
             }
-            gamer.seeInvis(false);
-            gamer.setAlive(true);
+            gamer.setSeeInvisibleSpectators(false);
+            SpectatorManager.getInstance().deactiveSpectating(gamer);
             if (mainConfig.isTeleportToSpawnLocationPregame() && mainConfig.isPreventMovingFromSpawnUsingPotions()) {
                 gamer.getPlayer().removePotionEffect(PotionEffectType.SLOW);
                 gamer.getPlayer().removePotionEffect(PotionEffectType.JUMP);
