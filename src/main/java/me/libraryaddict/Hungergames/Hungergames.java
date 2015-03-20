@@ -418,6 +418,8 @@ public class Hungergames extends JavaPlugin {
             }
             gamer.setSeeInvisibleSpectators(false);
             SpectatorManager.getInstance().deactiveSpectating(gamer);
+            gamer.getPlayer().setFlying(false);
+            gamer.getPlayer().setAllowFlight(false);
             if (mainConfig.isTeleportToSpawnLocationPregame() && mainConfig.isPreventMovingFromSpawnUsingPotions()) {
                 gamer.getPlayer().removePotionEffect(PotionEffectType.SLOW);
                 gamer.getPlayer().removePotionEffect(PotionEffectType.JUMP);

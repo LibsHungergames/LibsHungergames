@@ -40,7 +40,7 @@ public class SpectatorManager {
     }
 	
     public void activateSpectating(final Gamer toSpectate) {
-        if (toSpectate.isSpectator()) return;
+    if (toSpectate.isSpectator()) return;
 	if (SPECTATOR_MODE == null) throw new UnsupportedOperationException("Spectating isn't supported in this version of minecraft");
 	if (HungergamesApi.getConfigManager().getMainConfig().isShortenedNames() && toSpectate.getPlayer().getPlayerListName().length() <= 14) toSpectate.getPlayer().setPlayerListName(ChatColor.GRAY + toSpectate.getPlayer().getPlayerListName());
         toSpectate.getPlayer().setGameMode(SPECTATOR_MODE);
@@ -71,6 +71,7 @@ public class SpectatorManager {
             spectator.setSpectating(false);
             return;
         } //Never should be spectating without 1.8
+        spectator.getInventory().clear();
         spectator.getPlayer().setGameMode(GameMode.SURVIVAL);
         for (Gamer gamer : getSpectators()) {
             if (!gamer.getPlayer().canSee(spectator.getPlayer())) gamer.getPlayer().showPlayer(gamer.getPlayer());
