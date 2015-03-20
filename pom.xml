@@ -88,6 +88,12 @@
             <groupId>ScoreboardManager</groupId>
             <artifactId>ScoreboardManager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -99,7 +105,12 @@
             <groupId>DeathCause</groupId>
             <artifactId>DeathCause</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
->>>>>>> 7963c30... Exclude Spigot from Project
