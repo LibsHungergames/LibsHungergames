@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.UUID;
 
+import me.libraryaddict.Hungergames.techcable.ProfileUtils;
+import me.libraryaddict.Hungergames.techcable.ProfileUtils.PlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -22,7 +24,6 @@ public class PlayerJoinThread extends Thread {
     private Connection con = null;
     private LoggerConfig loggerConfig = HungergamesApi.getConfigManager().getLoggerConfig();
     private boolean uuids;
-
     public PlayerJoinThread(boolean useUuids) {
         this.uuids = useUuids;
     }
@@ -58,15 +59,8 @@ public class PlayerJoinThread extends Thread {
                         }
                         rs.close();
                         for (String name : namesToConvert) {
-                            Object profile = manager.grabProfileAddUUID(name);
-                            UUID uuid = null;
-                            if (profile != null) {
-                                try {
-                                    uuid = (UUID) profile.getClass().getMethod("getId").invoke(profile);
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
+                            PlayerProfile profile = ProfileUtils.lookup(name);
+                            UUID uuid = profile.getId();
                             if (uuid != null) {
                                 stmt.execute("UPDATE `HGKits` SET uuid = '" + uuid.toString() + "' WHERE Name='" + name + "'");
                                 System.out.print("[LibsHungergames] Converted " + name + " and added uuid " + uuid.toString());

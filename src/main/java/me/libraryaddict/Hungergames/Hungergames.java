@@ -416,7 +416,6 @@ public class Hungergames extends JavaPlugin {
             if (HungergamesApi.getConfigManager().getMySqlConfig().isBuyKitMenuEnabled()) {
                 gamer.getPlayer().getInventory().remove(HungergamesApi.getInventoryManager().getBuyKit());
             }
-            gamer.setSeeInvisibleSpectators(false);
             SpectatorManager.getInstance().deactiveSpectating(gamer);
             gamer.getPlayer().setFlying(false);
             gamer.getPlayer().setAllowFlight(false);

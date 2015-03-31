@@ -186,11 +186,4 @@ public class Gamer {
     public void setStats(Stats stats2) {
         this.stats = stats2;
     }
-    
-    /**
-     * True if spectators should be visible to you even if you are not in spectator mode
-     */
-    @Getter
-    @Setter
-    private boolean seeInvisibleSpectators;
 }
