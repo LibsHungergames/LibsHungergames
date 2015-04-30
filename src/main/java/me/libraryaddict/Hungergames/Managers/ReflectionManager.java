@@ -6,8 +6,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
-import me.libraryaddict.Hungergames.Types.LibsProfileLookupCaller;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
@@ -125,37 +123,6 @@ public class ReflectionManager
     public String getPropertiesConfig(String name, String obj)
     {
         return getProperties().getProperty(name, obj);
-    }
-
-    public Object grabProfileAddUUID(String playername)
-    {
-        try
-        {
-            Object minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(null);
-            for (Method method : getNmsClass("MinecraftServer").getMethods())
-            {
-                if (method.getReturnType().getSimpleName().equals("GameProfileRepository"))
-                {
-                    Object profileRepo = method.invoke(minecraftServer);
-                    Object agent = Class.forName("net.minecraft.util.com.mojang.authlib.Agent").getField("MINECRAFT").get(null);
-                    LibsProfileLookupCaller callback = new LibsProfileLookupCaller();
-                    profileRepo
-                            .getClass()
-                            .getMethod("findProfilesByNames", String[].class, agent.getClass(),
-                                    Class.forName("net.minecraft.util.com.mojang.authlib.ProfileLookupCallback"))
-                            .invoke(profileRepo, new String[]
-                                {
-                                    playername
-                                }, agent, callback);
-                    return callback.getGameProfile();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
     public boolean hasGameProfiles()

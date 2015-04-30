@@ -19,6 +19,7 @@ public class HungergamesApi {
     private static NameManager nameManager;
     private static PlayerManager playerManager;
     private static ReflectionManager reflectionManager;
+    private static SpectatorManager spectatorManager;
 
     /**
      * @return AbilityConfigManager which is used to load the configs of abilitys
@@ -131,7 +132,19 @@ public class HungergamesApi {
             playerManager = new PlayerManager();
         return playerManager;
     }
-
+    
+    /**
+     * Returns this plugin's spectator manager
+     * 
+     * @return the spectator manager which controls spectating
+     */
+    public static SpectatorManager getSpectatorManager() {
+        if (spectatorManager == null) {
+            spectatorManager = new SpectatorManager();
+        }
+        return spectatorManager;
+    }
+    
     public static ReflectionManager getReflectionManager() {
         if (reflectionManager == null)
             reflectionManager = new ReflectionManager();

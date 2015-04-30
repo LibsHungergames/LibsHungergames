@@ -39,7 +39,7 @@ public class TranslationConfig extends BaseConfig {
     private String commandChunkCooldown = ChatColor.RED + "You may not do this again yet!";
     private String commandChunkLoggerReloadingChunks = "[Hungergames] Reloading %s's chunks";
     private String commandChunkReloadedChunks = ChatColor.RED + "Chunks reloaded!";
-    private String commandCreator = ChatColor.RED + "libraryaddict created the Hungergames plugin!";
+    private String commandCreator = ChatColor.RED + "libraryaddict created the Hungergames plugin!" + ChatColor.GREEN + "Updated by Techcable";
     private String commandFeastHappened = ChatColor.YELLOW + "Compass now pointing to the feast!";
     private String commandFeastNotHappened = ChatColor.RED + "The feast has not happened yet!";
     private String commandForceFeastGenerated = ChatColor.RED + "A feast has been spawned at (%s, %s, %s)";
@@ -193,7 +193,7 @@ public class TranslationConfig extends BaseConfig {
     private String messagePlayerKitDescritionMoreInfo = ChatColor.AQUA
             + "Use /kititems %1$2s to view the items given with this kit\nUse /buykit %1$2s to purchase a kit";
     private String messagePlayerMotdOnJoin = ChatColor.GOLD + "[Hungergames] " + ChatColor.DARK_GREEN + "You are using "
-            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "%s";
+            + ChatColor.GREEN + "LibsHungergames %s" + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + "%s. Updated by %s";
     private String messagePlayerSendKitItemsDoesntExist = ChatColor.AQUA + "This kit does not exist!";
     private String messagePlayerSendKitItemsKitBoots = ChatColor.DARK_AQUA + "Kit Boots:" + ChatColor.AQUA + " %s";
     private String messagePlayerSendKitItemsKitChestplate = ChatColor.DARK_AQUA + "Kit Chestplate:" + ChatColor.AQUA + " %s";
