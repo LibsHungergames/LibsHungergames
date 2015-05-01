@@ -182,7 +182,7 @@ public class PlayerManager {
             event.setDeathMessage(this.addKitToDeathMessage(event.getDeathMessage(), event.getKillerPlayer().getPlayer()));
         }
         Bukkit.broadcastMessage(event.getDeathMessage());
-        int reward = hg.getPrize(getAliveGamers().size());
+        int reward = hg.getPrize(getAliveGamers().size()) * killed.getPayMultiplier();
         if (reward > 0)
             killed.addBalance(reward);
         if (killed.getStats() != null) {

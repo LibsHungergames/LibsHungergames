@@ -69,7 +69,7 @@ public class Hungergames extends JavaPlugin {
                     winner.getStats().addWin();
                 }
                 Bukkit.getPluginManager().callEvent(new PlayerWinEvent(winner));
-                int reward = getPrize(1);
+                int reward = getPrize(1) * winner.getPayMultiplier();
                 if (reward > 0)
                     winner.addBalance(reward);
                 winner.getPlayer().setAllowFlight(true);
@@ -445,4 +445,5 @@ public class Hungergames extends JavaPlugin {
         HungergamesApi.getInventoryManager().updateSpectatorHeads();
         doStage();
     }
+
 }

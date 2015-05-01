@@ -186,4 +186,17 @@ public class Gamer {
     public void setStats(Stats stats2) {
         this.stats = stats2;
     }
+	
+	private int payMultiplier = -1;
+	public int getPayMultiplier() {
+		if (payMultiplier > -1) return payMultiplier;
+		for (int i = 0; i < 100; i++) {
+			if (getPlayer().hasPermission("hungergames.paymultiplier." + i)) {
+				payMultiplier = i;
+				return i;
+			}
+		}
+		payMultiplier = 1;
+		return 1;
+	}
 }
