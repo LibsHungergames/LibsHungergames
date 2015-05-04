@@ -13,6 +13,7 @@ import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.*;
 import me.libraryaddict.Hungergames.Managers.*;
+import me.libraryaddict.Hungergames.techcable.Title;
 import me.libraryaddict.Hungergames.Types.CustomDeathCause;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.Hungergames.Types.Gamer;
@@ -37,6 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+
+import com.comphenix.protocol.PacketType;
 
 public class Hungergames extends JavaPlugin {
 
@@ -75,7 +78,13 @@ public class Hungergames extends JavaPlugin {
                 winner.getPlayer().setAllowFlight(true);
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
-                        Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName()));
+                        String msg = String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName()));
+                        if (PacketType.Play.Server.TITLE.isSupported()) {
+                            Title title = new Title(msg, "Good Game");
+                            title.sendTo(Bukkit.getOnlinePlayers());
+                        } else {
+                            Bukkit.broadcastMessage(msg);
+                        }
                     }
                 }, 0, mainConfig.getWonBroadcastsDelay() * 20);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
