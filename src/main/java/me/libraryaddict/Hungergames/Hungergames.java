@@ -78,7 +78,7 @@ public class Hungergames extends JavaPlugin {
                 winner.getPlayer().setAllowFlight(true);
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                     public void run() {
-                        String msg = String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName()));
+                        String msg = String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName());
                         if (PacketType.Play.Server.TITLE.isSupported()) {
                             Title title = new Title(msg, "Good Game");
                             title.sendTo(Bukkit.getOnlinePlayers());
