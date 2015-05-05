@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import lombok.Getter;
-import net.techcable.techutils.Reflection;
 import org.bukkit.entity.Player;
 
 import static me.libraryaddict.Hungergames.techcable.Reflection.*; //Make sure to change this to the right package
