@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.techcable.techutils;
+package me.libraryaddict.Hungergames.techcable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
