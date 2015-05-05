@@ -13,6 +13,7 @@ import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Listeners.*;
 import me.libraryaddict.Hungergames.Managers.*;
+import me.libraryaddict.Hungergames.techcable.ActionBar;
 import me.libraryaddict.Hungergames.techcable.Title;
 import me.libraryaddict.Hungergames.Types.CustomDeathCause;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
@@ -309,8 +310,17 @@ public class Hungergames extends JavaPlugin {
                     }
                 }
             }
-            if (mainConfig.isGameStarting(currentTime))
-                Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastGameStartingIn(), returnTime(currentTime)));
+            if (mainConfig.isGameStarting(currentTime)) {
+                String msg = String.format(translationsConfig.getBroadcastGameStartingIn(), returnTime(currentTime));
+                if (ActionBar.isSupported()) {
+                    ActionBar actionBar = new ActionBar(msg);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        actionBar.sendTo(p);
+                    }
+                } else {
+                    Bukkit.broadcastMessage(msg);
+                }
+            }
         } else if (currentTime == 0) {
             if (pm.getGamers().size() < mainConfig.getMinPlayersForGameStart()) {
                 currentTime = -90;
@@ -348,8 +358,15 @@ public class Hungergames extends JavaPlugin {
                 }
                 Bukkit.getPluginManager().callEvent(new InvincibilityWearOffEvent());
             } else if (mainConfig.advertiseInvincibility(currentTime)) {
-                Bukkit.broadcastMessage(String.format(translationsConfig.getBroadcastInvincibiltyWearsOffIn(),
-                        returnTime(mainConfig.getTimeForInvincibility() - currentTime)));
+                String msg = String.format(translationsConfig.getBroadcastInvincibiltyWearsOffIn(), returnTime(mainConfig.getTimeForInvincibility() - currentTime));
+                if (ActionBar.isSupported()) {
+                    ActionBar bar = new ActionBar(msg);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        bar.sendTo(p);
+                    }
+                } else {
+                    Bukkit.broadcastMessage(msg);
+                }
             }
         }
         doStage();

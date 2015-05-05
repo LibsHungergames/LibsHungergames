@@ -50,6 +50,9 @@ public class ForceFeastCommand implements CommandExecutor {
                 }
             }
             GenerationManager gen = HungergamesApi.getGenerationManager();
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("You must be a player to run this command");
+            }
             Location loc = ((Player) sender).getLocation().clone();
             int height = gen.getSpawnHeight(loc, radius);
             loc.setY(height);
