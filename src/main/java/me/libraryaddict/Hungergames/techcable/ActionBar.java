@@ -137,7 +137,7 @@ public class ActionBar {
     }
 
     private static final Method addSiblingMethod = makeMethod(getNmsClass("IChatBaseComponent"), "addSibling", getNmsClass("IChatBaseComponent"));
-    private static final Method fromStringMethod = makeMethod(getCbClass("util.CraftchatMessage"), "fromString", String.class);
+    private static final Method fromStringMethod = makeMethod(getCbClass("util.CraftChatMessage"), "fromString", String.class);
     private static Object serialize(String text) { //Serialize to IChatBaseComponent
         Object baseComponentArray = callMethod(fromStringMethod, null, text);;
         Object first = null;
