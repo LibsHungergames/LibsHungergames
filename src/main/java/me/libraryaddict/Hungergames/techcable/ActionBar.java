@@ -57,7 +57,7 @@ public class ActionBar {
     }
 
     public static boolean isSupported() {
-        return getActionBarHandler() != null;
+        return SpigotActionBarHandler.isSupported() || NMSActionBarHandler.isSupported();
     }
 
     private static ActionBarHandler handler;
@@ -91,8 +91,8 @@ public class ActionBar {
         }
 
         private static final Field playerConnectionField = makeField(getNmsClass("EntityPlayer"), "playerConnection");
-        private static final Field networkManagerField = makeField(playerConnectionField.getClass(), "networkManager");
-        private static final Method getVersion = makeMethod(networkManagerField.getClass(), "getVersion");
+        private static final Field networkManagerField = makeField(getNmsClass("PlayerConnection"), "networkManager");
+        private static final Method getVersion = makeMethod(getNmsClass("NetworkManager"), "getVersion");
         private static int getProtocolVersion(Player player) {
             Object handle = getHandle(player);
             Object connection = getField(playerConnectionField, handle);
