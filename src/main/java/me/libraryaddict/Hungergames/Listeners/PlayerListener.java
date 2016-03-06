@@ -378,7 +378,7 @@ public class PlayerListener implements Listener {
         } else {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
                 ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
-                        Bukkit.getOnlinePlayers().length);
+                        Bukkit.getOnlinePlayers().size());
             }
             if (!mysqlConfig.isMysqlKitsEnabled() && config.isKitSelectorEnabled()
                     && !p.getInventory().contains(icon.getKitSelector())) {
@@ -539,7 +539,7 @@ public class PlayerListener implements Listener {
         if (hg.currentTime < 0)
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {
                 ScoreboardManager.makeScore(DisplaySlot.SIDEBAR, tm.getScoreboardPlayersLength(),
-                        Bukkit.getOnlinePlayers().length - 1);
+                        Bukkit.getOnlinePlayers().size() - 1);
             }
         if (event.getPlayer().getVehicle() != null)
             event.getPlayer().leaveVehicle();

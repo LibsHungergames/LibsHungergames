@@ -61,7 +61,7 @@ public class Herobrine extends AbilityListener implements Disableable {
                     cooldown.put(p, System.currentTimeMillis());
                     final Location begin = p.getLocation().clone();
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 4), true);
-                    p.getWorld().playSound(begin, Sound.WITHER_SPAWN, 1, 0);
+                    p.getWorld().playSound(begin, Sound.ENTITY_WITHER_SPAWN, 1, 0);
                     final String name = p.getName();
                     Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {

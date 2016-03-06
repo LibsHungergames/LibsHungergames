@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers.TitleAction;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Throwables;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 import lombok.*;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public class Title {
 	*
 	* @param players players to display this title to
 	*/ 
-	public void sendTo(Player... players) {
+	public void sendTo(Collection<? extends Player> players) {
 		for (Player player : players) {
                         if (!PacketType.Play.Server.TITLE.isSupported()) return;
 			boolean shouldSend = false;

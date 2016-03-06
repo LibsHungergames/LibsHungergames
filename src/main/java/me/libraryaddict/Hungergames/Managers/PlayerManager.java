@@ -189,7 +189,7 @@ public class PlayerManager {
             killed.getStats().addLoss();
         }
         killed.getPlayer().getWorld()
-                .playSound(killed.getPlayer().getWorld().getSpawnLocation(), Sound.AMBIENCE_THUNDER, 10000, 2.9F);
+                .playSound(killed.getPlayer().getWorld().getSpawnLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 10000, 2.9F);
         killed.clearInventory();
         World world = p.getWorld();
         for (ItemStack item : event.getDrops()) {

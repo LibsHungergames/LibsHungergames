@@ -67,12 +67,12 @@ public class Linkage extends AbilityListener implements Disableable {
 
         public void teleport(Player p, Block clicked) {
             p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 9);
-            p.getWorld().playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1.2F, 1);
+            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.2F, 1);
             for (Block b : blocks)
                 if (!b.equals(clicked))
                     p.teleport(b.getLocation().clone().add(0.5, 0.5, 0.5));
             p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 9);
-            p.getWorld().playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1.2F, 1);
+            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.2F, 1);
         }
     }
 

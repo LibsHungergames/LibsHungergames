@@ -34,7 +34,7 @@ public class libraryaddict extends AbilityListener implements Disableable {
             for (int i = 0; i < grenadeTimer * 2; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
-                        explodingBook.getWorld().playSound(explodingBook.getLocation(), Sound.CLICK, 1, 10F);
+                        explodingBook.getWorld().playSound(explodingBook.getLocation(), Sound.UI_BUTTON_CLICK, 1, 10F);
                     }
                 }, i * 10);
             }

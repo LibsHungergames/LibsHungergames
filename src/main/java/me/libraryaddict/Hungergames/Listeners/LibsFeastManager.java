@@ -151,7 +151,7 @@ public class LibsFeastManager implements Listener {
             }
             generateChests(getFeastLocation(), config.getChestLayersHeight());
             World world = HungergamesApi.getHungergames().world;
-            world.playSound(world.getSpawnLocation(), Sound.IRONGOLEM_DEATH, 1000, 0);
+            world.playSound(world.getSpawnLocation(), Sound.ENTITY_IRONGOLEM_DEATH, 1000, 0);
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
         } else if (currentTime > config.getFeastPlatformGenerateTime() && currentTime < config.getFeastGenerateTime()) {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {

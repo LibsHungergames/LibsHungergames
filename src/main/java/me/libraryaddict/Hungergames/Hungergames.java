@@ -453,7 +453,7 @@ public class Hungergames extends JavaPlugin {
         }
         world.setGameRuleValue("doDaylightCycle", "true");
         world.setTime(mainConfig.getTimeOfDay());
-        world.playSound(world.getSpawnLocation(), Sound.AMBIENCE_THUNDER, 1, 0.8F);
+        world.playSound(world.getSpawnLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 1, 0.8F);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
                 for (Gamer gamer : pm.getAliveGamers())

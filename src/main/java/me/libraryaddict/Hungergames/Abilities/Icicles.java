@@ -92,7 +92,7 @@ public class Icicles extends AbilityListener implements Disableable {
                 if (frozen.get(p) <= hg.currentTime) {
                     itel.remove();
                     p.sendMessage(thawedOut);
-                    p.playSound(p.getEyeLocation(), Sound.LAVA_POP, 1, 0);
+                    p.playSound(p.getEyeLocation(), Sound.BLOCK_LAVA_POP, 1, 0);
                 }
             }
         }
