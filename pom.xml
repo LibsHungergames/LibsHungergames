@@ -138,6 +138,11 @@
             <id>md5-repo</id>
             <url>http://repo.md-5.net/content/groups/public/</url>
         </repository>
+        <!-- LibsDisguises 1.9 repo -->
+        <repository>
+            <id>o2gaming-repo</id>
+            <url>http://server.o2gaming.com/repo/</url>
+        </repository>
         <!-- ProtocolLib repo -->
         <repository>
             <id>dmulloy2-repo</id>
