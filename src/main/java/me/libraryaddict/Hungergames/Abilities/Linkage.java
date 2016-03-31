@@ -8,7 +8,6 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Player;
@@ -28,6 +27,8 @@ import me.libraryaddict.Hungergames.Managers.EnchantmentManager;
 import me.libraryaddict.Hungergames.Managers.PlayerManager;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
+import net.techcable.hungergames.SafeSounds;
 
 public class Linkage extends AbilityListener implements Disableable {
     private class Teleport {
@@ -67,12 +68,12 @@ public class Linkage extends AbilityListener implements Disableable {
 
         public void teleport(Player p, Block clicked) {
             p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 9);
-            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.2F, 1);
+            p.getWorld().playSound(p.getLocation(), SafeSounds.ENDERMAN_TELEPORT.getBukkitSound(), 1.2F, 1);
             for (Block b : blocks)
                 if (!b.equals(clicked))
                     p.teleport(b.getLocation().clone().add(0.5, 0.5, 0.5));
             p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 9);
-            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.2F, 1);
+            p.getWorld().playSound(p.getLocation(), SafeSounds.ENDERMAN_TELEPORT.getBukkitSound(), 1.2F, 1);
         }
     }
 

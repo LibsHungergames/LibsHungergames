@@ -2,7 +2,6 @@ package me.libraryaddict.Hungergames.Abilities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -11,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
+import net.techcable.hungergames.SafeSounds;
 
 public class libraryaddict extends AbilityListener implements Disableable {
     private static int i = 0;
@@ -34,7 +35,7 @@ public class libraryaddict extends AbilityListener implements Disableable {
             for (int i = 0; i < grenadeTimer * 2; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                     public void run() {
-                        explodingBook.getWorld().playSound(explodingBook.getLocation(), Sound.UI_BUTTON_CLICK, 1, 10F);
+                        explodingBook.getWorld().playSound(explodingBook.getLocation(), SafeSounds.CLICK.getBukkitSound(), 1, 10F);
                     }
                 }, i * 10);
             }

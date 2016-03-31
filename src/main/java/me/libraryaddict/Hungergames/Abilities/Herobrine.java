@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -20,6 +19,8 @@ import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
+import net.techcable.hungergames.SafeSounds;
 
 public class Herobrine extends AbilityListener implements Disableable {
     private transient HashMap<Player, Long> cooldown = new HashMap<Player, Long>();
@@ -61,7 +62,7 @@ public class Herobrine extends AbilityListener implements Disableable {
                     cooldown.put(p, System.currentTimeMillis());
                     final Location begin = p.getLocation().clone();
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 4), true);
-                    p.getWorld().playSound(begin, Sound.ENTITY_WITHER_SPAWN, 1, 0);
+                    p.getWorld().playSound(begin, SafeSounds.WITHER_SPAWN.getBukkitSound(), 1, 0);
                     final String name = p.getName();
                     Bukkit.getScheduler().scheduleSyncDelayedTask(HungergamesApi.getHungergames(), new Runnable() {
                         public void run() {

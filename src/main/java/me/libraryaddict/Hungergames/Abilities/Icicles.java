@@ -6,7 +6,6 @@ import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,6 +20,8 @@ import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
 import me.libraryaddict.Hungergames.Interfaces.Disableable;
 import me.libraryaddict.Hungergames.Types.AbilityListener;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
+
+import net.techcable.hungergames.SafeSounds;
 
 public class Icicles extends AbilityListener implements Disableable {
 
@@ -92,7 +93,7 @@ public class Icicles extends AbilityListener implements Disableable {
                 if (frozen.get(p) <= hg.currentTime) {
                     itel.remove();
                     p.sendMessage(thawedOut);
-                    p.playSound(p.getEyeLocation(), Sound.BLOCK_LAVA_POP, 1, 0);
+                    p.playSound(p.getEyeLocation(), SafeSounds.LAVA_POP.getBukkitSound(), 1, 0);
                 }
             }
         }

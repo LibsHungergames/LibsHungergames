@@ -16,10 +16,11 @@ import me.libraryaddict.Hungergames.Types.CordPair;
 import me.libraryaddict.Hungergames.Types.HungergamesApi;
 import me.libraryaddict.scoreboard.ScoreboardManager;
 
+import net.techcable.hungergames.SafeSounds;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -151,7 +152,7 @@ public class LibsFeastManager implements Listener {
             }
             generateChests(getFeastLocation(), config.getChestLayersHeight());
             World world = HungergamesApi.getHungergames().world;
-            world.playSound(world.getSpawnLocation(), Sound.ENTITY_IRONGOLEM_DEATH, 1000, 0);
+            world.playSound(world.getSpawnLocation(), SafeSounds.IRONGOLEM_DEATH.getBukkitSound(), 1000, 0);
             Bukkit.getPluginManager().callEvent(new FeastSpawnedEvent());
         } else if (currentTime > config.getFeastPlatformGenerateTime() && currentTime < config.getFeastGenerateTime()) {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {

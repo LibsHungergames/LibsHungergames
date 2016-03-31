@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creature;
@@ -37,6 +36,8 @@ import me.libraryaddict.Hungergames.Types.Gamer;
 import me.libraryaddict.Hungergames.Types.Stats;
 import me.libraryaddict.death.DeathCause;
 import me.libraryaddict.scoreboard.ScoreboardManager;
+
+import net.techcable.hungergames.SafeSounds;
 
 public class PlayerManager {
 
@@ -189,7 +190,7 @@ public class PlayerManager {
             killed.getStats().addLoss();
         }
         killed.getPlayer().getWorld()
-                .playSound(killed.getPlayer().getWorld().getSpawnLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 10000, 2.9F);
+                .playSound(killed.getPlayer().getWorld().getSpawnLocation(), SafeSounds.THUNDER.getBukkitSound(), 10000, 2.9F);
         killed.clearInventory();
         World world = p.getWorld();
         for (ItemStack item : event.getDrops()) {
