@@ -27,19 +27,31 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import com.google.common.base.Preconditions;
+
 import org.bukkit.Bukkit;
 
+import static com.google.common.base.Preconditions.*;
+
+@ParametersAreNonnullByDefault
 public class Reflection {
+
+    @Nullable
     public static Class<?> getNmsClass(String name) {
         String className = "net.minecraft.server." + getVersion() + "." + name;
         return getClass(className);
     }
-    
+
+    @Nullable
     public static Class<?> getCbClass(String name) {
         String className = "org.bukkit.craftbukkit." + getVersion() + "." + name;
         return getClass(className);
     }
 
+    @Nullable
     public static Class<?> getUtilClass(String name) {
         try {
             return Class.forName(name); //Try before 1.8 first
@@ -59,7 +71,7 @@ public class Reflection {
 
     public static Object getHandle(Object wrapper) {
         Method getHandle = makeMethod(wrapper.getClass(), "getHandle");
-        return callMethod(getHandle, wrapper);
+        return callMethod(checkNotNull(getHandle, "Null getHandle method"), wrapper);
     }
 
     //Utils
@@ -74,9 +86,8 @@ public class Reflection {
     }
 
     @SuppressWarnings("unchecked")
-	public static <T> T callMethod(Method method, Object instance, Object... paramaters) {
-        if (method == null) throw new RuntimeException("No such method");
-        method.setAccessible(true);
+	public static <T> T callMethod(Method method, @Nullable Object instance, Object... paramaters) {
+        checkNotNull(method, "Null method").setAccessible(true);
         try {
             return (T) method.invoke(instance, paramaters);
         } catch (InvocationTargetException ex) {
@@ -111,7 +122,7 @@ public class Reflection {
     
     public static Field makeField(Class<?> clazz, String name) {
         try {
-            return clazz.getDeclaredField(name);
+            return checkNotNull(clazz, "Null class").getDeclaredField(checkNotNull(name));
         } catch (NoSuchFieldException ex) {
             return null;
         } catch (Exception ex) {
@@ -131,15 +142,15 @@ public class Reflection {
     }
         
     public static void setField(Field field, Object instance, Object value) {
-        if (field == null) throw new RuntimeException("No such field");
-        field.setAccessible(true);
+        checkNotNull(field, "Null field").setAccessible(true);
         try {
             field.set(instance, value);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
-    
+
+    @Nullable
     public static Class<?> getClass(String name) {
         try {
             return Class.forName(name);

@@ -23,15 +23,21 @@
 
 package me.libraryaddict.Hungergames.techcable;
 
+import lombok.*;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import javax.annotation.Nullable;
 
-import lombok.Getter;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
+
 import org.bukkit.entity.Player;
 
-import static me.libraryaddict.Hungergames.techcable.Reflection.*; //Make sure to change this to the right package
+import static com.google.common.base.Preconditions.*;
+import static me.libraryaddict.Hungergames.techcable.Reflection.*;
 
 /**
  * A 1.8 ActionBar
@@ -57,12 +63,13 @@ public class ActionBar {
     }
 
     public static boolean isSupported() {
-        return SpigotActionBarHandler.isSupported() || NMSActionBarHandler.isSupported();
+        return addSiblingMethod != null && fromStringMethod != null && playerConnectionField != null && sendPacketMethod != null && SpigotActionBarHandler.isSupported() || NMSActionBarHandler.isSupported();
     }
 
     private static ActionBarHandler handler;
     private static ActionBarHandler getActionBarHandler() {
         if (handler != null) return handler;
+        checkState(isSupported(), "Not supported!");
         if (SpigotActionBarHandler.isSupported()) {
             handler = new SpigotActionBarHandler();
         } else if (NMSActionBarHandler.isSupported()) {
@@ -73,16 +80,31 @@ public class ActionBar {
         return handler;
     }
 
-    private static interface ActionBarHandler {
-        public void sendTo(Player p, ActionBar bar);
+    private interface ActionBarHandler {
+        void sendTo(Player p, ActionBar bar);
     }
+
+    @Nullable
+    private static final Class<?> PACKET_CLASS = getNmsClass("Packet");
+    @Nullable
+    private static final Class<?> CHAT_PACKET_CLASS = getNmsClass("PacketPlayOutChat");
+    @Nullable
+    private static final Class<?> CHAT_COMPONENT_CLASS = getNmsClass("IChatBaseComponent");
+    @Nullable
+    private static final Class<?> ENTITY_PLAYER_CLASS = getNmsClass("PlayerConnection");
+    @Nullable
+    private static final Class<?> NETWORK_MANAGER_CLASS = getNmsClass("NetworkManager");
+    @Nullable
+    private static final Class<?> PLAYER_CONNECTION_CLASS = getNmsClass("PlayerConnection");
+    @Nullable
+    private static final Class<?> CRAFT_CHAT_MESSAGE_CLASS = getCbClass("util.CraftChatMessage");
 
     private static class SpigotActionBarHandler implements ActionBarHandler {
         private SpigotActionBarHandler() {
             assert isSupported() : "Spigot action bar is unsupported!";
         }
 
-        private final static Constructor packetConstructor = makeConstructor(getNmsClass("PacketPlayOutChat"), getNmsClass("IChatBaseComponent"), int.class);
+        private final static Constructor packetConstructor = CHAT_PACKET_CLASS != null && CHAT_COMPONENT_CLASS != null ? makeConstructor(CHAT_PACKET_CLASS, CHAT_COMPONENT_CLASS, int.class) : null;
         public void sendTo(Player p, ActionBar bar) {
             if (getProtocolVersion(p) < 16) return;
             Object baseComponent = serialize(bar.getText());
@@ -90,20 +112,17 @@ public class ActionBar {
             sendPacket(p, packet);
         }
 
-        private static final Field playerConnectionField = makeField(getNmsClass("EntityPlayer"), "playerConnection");
-        private static final Field networkManagerField = makeField(getNmsClass("PlayerConnection"), "networkManager");
-        private static final Method getVersion = makeMethod(getNmsClass("NetworkManager"), "getVersion");
+        private static final Field networkManagerField = PLAYER_CONNECTION_CLASS != null ? makeField(PLAYER_CONNECTION_CLASS, "networkManager") : null;
+        private static final Method getVersionMethod = NETWORK_MANAGER_CLASS != null ? makeMethod(NETWORK_MANAGER_CLASS, "getVersion") : null;
         private static int getProtocolVersion(Player player) {
             Object handle = getHandle(player);
             Object connection = getField(playerConnectionField, handle);
             Object networkManager = getField(networkManagerField, connection);
-            assert getVersion() != null : "Not Protocol Hack";
-            int version = callMethod(getVersion, networkManager);
-            return version;
+            return callMethod(getVersionMethod, networkManager);
         }
 
         public static boolean isSupported() {
-            return Reflection.getClass("org.spigotmc.ProtocolData") != null;
+            return Reflection.getClass("org.spigotmc.ProtocolData") != null && networkManagerField != null && getVersionMethod != null;
         }
     }
 
@@ -114,7 +133,7 @@ public class ActionBar {
             assert NMSActionBarHandler.isSupported(): "NMS Action bar isn't supported";
         }
 
-        private static final Constructor packetConstructor = makeConstructor(getNmsClass("PacketPlayOutChat"), getNmsClass("IChatBaseComponent"), int.class);
+        private static final Constructor packetConstructor = CHAT_PACKET_CLASS != null && CHAT_COMPONENT_CLASS != null ? makeConstructor(CHAT_PACKET_CLASS, CHAT_COMPONENT_CLASS, int.class) : null;
         public void sendTo(Player p, ActionBar bar) {
             Object baseComponent = serialize(bar.getText());
             Object packet = callConstructor(packetConstructor, baseComponent, 2);
@@ -128,16 +147,16 @@ public class ActionBar {
 
     //Utils
 
-    private static final Field playerConnectionField = makeField(getNmsClass("EntityPlayer"), "playerConnection");
-    private static final Method sendPacketMethod = makeMethod(getNmsClass("PlayerConnection"), "sendPacket", getNmsClass("Packet"));
+    private static final Field playerConnectionField = ENTITY_PLAYER_CLASS != null ? makeField(ENTITY_PLAYER_CLASS, "playerConnection") : null;
+    private static final Method sendPacketMethod = PLAYER_CONNECTION_CLASS != null && PACKET_CLASS != null ? makeMethod(PLAYER_CONNECTION_CLASS, "sendPacket", PACKET_CLASS) : null;
     private static void sendPacket(Player player, Object packet) {
         Object handle = getHandle(player);
         Object connection = getField(playerConnectionField, handle);
         callMethod(sendPacketMethod, connection, packet);
     }
 
-    private static final Method addSiblingMethod = makeMethod(getNmsClass("IChatBaseComponent"), "addSibling", getNmsClass("IChatBaseComponent"));
-    private static final Method fromStringMethod = makeMethod(getCbClass("util.CraftChatMessage"), "fromString", String.class);
+    private static final Method addSiblingMethod = CHAT_COMPONENT_CLASS != null ? makeMethod(CHAT_COMPONENT_CLASS, "addSibling", CHAT_COMPONENT_CLASS) : null;
+    private static final Method fromStringMethod = CRAFT_CHAT_MESSAGE_CLASS != null ? makeMethod(CRAFT_CHAT_MESSAGE_CLASS, "fromString", String.class) : null;
     private static Object serialize(String text) { //Serialize to IChatBaseComponent
         Object baseComponentArray = callMethod(fromStringMethod, null, text);;
         Object first = null;
