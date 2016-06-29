@@ -82,7 +82,8 @@ public class Hungergames extends JavaPlugin {
                     public void run() {
                         String msg = String.format(translationsConfig.getBroadcastWinnerWon(), winner.getName());
                         if (PacketType.Play.Server.TITLE.isSupported()) {
-                            Title title = new Title(msg, "Good Game");
+                            String subtitle = String.format(translationsConfig.getBroadcastWinnerWonSubtitle(), winner.getName());
+                            Title title = new Title(msg, subtitle);
                             title.sendTo(Bukkit.getOnlinePlayers());
                         } else {
                             Bukkit.broadcastMessage(msg);

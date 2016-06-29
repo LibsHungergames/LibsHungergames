@@ -20,6 +20,7 @@ public class TranslationConfig extends BaseConfig {
     private String broadcastInvincibiltyWearsOffIn = ChatColor.RED + "Invincibility wears off in %s!";
     private String broadcastNotEnoughPlayers = ChatColor.RED + "You need more people!";
     private String broadcastWinnerWon = ChatColor.RED + "%s won!";
+    private String broadcastWinnerWonSubtitle = ChatColor.RED + "Good Game";
     private String buyKitMenuItemPrice = ChatColor.DARK_AQUA + "Price: " + ChatColor.AQUA + "$%s";
     private String buyKitMenuOwnAllKits = ChatColor.RED + "You already own all the kits!";
     private String buyKitMenuTitle = "Buy Kits";
