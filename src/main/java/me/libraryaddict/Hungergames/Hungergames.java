@@ -1,9 +1,5 @@
 package me.libraryaddict.Hungergames;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-
 import me.libraryaddict.Hungergames.Configs.MainConfig;
 import me.libraryaddict.Hungergames.Configs.TranslationConfig;
 import me.libraryaddict.Hungergames.Events.GameStartEvent;
@@ -11,16 +7,29 @@ import me.libraryaddict.Hungergames.Events.InvincibilityWearOffEvent;
 import me.libraryaddict.Hungergames.Events.PlayerWinEvent;
 import me.libraryaddict.Hungergames.Events.ServerShutdownEvent;
 import me.libraryaddict.Hungergames.Events.TimeSecondEvent;
-import me.libraryaddict.Hungergames.Listeners.*;
-import me.libraryaddict.Hungergames.Managers.*;
+import me.libraryaddict.Hungergames.Listeners.GeneralListener;
+import me.libraryaddict.Hungergames.Listeners.InventoryListener;
+import me.libraryaddict.Hungergames.Listeners.PlayerListener;
+import me.libraryaddict.Hungergames.Managers.ConfigManager;
+import me.libraryaddict.Hungergames.Managers.GenerationManager;
+import me.libraryaddict.Hungergames.Managers.PlayerManager;
+import me.libraryaddict.Hungergames.Managers.SpectatorManager;
+import me.libraryaddict.Hungergames.Types.CustomDeathCause;
+import me.libraryaddict.Hungergames.Types.Gamer;
+import me.libraryaddict.Hungergames.Types.HungergamesApi;
+import me.libraryaddict.Hungergames.Utilities.MapLoader;
 import me.libraryaddict.Hungergames.techcable.ActionBar;
 import me.libraryaddict.Hungergames.techcable.Title;
-import me.libraryaddict.Hungergames.Types.CustomDeathCause;
-import me.libraryaddict.Hungergames.Types.HungergamesApi;
-import me.libraryaddict.Hungergames.Types.Gamer;
-import me.libraryaddict.Hungergames.Utilities.MapLoader;
 import me.libraryaddict.death.DeathHandler;
 import me.libraryaddict.scoreboard.ScoreboardManager;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+
+import com.comphenix.protocol.PacketType;
+
+import net.techcable.hungergames.SafeSounds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -39,9 +48,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
-import com.comphenix.protocol.PacketType;
-
-import net.techcable.hungergames.SafeSounds;
+import static com.google.common.base.Preconditions.*;
 
 public class Hungergames extends JavaPlugin {
 
@@ -108,6 +115,7 @@ public class Hungergames extends JavaPlugin {
         Location pLoc = p.getLocation().clone();
         Location sLoc = world.getSpawnLocation().clone();
         double border = mainConfig.getBorderSize();
+        checkState(!mainConfig.isUseMinecraftWorldBorder(), "Minecraft 1.8 worldborder should be used!");
         if (mainConfig.isRoundedBorder()) {
             sLoc.setY(pLoc.getY());
             double fromSpawn = pLoc.distance(sLoc);
@@ -345,8 +353,12 @@ public class Hungergames extends JavaPlugin {
                         (int) mainConfig.getBorderSize());
             }
         }
-        for (Gamer gamer : pm.getGamers()) {
-            this.doBorder(gamer);
+        if (mainConfig.isUseMinecraftWorldBorder()) {
+            world.getWorldBorder().setDamageAmount(mainConfig.getDamageBorderDeals());
+            world.getWorldBorder().setCenter(world.getSpawnLocation());
+            world.getWorldBorder().setSize(mainConfig.getBorderSize());
+        } else {
+            pm.getGamers().forEach(this::doBorder);
         }
         if (mainConfig.getTimeForInvincibility() > 0 && currentTime <= mainConfig.getTimeForInvincibility() && currentTime >= 0) {
             if (HungergamesApi.getConfigManager().getMainConfig().isScoreboardEnabled()) {

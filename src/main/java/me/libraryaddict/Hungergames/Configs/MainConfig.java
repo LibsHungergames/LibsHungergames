@@ -165,6 +165,10 @@ public class MainConfig extends BaseConfig {
     private String prefixWhenAlive = "<%Name%> %Message%";
     private boolean preventMovingFromSpawnUsingPotions = false;
     /**
+     * Whether to use minecraft's builtin world border
+     */
+    private boolean useMinecraftWorldBorder = true;
+    /**
      * Is the border round instead of square
      */
     private boolean roundedBorder = false;
